@@ -311,7 +311,7 @@
       <ol>
         <li><b>Check that the near stack really is the intercept.</b> On step 2, read the largest gap
           between N and A, then compare it with the intercept itself for a few models.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The gap is A + 0.0101&nbsp;B
+          <details class="reveal"><summary>Answer</summary><span class="ans">The gap is A + 0.0101&nbsp;B
             minus A, which is a hundredth of the gradient. Across the whole model it never exceeds about
             0.007, and for most sands it is nearer 0.002. Set against intercepts of a tenth to half, that
             is a rounding error, and it is why the DQ papers use the near stack as the intercept without
@@ -320,7 +320,7 @@
             around.</span></details></li>
         <li><b>Move the far window and watch the gradient scale.</b> On step 2, drag the far window from
           12&deg; out to 45&deg;, reading the multiplier on F &minus; N.
-          <details class="reveal"><summary>Hint</summary><span class="ans">It climbs steeply: 0.0775 at a
+          <details class="reveal"><summary>Answer</summary><span class="ans">It climbs steeply: 0.0775 at a
             12&ndash;22&deg; window, 0.1701 at 20&ndash;30&deg;, 0.3198 at 30&ndash;40&deg;. Moving the
             window out by eighteen degrees roughly quadruples it. A wider separation gives the gradient
             more leverage and a larger number to work with, which is why acquisition geometry matters so
@@ -330,7 +330,7 @@
             not a law.</span></details></li>
         <li><b>Be fair to the fit first.</b> On step 3, leave the residual moveout at zero and raise the
           noise to 40%, then read the two gradient noise figures.
-          <details class="reveal"><summary>Hint</summary><span class="ans">57% of the true gradient for the
+          <details class="reveal"><summary>Answer</summary><span class="ans">57% of the true gradient for the
             two stacks against 28% for the fit &mdash; almost exactly half, which is the square root of the
             factor of four in variance. The fit uses all forty-one traces; the difference of two window
             averages uses eleven and eleven, and then divides by 0.1701, which magnifies whatever noise
@@ -338,7 +338,7 @@
             story this module would end differently.</span></details></li>
         <li><b>Now break it with four milliseconds.</b> Set the noise back to zero and raise the residual
           moveout to 4 ms, reading the two gradient bias figures.
-          <details class="reveal"><summary>Hint</summary><span class="ans">30% for the two stacks against
+          <details class="reveal"><summary>Answer</summary><span class="ans">30% for the two stacks against
             71% for the fit. The near window spans about a third of a millisecond of the moveout and the
             far window about a millisecond, so the traces inside each are still lined up when they are
             averaged. The fit compares the same sample index at 0&deg; and at 40&deg;, four milliseconds
@@ -347,7 +347,7 @@
             one.</span></details></li>
         <li><b>Watch the intercept while you do it.</b> Push the moveout on to 8 ms and read the two
           intercept bias figures.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The near stack is still exact.
+          <details class="reveal"><summary>Answer</summary><span class="ans">The near stack is still exact.
             The fitted intercept is out by about half. The near stack averages ten degrees of angle, over
             which the moveout is a fraction of a millisecond, and it never has to extrapolate anywhere. The
             fit reaches back to zero angle along a forty degree lever arm, and every millisecond of
@@ -357,7 +357,7 @@
             the gradient is no consolation if they are not.</span></details></li>
         <li><b>Find a model where the far stack is the only thing that sees the sand.</b> Try the soft
           shale with gas, around 25% porosity, and read the two key numbers on step 1.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The near stack sits close to
+          <details class="reveal"><summary>Answer</summary><span class="ans">The near stack sits close to
             zero while F &minus; N is clearly negative, and the far stack has the opposite sign to the
             near. This is the class 2p case from module 01, seen through the two traces the method actually
             works on. A full stack would average the two and lose most of it. The DQ process never forms a
@@ -403,7 +403,7 @@
       <summary>Method, assumptions, and where to read more</summary>
       <p>The rocks are the same as module 01 and are computed the same way: three fixed enclosing
         lithologies, a brine sand built from porosity through Wyllie's time average and the
-        V<sub>P</sub>/V<sub>S</sub> trend of Bedle et al. (2025), and Gassmann fluid substitution for the
+        V<sub>P</sub>/V<sub>S</sub> trend of Bedle et al. (2025a), and Gassmann fluid substitution for the
         oil and gas cases. The underburden follows the overburden throughout this module. Intercept and
         gradient come from the Shuey (1985) two-term approximation across each interface.</p>
       <p>The gather is forty-one traces at one degree spacing from 0 to 40&deg;. Each is the two reflection
@@ -439,7 +439,7 @@
           <em>Geophysics</em>, 54, 680&ndash;688.</li>
         <li>Castagna, J. P., and H. W. Swan, 1997, Principles of AVO cross plotting: <em>The Leading
           Edge</em>, 16, 337&ndash;344.</li>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
       </ul>
     </details>
@@ -447,7 +447,7 @@
 
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
-    <h3><a href="stickogram.html">03 · The stick-o-gram</a></h3>
+    <h3><a href="stickogram.html">03 · The StickOgram</a></h3>
     <p>The near stack stops being a waveform and becomes a set of picks: every zero crossing, every peak
       and every trough. Those picks are the acoustic layers, and they are what the quadrant numbers get
       written into.</p>
@@ -457,7 +457,7 @@
 
   <div class="pager" id="pager" hidden>
     <a class="btn ghost" href="avo-limits.html">← Where AVO runs out</a>
-    <a class="btn" href="stickogram.html">Next: the stick-o-gram →</a>
+    <a class="btn" href="stickogram.html">Next: the StickOgram →</a>
   </div>
 
   <footer>
@@ -469,10 +469,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>

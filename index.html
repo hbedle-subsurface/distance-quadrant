@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>How the DQ Trace Actually Works</title>
-<meta name="description" content="Interactive modules on the distance and quadrant (DQ) seismic attribute: quadrant numbers, quadrant enhancement, DQ distance, the RDQ crossplot, and DQ as a porosity analogue. Built for teaching by AASPI at the University of Oklahoma.">
+<meta name="description" content="Interactive modules on the distance and quadrant (DQ) seismic attributes: the near and far stacks, quadrant numbers, phase rotations, the DQ distance, Theta PX, time thickness and the RDQ crossplot. A teaching resource from the University of Oklahoma.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -26,28 +26,30 @@
    <div class="hero-grid">
     <div class="hero-copy">
       <p class="eyebrow">AASPI &nbsp;·&nbsp; University of Oklahoma</p>
-      <h1 class="title">AVO theory is cleanest at <em>two samples per cycle</em>. The DQ trace extends it
-        to the rest.</h1>
-      <p class="lede">The equations behind amplitude variation with offset describe a single boundary
-        between two thick layers. Real seismic data is many thin layers convolved with a wavelet, so a
-        sample generally carries the response of more than one boundary at once. The two-layer reading is
-        cleanest at a peak maximum or a trough minimum, where that mixing is least, and it degrades
-        steadily between them. Through most of a reservoir interior, an intercept and gradient measured
-        sample by sample are describing interference as much as rock.</p>
-      <p class="lede">The distance and quadrant trace converts <em>every</em> sample into the equivalent of
-        a peak or a trough, so the two-layer equation becomes usable everywhere, without estimating a
-        wavelet and without well control. These modules build that idea one step at a time, with nothing to
-        install.</p>
-      <p class="lede"><b>What you should be able to do afterwards.</b> Explain what the DQ distance and
-        &thetas;<sub>px</sub> each measure and what controls them; say why the workflow picks, numbers and
-        phase-filters a trace before combining the stacks; read a DQ section and know which features are
-        rock and which are bed thickness; and recognise where the attributes become unreliable.</p>
-      <p class="lede"><b>What you need first.</b> You should know what a seismic trace is, what a reflector
-        is, and roughly what AVO is trying to do. If intercept, gradient and crossplots are new, work
-        through <a href="https://hbedle-subsurface.github.io/avo-basics/">How AVO Actually Works</a>
-        first. Everything after that is built up in order here.</p>
+      <h1 class="title">AVO theory is cleanest at <em>two samples per cycle</em>. The DQ trace is designed
+        to use the rest.</h1>
+      <p class="lede">The equations behind amplitude variation with offset (AVO) describe a single boundary
+        between two thick layers. Seismic data record many layers, each reflection spread out by the
+        wavelet, so one sample generally carries the response of more than one boundary. The two-layer
+        reading is cleanest at a peak or a trough, where one boundary dominates, and it becomes less
+        reliable between them.</p>
+      <p class="lede">The distance and quadrant (DQ) workflow, developed by Dennis Neff and Warren Neff at
+        Phillips Petroleum and published with the AASPI group (Bedle et al., 2025a, 2025b, 2025c), converts
+        each sample of a near and a far partial stack to the equivalent of a peak or trough. The two-layer
+        reading can then be applied down the whole trace, before a wavelet is estimated or a well is tied.
+        The modules build the workflow one operation at a time and show where it works less well.</p>
+      <p class="lede"><b>Who it is for.</b> Undergraduate geology and geophysics students meeting these
+        methods for the first time. The modules assume a working idea of a seismic trace, a reflection and
+        what AVO sets out to measure. Students new to intercept, gradient and crossplots may find
+        <a href="https://hbedle-subsurface.github.io/avo-basics/">How AVO Actually Works</a> a useful first
+        step.</p>
+      <p class="lede"><b>After the modules.</b> A student should be able to explain what the DQ distance and
+        Theta PX measure and what controls them; describe why the workflow picks, numbers and phase-rotates
+        the near stack before combining it with the far stack; recognize on a DQ section which features can
+        come from the rock and which from bed thickness; and name the conditions under which the attributes
+        become unreliable. Start with module 00.</p>
       <div class="hero-cta">
-        <a class="btn" href="modules/orientation.html">Start with what the DQ trace gives you →</a>
+        <a class="btn" href="modules/orientation.html">Start with module 00 →</a>
         <a class="btn ghost" href="#modules">See all modules</a>
       </div>
     </div>
@@ -64,14 +66,15 @@
         The rest are recorded and displayed, and are rarely interpreted quantitatively.</p>
     </div>
     <div>
-      <h3>No wavelet, no wells, no mudrock line</h3>
-      <p>The DQ process needs a near stack and a far stack and nothing else. That is what lets AVO work
-        start at the beginning of a project rather than the end.</p>
+      <h3>No wavelet estimate or well tie</h3>
+      <p>The workflow runs on a near and a far partial stack, prepared with zero phase and relative
+        amplitudes. No wavelet estimate, well tie or mudrock-line slope is needed, so AVO work can begin
+        early in a project.</p>
     </div>
     <div>
-      <h3>It does not invent events</h3>
-      <p>Every feature on a DQ section is already in the near and far stacks. The process makes them easier
-        to see and easier to quantify, and you can always go back and check.</p>
+      <h3>Traceable to the input stacks</h3>
+      <p>Features on a DQ section come from the near and far stacks, so each one can be checked against
+        the stacks it came from (Bedle et al., 2025a).</p>
     </div>
    </div>
   </section>
@@ -93,10 +96,9 @@
         <div class="card-thumb" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid meet"><rect width="160" height="84" fill="#F6F4EE"/><rect x="14" y="12" width="60" height="60" fill="#f4f2ee"/><rect x="14" y="30" width="60" height="9" fill="#b9c8da"/><rect x="14" y="49" width="60" height="9" fill="#e8b4b4"/><rect x="86" y="12" width="60" height="60" fill="#f4f2ee"/><rect x="86" y="30" width="60" height="28" fill="#e0567f"/><text x="44" y="82" font-size="8" fill="#16191C" opacity=".55" font-family="monospace" text-anchor="middle">STACK</text><text x="116" y="82" font-size="8" fill="#841617" font-family="monospace" text-anchor="middle">DQ</text></svg></div>
         <div class="card-body">
           <div class="card-no">00</div>
-          <h3>Same rocks, two pictures</h3>
-          <p>A stack section and a DQ section from the same rocks, side by side.</p>
-          <div class="q">What does the DQ trace show that a stack does not?</div>
-        </div><span class="flag">old version</span>
+          <h3>The rocks, and two pictures of them</h3>
+          <p>A rock model beside the stack section and the DQ section computed from it.</p>
+        </div>
       </a>
 
       <a class="card" href="modules/two-stacks.html">
@@ -104,8 +106,7 @@
         <div class="card-body">
           <div class="card-no">01</div>
           <h3>Two stacks, and what AVO reads from them</h3>
-          <p>The near and far stacks, the intercept and gradient they carry, and why a conventional AVO reading holds only at peaks and troughs.</p>
-          <div class="q">What goes into the DQ workflow?</div>
+          <p>The near and far stacks, the intercept and gradient they carry, and why a two-layer AVO reading is cleanest at peaks and troughs.</p>
         </div>
       </a>
 
@@ -117,7 +118,6 @@
           <div class="card-no">02</div>
           <h3>Marking the waveform</h3>
           <p>The near stack reduced to peaks, troughs and zero crossings, and every sample between them given a quadrant number.</p>
-          <div class="q">How does each sample know where it sits in the waveform?</div>
         </div><span class="flag">old version</span>
       </a>
 
@@ -127,7 +127,6 @@
           <div class="card-no">03</div>
           <h3>Turning every sample into a peak</h3>
           <p>Seven phase rotations, and each sample read from the rotated copy in which it sits at a peak or trough.</p>
-          <div class="q">How does a zero crossing become usable?</div>
         </div><span class="flag">old version</span>
       </a>
 
@@ -137,7 +136,6 @@
           <div class="card-no">04</div>
           <h3>The distance</h3>
           <p>The near and gradient traces combined into one distance, its sign, and the blocked shape that results.</p>
-          <div class="q">What is the DQ trace, sample by sample?</div>
         </div><span class="flag">old version</span>
       </a>
 
@@ -149,7 +147,6 @@
           <div class="card-no">05</div>
           <h3>Rotating and splitting the crossplot</h3>
           <p>The shale trend rotated onto the x-axis, and the points split into four sectors by quadrant number.</p>
-          <div class="q">What is the RDQ crossplot?</div>
         </div><span class="flag">old version</span>
       </a>
 
@@ -159,7 +156,6 @@
           <div class="card-no">06</div>
           <h3>Theta PX, the angle of the same point</h3>
           <p>The polar angle of each point on the RDQ crossplot, and the fluid and lithology differences it separates.</p>
-          <div class="q">What does the angle add to the distance?</div>
         </div><span class="flag">old version</span>
       </a>
 
@@ -169,7 +165,6 @@
           <div class="card-no">07</div>
           <h3>Time thickness</h3>
           <p>The signed isochron and signed half isochron, their response to facies, and the half isochron as a third crossplot axis.</p>
-          <div class="q">What does the time between picks record?</div>
         </div><span class="flag">old version</span>
       </a>
 
@@ -181,7 +176,6 @@
           <div class="card-no">08</div>
           <h3>Porosity</h3>
           <p>How the DQ distance follows porosity through impedance and V<sub>P</sub>/V<sub>S</sub>.</p>
-          <div class="q">Why does a DQ trace resemble a porosity log?</div>
         </div><span class="flag">old version</span>
       </a>
 
@@ -191,7 +185,6 @@
           <div class="card-no">09</div>
           <h3>Thickness and tuning</h3>
           <p>Wedge models, the tuning curve, and which attribute responds to thickness.</p>
-          <div class="q">Which changes are rock and which are bed thickness?</div>
         </div><span class="flag">old version</span>
       </a>
 
@@ -201,7 +194,6 @@
           <div class="card-no">10</div>
           <h3>The four AVO classes</h3>
           <p>Classes 1 to 4 through the same workflow, as sections, crossplots and histograms.</p>
-          <div class="q">Does the workflow behave the same for every class?</div>
         </div><span class="flag">old version</span>
       </a>
 
@@ -211,7 +203,6 @@
           <div class="card-no">11</div>
           <h3>A synthetic line with every attribute</h3>
           <p>A dipping, faulted line with every attribute on it, including DQ Average, DQ Sum and Median Theta PX.</p>
-          <div class="q">What do the attributes look like on structure?</div>
         </div><span class="flag">old version</span>
       </a>
 
@@ -228,12 +219,31 @@
     <div class="sec-row">
       <div>
         <h2>About</h2>
-        <p>The distance and quadrant trace was developed at Phillips Petroleum and has been carried forward
-          by the AASPI consortium at the University of Oklahoma. These modules are a teaching companion to
-          two papers in <em>Interpretation</em>: Bedle et al. (2024) on the DQ trace itself, and Bedle et al.
-          (2025) on the RDQ crossplot workflow.</p>
-        <p>Everything here runs in the browser. There is no server, no upload and no install, and no data
-          you generate leaves the page.</p>
+        <p>The distance and quadrant trace was developed by Dennis B. Neff and Warren Neff at Phillips
+          Petroleum (Neff, 2003; Neff et al., 2005) and has been published with the AASPI consortium at
+          the University of Oklahoma. These modules are a teaching companion to three papers in
+          <em>Interpretation</em>: Bedle et al. (2025a) on the DQ trace, Bedle et al. (2025b) on the RDQ
+          crossplot workflow, and Bedle et al. (2025c) on RDQ inversion. The signed isochron attributes
+          follow Chaudhry et al. (2026).</p>
+        <ul class="refs">
+          <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method
+            for quantitative seismic interpretation: Theory and application to a synthetic amplitude
+            variation with offset data catalog: <em>Interpretation</em>, 13, T163&ndash;T176,
+            doi: 10.1190/INT-2024-0084.1.</li>
+          <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025b, Prediction of reservoir properties
+            using the RDQ crossplot workflow: <em>Interpretation</em>, doi: 10.1190/INT-2024-0096.1.</li>
+          <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025c, Prediction of reservoir properties
+            using the DQ trace attribute and RDQ inversion workflow: <em>Interpretation</em>,
+            doi: 10.1190/INT-2024-0113.1.</li>
+          <li>Chaudhry, N., H. Bedle, D. B. Neff, and W. Neff, 2026, Isochron-based seismic attributes for
+            stratigraphic and facies interpretation: Field examples: IMAGE expanded abstract.</li>
+          <li>Neff, D. B., 2003, Method of predicting rock properties from seismic data: U.S. Patent
+            6,654,692 B1.</li>
+          <li>Neff, D. B., E. L. Butler, and W. A. Lucas, 2005, Concurrent phase angle graphic analysis:
+            U.S. Patent 6,954,403 B2.</li>
+        </ul>
+        <p>Everything runs in the browser. There is no server, no upload and no install, and no data
+          generated on the page leaves it.</p>
       </div>
       <div>
         <h2>Companion sets</h2>
@@ -257,9 +267,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of Oklahoma,
         <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside these modules leaves your browser. The one request each page
+      <p class="lic">Nothing done inside these modules leaves the browser. The one request each page
         makes is a page-view count, so that I can show the university these are being used &mdash; no
-        cookie, no account, nothing about you.</p>
+        cookie, no account, no personal information.</p>
     </div>
   </footer>
 </div>

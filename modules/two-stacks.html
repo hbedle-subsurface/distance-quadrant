@@ -47,8 +47,8 @@
           <div class="ctl-col">
             <h2>The rocks</h2>
             <div class="ctl">
-              <label>Shale above and below <span class="val" id="overV">soft shale</span></label>
-              <div class="seg" role="group" aria-label="Shale above and below the sand">
+              <label>Rock above and below <span class="val" id="overV">soft shale</span></label>
+              <div class="seg" role="group" aria-label="Rock above and below the sand">
                 <button type="button" data-over="soft" aria-pressed="true">soft</button>
                 <button type="button" data-over="hard" aria-pressed="false">hard</button>
                 <button type="button" data-over="tight" aria-pressed="false">tight</button>
@@ -145,7 +145,7 @@
     <p class="lede">At a single boundary the <span class="g" data-g="rc">reflection coefficient</span>
       plotted against sin&sup2;&theta; is close to a straight line
       (<span class="g" data-g="shuey">Shuey, 1985</span>): R(&theta;)&nbsp;=&nbsp;A&nbsp;+&nbsp;B&nbsp;sin&sup2;&theta;.
-      A is where the line meets zero angle. B is its slope.</p>
+      A is where the line meets zero angle. B, the gradient, is how steeply the line rises or falls.</p>
     <p class="lede">The average of a straight line over a window is the line&rsquo;s value at the window&rsquo;s
       mean sin&sup2;&theta;. That mean is <b>0.0101</b> for 0&ndash;10&deg; and <b>0.1802</b> for
       20&ndash;30&deg;. So N&nbsp;=&nbsp;A&nbsp;+&nbsp;0.0101&nbsp;B, which is the intercept to within a
@@ -154,6 +154,11 @@
     <p class="lede">The right-hand plot is a <span class="g" data-g="crossplot">crossplot</span> of N against
       F&nbsp;&minus;&nbsp;N, the form the DQ papers use. Both axes share one fixed scale, so the 0.17 factor
       shows as a compressed vertical spread.</p>
+    <p class="lede">Changing the pore fluid moves the sand-top point. Gas lowers the sand&rsquo;s P-wave
+      velocity strongly and its density slightly, so its <span class="g" data-g="impedance">impedance</span>
+      drops and A becomes more negative. Gas lowers V<sub>P</sub> much more than V<sub>S</sub>, so
+      <span class="g" data-g="vpvs">V<sub>P</sub>/V<sub>S</sub></span> falls and B generally becomes more
+      negative as well.</p>
 
     <div class="stepctl">
       <div class="ctl">
@@ -191,13 +196,15 @@
       <span class="g" data-g="sidelobe">sidelobes</span>.</p>
     <p class="lede">At a <span class="g" data-g="peak">peak</span> or <span class="g" data-g="trough">trough</span>
       one boundary dominates, and the sample lands near the two-layer answer on the crossplot. Between the
-      <span class="g" data-g="extremum">extrema</span> the mixture changes from sample to sample and the point
-      slides along a path through the origin. Conventional AVO interpretation reads only the extrema: two
-      samples in each waveform cycle, out of 25 at 40&nbsp;Hz and a 1&nbsp;ms
+      <span class="g" data-g="extremum">extrema</span> the mixture changes from sample to sample, and the points
+      form a path through the origin. The two-layer reading is cleanest at the extrema: two samples in
+      each waveform cycle, out of 25 at 40&nbsp;Hz and a 1&nbsp;ms
       <span class="g" data-g="sample-rate">sample rate</span>.</p>
-    <p class="lede">The DQ workflow converts every sample to the equivalent of a peak or trough, so the
-      two-layer reading applies to all of them (Bedle et al., 2025). Modules 02 to 04 build that
-      conversion one operation at a time.</p>
+    <p class="lede">The DQ workflow is designed to convert every sample to the equivalent of a peak or
+      trough, so that the two-layer reading can be applied to all of them (Bedle et al., 2025a). The papers
+      note where this works less well: in beds thinner than about a quarter wavelength, and where the
+      lithology changes within one waveform loop. Modules 02 to 04 build the conversion one operation at a
+      time.</p>
 
     <div class="stepctl">
       <div class="ctl">
@@ -240,13 +247,14 @@
             0.0775 to 0.1701. A wider separation between the windows gives a larger F&nbsp;&minus;&nbsp;N for
             the same gradient. Farther angles are also noisier and more affected by residual moveout, and the
             two-term equation drifts past about 30&deg;, which is why the papers stop there.</span></details></li>
-        <li><b>Where does the sand top move when brine replaces gas?</b> At 28% porosity under soft shale,
-          where does the filled point on the step 2 crossplot sit for each fluid?
-          <details class="reveal"><summary>Answer</summary><span class="ans">With brine the point sits in the
-            lower right: A&nbsp;=&nbsp;+0.047 and B&nbsp;=&nbsp;&minus;0.183, a class 1 response. With gas it
-            moves left and down, to A&nbsp;=&nbsp;&minus;0.039 and B&nbsp;=&nbsp;&minus;0.247. Gas lowers the
-            sand&rsquo;s impedance, which moves the point left, and lowers its V<sub>P</sub>/V<sub>S</sub>,
-            which makes the gradient more negative.</span></details></li>
+        <li><b>Can the near stack alone identify gas?</b> Under soft shale, compare a gas sand at 28%
+          porosity with a brine sand at 36%. What do N and F&nbsp;&minus;&nbsp;N read at the sand top?
+          <details class="reveal"><summary>Answer</summary><span class="ans">The near stack reads almost the
+            same for both, &minus;0.041 for the gas sand and &minus;0.042 for the brine sand. Higher porosity
+            and gas both lower the sand&rsquo;s impedance, so both lower the intercept. F&nbsp;&minus;&nbsp;N
+            differs: &minus;0.042 with gas and &minus;0.013 with brine, because gas lowers
+            V<sub>P</sub>/V<sub>S</sub> much more than extra porosity does. In this model the gradient separates
+            the two; a near stack on its own would not.</span></details></li>
         <li><b>Does the trough still give the two-layer answer when the sand is thin?</b> With the step 3 cursor
           on the trough at the sand top, what happens to the distance readout as the sand thins from
           30&nbsp;ms to 10&nbsp;ms?
@@ -255,6 +263,14 @@
             the trough moves, and it lands <span id="x4b">45%</span> away. This is
             <span class="g" data-g="tuning">tuning</span>: even the extrema stop being single-boundary
             readings once the bed is thin.</span></details></li>
+        <li><b>Does one crossplot position mean one kind of sand?</b> On the step 2 crossplot, compare a brine
+          sand at 36% porosity under soft shale with a gas sand at 20% porosity under hard shale.
+          <details class="reveal"><summary>Answer</summary><span class="ans">The two sand tops plot close
+            together, at about (&minus;0.042, &minus;0.013) and (&minus;0.056, &minus;0.018). One is wet and
+            one holds gas. The crossplot records the contrast between the sand and the rock above it, so a
+            change in the overlying rock can move the point as far as a change in fluid. Reading the fluid
+            from the point requires some independent knowledge of the rock above the sand, from a well or
+            from the regional geology.</span></details></li>
         <li><b>What does a zero crossing contribute?</b> Where does the crossplot point sit when the step 3
           cursor is halfway between the trough and the peak?
           <details class="reveal"><summary>Answer</summary><span class="ans">The point sits close to the origin
@@ -279,7 +295,10 @@
         <li><b>The two-layer reading holds at peaks and troughs</b>, where one boundary dominates the sample.
           Between them each sample mixes boundaries.</li>
         <li><b>Two samples per cycle.</b> At 40&nbsp;Hz and 1&nbsp;ms a waveform cycle holds 25 samples, and
-          conventional AVO reads two of them.</li>
+          the two-layer reading is cleanest at two of them.</li>
+        <li><b>A crossplot position has more than one explanation.</b> Porosity, pore fluid and the rock
+          above the sand all move the sand-top point, and different combinations can land in the same
+          place.</li>
         <li><b>Thin beds move even the extrema</b> away from the two-layer answer, through tuning.</li>
       </ul>
     </div>
@@ -289,10 +308,10 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and references</summary>
-      <p>The rock model is the one used on every page of the site. The shale is one of three fixed
-        lithologies, above and below the sand. The brine sand is built from porosity with Wyllie&rsquo;s time
+      <p>The rock model is the one used on every page of the site. The rock above and below the sand
+        is one of three fixed lithologies: soft shale, hard shale or tight sandstone. The brine sand is built from porosity with Wyllie&rsquo;s time
         average for V<sub>P</sub>, a linear mixing law for density, and the V<sub>P</sub>/V<sub>S</sub>
-        trend of Bedle et al. (2025, eq. 7). Oil and gas cases follow from Gassmann fluid substitution.
+        trend of Bedle et al. (2025a, eq. 7). Oil and gas cases follow from Gassmann fluid substitution.
         Intercept and gradient at each boundary come from the Shuey (1985) two-term approximation.</p>
       <p>The gather has 41 traces at one-degree spacing from 0 to 40&deg;. Each trace is the two reflection
         coefficients at that angle convolved with a zero-phase Ricker wavelet, sampled at 1&nbsp;ms. A partial
@@ -318,9 +337,11 @@
           <em>Geophysics</em>, 54, 680&ndash;688.</li>
         <li>Castagna, J. P., and H. W. Swan, 1997, Principles of AVO crossplotting: <em>The Leading Edge</em>,
           16, 337&ndash;344.</li>
+        <li>Ross, C. P., and D. L. Kinman, 1995, Nonbright-spot AVO: Two examples: <em>Geophysics</em>, 60,
+          1398&ndash;1408.</li>
         <li>Castagna, J. P., H. W. Swan, and D. J. Foster, 1998, Framework for AVO gradient and intercept
           interpretation: <em>Geophysics</em>, 63, 948&ndash;956.</li>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: Theory and application to a synthetic amplitude variation with
           offset data catalog: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
       </ul>
@@ -338,7 +359,7 @@
   </section>
 
   <div class="pager" id="pager" hidden>
-    <a class="btn ghost" href="orientation.html">← Same rocks, two pictures</a>
+    <a class="btn ghost" href="orientation.html">← The rocks, and two pictures of them</a>
     <a class="btn" href="stickogram.html">Next: marking the waveform →</a>
   </div>
 
@@ -554,7 +575,7 @@
 
   const INK = '#16191C', SOFT = 'rgba(22,25,28,0.45)';
   const CRIM = '#841617', NEARC = '#1D6FA3', FARC = '#C2306B';
-  const SANDFILL = { brine: '#D9C27A', oil: '#B99A55', gas: '#E7B7C8' };
+  const SANDFILL = { brine: '#9CC3DE', oil: '#AEBB86', gas: '#E7B7C8' };
   const SHALEFILL = { soft: '#9AA3AB', hard: '#7E8790', tight: '#B8A98C' };
   const MONO = '9.5px "IBM Plex Mono", monospace';
 
@@ -771,14 +792,14 @@
     SEIS.axisLeft(ctx, rA, -LIM, LIM, 'reflection coefficient', null, { ticks: 6, flip: true, grid: true });
     SEIS.frame(ctx, rA);
     SEIS.dashedLine(ctx, rA.x, yA(0), rA.x + rA.w, yA(0), SOFT, [4, 4], 1);
-    // bottom axis: positioned by sin^2, labelled in degrees
+    // bottom axis: positioned by sin^2, labeled in degrees
     ctx.save();
     ctx.font = MONO; ctx.fillStyle = SOFT; ctx.strokeStyle = SOFT;
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
     [0, 10, 20, 30, 40].forEach((d) => {
       const x = xA(SIN2[d]);
       ctx.beginPath(); ctx.moveTo(x, rA.y + rA.h); ctx.lineTo(x, rA.y + rA.h + 4); ctx.stroke();
-      // 0 and 10 degrees sit close together on a sin^2 axis, so 10 is ticked but not labelled
+      // 0 and 10 degrees sit close together on a sin^2 axis, so 10 is ticked but not labeled
       if (d !== 10) ctx.fillText(d + '\u00B0', x, rA.y + rA.h + 6);
     });
     ctx.font = '11px "IBM Plex Sans", sans-serif';

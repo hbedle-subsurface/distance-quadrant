@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The four AVO classes | How the DQ Trace Actually Works</title>
-<meta name="description" content="Classes 1, 2, 3 and 4 built from the same rocks, put through the whole DQ chain, and compared as sections and as histograms.">
+<meta name="description" content="Classes 1, 2, 3 and 4 built from the same rocks, put through the whole DQ workflow, and compared as sections and as histograms.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@
     <h1>The four AVO classes</h1>
     <p class="sub">Module 01 introduced the classes as a way of naming where a sand sits on an AB
       crossplot. Every module since has quietly assumed one. Here all four are built from the same rock
-      model, run through the whole chain, and compared &mdash; as traces, and as the histograms the DQ
+      model, run through the whole workflow, and compared &mdash; as traces, and as the histograms the DQ
       papers use to summarise a volume.</p>
   </div>
 
@@ -93,7 +93,7 @@
     Method and references are there when you want them.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · Four corners of one plot</button>
-    <button role="tab" data-tab="p2" aria-selected="false">2 · Through the chain</button>
+    <button role="tab" data-tab="p2" aria-selected="false">2 · Through the workflow</button>
     <button role="tab" data-tab="p3" aria-selected="false">3 · As histograms</button>
     <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
     <span class="gap"></span>
@@ -137,7 +137,7 @@
 
   <section class="tabpane" id="p2" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
-      <h3><span class="stepno">2</span>Through the chain</h3>
+      <h3><span class="stepno">2</span>Through the workflow</h3>
       <span class="hint">The same processing, four times</span>
     </div>
 
@@ -155,7 +155,7 @@
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Polarity flip applied to</span><b id="s2a">&mdash;</b></div>
       <div class="stat key"><span>Distance at the sand top</span><b id="s2b">&mdash;</b></div>
-      <div class="stat"><span>&thetas;<sub>px</sub> there</span><b id="s2c">&mdash;</b></div>
+      <div class="stat"><span>&theta;<sub>px</sub> there</span><b id="s2c">&mdash;</b></div>
       <div class="stat"><span>Sand top reads as</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
@@ -163,7 +163,7 @@
       <span>The class 2 column is the instructive one. Its intercept is close to zero, so the near stack
         barely registers the sand at all, and the distance is correspondingly small &mdash; this is the
         case module 10 used as its example of an unreliable angle, and it is the case every amplitude
-        method finds hardest. Nothing here fixes it; what the chain does is make the weakness visible
+        method finds hardest. Nothing here fixes it; what the workflow does is make the weakness visible
         rather than hiding it inside a single bright number.</span>
     </div>
   </section>
@@ -221,7 +221,7 @@
     <p class="lede">They remain useful because they name the thing that decides how an amplitude method
       will behave. Knowing you are in a class 2 setting tells you the intercept is near zero and that
       anything depending on it will be fragile, which is worth knowing before you build a workflow on it.
-      The DQ chain does not remove that fragility. What it does is carry a second number, the angle, whose
+      The DQ workflow does not remove that fragility. What it does is carry a second number, the angle, whose
       failure mode is different from the distance's, so that the two disagree in a detectable way rather
       than failing silently together.</p>
 
@@ -237,42 +237,40 @@
       <h3>Exercises</h3>
       <ol>
         <li><b>Read the four positions.</b> On step 1, note the intercept and gradient of each exemplar.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Class 1 has a positive
+          <details class="reveal"><summary>Answer</summary><span class="ans">Class 1 has a positive
             intercept and a negative gradient, class 3 has both negative, class 4 has a negative intercept
             with a positive gradient, and class 2 sits near the origin. Those four sign combinations are the entire content of the classification. Note what that does not tell you: two sands in the same class can be quite different rocks, and the same rock changes class when the seal changes. A class is a statement about a boundary, so it is shared by every pair of rocks that happens to produce those signs. Everything else attached to the names &mdash; bright
             spot, dim spot, phase reversal &mdash; follows from where the line through those two numbers
             crosses zero.</span></details></li>
         <li><b>Find the polarity flip.</b> On step 2, see which class has it applied.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Class 1, because its intercept
-            is positive and the reservoir top arrives as a peak rather than a trough. Module 04 showed why
-            this is done at the stacking step rather than in the numbering: the numbering restarts at every
-            extremum and cannot tell a peak from a trough, so the only place to fix polarity is before the
-            picking. Skip it and every downstream attribute is attached to the wrong
-            boundaries.</span></details></li>
+          <details class="reveal"><summary>Answer</summary><span class="ans">Class 1, because its intercept
+            is positive and the reservoir top arrives as a peak rather than a trough. Troughs are Q1 and peaks Q9, so
+            without the flip a class 1 top would be labeled Q9 while a class 3 top is Q1. Reversing both
+            partial stacks before picking gives the same boundary the same label in every class.</span></details></li>
         <li><b>Compare the class 2 column with the others.</b> On step 2, read the distance at the sand top
           for each class.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Class 2 is much the smallest,
+          <details class="reveal"><summary>Answer</summary><span class="ans">Class 2 is much the smallest,
             because its intercept is close to zero by definition and the near stack is essentially the
             intercept. This is the same weakness module 10 met at its class 2 crossover and module 12 met
             under a soft shale: near a crossover the vector is short, the distance is small and the angle
             is unstable. It is a property of the rocks rather than of the method, and no processing
             removes it.</span></details></li>
         <li><b>Switch the histogram to a linear count axis.</b> On step 3, untick the box.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The background bar near zero
+          <details class="reveal"><summary>Answer</summary><span class="ans">The background bar near zero
             swamps everything and the tail vanishes. In a real clastic section the imbalance is far worse
             than in this model &mdash; the papers put it at roughly four samples in five being shale
             &mdash; which is why the published histograms use a logarithmic count axis. It is a display
             choice rather than a processing one, and it changes whether you can see the thing you are
             looking for.</span></details></li>
         <li><b>Thin the sand.</b> Take the thickness to 10 ms and look at steps 2 and 3 together.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Every class loses separation at
+          <details class="reveal"><summary>Answer</summary><span class="ans">Every class loses separation at
             once, because module 12's tuning applies to all of them equally: the top and base reflections
             merge and the sand no longer has a sample of its own. The classes differ in how bright they
             are, not in how they respond to thinning, so a thin class 3 sand can read like a thick class 2
             one. That ambiguity is exactly what module 12's pairing of distance with angle is
             for.</span></details></li>
         <li><b>Add noise and watch which class fails first.</b> Take the noise to 30% on step 3.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Class 2 degrades first and
+          <details class="reveal"><summary>Answer</summary><span class="ans">Class 2 degrades first and
             worst, because its separation was smallest to begin with and noise is added in absolute rather
             than relative terms. The ordering is the useful part: the class that is hardest in clean data
             is hardest in noisy data too, and by more. Any claim that a method works on class 2 should be
@@ -290,7 +288,7 @@
           seal together, not a property of the reservoir.</li>
         <li><b>All four classes are built from this one rock model</b> by changing the seal, the fluid or
           the porosity.</li>
-        <li><b>The chain is identical for all four</b>, with one exception: class 1 has both partial stacks
+        <li><b>The workflow is identical for all four</b>, with one exception: class 1 has both partial stacks
           reversed before picking.</li>
         <li><b>Class 2 is the hard case</b> and stays hard. Its intercept is near zero, so the distance is
           small and the angle unstable.</li>
@@ -313,27 +311,29 @@
         each lands cleanly in one quadrant of the intercept-gradient plane: <b>class 1</b> is a soft shale
         over a 10% porosity brine sand; <b>class 2</b> a soft shale over a 34% brine sand; <b>class 3</b> a
         soft shale over a 28% gas sand; <b>class 4</b> a tight sandstone over a 26% gas sand. The class
-        label shown on step 1 is computed from the signs of the modelled intercept and gradient rather than
+        label shown on step 1 is computed from the signs of the modeled intercept and gradient rather than
         asserted, so if the rock model is ever retuned the labels follow it.</p>
       <p>Everything downstream is as in modules 03 through 13, applied identically to all four. The one
         difference is the polarity flip of module 04, applied where the intercept is positive.</p>
       <p>The histograms are of DQ distance over the whole analysis window, binned uniformly, with the
-        samples falling inside the modelled sand marked separately. The logarithmic count axis follows the
+        samples falling inside the modeled sand marked separately. The logarithmic count axis follows the
         published displays; the note that roughly four samples in five are shale in a clastic section is
         from the DQ display specification and describes field data rather than this model, where the
         proportion depends on how thick you set the sand.</p>
       <p><b>What this module does not do.</b> It does not reproduce the published class sections, which are
-        built from ray-traced synthetics over pseudo-well catalogues with lateral variation. It is four
+        built from ray-traced synthetics over pseudo-well catalogs with lateral variation. It is four
         single traces from one rock model, intended to show what the class names mean and how the same
-        chain treats each. Comparisons between classes here are internally consistent; their absolute
+        workflow treats each. Comparisons between classes here are internally consistent; their absolute
         values are not calibrated to anything.</p>
       <ul>
         <li>Rutherford, S. R., and R. H. Williams, 1989, Amplitude-versus-offset variations in gas sands:
           <em>Geophysics</em>, 54, 680&ndash;688.</li>
         <li>Castagna, J. P., and H. W. Swan, 1997, Principles of AVO cross plotting: <em>The Leading
           Edge</em>, 16, 337&ndash;344.</li>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025b, Prediction of reservoir properties
+          using the RDQ crossplot workflow: <em>Interpretation</em>, doi: 10.1190/INT-2024-0096.1.</li>
       </ul>
     </details>
   </section>
@@ -341,7 +341,7 @@
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
     <h3><a href="reading-sections.html">15 · Reading a DQ section</a></h3>
-    <p>The display conventions the papers use, and what each colour bar is protecting &mdash; the last
+    <p>The display conventions the papers use, and what each color bar is protecting &mdash; the last
       module in the course.</p>
     <a class="btn" href="reading-sections.html">Open module 15 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
@@ -361,10 +361,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>
@@ -625,12 +624,10 @@
      long and drops them when it is short.
      ===================================================================== */
 
-  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
-     and then starts again. It does not run up to 9 and mirror back down. The
-     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
-     opens the next, which is why the published table gives both the 0 degree
-     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
-     coarse version as "4 quadrants". */
+  /* Published rule (Bedle et al., 2025a, steps 2 to 5 and Figure 4a): every
+     zero crossing is Q5, every trough Q1 and every peak Q9. Between each pair
+     of anchors the interior numbers run upward from the extremum, so below a
+     peak the sequence is 9, 2, 3, 4, 5 and below a trough 1, 2, 3, 4, 5. */
 
   function quadrants(tr, pk) {
     const nt = tr.length;
@@ -665,24 +662,25 @@
     };
 
     loops.forEach((L) => {
-      q[L.a] = 1;                                // opens this loop
+      q[L.a] = tr[L.a] < 0 ? 1 : 9;               // trough Q1, peak Q9
       q[L.x] = 5;
-      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
-      ends.add(L.b);                             // loop has already claimed it
+      q[L.b] = tr[L.b] < 0 ? 1 : 9;
+      ends.add(L.b);
       fill(L.a, L.x, [2, 3, 4]);
       fill(L.x, L.b, [6, 7, 8]);
     });
-    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
-    // same position and take the same filter, so either label is correct
-    loops.forEach((L) => { q[L.a] = 1; });
+    // troughs are Q1 and peaks Q9 wherever they sit; both take the 0 degree
+    // filter, so this changes the labels and not the DQ values
+    const tag = (i) => (tr[i] < 0 ? 1 : 9);
+    loops.forEach((L) => { q[L.a] = tag(L.a); q[L.b] = tag(L.b); });
 
     const anchors = [];
     loops.forEach((L) => {
-      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+      anchors.push({ i: L.a, q: q[L.a] }, { i: L.x, q: 5 });
     });
     if (loops.length) {
       const last = loops[loops.length - 1];
-      anchors.push({ i: last.b, q: q[last.b] || 9 });
+      anchors.push({ i: last.b, q: q[last.b] });
     }
     anchors.sort((a, b) => a.i - b.i);
     return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
@@ -724,7 +722,7 @@
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace rather than to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centres a sample runs the other way, so the filter is
+     the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
      ===================================================================== */
 
@@ -972,7 +970,7 @@
 
      The polar angle of the split coordinates, folded into 0-90 by sector and
      multiplied by the sign of the DQ trace. Quoted from the AASPI column
-     sequence; Paper 2 gives the same four rules labelled by sector.
+     sequence; Paper 2 gives the same four rules labeled by sector.
      ===================================================================== */
 
   function fold(deg) {
@@ -1021,8 +1019,8 @@
      THE FOUR AVO CLASSES
 
      Four fixed recipes in the shared rock model, one per quadrant of the
-     intercept-gradient plane, run through the identical chain. The class
-     label is computed from the modelled signs rather than asserted.
+     intercept-gradient plane, run through the identical workflow. The class
+     label is computed from the modeled signs rather than asserted.
      ===================================================================== */
 
   const SOFT = 'rgba(22,25,28,0.45)';
@@ -1233,7 +1231,7 @@
     ctx.font = '9px "IBM Plex Mono", monospace';
     ctx.textAlign = 'left'; ctx.textBaseline = 'top';
     ctx.fillStyle = 'rgba(22,25,28,0.5)';
-    ctx.fillText('grey = near stack, colour = DQ distance, \u21BB = polarity flipped',
+    ctx.fillText('gray = near stack, color = DQ distance, \u21BB = polarity flipped',
       rect.x, rect.y + rect.h + 8);
 
     const cur = runClass(current());
@@ -1295,7 +1293,7 @@
     ctx.font = '9px "IBM Plex Mono", monospace';
     ctx.textAlign = 'left'; ctx.textBaseline = 'top';
     ctx.fillStyle = 'rgba(22,25,28,0.5)';
-    ctx.fillText('grey = all samples in the window, colour = samples inside the sand',
+    ctx.fillText('gray = all samples in the window, color = samples inside the sand',
       62, H - 30);
 
     const cur = runClass(current());
@@ -1356,7 +1354,7 @@
 
   const PANES = ['p1', 'p2', 'p3', 'pw', 'pe', 'pk', 'pm'];
   const STEPNAMES = {
-    p1: 'Four corners', p2: 'Through the chain', p3: 'Histograms',
+    p1: 'Four corners', p2: 'Through the workflow', p3: 'Histograms',
     pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
   };
 

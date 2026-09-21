@@ -113,12 +113,12 @@
   <section class="tabpane" id="p1" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
       <h3><span class="stepno">1</span>Where each number sits</h3>
-      <span class="hint">The loop, coloured by quadrant number</span>
+      <span class="hint">The loop, colored by quadrant number</span>
     </div>
 
     <p class="lede">
       Start from the crossplot of module 07 with the baseline rotation of module 08 already applied, so the
-      background trend lies along the horizontal. Now colour every point by its quadrant number rather than
+      background trend lies along the horizontal. Now color every point by its quadrant number rather than
       by its sign.</p>
 
     <p class="lede">
@@ -128,9 +128,9 @@
       in the waveform and position on the crossplot are the same information seen two ways, which is the
       fact the next step exploits.</p>
 
-    <canvas id="c1a" aria-label="The rotated crossplot with every sample coloured by its quadrant number"></canvas>
+    <canvas id="c1a" aria-label="The rotated crossplot with every sample colored by its quadrant number"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Blue counts toward the trough, pink toward the peak,
-      grey is the zero crossing. The dashed line is the rotated background trend, now horizontal.</p>
+      gray is the zero crossing. The dashed line is the rotated background trend, now horizontal.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Samples plotted</span><b id="s1a">&mdash;</b></div>
@@ -156,18 +156,17 @@
     <p class="lede">
       The rule is short enough to quote in full. Taking the rotated coordinates, <b>if the quadrant number
       is Q3, Q4, Q5, Q6 or Q7, replace the gradient with its negative</b> and leave the amplitude alone.
-      Q1, Q2, Q8 and Q9 are left as they are. The AASPI column spec writes the same rule one number lower,
-      because it counts quadrants from zero rather than from one; the site follows the paper's numbering,
-      where the delimiter table gives the range as 1 to 9.</p>
+      Q1, Q2, Q8 and Q9 are left as they are. This is equation 4 of Bedle et al. (2025b), in the
+      paper's numbering of Q1 to Q9.</p>
 
     <p class="lede">
       Geometrically it is a reflection in the horizontal axis, applied to the middle of every loop and not
       to its ends. Because the baseline has already been rotated onto that axis, reflecting in it is
-      reflecting in the background trend, which is the only line on the plot with a meaning.</p>
+      reflecting in the background trend.</p>
 
     <canvas id="c2a" aria-label="The crossplot before and after the sector split, side by side"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The same samples, before and after. The points that
-      move are exactly the ones coloured for Q3 to Q7; everything else is fixed.</p>
+      move are exactly the ones colored for Q3 to Q7; everything else is fixed.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat key"><span>Samples moved</span><b id="s2a">&mdash;</b></div>
@@ -191,9 +190,9 @@
 
     <p class="lede">
       Sector splitting is not an attribute. Nothing is displayed from it and nothing is written to a cube.
-      It exists because of what comes next: the AASPI column sequence computes the split coordinates,
+      It exists because of what comes next: the RDQ workflow (Bedle et al., 2025b) computes the split coordinates,
       then takes the polar angle of those coordinates, and only then folds that angle into
-      &thetas;<sub>px</sub>. Change the split and you change the angle, which changes the attribute.</p>
+      &theta;<sub>px</sub>. Change the split and you change the angle, which changes the attribute.</p>
 
     <p class="lede">
       Below is the polar angle of every sample, with and without the step, plotted against the quadrant
@@ -233,8 +232,7 @@
 
     <p class="lede">The reason for four rather than two is a matter of record. The method's authors used a
       coarser scheme in the original Phillips work &mdash; four quadrant numbers rather than nine, which
-      was enough for 35 Hz data sampled at 2 ms &mdash; and there was no sector splitting in that
-      software. The finer numbering and the splitting arrived together, and the stated reason for the
+      was enough for 35 Hz data sampled at 2 ms &mdash; and it did not include sector splitting. The finer numbering and the splitting arrived together, and the stated reason for the
       finer numbering was the extra detail it gave the splitting to work with.</p>
 
     <div class="legend prose">
@@ -251,7 +249,7 @@
       <ol>
         <li><b>Check that the distance survives.</b> On step 3, compare the two distance readouts, then
           change the rocks and compare them again.
-          <details class="reveal"><summary>Hint</summary><span class="ans">They are identical every time,
+          <details class="reveal"><summary>Answer</summary><span class="ans">They are identical every time,
             and they have to be. The split reflects a point in a line through the origin, and a reflection
             is a rigid motion about that origin, so it cannot change how far away the point is. That is
             worth checking rather than assuming, because it tells you the step is doing nothing at all to
@@ -259,32 +257,32 @@
             split has been applied before the rotation instead of after it.</span></details></li>
         <li><b>Count what moves.</b> On step 2, read how many samples are moved and how many are left
           alone.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Roughly two thirds move. Q3
+          <details class="reveal"><summary>Answer</summary><span class="ans">Roughly two thirds move. Q3
             through Q7 is five of the nine numbers, but they cover more than five ninths of the samples
             because the interior numbers get repeated in long loops while Q1 and Q9 land on single
             samples. Module 04 measured that repetition directly: at ordinary seismic frequencies every
             gap repeats numbers and none omits any.</span></details></li>
         <li><b>Check that only the direction moves.</b> On step 3, read how many samples changed angle,
           by how much, and what happened to the distance.
-          <details class="reveal"><summary>Hint</summary><span class="ans">About two thirds of the samples
+          <details class="reveal"><summary>Answer</summary><span class="ans">About two thirds of the samples
             change direction, by a large amount, and the mean distance does not move at all. One thing cannot be shown here at all: any statistic computed <em>within</em> a single quadrant number is unchanged by the split, because those samples are all reflected together and a reflection
             cannot alter the spread of a group about itself. Whatever the step achieves, it achieves it in
             the relationship between one quadrant number and another, not inside any
             one.</span></details></li>
         <li><b>Look at where Q5 lands.</b> On step 1, read the mean distance for the Q3 to Q7 samples
           against the whole population.
-          <details class="reveal"><summary>Hint</summary><span class="ans">They sit closer to the origin,
+          <details class="reveal"><summary>Answer</summary><span class="ans">They sit closer to the origin,
             because those are the samples nearest a zero crossing and a crossing is a low-amplitude sample.
             Two consequences follow, and they are the same consequence twice: a short vector has a poorly
             determined direction, so the angle of a Q5 sample is the least trustworthy on the plot; and a
             low-amplitude sample is the one most easily moved by noise, which module 03 established when
             it picked the crossings in the first place.</span></details></li>
         <li><b>Turn the step off.</b> Untick the box in the panel and look at steps 2 and 3 together.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The crossplot looks tidier
+          <details class="reveal"><summary>Answer</summary><span class="ans">The crossplot looks tidier
             without it &mdash; the loop stays a loop &mdash; and the angle statistics get worse. The step makes the picture less tidy and the measurement more usable. Anyone meeting sector splitting for the first time and finding it arbitrary is
             responding to something real, and the answer is that it is not for looking at.</span></details></li>
         <li><b>Coarsen the sampling.</b> Step the sample rate to 4 ms and look at step 1 again.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Whole quadrant numbers vanish,
+          <details class="reveal"><summary>Answer</summary><span class="ans">Whole quadrant numbers vanish,
             so the split starts operating on a numbering that no longer distinguishes positions within a
             loop. The step is only as good as the numbers it is given, and those are only as good as the
             sample rate. This is the fourth module to arrive at the same place from a different direction,
@@ -324,26 +322,25 @@
       <summary>Method, assumptions, and where to read more</summary>
       <p>Everything upstream is as in modules 03, 04, 06 and 07: the same rocks, the same picks, the same
         quadrant numbers, the same phase filters, and A and B taken as the quadrant-enhanced near stack and
-        the enhanced far minus near. The baseline rotation is module 08's, applied as the AASPI column
-        sequence specifies &mdash; the polar angle plus (360&deg; minus the shale baseline angle) &mdash;
-        using this model's fitted baseline.</p>
-      <p>The split itself is quoted directly. Paper 2 gives it as: if the quadrant number is Q3, Q4, Q5, Q6
-        or Q7 then the data are replotted using the amplitude unchanged and the gradient multiplied by
-        &minus;1. The RDQ column spec gives the identical rule for quadrant numbers 2 through 6, one lower
-        throughout, because that document numbers the quadrants from zero. The delimiter table in the same
-        document gives the quadrant number range as 1 to 9, which is the convention this site follows.</p>
+        the enhanced far minus near. The baseline rotation is module 08's, applied as a rotation of the
+        polar angle (Bedle et al., 2025b, eq. 3) using this model's fitted baseline.</p>
+      <p>The split itself is quoted directly. Bedle et al. (2025b, eq. 4) give it as: if the quadrant
+        number is Q3, Q4, Q5, Q6 or Q7 then the data are replotted using the amplitude unchanged and the
+        gradient multiplied by &minus;1.</p>
       <p>The angle spread reported on step 3 is the mean, across the nine quadrant numbers, of the standard
         deviation of polar angle among the samples carrying that number. Angles are unwrapped about each
         group's own mean before the standard deviation is taken, so a group straddling 0&deg; is not
         counted as having enormous spread for that reason alone.</p>
       <p>What this module does not do is show the attribute that comes out. Sector splitting produces no
         output of its own: the split coordinates feed the polar angle, and the angle feeds
-        &thetas;<sub>px</sub>, which is module 10. Read this one as plumbing.</p>
+        &theta;<sub>px</sub>, which is module 10. Read this one as plumbing.</p>
       <ul>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
-        <li>Neff, D. B., and W. Neff, RDQ calculations, 3D crossplots and statistical readouts, and the
-          Paper 2 equation notes.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025b, Prediction of reservoir properties
+          using the RDQ crossplot workflow: <em>Interpretation</em>, doi: 10.1190/INT-2024-0096.1.</li>
+        <li>Neff, D. B., and W. Neff, RDQ calculations, 3D crossplots and statistical readouts,
+          unpublished notes.</li>
       </ul>
     </details>
   </section>
@@ -371,10 +368,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>
@@ -635,12 +631,10 @@
      long and drops them when it is short.
      ===================================================================== */
 
-  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
-     and then starts again. It does not run up to 9 and mirror back down. The
-     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
-     opens the next, which is why the published table gives both the 0 degree
-     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
-     coarse version as "4 quadrants". */
+  /* Published rule (Bedle et al., 2025a, steps 2 to 5 and Figure 4a): every
+     zero crossing is Q5, every trough Q1 and every peak Q9. Between each pair
+     of anchors the interior numbers run upward from the extremum, so below a
+     peak the sequence is 9, 2, 3, 4, 5 and below a trough 1, 2, 3, 4, 5. */
 
   function quadrants(tr, pk) {
     const nt = tr.length;
@@ -675,24 +669,25 @@
     };
 
     loops.forEach((L) => {
-      q[L.a] = 1;                                // opens this loop
+      q[L.a] = tr[L.a] < 0 ? 1 : 9;               // trough Q1, peak Q9
       q[L.x] = 5;
-      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
-      ends.add(L.b);                             // loop has already claimed it
+      q[L.b] = tr[L.b] < 0 ? 1 : 9;
+      ends.add(L.b);
       fill(L.a, L.x, [2, 3, 4]);
       fill(L.x, L.b, [6, 7, 8]);
     });
-    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
-    // same position and take the same filter, so either label is correct
-    loops.forEach((L) => { q[L.a] = 1; });
+    // troughs are Q1 and peaks Q9 wherever they sit; both take the 0 degree
+    // filter, so this changes the labels and not the DQ values
+    const tag = (i) => (tr[i] < 0 ? 1 : 9);
+    loops.forEach((L) => { q[L.a] = tag(L.a); q[L.b] = tag(L.b); });
 
     const anchors = [];
     loops.forEach((L) => {
-      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+      anchors.push({ i: L.a, q: q[L.a] }, { i: L.x, q: 5 });
     });
     if (loops.length) {
       const last = loops[loops.length - 1];
-      anchors.push({ i: last.b, q: q[last.b] || 9 });
+      anchors.push({ i: last.b, q: q[last.b] });
     }
     anchors.sort((a, b) => a.i - b.i);
     return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
@@ -734,7 +729,7 @@
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace rather than to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centres a sample runs the other way, so the filter is
+     the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
      ===================================================================== */
 
@@ -1108,7 +1103,7 @@
     const rect = square(W, H, { l: 66, r: 190, t: 26, b: 50 });
     xplot(ctx, rect, pts, lim, { raw: true });
 
-    // a key, since colour is carrying the whole message here
+    // a key, since color is carrying the whole message here
     const kx = rect.x + rect.w + 34;
     ctx.font = '10px "IBM Plex Mono", monospace';
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
@@ -1195,7 +1190,7 @@
       ctx.fillStyle = CRIM; ctx.globalAlpha = 0.7; ctx.fill(); ctx.globalAlpha = 1;
     });
     ctx.restore();
-    SEIS.tag(ctx, rect.x + 8, rect.y + 10, 'grey = before, left of each pair', 'rgba(22,25,28,0.55)');
+    SEIS.tag(ctx, rect.x + 8, rect.y + 10, 'gray = before, left of each pair', 'rgba(22,25,28,0.55)');
     SEIS.tag(ctx, rect.x + 8, rect.y + 28, 'crimson = after', CRIM);
 
     let d0 = 0, d1 = 0, changed = 0, dsum = 0;

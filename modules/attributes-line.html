@@ -26,7 +26,7 @@
     <p class="eyebrow">Module 16 &nbsp;·&nbsp; The DQ trace</p>
     <h1>The attributes on a line</h1>
     <p class="sub">Every module so far has worked on one trace or one model at a time. This one puts a
-      geological structure under the whole chain: a dipping section cut by a normal fault, a sand that
+      geological structure under the whole workflow: a dipping section cut by a normal fault, a sand that
       thickens and thins with its porosity rising alongside, and a fluid contact you can switch on. Each
       attribute the course has built is then shown on it, including the two layer attributes that have not
       appeared before.</p>
@@ -72,7 +72,7 @@
               <div class="seg seg-wrap" role="group" aria-label="Which attribute to display">
                 <button type="button" data-view="seis" aria-pressed="false">stack</button>
                 <button type="button" data-view="dq" aria-pressed="true">DQ</button>
-                <button type="button" data-view="px" aria-pressed="false">&thetas;px</button>
+                <button type="button" data-view="px" aria-pressed="false">&theta;px</button>
                 <button type="button" data-view="iso" aria-pressed="false">½ iso</button>
                 <button type="button" data-view="avg" aria-pressed="false">DQ avg</button>
                 <button type="button" data-view="sum" aria-pressed="false">DQ sum</button>
@@ -129,11 +129,11 @@
     <p class="lede">
       Both displays show the same rocks. On the stack section the sand is a pair of bands and its extent
       has to be inferred from where those bands brighten. On the DQ section it is a single body whose
-      colour follows the rock. The fault and the dip are equally clear on both, because both are built from
+      color follows the rock. The fault and the dip are equally clear on both, because both are built from
       the same reflections.</p>
 
     <canvas id="c1a" aria-label="The stack section and the DQ section for the same faulted, dipping line"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The dashed outline is the modelled sand, so you can
+    <p class="hint-line" style="margin:8px 0 18px">The dashed outline is the modeled sand, so you can
       check what each display is doing against the geology that produced it.</p>
 
     <div class="stats" style="margin-top:16px">
@@ -158,7 +158,7 @@
     </div>
 
     <p class="lede">
-      &thetas;<sub>px</sub> maps where each cluster of rock sits on the crossplot, so on a section it
+      &theta;<sub>px</sub> maps where each cluster of rock sits on the crossplot, so on a section it
       separates the sand from the background by kind rather than by strength. The half isochron measures
       how long each half loop lasts, so it responds to bed thickness and to whether a layer is internally
       uniform.</p>
@@ -170,10 +170,10 @@
 
     <canvas id="c2a" aria-label="Theta px and half isochron sections for the same line"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Left, the angle; right, the signed half isochron.
-      Both carry the same dashed outline of the modelled sand.</p>
+      Both carry the same dashed outline of the modeled sand.</p>
 
     <div class="stats" style="margin-top:16px">
-      <div class="stat"><span>&thetas;<sub>px</sub> at the sand top, mid line</span><b id="s2a">&mdash;</b></div>
+      <div class="stat"><span>&theta;<sub>px</sub> at the sand top, mid line</span><b id="s2a">&mdash;</b></div>
       <div class="stat"><span>Half isochron in the sand</span><b id="s2b">&mdash;</b></div>
       <div class="stat key"><span>Fluid contact</span><b id="s2c">&mdash;</b></div>
       <div class="stat"><span>Fluid above it</span><b id="s2d">&mdash;</b></div>
@@ -203,13 +203,13 @@
       They answer different questions. <b>DQ Average</b> describes the quality of the rock in the layer,
       because averaging removes how many samples there happen to be. <b>DQ Sum</b> keeps that count, so it
       grows with both quality and thickness. Neither escapes tuning: both are built from DQ values, and
-      where a bed is thin enough to tune, those values are amplified before either is computed. In the AASPI documentation these become average and total
-      relative porosity for a layer, and after a well tie, average and total hydrocarbon pore volume &mdash;
-      which is why sum is the one used for placing a horizontal well.</p>
+      where a bed is thin enough to tune, those values are amplified before either is computed. In the AASPI DQ attributes pamphlet these become average and total
+      relative porosity for a layer, and after a well tie, average and total hydrocarbon pore volume. The
+      pamphlet suggests targeting horizontal wells at zones where both the average and the sum are high.</p>
 
     <canvas id="c3a" aria-label="DQ average and DQ sum sections, with both read along the sand as curves"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The two sections above, and below them both attributes
-      read along the sand and normalised so their shapes can be compared.</p>
+      read along the sand and normalized so their shapes can be compared.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>DQ average, thickest point</span><b id="s3a">&mdash;</b></div>
@@ -231,14 +231,14 @@
   <section class="tabpane" id="pw" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
       <h3><span class="stepno">?</span>The attributes, and where they came from</h3>
-      <span class="hint">A short catalogue</span>
+      <span class="hint">A short catalog</span>
     </div>
 
     <p class="lede">This is the point of the course, so it is worth setting the attributes out together
-      with what each measures and where in the chain it appears.</p>
+      with what each measures and where in the workflow it appears.</p>
 
     <div class="legend prose" style="margin-bottom:14px">
-      <span><b>StickOgram</b> (module 03) &mdash; the centres of peaks and troughs and the zero crossings
+      <span><b>StickOgram</b> (module 03) &mdash; the centers of peaks and troughs and the zero crossings
         of the near stack. A volume reduced to layer boundaries, used for mapping horizons and faults and
         as light input to machine learning.</span>
     </div>
@@ -263,7 +263,7 @@
         porosity or hydrocarbon pore volume.</span>
     </div>
     <div class="legend prose" style="margin-bottom:14px">
-      <span><b>&thetas;<sub>px</sub></b> (module 10) &mdash; the polar angle of the same point, folded and
+      <span><b>&theta;<sub>px</sub></b> (module 10) &mdash; the polar angle of the same point, folded and
         signed. A crossplot cluster mapping attribute: it says which kind of rock, where the distance says
         how much response.</span>
     </div>
@@ -280,26 +280,26 @@
       <ol>
         <li><b>Find the fault on each display.</b> Step through the six displays in the panel and look for
           the offset.
-          <details class="reveal"><summary>Hint</summary><span class="ans">It is visible on all of them,
+          <details class="reveal"><summary>Answer</summary><span class="ans">It is visible on all of them,
             because a fault offsets the reflections themselves and every attribute here is computed from
             those reflections. What differs is how sharply it reads: the half isochron often shows it
             most clearly, because the loop structure changes abruptly across the offset. No attribute here
             adds structural information that was not already in the stack.</span></details></li>
         <li><b>Compare the thin ends with the middle.</b> On step 1, look at where the sand is thinnest.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The outline no longer matches a
+          <details class="reveal"><summary>Answer</summary><span class="ans">The outline no longer matches a
             distinct body, and the DQ brightness there is tuning rather than rock quality. This is module
             12's finding shown as a picture. A student who reads the thin end as poor rock and the middle
             as good rock happens to be right on this model, because porosity was built to rise with
             thickness &mdash; but they would have been right for the wrong reason, and on a model where the
             two were opposed they would have been wrong.</span></details></li>
         <li><b>Turn on the fluid contact.</b> Then look at step 2.
-          <details class="reveal"><summary>Hint</summary><span class="ans">A boundary appears that stays at
+          <details class="reveal"><summary>Answer</summary><span class="ans">A boundary appears that stays at
             one time while the beds around it dip and step across the fault. That flatness is the argument
             for a fluid contact rather than a lithology change: rock boundaries follow structure, fluid
             boundaries follow gravity. Note also where it stops &mdash; it can only show where the sand is
             present and thick enough to contain it.</span></details></li>
         <li><b>Compare DQ average with DQ sum.</b> On step 3, read where each peaks.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Both peak near the thin
+          <details class="reveal"><summary>Answer</summary><span class="ans">Both peak near the thin
             right-hand end rather than in the thick, porous middle, because a 10 ms bed at 40 Hz is close
             to the tuning maximum and its reflections are amplified. The lesson is the one module 12 makes
             numerically, seen here as a picture: a layer attribute inherits every problem the samples it
@@ -310,13 +310,13 @@
             rock quality and the sum multiplies that by how much rock there is &mdash; but only once you
             are out of the tuning regime.</span></details></li>
         <li><b>Change the fluid.</b> Switch between brine, oil and gas and watch the DQ and angle sections.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The body changes value while its
+          <details class="reveal"><summary>Answer</summary><span class="ans">The body changes value while its
             outline stays put, because the geometry has not changed. How much it changes depends on the
             seal, which module 11 measured: under some seals the fluid effect is mostly a change of
             distance, under others mostly a change of angle. Try all three overburdens and watch which of
             the two displays does the work.</span></details></li>
         <li><b>Add noise.</b> Take it to 30% and look at each display in turn.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The angle and half isochron
+          <details class="reveal"><summary>Answer</summary><span class="ans">The angle and half isochron
             sections degrade first, because both depend on the picks being in the right places and noise
             moves picks. The DQ section holds up longer because it is an amplitude. When displays that
             should agree start disagreeing, suspect the picking rather than the rock.</span></details></li>
@@ -331,7 +331,7 @@
         <li><b>Every attribute here is computed from the same two partial stacks</b>, so none of them adds
           structural information the stack section did not have.</li>
         <li><b>The DQ section shows a bed as one body</b> where the stack section shows two bands.</li>
-        <li><b>&thetas;<sub>px</sub> maps clusters</b>, so it separates rock types; the distance measures
+        <li><b>&theta;<sub>px</sub> maps clusters</b>, so it separates rock types; the distance measures
           response strength.</li>
         <li><b>The half isochron responds to loop length</b>, which makes it good at thinning, pinch-out
           and tuned zones.</li>
@@ -360,16 +360,21 @@
       <p><b>DQ Average and DQ Sum</b> follow the AASPI definition: the arithmetic mean and the arithmetic
         sum of the DQ values between one extremum and the next, so a single trough-to-peak or peak-to-trough
         layer. Both are written back to every sample in that layer so they can be displayed as sections.
-        The curves below the sections read the layer that contains the middle of the modelled sand.</p>
-      <p><b>What this module does not do.</b> It does not ray trace, and each trace is modelled
+        The curves below the sections read the layer that contains the middle of the modeled sand.</p>
+      <p><b>What this module does not do.</b> It does not ray trace, and each trace is modeled
         independently, so there is no lateral wave propagation, no diffraction from the fault tip and no
         migration artefact. A real fault on real data produces all three. The structure here is a device
         for showing how the attributes behave when geology varies along a line, not a simulation of a
         seismic experiment.</p>
       <ul>
-        <li>Neff, D. B., and W. Neff, AASPI distance quadrant attribute descriptions.</li>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Neff, D. B., and W. Neff, AASPI DQ attributes pamphlet, unpublished.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025b, Prediction of reservoir properties
+          using the RDQ crossplot workflow: <em>Interpretation</em>, doi: 10.1190/INT-2024-0096.1.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025c, Prediction of reservoir properties
+          using the DQ trace attribute and RDQ inversion workflow: <em>Interpretation</em>,
+          doi: 10.1190/INT-2024-0113.1.</li>
       </ul>
     </details>
   </section>
@@ -396,10 +401,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>
@@ -660,12 +664,10 @@
      long and drops them when it is short.
      ===================================================================== */
 
-  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
-     and then starts again. It does not run up to 9 and mirror back down. The
-     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
-     opens the next, which is why the published table gives both the 0 degree
-     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
-     coarse version as "4 quadrants". */
+  /* Published rule (Bedle et al., 2025a, steps 2 to 5 and Figure 4a): every
+     zero crossing is Q5, every trough Q1 and every peak Q9. Between each pair
+     of anchors the interior numbers run upward from the extremum, so below a
+     peak the sequence is 9, 2, 3, 4, 5 and below a trough 1, 2, 3, 4, 5. */
 
   function quadrants(tr, pk) {
     const nt = tr.length;
@@ -700,24 +702,25 @@
     };
 
     loops.forEach((L) => {
-      q[L.a] = 1;                                // opens this loop
+      q[L.a] = tr[L.a] < 0 ? 1 : 9;               // trough Q1, peak Q9
       q[L.x] = 5;
-      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
-      ends.add(L.b);                             // loop has already claimed it
+      q[L.b] = tr[L.b] < 0 ? 1 : 9;
+      ends.add(L.b);
       fill(L.a, L.x, [2, 3, 4]);
       fill(L.x, L.b, [6, 7, 8]);
     });
-    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
-    // same position and take the same filter, so either label is correct
-    loops.forEach((L) => { q[L.a] = 1; });
+    // troughs are Q1 and peaks Q9 wherever they sit; both take the 0 degree
+    // filter, so this changes the labels and not the DQ values
+    const tag = (i) => (tr[i] < 0 ? 1 : 9);
+    loops.forEach((L) => { q[L.a] = tag(L.a); q[L.b] = tag(L.b); });
 
     const anchors = [];
     loops.forEach((L) => {
-      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+      anchors.push({ i: L.a, q: q[L.a] }, { i: L.x, q: 5 });
     });
     if (loops.length) {
       const last = loops[loops.length - 1];
-      anchors.push({ i: last.b, q: q[last.b] || 9 });
+      anchors.push({ i: last.b, q: q[last.b] });
     }
     anchors.sort((a, b) => a.i - b.i);
     return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
@@ -759,7 +762,7 @@
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace rather than to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centres a sample runs the other way, so the filter is
+     the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
      ===================================================================== */
 
@@ -1007,7 +1010,7 @@
 
      The polar angle of the split coordinates, folded into 0-90 by sector and
      multiplied by the sign of the DQ trace. Quoted from the AASPI column
-     sequence; Paper 2 gives the same four rules labelled by sector.
+     sequence; Paper 2 gives the same four rules labeled by sector.
      ===================================================================== */
 
   function fold(deg) {
@@ -1056,15 +1059,15 @@
      THE FOUR AVO CLASSES
 
      Four fixed recipes in the shared rock model, one per quadrant of the
-     intercept-gradient plane, run through the identical chain. The class
-     label is computed from the modelled signs rather than asserted.
+     intercept-gradient plane, run through the identical workflow. The class
+     label is computed from the modeled signs rather than asserted.
      ===================================================================== */
 
   /* =====================================================================
      READING A DQ SECTION
 
-     The three colour conventions from the DQ display specification, applied
-     to one modelled line: symmetric for seismic, one-sided for DQ, banded
+     The three color conventions from the DQ display specification, applied
+     to one modeled line: symmetric for seismic, one-sided for DQ, banded
      two-sided for the angle.
      ===================================================================== */
 
@@ -1276,7 +1279,7 @@
         ctx.fillRect(x0, y - ch / 2, tw + 0.6, ch + 0.6);
       }
     });
-    // the modelled sand, outlined, so structure can be checked against the display
+    // the modeled sand, outlined, so structure can be checked against the display
     if (o.outline !== false) {
       ctx.beginPath();
       traces.forEach((t, k) => {
@@ -1405,8 +1408,8 @@
     // the two layer attributes read along the sand, as curves
     const rC = { x: 62, y: 30 + (H - 104) * 0.58 + 46, w: W - 96, h: (H - 104) * 0.32 };
     const avgs = [], sums = [];
-    /* Pick the layer that overlaps the modelled sand most, rather than the one
-       whose centre is nearest: at the thin ends the nearest-centre test can
+    /* Pick the layer that overlaps the modeled sand most, rather than the one
+       whose center is nearest: at the thin ends the nearest-center test can
        land on a background loop instead of the reservoir. */
     traces.forEach((t) => {
       let best = null, bestOv = 0;
@@ -1419,7 +1422,7 @@
     });
     const aMax = Math.max(...avgs.map(Math.abs)) || 1;
     const sMax = Math.max(...sums.map(Math.abs)) || 1;
-    SEIS.axisLeft(ctx, rC, 0, 1, 'normalised', (v) => v.toFixed(1), { ticks: 3, flip: true });
+    SEIS.axisLeft(ctx, rC, 0, 1, 'normalized', (v) => v.toFixed(1), { ticks: 3, flip: true });
     SEIS.axisBottom(ctx, rC, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: 6 });
     SEIS.frame(ctx, rC);
     ctx.save();

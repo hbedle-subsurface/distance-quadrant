@@ -118,7 +118,7 @@
     </div>
 
     <p class="lede">
-      This is where the DQ trace earns the description the AASPI documentation gives it: before any
+      This is where the DQ trace earns the description the AASPI DQ attributes pamphlet gives it: before any
       inversion, it is a <b>relative porosity curve</b>. Relative because the vertical axis is in amplitude
       units and nothing here converts them to porosity units; a curve, because it varies down the trace
       with the rock rather than reporting a single number per layer. After an inversion tied to wells it
@@ -164,7 +164,7 @@
     </div>
 
     <p class="lede">
-      Now run the whole chain. For each porosity in turn, build the sand, model the near and far stacks,
+      Now run the whole workflow. For each porosity in turn, build the sand, model the near and far stacks,
       pick, number, filter, enhance, and read the DQ distance at the top of the sand. No wavelet has been
       estimated, no well has been used and nothing has been inverted.</p>
 
@@ -174,7 +174,7 @@
       V<sub>P</sub>/V<sub>S</sub> &mdash; the same information, from amplitudes.</p>
 
     <p class="lede">
-      The chain is worth following once, because the rest of the module depends on it. Porosity raises pore
+      The sequence of causes is worth following once, because the rest of the module depends on it. Porosity raises pore
       volume, which lowers density and velocity, which lowers the sand's impedance. The seal's impedance
       does not change, so the contrast across the top of the sand grows. A larger contrast gives a larger
       reflection coefficient at both the near and the far angle, which gives a longer vector on the
@@ -182,7 +182,7 @@
       reflection theory; the attribute carries the result through to a number you can map.</p>
 
     <p class="lede">
-      Read the correlation for what it is. It is measured on one modelled sand at a time under a fixed
+      Read the correlation for what it is. It is measured on one modeled sand at a time under a fixed
       seal, with no shale content and no lithological variation, so it is an upper bound rather than an
       estimate of field performance. What it establishes is that the information is present in the
       attribute.</p>
@@ -237,8 +237,8 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>This is the argument for the look-up catalogues the DQ workflow uses, made from first
-        principles rather than asserted. A catalogue is a relationship between attribute values and rock
+      <span>This is the argument for the look-up catalogs the DQ workflow uses, made from first
+        principles rather than asserted. A catalog is a relationship between attribute values and rock
         properties that has been calibrated for one interval, and the reason you need a new one when the
         petrophysics changes is on this plot: the same attribute means the opposite thing under a different
         seal.</span>
@@ -259,16 +259,18 @@
 
     <p class="lede">
       Read the DQ trace at each sand top and compare it with the porosity that built that sand. Under a
-      tight sandstone seal the two track each other at a correlation of <b>1.00</b> &mdash; the five
-      readings rank the five sands in exactly the right order; under a soft shale,
-      <b>&minus;1.00</b>, the same ranking reversed. The log has been recovered, up to a sign and a scale that step 3 explained and
-      that only a well can supply.</p>
+      tight sandstone seal the two track each other at a correlation of <b>1.00</b>, and the five readings
+      rank the five sands in the right order; under a soft shale the correlation is <b>&minus;1.00</b>, the
+      same ranking reversed. In this noise-free, single-mineral model the log is recovered up to a sign and
+      a scale that step 3 explained and that only a well can supply. With real data, noise, mixed
+      lithology, fluid changes and bed thickness all move the DQ value as well, so the match is weaker and
+      a bright DQ value has more than one possible cause.</p>
 
     <p class="lede">
       The spacing matters more than it looks. These sands sit 62 ms apart, so the base of one is more
       than a wavelength from the top of the next and each reflection stands on its own. Pack them to 24 ms
       and the correlation falls to about 0.8, because the value read at a sand top is then contaminated by
-      its neighbours rather than describing its own rock. That is a limit on the seismic, not on the
+      its neighbors rather than describing its own rock. That is a limit on the seismic, not on the
       attribute, and module 12 takes it up in earnest.</p>
 
     <canvas id="c4a" aria-label="A five-sand porosity log beside the near stack and the DQ trace computed from it"></canvas>
@@ -299,24 +301,25 @@
       <span class="hint">Detection, calibration, and the line between them</span>
     </div>
 
-    <p class="lede">The DQ papers separate two things carefully and it is worth separating them here.
+    <p class="lede">The DQ papers separate two things.
       <b>Detection</b> asks where something interesting is, and does not need a well: the earlier modules
       are all detection, and so is the correlation on step 2. <b>Quantitative prediction</b> asks how much
       porosity is there, in porosity units, and does need a well, because the conversion from an amplitude
       to a rock property has a slope and an intercept that only a calibration can supply.</p>
 
     <p class="lede">The method's authors are explicit that this ordering was historical as well as logical.
-      The original work was built for quantitative inversion and required forward modelling from full well
-      log suites; the detection attributes were a by-product that turned out not to need any of it. Papers
-      1 and 2 are about the by-product. Paper 3 goes back to the original problem.</p>
+      The original work was built for quantitative inversion and required forward modeling from full well
+      log suites; the detection attributes were a by-product that turned out not to need any of it. Bedle et
+      al. (2025a, 2025b) describe the detection attributes, and Bedle et al. (2025c) returns to quantitative
+      inversion.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
-      Why one catalogue is never enough</h2>
+      Why one catalog is never enough</h2>
     <p class="lede">Step 3 shows the sign flipping between seals. In a real basin the same thing happens
       with depth: compaction moves both the sand trend and the shale trend, and where they cross, the
-      relationship inverts. The reported field practice matches &mdash; two catalogues over a two-second
-      window in one offshore dataset, a forced catalogue switch at an unconformity in another where the
-      petrophysics changed abruptly, and a single catalogue sufficing in a third field where it did not.
+      relationship inverts. The reported field practice matches &mdash; two catalogs over a two-second
+      window in one offshore dataset, a forced catalog switch at an unconformity in another where the
+      petrophysics changed abruptly, and a single catalog sufficing in a third field where it did not.
       None of that is a weakness of the attribute. It is what any amplitude-based rock property estimate
       has to live with, and the DQ workflow at least makes the boundary visible by letting you crossplot a
       time window and watch the cluster move.</p>
@@ -334,14 +337,14 @@
       <ol>
         <li><b>Read the correlation under tight sandstone.</b> On step 2, with a tight sandstone seal and brine fill,
           read the two correlation figures.
-          <details class="reveal"><summary>Hint</summary><span class="ans">About 0.99 against porosity and
-            about 1.00 against acoustic impedance. That is the headline result of this module: an attribute
-            computed from partial-stack amplitudes alone, with no wavelet estimate and no well, carrying
-            essentially the same porosity information that an impedance inversion would give you. Worth
-            being precise about the claim &mdash; it carries the information, it does not deliver a
-            porosity number, and step 2's legend says why.</span></details></li>
+          <details class="reveal"><summary>Answer</summary><span class="ans">About 0.99 against porosity and
+            about 1.00 against acoustic impedance. In this model the attribute, computed from partial-stack
+            amplitudes alone with no wavelet estimate and no well, follows porosity about as closely as
+            impedance does. The model has one mineral, one seal and no noise, so the figure is an upper
+            limit. The attribute carries porosity information; it does not deliver a porosity number, and
+            step 2's legend explains why.</span></details></li>
         <li><b>Now switch to a soft shale seal.</b> Read the same figure.
-          <details class="reveal"><summary>Hint</summary><span class="ans">About &minus;0.97. The
+          <details class="reveal"><summary>Answer</summary><span class="ans">About &minus;0.97. The
             correlation is nearly as strong and points the other way. A porous sand under a soft shale is
             acoustically similar to the shale, so the reflection weakens as porosity rises, and the
             distance falls. The rock has not changed; the seal has. Anyone who calibrated a DQ-to-porosity
@@ -349,34 +352,34 @@
             backwards.</span></details></li>
         <li><b>Find where the contrast dies.</b> Still on soft shale, look at where the curve bottoms
           out on step 3.
-          <details class="reveal"><summary>Hint</summary><span class="ans">In the mid thirties, where the
+          <details class="reveal"><summary>Answer</summary><span class="ans">In the mid thirties, where the
             distance falls to under a hundredth &mdash; on the 2% sampling this page uses, the minimum
             lands at 34%. That is the class 2 crossover: the sand and the shale have matched impedances,
             there is almost no reflection, and the attribute has nothing to measure. Module 10 used the
             same region as its example of an unreliable angle, for the same underlying reason. Near a
             crossover, every attribute in this course is weak at once.</span></details></li>
         <li><b>Try the hard shale.</b> Read its correlation on step 3.
-          <details class="reveal"><summary>Hint</summary><span class="ans">About 0.43, which is not a
+          <details class="reveal"><summary>Answer</summary><span class="ans">About 0.43, which is not a
             useful number and is not meant to be. The crossover sits in the middle of the porosity range
             rather than at one end, so the curve is a V and a straight-line correlation averages the two
             halves into nonsense. This is a good reason to look at the shape before trusting a coefficient
             &mdash; the correlation is low here not because the physics is noisy but because it is
             two-sided.</span></details></li>
         <li><b>Change the fluid.</b> Switch between brine, oil and gas under tight sandstone.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The curve shifts but keeps its shape and its sign. Which means a single DQ value is ambiguous: a brine sand at high porosity and a gas sand at lower porosity can give the same number. Porosity and fluid both move the distance the same way here, and only the angle of module 10 tells them apart. Hydrocarbon lowers the sand's impedance, which under a tight sandstone seal
+          <details class="reveal"><summary>Answer</summary><span class="ans">The curve shifts but keeps its shape and its sign. Which means a single DQ value is ambiguous: a brine sand at high porosity and a gas sand at lower porosity can give the same number. Porosity and fluid both move the distance the same way here, and only the angle of module 10 tells them apart. Hydrocarbon lowers the sand's impedance, which under a tight sandstone seal
             increases the contrast and lifts the whole curve. So fluid and porosity both move the distance
             in the same direction here, and the distance alone cannot separate them. That is exactly what
             module 10's angle is for, and it is the clearest argument on the site for computing both
             attributes rather than one.</span></details></li>
         <li><b>Add noise.</b> Take the noise to 30% under tight sandstone and watch the correlation.
-          <details class="reveal"><summary>Hint</summary><span class="ans">It barely moves, and then it
+          <details class="reveal"><summary>Answer</summary><span class="ans">It barely moves, and then it
             gives way. The correlation stays around 0.98 or better all the way to about 35% noise, and
             then drops sharply &mdash; to a little over 0.5 by 40% on the brine case, and further under
             other fluids. That is a cliff rather than a slope, and the reason is the picking rather than the amplitudes: while the picks stay in the right places the
             trend survives almost intact, and once noise starts inventing and destroying picks &mdash;
-            which module 03 measured directly &mdash; the chain downstream has nothing sound to work with.
+            which module 03 measured directly &mdash; the workflow downstream has nothing sound to work with.
             The practical reading is that this holds up in ordinary data and is worth no trust at all in bad data, with less warning in between than you would like. Treat the figure as an upper bound in
-            any case: it is computed on one modelled sand at a time, not on a population of real
+            any case: it is computed on one modeled sand at a time, not on a population of real
             samples.</span></details></li>
       </ol>
     </div>
@@ -386,8 +389,9 @@
     <div class="takeaway" style="max-width:none">
       <h3>The main points</h3>
       <ul>
-        <li><b>The DQ distance tracks porosity about as tightly as acoustic impedance does</b>, and it does
-          so from partial-stack amplitudes with no wavelet estimate, no inversion and no well.</li>
+        <li><b>In this model the DQ distance tracks porosity about as closely as acoustic impedance
+          does</b>, from partial-stack amplitudes with no wavelet estimate, no inversion and no well. Real
+          data, with noise, mixed lithology and varying thickness, give a weaker relationship.</li>
         <li><b>Under a tight sandstone seal the correlation is about +0.99</b> against porosity, and about 1.00
           against impedance.</li>
         <li><b>Under a soft shale it is about &minus;0.97.</b> The relationship is just as strong and
@@ -412,26 +416,31 @@
       <p>Everything upstream is as in modules 03 through 10, unchanged: the same rocks, picks, quadrant
         numbers, phase filters, enhancement, distance, baseline rotation and sector split. The distance is
         read at the sample nearest the top of the sand, and the curve is built by rebuilding the whole
-        chain at each porosity from 10% to 36% in steps of two.</p>
-      <p>Acoustic impedance and V<sub>P</sub>/V<sub>S</sub> on step 1 are properties of the modelled sand
+        workflow at each porosity from 10% to 36% in steps of two.</p>
+      <p>Acoustic impedance and V<sub>P</sub>/V<sub>S</sub> on step 1 are properties of the modeled sand
         and involve no seismic: impedance is velocity times density, and both come from Wyllie's time
         average and the volumetric density mix with the V<sub>P</sub>/V<sub>S</sub> trend of Bedle et al.
         (2025). Correlations are ordinary Pearson coefficients across the porosity samples.</p>
-      <p><b>What the correlation figure does and does not represent.</b> It is computed on one modelled sand
+      <p><b>What the correlation figure does and does not represent.</b> It is computed on one modeled sand
         at a time under a fixed seal, with no lithological variation, no shale content and no noise unless
         you add it. A real correlation on a real basin would be lower, and the number here should be read as a demonstration that the information is present in the attribute rather than as an estimate of how well it would perform. The step 3 result &mdash; that the sign depends on the seal
         &mdash; is the finding that holds generally, because it follows from the sign of an impedance contrast rather than from any detail of the rock model.</p>
       <p>The module stops short of predicting a porosity value, deliberately. The vertical axis is in
         amplitude units, and the conversion is a scaling that has to be calibrated. The method's authors
-        treat that as a separate paper requiring forward modelling from well logs, and this course covers
+        treat that as a separate paper requiring forward modeling from well logs, and this course covers
         the detection side only.</p>
       <ul>
         <li>Wyllie, M. R. J., A. R. Gregory, and L. W. Gardner, 1956, Elastic wave velocities in
           heterogeneous and porous media: <em>Geophysics</em>, 21, 41&ndash;70.</li>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025b, Prediction of reservoir properties
+          using the RDQ crossplot workflow: <em>Interpretation</em>, doi: 10.1190/INT-2024-0096.1.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025c, Prediction of reservoir properties
+          using the DQ trace attribute and RDQ inversion workflow: <em>Interpretation</em>,
+          doi: 10.1190/INT-2024-0113.1.</li>
         <li>Neff, D. B., and W. Neff, 2023, DQ trace applications to hydrocarbon detection: a theoretical
-          review with pseudo wells and synthetic seismograms, presentation notes.</li>
+          review with pseudo wells and synthetic seismograms, unpublished presentation notes.</li>
       </ul>
     </details>
   </section>
@@ -459,10 +468,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>
@@ -723,12 +731,10 @@
      long and drops them when it is short.
      ===================================================================== */
 
-  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
-     and then starts again. It does not run up to 9 and mirror back down. The
-     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
-     opens the next, which is why the published table gives both the 0 degree
-     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
-     coarse version as "4 quadrants". */
+  /* Published rule (Bedle et al., 2025a, steps 2 to 5 and Figure 4a): every
+     zero crossing is Q5, every trough Q1 and every peak Q9. Between each pair
+     of anchors the interior numbers run upward from the extremum, so below a
+     peak the sequence is 9, 2, 3, 4, 5 and below a trough 1, 2, 3, 4, 5. */
 
   function quadrants(tr, pk) {
     const nt = tr.length;
@@ -763,24 +769,25 @@
     };
 
     loops.forEach((L) => {
-      q[L.a] = 1;                                // opens this loop
+      q[L.a] = tr[L.a] < 0 ? 1 : 9;               // trough Q1, peak Q9
       q[L.x] = 5;
-      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
-      ends.add(L.b);                             // loop has already claimed it
+      q[L.b] = tr[L.b] < 0 ? 1 : 9;
+      ends.add(L.b);
       fill(L.a, L.x, [2, 3, 4]);
       fill(L.x, L.b, [6, 7, 8]);
     });
-    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
-    // same position and take the same filter, so either label is correct
-    loops.forEach((L) => { q[L.a] = 1; });
+    // troughs are Q1 and peaks Q9 wherever they sit; both take the 0 degree
+    // filter, so this changes the labels and not the DQ values
+    const tag = (i) => (tr[i] < 0 ? 1 : 9);
+    loops.forEach((L) => { q[L.a] = tag(L.a); q[L.b] = tag(L.b); });
 
     const anchors = [];
     loops.forEach((L) => {
-      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+      anchors.push({ i: L.a, q: q[L.a] }, { i: L.x, q: 5 });
     });
     if (loops.length) {
       const last = loops[loops.length - 1];
-      anchors.push({ i: last.b, q: q[last.b] || 9 });
+      anchors.push({ i: last.b, q: q[last.b] });
     }
     anchors.sort((a, b) => a.i - b.i);
     return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
@@ -822,7 +829,7 @@
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace rather than to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centres a sample runs the other way, so the filter is
+     the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
      ===================================================================== */
 
@@ -1070,7 +1077,7 @@
 
      The polar angle of the split coordinates, folded into 0-90 by sector and
      multiplied by the sign of the DQ trace. Quoted from the AASPI column
-     sequence; Paper 2 gives the same four rules labelled by sector.
+     sequence; Paper 2 gives the same four rules labeled by sector.
      ===================================================================== */
 
   function fold(deg) {
@@ -1109,7 +1116,7 @@
   /* =====================================================================
      POROSITY
 
-     The whole chain rebuilt at each porosity, with the distance read at the
+     The whole workflow rebuilt at each porosity, with the distance read at the
      top of the sand. Impedance and Vp/Vs come from the rock alone and involve
      no seismic at all.
      ===================================================================== */
@@ -1134,7 +1141,7 @@
     });
   }
 
-  // the full chain, once per porosity — the expensive call in this module
+  // the full workflow, once per porosity — the expensive call in this module
   const distCache = {};
   function distCurve(over, fluid) {
     const key = [over, fluid, S.thick, S.freq, S.dt, S.noise].join('|');
@@ -1296,7 +1303,7 @@
     curveOn(ctx, rect, av, alo, ahi, 'rgba(22,25,28,0.22)', 2, null);
     curveOn(ctx, rect, dv, dlo, dhi, CRIM, 2.4, S.phi);
     SEIS.tag(ctx, rect.x + 8, rect.y + 10, 'crimson = DQ distance', CRIM);
-    SEIS.tag(ctx, rect.x + 8, rect.y + 28, 'grey = impedance, own scale', 'rgba(22,25,28,0.5)');
+    SEIS.tag(ctx, rect.x + 8, rect.y + 28, 'gray = impedance, own scale', 'rgba(22,25,28,0.5)');
 
     const phis = dist.map((q) => q.phi);
     const rD = pearson(dist.map((q) => q.d), phis);

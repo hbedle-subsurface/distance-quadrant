@@ -27,7 +27,7 @@
     <h1>Wedge models and tuning</h1>
     <p class="sub">Module 11 ended by admitting that closely spaced sands contaminate each other. This
       module takes that seriously. A wedge is the standard way to ask what thickness does to an amplitude,
-      and running one through the DQ chain turns up a clean division of labour: the distance moves with
+      and running one through the DQ workflow turns up a clean division of labour: the distance moves with
       thickness and the angle does not.</p>
   </div>
 
@@ -153,7 +153,7 @@
     </div>
 
     <p class="lede">
-      Now put &thetas;<sub>px</sub> on the same wedge. It is flat. Across the whole thickness range the
+      Now put &theta;<sub>px</sub> on the same wedge. It is flat. Across the whole thickness range the
       angle at the sand top does not move &mdash; under a tight seal it holds to within a degree, while
       the distance beside it swings by a third.</p>
 
@@ -169,8 +169,8 @@
 
     <div class="stats" style="margin-top:16px">
       <div class="stat key"><span>Distance varies by</span><b id="s2a">&mdash;</b></div>
-      <div class="stat key"><span>&thetas;<sub>px</sub> varies by</span><b id="s2b">&mdash;</b></div>
-      <div class="stat"><span>&thetas;<sub>px</sub> at the marker</span><b id="s2c">&mdash;</b></div>
+      <div class="stat key"><span>&theta;<sub>px</sub> varies by</span><b id="s2b">&mdash;</b></div>
+      <div class="stat"><span>&theta;<sub>px</sub> at the marker</span><b id="s2c">&mdash;</b></div>
       <div class="stat"><span>Thickness range swept</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
@@ -191,13 +191,14 @@
     <p class="lede">
       Put the two facts together. Module 11 showed the distance tracking porosity. This module shows it
       tracking thickness as well &mdash; and an interpreter looking at a single bright DQ sample cannot
-      tell which of the two caused it. The angle can, because it moved with fluid in module 10 and does not
-      move with thickness here.</p>
+      tell which of the two caused it. The angle helps, because in module 10 it moved with fluid, and in this wedge it changes
+      little with thickness once the bed is thicker than about a quarter wavelength. Thinner beds shift
+      the angle as well (Bedle et al., 2025b).</p>
 
     <p class="lede">
       So the pair separates two questions that a single amplitude cannot: <b>how much rock is there</b>,
-      which the distance answers but confounds with quality, and <b>what kind of rock is it</b>, which the
-      angle answers and thickness cannot disturb.</p>
+      which the distance answers but mixes with rock quality, and <b>what kind of rock is it</b>, which the
+      angle answers and which thickness affects much less, except in thin beds.</p>
 
     <p class="lede">
       How much the angle has to say about fluid depends on the seal, and module 10 measured that. Under
@@ -233,14 +234,14 @@
 
     <p class="lede">The question in front of an interpreter looking at a bright amplitude is almost never
       "how bright is it". It is "is this bright because there is more rock, better rock, or hydrocarbon in
-      the rock". A single amplitude attribute cannot answer that, and no amount of scaling or normalising
+      the rock". A single amplitude attribute cannot answer that, and no amount of scaling or normalizing
       makes it able to, because the three effects all move it in the same direction.</p>
 
     <p class="lede">The DQ pair does not solve the problem either &mdash; nothing computed from two partial
-      stacks can fully separate three unknowns &mdash; but it splits it usefully. The angle is immune to
-      thickness, so an angle anomaly is about the rock or the fluid. The distance carries thickness, so a
-      distance anomaly with no angle anomaly is probably geometry. That is a genuine narrowing, and it is
-      available without a well.</p>
+      stacks can fully separate three unknowns &mdash; but it narrows it. Above about a quarter wavelength the angle
+      changes little with thickness, so an angle anomaly more likely reflects the rock or the fluid. The
+      distance carries thickness, so a distance anomaly with no angle anomaly may be geometry. That
+      narrowing is available without a well, and it is weaker in thin beds.</p>
 
     <div class="legend prose">
       <span>Worth being clear about the limit. The angle separates fluid from thickness; it does not
@@ -255,13 +256,13 @@
       <ol>
         <li><b>Find the tuning peak.</b> On step 1 with a tight seal and gas at 24%, read where the curve
           peaks, then change the wavelet frequency.
-          <details class="reveal"><summary>Hint</summary><span class="ans">It peaks at 8 ms at 40 Hz, and
+          <details class="reveal"><summary>Answer</summary><span class="ans">It peaks at 8 ms at 40 Hz, and
             at 14, 11 and 7 ms for 25, 30 and 55 Hz, because tuning is a property of the wavelet rather than
             of the rock. The classical figure is a quarter of the period, 6.3 ms at 40 Hz; the measured
             peak sits a little thicker than that because the attribute is read at a picked sample rather
             than at the true maximum of a continuous curve. What matters is not the exact number but the fact that the peak follows the bandwidth.</span></details></li>
         <li><b>Measure how much thickness moves the distance.</b> Read the variation figure on step 1.
-          <details class="reveal"><summary>Hint</summary><span class="ans">About a third of the maximum
+          <details class="reveal"><summary>Answer</summary><span class="ans">About a third of the maximum
             across a wedge from 6 to 55 ms. That is the same order as the change module 11 got from
             varying porosity across its whole range, which is the problem in one sentence: a bright DQ
             sample could be a thick ordinary sand or a thin excellent one, and the distance alone cannot
@@ -269,20 +270,20 @@
             causes &mdash; more rock, better rock, or hydrocarbon in the rock &mdash; and to ask which
             attribute could separate them.</span></details></li>
         <li><b>Now read the angle.</b> On step 2, compare the two variation figures.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The distance moves by about a
+          <details class="reveal"><summary>Answer</summary><span class="ans">The distance moves by about a
             third and the angle by about a degree. The angle is not merely less sensitive to thickness, it
             is essentially blind to it, and for a reason worth understanding: tuning scales the whole
             vector, and scaling changes a length but not a direction. Any attribute defined as a ratio or
             an angle of the same pair would behave the same way.</span></details></li>
         <li><b>Check that the angle still sees fluid.</b> On step 3, read the fluid separation.
-          <details class="reveal"><summary>Hint</summary><span class="ans">About three degrees from
+          <details class="reveal"><summary>Answer</summary><span class="ans">About three degrees from
             brine to gas under this seal, against half a degree of movement across the whole wedge. So the
             fluid signal is six times the thickness signal &mdash; but both are small here, because module
             10 found this seal to be the one where the angle says least about fluid. The claim worth taking
             away is the ratio rather than the magnitude: whatever fluid response the angle has in a given
             setting, thickness will not counterfeit it.</span></details></li>
         <li><b>Break it with a soft shale.</b> Switch the overburden on step 3 and look again.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The angle stops being flat and
+          <details class="reveal"><summary>Answer</summary><span class="ans">The angle stops being flat and
             starts swinging, and the distance collapses to a few hundredths. Under a soft shale at this
             porosity the sand is close to the seal in impedance, so there is barely a reflection, and a
             short vector has no reliable direction. The separation of thickness from rock is a real
@@ -290,7 +291,7 @@
             same limit module 10 met at the class 2 crossover.</span></details></li>
         <li><b>Thin the bed past the point of no return.</b> Drag the thickness marker down to 6 ms on
           step 1 and look at the model panel.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The top and base reflections
+          <details class="reveal"><summary>Answer</summary><span class="ans">The top and base reflections
             have merged into one event, and module 03 measured what that does to the picks: below about
             8 ms the sand interval contains no pick at all. Everything downstream inherits it. The
             attribute is still defined and still returns a number; what it no longer has is a sample that
@@ -307,7 +308,7 @@
           it varies by about a third of its maximum.</li>
         <li><b>The tuning peak follows the wavelet, not the rock</b>, near 10 ms at 40 Hz and moving with
           frequency.</li>
-        <li><b>&thetas;<sub>px</sub> does not respond to thickness at all</b> &mdash; about a degree across
+        <li><b>&theta;<sub>px</sub> does not respond to thickness at all</b> &mdash; about a degree across
           the same wedge, under a seal that gives a healthy contrast.</li>
         <li><b>The reason is geometric.</b> Tuning scales the vector; scaling changes a length and leaves a
           direction alone.</li>
@@ -328,7 +329,7 @@
       <summary>Method, assumptions, and where to read more</summary>
       <p>Everything upstream is as in modules 03 through 11: the same rocks, picks, quadrant numbers, phase
         filters, enhancement, distance, baseline rotation, sector split and angle fold. The wedge is
-        modelled by rebuilding the whole chain at each thickness from 6 to 55 ms in steps of one and
+        modeled by rebuilding the whole workflow at each thickness from 6 to 55 ms in steps of one and
         reading both attributes at the sample nearest the top of the sand.</p>
       <p>This is a two-interface wedge in a fixed seal, not a true wedge section with lateral continuity.
         The published wedge displays vary thickness across traces and show the section; this page varies it
@@ -345,8 +346,10 @@
         measured on this page rather than assumed.</p>
       <ul>
         <li>Widess, M. B., 1973, How thin is a thin bed?: <em>Geophysics</em>, 38, 1176&ndash;1180.</li>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025b, Prediction of reservoir properties
+          using the RDQ crossplot workflow: <em>Interpretation</em>, doi: 10.1190/INT-2024-0096.1.</li>
       </ul>
     </details>
   </section>
@@ -354,7 +357,7 @@
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
     <h3><a href="rdq-crossplot.html">13 · The 3D RDQ crossplot</a></h3>
-    <p>Distance, &thetas;<sub>px</sub> and the signed half isochron on three axes &mdash; the plot the whole
+    <p>Distance, &theta;<sub>px</sub> and the signed half isochron on three axes &mdash; the plot the whole
       workflow has been building toward.</p>
     <a class="btn" href="rdq-crossplot.html">Open module 13 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
@@ -374,10 +377,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>
@@ -638,12 +640,10 @@
      long and drops them when it is short.
      ===================================================================== */
 
-  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
-     and then starts again. It does not run up to 9 and mirror back down. The
-     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
-     opens the next, which is why the published table gives both the 0 degree
-     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
-     coarse version as "4 quadrants". */
+  /* Published rule (Bedle et al., 2025a, steps 2 to 5 and Figure 4a): every
+     zero crossing is Q5, every trough Q1 and every peak Q9. Between each pair
+     of anchors the interior numbers run upward from the extremum, so below a
+     peak the sequence is 9, 2, 3, 4, 5 and below a trough 1, 2, 3, 4, 5. */
 
   function quadrants(tr, pk) {
     const nt = tr.length;
@@ -678,24 +678,25 @@
     };
 
     loops.forEach((L) => {
-      q[L.a] = 1;                                // opens this loop
+      q[L.a] = tr[L.a] < 0 ? 1 : 9;               // trough Q1, peak Q9
       q[L.x] = 5;
-      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
-      ends.add(L.b);                             // loop has already claimed it
+      q[L.b] = tr[L.b] < 0 ? 1 : 9;
+      ends.add(L.b);
       fill(L.a, L.x, [2, 3, 4]);
       fill(L.x, L.b, [6, 7, 8]);
     });
-    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
-    // same position and take the same filter, so either label is correct
-    loops.forEach((L) => { q[L.a] = 1; });
+    // troughs are Q1 and peaks Q9 wherever they sit; both take the 0 degree
+    // filter, so this changes the labels and not the DQ values
+    const tag = (i) => (tr[i] < 0 ? 1 : 9);
+    loops.forEach((L) => { q[L.a] = tag(L.a); q[L.b] = tag(L.b); });
 
     const anchors = [];
     loops.forEach((L) => {
-      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+      anchors.push({ i: L.a, q: q[L.a] }, { i: L.x, q: 5 });
     });
     if (loops.length) {
       const last = loops[loops.length - 1];
-      anchors.push({ i: last.b, q: q[last.b] || 9 });
+      anchors.push({ i: last.b, q: q[last.b] });
     }
     anchors.sort((a, b) => a.i - b.i);
     return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
@@ -737,7 +738,7 @@
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace rather than to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centres a sample runs the other way, so the filter is
+     the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
      ===================================================================== */
 
@@ -985,7 +986,7 @@
 
      The polar angle of the split coordinates, folded into 0-90 by sector and
      multiplied by the sign of the DQ trace. Quoted from the AASPI column
-     sequence; Paper 2 gives the same four rules labelled by sector.
+     sequence; Paper 2 gives the same four rules labeled by sector.
      ===================================================================== */
 
   function fold(deg) {
@@ -1024,7 +1025,7 @@
   /* =====================================================================
      THE WEDGE
 
-     The whole chain rebuilt at each bed thickness, with both attributes read
+     The whole workflow rebuilt at each bed thickness, with both attributes read
      at the top of the sand. Tuning scales the vector, so it moves the length
      and leaves the direction alone.
      ===================================================================== */

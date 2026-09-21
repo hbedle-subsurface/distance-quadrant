@@ -47,19 +47,26 @@ expect('F-N over B, to 2 dp', ratio.toFixed(2), '0.17');
 expect('exercise 1 placeholder, F-N', /id="x1a">([^<]*)</.exec(html)[1].replace('&minus;', '\u2212'), '\u22120.042');
 expect('exercise 1 placeholder, B', /id="x1b">([^<]*)</.exec(html)[1].replace('&minus;', '\u2212'), '\u22120.247');
 
-console.log('--- exercise 3: brine against gas, 28%, soft shale ---');
-hit('[data-fluid="brine"]');
-let mm = P.model();
-expect('brine A', (mm.top.A >= 0 ? '+' : '-') + Math.abs(mm.top.A).toFixed(3), '+0.047');
-expect('brine B', (mm.top.B >= 0 ? '+' : '-') + Math.abs(mm.top.B).toFixed(3), '-0.183');
-expect('brine is class 1', $('mClass').textContent, 'class 1');
-hit('[data-fluid="gas"]');
-mm = P.model();
-expect('gas A', (mm.top.A >= 0 ? '+' : '-') + Math.abs(mm.top.A).toFixed(3), '-0.039');
-expect('gas B', (mm.top.B >= 0 ? '+' : '-') + Math.abs(mm.top.B).toFixed(3), '-0.247');
-expect('gas is class 3 by default', $('mClass').textContent, 'class 3');
+console.log('--- exercise 3: gas 28% against brine 36%, soft shale ---');
+hit('#tabs button[data-tab="p1"]');
+hit('[data-over="soft"]'); hit('[data-fluid="gas"]'); set('phi', 28);
+expect('gas 28%: N at top', $('s1c').textContent, '\u22120.041');
+expect('gas 28%: F-N at top', $('s1d').textContent, '\u22120.042');
+expect('gas 28% is class 3', $('mClass').textContent, 'class 3');
+hit('[data-fluid="brine"]'); set('phi', 36);
+expect('brine 36%: N at top', $('s1c').textContent, '\u22120.042');
+expect('brine 36%: F-N at top', $('s1d').textContent, '\u22120.013');
 
-console.log('--- exercise 4: trough against two-layer answer ---');
+console.log('--- exercise 4 (crossplot): brine 36% soft against gas 20% hard ---');
+const pt = () => { const q = P.model(); return [(q.top.A + q.top.B * q.s2n).toFixed(3), (q.top.B * q.gain).toFixed(3)]; };
+let a = pt();
+expect('brine 36% soft, crossplot point', a.join(','), '-0.042,-0.013');
+hit('[data-over="hard"]'); hit('[data-fluid="gas"]'); set('phi', 20);
+a = pt();
+expect('gas 20% hard, crossplot point', a.join(','), '-0.056,-0.018');
+hit('[data-over="soft"]'); hit('[data-fluid="gas"]'); set('phi', 28);
+
+console.log('--- exercise 5: trough against two-layer answer ---');
 const pct = (t) => {
   set('thick', t);
   const q = P.step3Numbers();

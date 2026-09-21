@@ -151,13 +151,13 @@
     <p class="lede">
       The folded angle is a magnitude between 0 and 90&deg; and cannot say which way the departure runs.
       The sign of the DQ trace supplies that: whatever polarity module 07 gave the distance at a sample,
-      &thetas;<sub>px</sub> at that sample takes the same one. The result runs from &minus;90 to
+      &theta;<sub>px</sub> at that sample takes the same one. The result runs from &minus;90 to
       +90&deg;, and the two halves are read differently.</p>
 
     <p class="lede">
       This is also why the two attributes are designed to be displayed together. They share a sign
-      convention, so a positive DQ section and a positive &thetas;<sub>px</sub> section are picking out the
-      same samples. The published displays call them twin sisters and colour them so that the positive side
+      convention, so a positive DQ section and a positive &theta;<sub>px</sub> section are picking out the
+      same samples. The published displays call them twin sisters and color them so that the positive side
       is the bold one, because on a soft-sand play that is where the sands are.</p>
 
     <canvas id="c2a" aria-label="Theta px down the trace, with and without the sign applied"></canvas>
@@ -169,7 +169,7 @@
       <div class="stat"><span>Samples with an angle</span><b id="s2a">&mdash;</b></div>
       <div class="stat"><span>Given a positive sign</span><b id="s2b">&mdash;</b></div>
       <div class="stat"><span>Given a negative sign</span><b id="s2c">&mdash;</b></div>
-      <div class="stat key"><span>&thetas;<sub>px</sub> at the sand top</span><b id="s2d">&mdash;</b></div>
+      <div class="stat key"><span>&theta;<sub>px</sub> at the sand top</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend">
@@ -203,7 +203,7 @@
       which of the two panels does the separating.</p>
 
     <div class="stats" style="margin-top:16px">
-      <div class="stat"><span>&thetas;<sub>px</sub>, brine / oil / gas</span><b id="s3a">&mdash;</b></div>
+      <div class="stat"><span>&theta;<sub>px</sub>, brine / oil / gas</span><b id="s3a">&mdash;</b></div>
       <div class="stat"><span>Distance, brine / oil / gas</span><b id="s3b">&mdash;</b></div>
       <div class="stat key"><span>Angle separates by</span><b id="s3c">&mdash;</b></div>
       <div class="stat key"><span>Distance separates by</span><b id="s3d">&mdash;</b></div>
@@ -224,9 +224,9 @@
       <span class="hint">Why the method does not settle for the distance</span>
     </div>
 
-    <p class="lede">The AASPI attribute description calls &thetas;<sub>px</sub> a <b>crossplot cluster
+    <p class="lede">The AASPI DQ attributes pamphlet calls &theta;<sub>px</sub> a <b>crossplot cluster
       mapping attribute</b>, which names its job precisely. Rock types that sit in different places on the
-      crossplot take different angles, so a section or map coloured by the angle shows where each cluster
+      crossplot take different angles, so a section or map colored by the angle shows where each cluster
       sits in space. That is a different question from how strong the response is, which is what the
       distance answers.</p>
 
@@ -242,10 +242,10 @@
       situation you were in.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
-      Reading a &thetas;<sub>px</sub> section</h2>
-    <p class="lede">The published displays use a two-sided colour bar from &minus;90 to +90 in ten degree
+      Reading a &theta;<sub>px</sub> section</h2>
+    <p class="lede">The published displays use a two-sided color bar from &minus;90 to +90 in ten degree
       steps, with the boundaries kept sharp rather than smoothly graded, so that a feature confined to one
-      ten-degree band stays visible. The positive side is coloured boldly and the negative side held back,
+      ten-degree band stays visible. The positive side is colored boldly and the negative side held back,
       for the same reason as on a DQ section: on a soft-sand play the sands are the positive samples. The
       two sections are meant to be read as a pair, and the papers describe a flat spot as something that
       appears on the angle section where the distance section shows nothing in particular.</p>
@@ -263,7 +263,7 @@
       <ol>
         <li><b>Watch the fluids separate in angle.</b> On step 3, with soft shale at 20% porosity, read the
           three angles and the three distances.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The angle gives +6&deg;,
+          <details class="reveal"><summary>Answer</summary><span class="ans">The angle gives +6&deg;,
             +15&deg; and +23&deg; for brine, oil and gas: clean, monotonic, and in the direction you would
             want. The distance gives 0.147, 0.123 and 0.103 &mdash; it falls as the sand is charged, so on
             distance alone the gas sand looks like the weakest anomaly of the three. That is not an error
@@ -271,14 +271,14 @@
             while its direction swings away from the background. One number cannot carry both
             facts.</span></details></li>
         <li><b>Now switch the overburden to tight sandstone.</b> Read the same six numbers.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The two attributes swap roles.
+          <details class="reveal"><summary>Answer</summary><span class="ans">The two attributes swap roles.
             The angles crowd into a few degrees and barely separate the fluids at all, while the distance
             spreads them cleanly. So neither attribute is the useful one in general &mdash; which one
             works depends on what the reservoir is sitting under, and that is not something an interpreter
             chooses. This is the concrete version of module 07's argument for computing both.</span></details></li>
         <li><b>Find where the angle becomes unreliable.</b> Set soft shale with oil and drag the porosity
           up to about 28%, watching the distance and the angle together.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The distance collapses to a few
+          <details class="reveal"><summary>Answer</summary><span class="ans">The distance collapses to a few
             thousandths and the angle swings to a large value that means nothing. That is a class 2
             crossover: the intercept passes through zero, the vector is almost at the origin, and the
             direction of a point at the origin is undefined. Module 09 made the same observation about the
@@ -286,7 +286,7 @@
             rule is the same in both cases: an angle is only as good as the distance it belongs
             to.</span></details></li>
         <li><b>Take the sign off.</b> Untick the box in the panel and look at step 2.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Everything becomes positive and
+          <details class="reveal"><summary>Answer</summary><span class="ans">Everything becomes positive and
             the section loses the ability to distinguish a departure on one side of the background from a
             departure on the other. The magnitude of the fold is a measure of how unusual a sample is; the
             sign is what tells you in which sense. It is taken from the near stack slope, exactly as the
@@ -294,13 +294,13 @@
             without one arriving upside down.</span></details></li>
         <li><b>Check the range.</b> Step through several models and watch the folded angle readout on
           step 1.
-          <details class="reveal"><summary>Hint</summary><span class="ans">It never leaves 0 to 90&deg;
+          <details class="reveal"><summary>Answer</summary><span class="ans">It never leaves 0 to 90&deg;
             before the sign is applied, and never leaves &minus;90 to +90&deg; after. That is guaranteed by
             the fold rather than observed: each of the four sector rules maps its quarter onto the first
-            one. The AASPI delimiter table gives the range of the attribute as 0 to 90, which is the
-            unsigned form, and the published colour bar runs the full &plusmn;90.</span></details></li>
+            one. Bedle et al. (2025b) describe the sector angles as lying between 0 and 90&deg;, which
+            is the unsigned form, and the published color bar runs the full &plusmn;90.</span></details></li>
         <li><b>Coarsen the sampling.</b> Step the sample rate to 4 ms.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Fewer samples carry an angle at
+          <details class="reveal"><summary>Answer</summary><span class="ans">Fewer samples carry an angle at
             all, and the ones that remain inherit the coarser quadrant numbering that module 04 measured.
             Every attribute in this course degrades the same way for the same reason, which is why the
             papers ask for 1 ms data and sync interpolation up to it before anything else
@@ -313,7 +313,7 @@
     <div class="takeaway" style="max-width:none">
       <h3>The main points</h3>
       <ul>
-        <li><b>&thetas;<sub>px</sub> is the direction of the same vector whose length is the DQ
+        <li><b>&theta;<sub>px</sub> is the direction of the same vector whose length is the DQ
           distance</b>, measured after the rotation of module 08 and the split of module 09.</li>
         <li><b>The bearing is folded from 0&ndash;360&deg; into 0&ndash;90&deg;</b> by four sector rules,
           one per quarter of the crossplot.</li>
@@ -341,13 +341,13 @@
         of module 04, the phase filters of module 06, A and B as the quadrant-enhanced near stack and
         enhanced far minus near, the baseline rotation of module 08, and the sector split of module 09
         applied to the rotated coordinates.</p>
-      <p>The fold is quoted directly from the AASPI column sequence. With &thetas;<sub>p</sub> the polar
-        angle of the split coordinates: for 0&deg; &le; &thetas;<sub>p</sub> &lt; 90&deg;,
-        &thetas;<sub>px</sub> is &thetas;<sub>p</sub>; for 90 to 180&deg; it is
-        180&nbsp;&minus;&nbsp;&thetas;<sub>p</sub>; for 180 to 270&deg; it is
-        &thetas;<sub>p</sub>&nbsp;&minus;&nbsp;180; and for 270 to 360&deg; it is
-        360&nbsp;&minus;&nbsp;&thetas;<sub>p</sub>. Each result is then multiplied by the sign of the DQ
-        trace. Paper 2 gives the same four rules labelled by sector I to IV.</p>
+      <p>The fold is equation 5 of Bedle et al. (2025b). With &theta;<sub>p</sub> the polar
+        angle of the split coordinates: for 0&deg; &le; &theta;<sub>p</sub> &lt; 90&deg;,
+        &theta;<sub>px</sub> is &theta;<sub>p</sub>; for 90 to 180&deg; it is
+        180&nbsp;&minus;&nbsp;&theta;<sub>p</sub>; for 180 to 270&deg; it is
+        &theta;<sub>p</sub>&nbsp;&minus;&nbsp;180; and for 270 to 360&deg; it is
+        360&nbsp;&minus;&nbsp;&theta;<sub>p</sub>. Each result is then multiplied by the sign of the DQ
+        trace. The paper labels the four rules by sector, I to IV.</p>
       <p>The comparison on step 3 is made at the sample nearest the top of the sand, and the separation
         figures are the spread between the brine and gas values as a fraction of the larger of the two. The
         numbers quoted in the prose are for a 30 ms sand at 40 Hz with 1 ms sampling and no noise; the
@@ -359,10 +359,12 @@
         compaction state and baseline would move both numbers. Treat the separation shown here as evidence
         that the angle carries fluid information, not as a calibration.</p>
       <ul>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
-        <li>Neff, D. B., and W. Neff, RDQ calculations, 3D crossplots and statistical readouts, and the
-          Paper 2 equation notes.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025b, Prediction of reservoir properties
+          using the RDQ crossplot workflow: <em>Interpretation</em>, doi: 10.1190/INT-2024-0096.1.</li>
+        <li>Neff, D. B., and W. Neff, RDQ calculations, 3D crossplots and statistical readouts,
+          unpublished notes.</li>
       </ul>
     </details>
   </section>
@@ -390,10 +392,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>
@@ -654,12 +655,10 @@
      long and drops them when it is short.
      ===================================================================== */
 
-  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
-     and then starts again. It does not run up to 9 and mirror back down. The
-     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
-     opens the next, which is why the published table gives both the 0 degree
-     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
-     coarse version as "4 quadrants". */
+  /* Published rule (Bedle et al., 2025a, steps 2 to 5 and Figure 4a): every
+     zero crossing is Q5, every trough Q1 and every peak Q9. Between each pair
+     of anchors the interior numbers run upward from the extremum, so below a
+     peak the sequence is 9, 2, 3, 4, 5 and below a trough 1, 2, 3, 4, 5. */
 
   function quadrants(tr, pk) {
     const nt = tr.length;
@@ -694,24 +693,25 @@
     };
 
     loops.forEach((L) => {
-      q[L.a] = 1;                                // opens this loop
+      q[L.a] = tr[L.a] < 0 ? 1 : 9;               // trough Q1, peak Q9
       q[L.x] = 5;
-      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
-      ends.add(L.b);                             // loop has already claimed it
+      q[L.b] = tr[L.b] < 0 ? 1 : 9;
+      ends.add(L.b);
       fill(L.a, L.x, [2, 3, 4]);
       fill(L.x, L.b, [6, 7, 8]);
     });
-    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
-    // same position and take the same filter, so either label is correct
-    loops.forEach((L) => { q[L.a] = 1; });
+    // troughs are Q1 and peaks Q9 wherever they sit; both take the 0 degree
+    // filter, so this changes the labels and not the DQ values
+    const tag = (i) => (tr[i] < 0 ? 1 : 9);
+    loops.forEach((L) => { q[L.a] = tag(L.a); q[L.b] = tag(L.b); });
 
     const anchors = [];
     loops.forEach((L) => {
-      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+      anchors.push({ i: L.a, q: q[L.a] }, { i: L.x, q: 5 });
     });
     if (loops.length) {
       const last = loops[loops.length - 1];
-      anchors.push({ i: last.b, q: q[last.b] || 9 });
+      anchors.push({ i: last.b, q: q[last.b] });
     }
     anchors.sort((a, b) => a.i - b.i);
     return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
@@ -753,7 +753,7 @@
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace rather than to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centres a sample runs the other way, so the filter is
+     the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
      ===================================================================== */
 
@@ -1001,7 +1001,7 @@
 
      The polar angle of the split coordinates, folded into 0-90 by sector and
      multiplied by the sign of the DQ trace. Quoted from the AASPI column
-     sequence; Paper 2 gives the same four rules labelled by sector.
+     sequence; Paper 2 gives the same four rules labeled by sector.
      ===================================================================== */
 
   function fold(deg) {

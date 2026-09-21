@@ -144,7 +144,7 @@
       sign is a direction.</p>
 
     <canvas id="c1a" aria-label="The near-stack trace beside its signed isochron, signed half isochron and signed slope columns"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The four columns of Figure 1 of the isochron paper,
+    <p class="hint-line" style="margin:8px 0 18px">The four columns of Figure 1 of Chaudhry et al. (2026),
       built from whatever model is in the panel. Amplitude, then the signed isochron, then the signed half
       isochron of step 2, then the slope polarity on its own.</p>
 
@@ -231,7 +231,7 @@
       <span>The blocky sand splits evenly. The graded sands do not, and the shorter half sits at the
         cleaner end &mdash; at the top for a coarsening-upward sand and at the base for a fining-upward
         one. A sharper contrast makes a tighter, better-centered extremum, which pulls the crossing toward
-        it and shortens the half on that side. This is the observation the isochron paper builds its facies
+        it and shortens the half on that side. This is the observation Chaudhry et al. (2026) build its facies
         argument on: the sign separates sand from shale, and the asymmetry within the sand separates one
         kind of sand from another.</span>
     </div>
@@ -250,7 +250,7 @@
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       What the sign buys</h2>
-    <p class="lede">In the field examples of the isochron paper, sand intervals carry a positive slope and
+    <p class="lede">In the field examples of Chaudhry et al. (2026), sand intervals carry a positive slope and
       the shales and silts around them carry a negative one. That is not a law of nature &mdash; it follows
       from a soft reservoir under a harder overburden, which is the same convention module 04 enforces with
       its polarity flip &mdash; but where it holds it means a single signed number separates the two
@@ -267,15 +267,15 @@
       display: flat where the geology is layered, noisy where it is not.</p>
 
     <p class="lede">The half isochron adds sensitivity and gives up stability to get it. Peaks and troughs
-      at medium and high amplitude are relatively immune to thin beds and to noise, and they tend to sit at
-      the boundary of a high impedance layer. Zero crossings are always low amplitude samples, and a strong
+      at medium and high amplitude are less affected by thin beds and noise, and they tend to sit at
+      the boundary of a high impedance layer. Zero crossings are low-amplitude samples, and a strong
       reflection nearby will move them. That is why the half isochron becomes erratic in high-energy
       depositional settings, and why it is the more informative of the two attributes in quiet, well
       layered ones.</p>
 
     <div class="legend prose">
       <span>The isochron is also the third axis of the crossplot in module 13. The DQ distance and Theta PX
-        describe the amplitude behaviour at a sample; the signed half isochron describes the geometry of
+        describe the amplitude behavior at a sample; the signed half isochron describes the geometry of
         the waveform it sits in. They are close to independent, which is what makes the three of them worth
         plotting together.</span>
     </div>
@@ -287,7 +287,7 @@
       <ol>
         <li><b>Check that the halves add up.</b> On step 2, read the isochron and its two halves for a few
           models.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The two halves always sum to
+          <details class="reveal"><summary>Answer</summary><span class="ans">The two halves always sum to
             the isochron exactly, because the crossing is a sample inside the interval and the two pieces
             are measured to it and from it. Nothing is lost in the split, which means the half isochron
             carries strictly more information than the isochron and the isochron can always be recovered
@@ -295,7 +295,7 @@
             the other.</span></details></li>
         <li><b>Find out what sets the isochron in a thick layer.</b> On step 1, set the sand thickness to
           its maximum with a blocky profile, then drag the wavelet frequency.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The isochron zones that belong
+          <details class="reveal"><summary>Answer</summary><span class="ans">The isochron zones that belong
             to isolated boundaries track the wavelet and have almost nothing to do with the sand. For a
             Ricker wavelet the trough-to-peak time is &radic;1.5&nbsp;/&nbsp;&pi;f, which is 15.6 ms at
             25 Hz and 7.8 ms at 50 Hz, and the measured isochron follows it to within a sample. Note that
@@ -305,34 +305,34 @@
             a geological measurement only once two boundaries are close enough to interfere, which is the
             tuning regime module 12 works in.</span></details></li>
         <li><b>Split a blocky sand.</b> On step 3, read the blocky panel's two halves.
-          <details class="reveal"><summary>Hint</summary><span class="ans">They are equal. Both boundaries
+          <details class="reveal"><summary>Answer</summary><span class="ans">They are equal. Both boundaries
             of the sand are equally sharp and equally strong, so the waveform between them is symmetric and
             the crossing lands midway. That is the baseline everything else is read against &mdash; not
             because blocky sands are common, but because any departure from an even split has to be caused
             by something, and the something is what you are looking for.</span></details></li>
         <li><b>Grade the sand and watch the split move.</b> Compare the coarsening-upward and
           fining-upward panels on step 3.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The shorter half sits at the
+          <details class="reveal"><summary>Answer</summary><span class="ans">The shorter half sits at the
             cleaner end: at the top for a coarsening-upward sand, at the base for a fining-upward one. The
             cleaner end has the sharper impedance contrast, which produces a tighter extremum sitting
             closer to the boundary, and that pulls the crossing toward it. So the asymmetry is a read on
-            which end of the sand has the better rock &mdash; the same conclusion the isochron paper draws
+            which end of the sand has the better rock &mdash; the same conclusion Chaudhry et al. (2026) draw
             from its Figure 2, and it comes out of the wavelet rather than out of any assumption about
             depositional environment.</span></details></li>
         <li><b>Try to move the crossing with noise.</b> On step 2, with a blocky 24 ms sand at 25 Hz,
           walk the noise from zero to 40% and watch the isochron and the split.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Very little happens. The
+          <details class="reveal"><summary>Answer</summary><span class="ans">Very little happens. The
             isochron drifts from 22 ms to 19 and the split never leaves the high forties. That is worth knowing, because
             it is the opposite of what the setup invites you to expect, and because it tells you what kind
             of test this is: band-limited noise at the signal's own frequency perturbs a strong, isolated
-            loop hardly at all. The instability the isochron paper reports on field data &mdash; half
+            loop hardly at all. The instability Chaudhry et al. (2026) report on field data &mdash; half
             isochron readings becoming varied and sometimes erratic in high-energy settings &mdash; comes
             from strong reflections interfering with each other and dragging the low-amplitude crossing
             around, not from random noise. Step 3 is where you can see that mechanism working, and this
             synthetic understates it.</span></details></li>
         <li><b>Coarsen the sampling.</b> On step 1, step the sample rate from 1 ms to 4 ms with everything
           else fixed.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The isochron can only take
+          <details class="reveal"><summary>Answer</summary><span class="ans">The isochron can only take
             values that are whole multiples of the sample interval, so at 4 ms it jumps in steps of four
             milliseconds and the fine distinctions between one zone and the next disappear. The half
             isochron suffers twice over, because it is a shorter interval measured to a pick that is itself
@@ -381,22 +381,22 @@
       <p>The picks are made exactly as in module 03. The isochron is the time between consecutive extrema
         and the half isochron is that interval cut at the zero-crossing sample between them, both written
         to every sample in their zone and both signed by the slope, positive from trough down to peak.
-        This reproduces Figure 1 of the isochron abstract, including its property that the two halves sum
+        This reproduces Figure 1 of Chaudhry et al. (2026), including its property that the two halves sum
         to the isochron.</p>
       <p>Step 3 compares three profiles rather than four. The tight streak is still a model you can select
         in the panel, and its effect on the isochron is real, but it is left out of the facies comparison:
-        the direction it moves the split in this model does not match the one shown in Figure 2d of the
-        isochron abstract, and the likeliest reason is that the published model is built from a real sand
-        log whose contrast, thickness and position this page is only approximating. A comparison meant to
-        teach a facies signature is the wrong place for a result that is not settled.</p>
+        the direction it moves the split in this model does not match the one shown in Figure 2d of
+        Chaudhry et al. (2026), and the likeliest reason is that the published model is built from a real sand
+        log whose contrast, thickness and position this page is only approximating. The published
+        result is taken as the reference, and this model does not yet reproduce it.</p>
       <p>The window holds the sand and nothing else. An earlier draft put a bed above and below it so the
-        display would look like a layered earth, and that was a mistake: a neighbour close enough to fill
+        display would look like a layered earth, and that was a mistake: a neighbor close enough to fill
         the panel is also close enough to shift the sand's zero crossing, which is the measurement step 3
         depends on. With those beds in place a blocky sand stopped splitting evenly, which it should always
         do. The window is sized to the sand's own response instead.</p>
       <p>Noise is band-limited with the same wavelet and scaled as a percentage of the strongest reflection
         in the model, as in the earlier modules. The isochron is quantized to the sample interval by
-        construction, so a coarse sample rate limits it directly rather than through any modelling
+        construction, so a coarse sample rate limits it directly rather than through any modeling
         choice.</p>
       <p>What this module leaves out is the use the signed half isochron is put to as the third axis of the
         RDQ crossplot, which is module 13, and the relationship between isochron and bed thickness in the
@@ -404,8 +404,10 @@
       <ul>
         <li>Chaudhry, N., H. Bedle, D. B. Neff, and W. Neff, 2026, Isochron-based seismic attributes for
           stratigraphic and facies interpretation: field examples, IMAGE expanded abstract.</li>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025b, Prediction of reservoir properties
+          using the RDQ crossplot workflow: <em>Interpretation</em>, doi: 10.1190/INT-2024-0096.1.</li>
       </ul>
     </details>
   </section>
@@ -434,10 +436,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>
@@ -701,7 +702,7 @@
     const out = [];
 
     /* Deliberately just the sand. Step 3 measures the sand's own loop, and a
-       neighbouring bed close enough to fill the display would also be close
+       neighboring bed close enough to fill the display would also be close
        enough to shift its zero crossing, which is the measurement. The window
        is sized to the sand's response instead. */
     let prev = over;
@@ -765,19 +766,19 @@
     return { tr, z: zones(tr) };
   }
 
-  /* The sand's own isochron: the rising limb whose centre lies closest to the
+  /* The sand's own isochron: the rising limb whose center lies closest to the
      middle of the sand. Selecting the loop and then taking its two halves is
      more robust than filtering halves by position, which miscounts whenever a
      side lobe puts a third rising zone near the sand. */
   function sandIsochron(b) {
     const win = sandWindow(TTOP, S.thick);
-    const centre = (win[0] + win[1]) / 2;
+    const center = (win[0] + win[1]) / 2;
     const maxSpan = 2.5 * Math.sqrt(1.5) / (Math.PI * S.freq) / dt();
     let best = null, bestD = Infinity;
     b.z.isos.forEach((z) => {
       if (z.v <= 0) return;
       if (z.b - z.a > maxSpan) return;
-      const d = Math.abs((z.a + z.b) / 2 - centre);
+      const d = Math.abs((z.a + z.b) / 2 - center);
       if (d < bestD) { bestD = d; best = z; }
     });
     return best;
@@ -814,7 +815,7 @@
     ctx.restore();
   }
 
-  // shade a zone column: one filled block per zone, labelled with its value
+  // shade a zone column: one filled block per zone, labeled with its value
   function zoneColumn(ctx, rect, list, nt, opts) {
     const yOf = (i) => rect.y + (i / (nt - 1)) * rect.h;
     ctx.save();
@@ -1021,12 +1022,12 @@
       // no rising loop near the sand, so fall back to the nearest loop of
       // either sign rather than showing nothing
       const win = sandWindow(TTOP, S.thick);
-      const centre = (win[0] + win[1]) / 2;
+      const center = (win[0] + win[1]) / 2;
       const maxSpan = 2.5 * Math.sqrt(1.5) / (Math.PI * S.freq) / dt();
       let bestD = Infinity;
       b.z.isos.forEach((z) => {
         if (z.b - z.a > maxSpan) return;
-        const d = Math.abs((z.a + z.b) / 2 - centre);
+        const d = Math.abs((z.a + z.b) / 2 - center);
         if (d < bestD) { bestD = d; best = z; }
       });
     }

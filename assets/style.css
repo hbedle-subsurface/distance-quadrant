@@ -923,3 +923,6 @@ body.view-exercises #pe { display: block !important; border-top: 1px solid var(-
 .card { position: relative; }
 .flag.old, .card .flag { background: var(--slate); }
 .old-note { font-size: 13.5px; color: var(--slate); margin: 18px 0 0; max-width: 90ch; }
+
+.about .refs { font-size: 13px; color: var(--slate); padding-left: 18px; margin: 10px 0 14px; }
+.about .refs li { margin-bottom: 6px; }

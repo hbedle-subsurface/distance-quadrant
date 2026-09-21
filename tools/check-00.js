@@ -44,6 +44,17 @@ for(const o of ['soft','hard','tight']){hit('[data-over="'+o+'"]');
  console.log('  ',o.padEnd(6),'DQ at top',$('s0c').textContent,' angle',$('s0d').textContent);}
 hit('[data-over="tight"]'); hit('[data-fluid="gas"]');
 
+console.log('\n--- the rock panel and the prose: porosity range and brightening ---');
+hit('[data-over="tight"]'); hit('[data-fluid="gas"]');
+const P0=window.__DQ00, L=P0.line();
+console.log('   porosity at left and right:',P0.phiOf(0),P0.phiOf(20));
+if(P0.phiOf(0)!==12) fail.push('left porosity is '+P0.phiOf(0)+', prose says 12%');
+if(P0.phiOf(20)!==33) fail.push('right porosity is '+P0.phiOf(20)+', prose says 33%');
+if(!/12% at the left/.test(h)||!/33%/.test(h)) fail.push('prose porosity range not found');
+const topDQ=(t)=>Math.abs(t.dq[t.win[0]]);
+console.log('   |DQ| at sand top, left / right:',topDQ(L[0]).toFixed(4),topDQ(L[20]).toFixed(4));
+if(!(topDQ(L[20])>topDQ(L[0]))) fail.push('DQ does not strengthen left to right under tight sandstone with gas');
+
 console.log('\n=======================================');
 if(fail.length){fail.forEach(f=>console.log('  -',f));process.exit(1);}
 console.log('every quoted number checks out');

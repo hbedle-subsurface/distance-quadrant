@@ -406,7 +406,7 @@ const SEIS = (function () {
    * Sequential maps, for quantities that run from low to high rather than
    * negative to positive: thickness, amplitude magnitude, depth. Viridis and
    * cividis are both perceptually uniform and safe for color-vision
-   * deficiency; cividis is optimised for it specifically. Rainbow maps are
+   * deficiency; cividis is optimized for it specifically. Rainbow maps are
    * avoided because they invent boundaries where the data has none.
    */
   const SEQMAPS = {
@@ -694,7 +694,7 @@ const SEIS = (function () {
    * Horizontal color bar, drawn in terms of REFLECTION COEFFICIENT rather than
    * displayed amplitude. That distinction matters: the color map itself never
    * changes, but polarity decides whether a positive RC is drawn as a peak or a
-   * trough, so labelling the bar by RC makes the bar itself flip when polarity
+   * trough, so labeling the bar by RC makes the bar itself flip when polarity
    * is switched. Pass pol = -1 for reverse polarity.
    */
   function drawColorbar(ctx, rect, cmap, opts) {

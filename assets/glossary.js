@@ -99,8 +99,8 @@ window.DQ_GLOSSARY = {
   'shuey': {
     term: 'Shuey approximation',
     def: 'A simplification of the Zoeppritz equations that writes the reflection coefficient as a ' +
-      'straight line in sin&sup2;&theta;: R(&theta;) = A + B sin&sup2;&theta;. It holds well out to ' +
-      'about 30&deg; (Shuey, 1985).',
+      'straight line in sin&sup2;&theta;: R(&theta;) = A + B sin&sup2;&theta;. It is generally accurate ' +
+      'to incidence angles of about 30&deg; (Shuey, 1985).',
   },
   'intercept': {
     term: 'Intercept (A)',
@@ -116,7 +116,9 @@ window.DQ_GLOSSARY = {
     term: 'AVO class',
     def: 'A grouping of sand-top responses by their intercept and gradient (Rutherford and Williams, ' +
       '1989; Castagna and Swan, 1997). Class 1 sands are harder than the shale above; class 3 and 4 ' +
-      'sands are softer; class 2 sands have almost no impedance contrast.',
+      'sands are softer, class 4 with a gradient of opposite sign to class 3; class 2 sands have little ' +
+      'impedance contrast, and class 2p sands change polarity with angle (Ross and Kinman, 1995). The ' +
+      'numerical boundaries between classes used on this site are its own convention.',
   },
   'crossplot': {
     term: 'Crossplot',
@@ -155,13 +157,15 @@ window.DQ_GLOSSARY = {
   },
   'peak': {
     term: 'Peak',
-    def: 'A local maximum on a trace. With a zero-phase wavelet and a thick bed, a peak sits at a ' +
-      'boundary where impedance increases downward.',
+    def: 'A local maximum on a trace. This site draws a positive reflection coefficient as a peak, so ' +
+      'with a zero-phase wavelet and a thick bed a peak sits at a boundary where impedance increases ' +
+      'downward. Other polarity conventions reverse this.',
   },
   'trough': {
     term: 'Trough',
-    def: 'A local minimum on a trace. With a zero-phase wavelet and a thick bed, a trough sits at a ' +
-      'boundary where impedance decreases downward, such as the top of a soft sand.',
+    def: 'A local minimum on a trace. Under the polarity convention used on this site, with a ' +
+      'zero-phase wavelet and a thick bed, a trough sits at a boundary where impedance decreases ' +
+      'downward, such as the top of a soft sand.',
   },
   'zero-crossing': {
     term: 'Zero crossing',

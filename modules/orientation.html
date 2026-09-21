@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>What the DQ trace gives you | How the DQ Trace Actually Works</title>
-<meta name="description" content="A stack section and a DQ section from the same rocks, side by side. What the second one adds, before any of the machinery.">
+<title>The rocks, and two pictures of them | How the DQ Trace Actually Works</title>
+<meta name="description" content="A rock model shown beside the conventional stack section and the DQ section computed from it, so the two seismic pictures can be compared with the rocks that produced them.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -22,35 +22,36 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 00 &nbsp;·&nbsp; The DQ trace</p>
-    <h1>What the DQ trace gives you</h1>
-    <p class="sub">Before any of the machinery, here is the destination. The same rocks, imaged twice: a
-      conventional stack section, and the DQ section built from the near and far stacks of the same
-      gather. Change the rocks and both update. The rest of the course is how the second one is
-      made.</p>
+    <p class="eyebrow">Module 00 &nbsp;·&nbsp; Part 1: Why a new trace</p>
+    <h1>The rocks, and two pictures of them</h1>
+    <p class="sub">One rock model shown three ways: the rocks themselves, a conventional
+      <span class="g" data-g="near-stack">near-stack</span> section, and a DQ section computed from the near
+      and far stacks of the same <span class="g" data-g="gather">gathers</span>. Changing the rocks updates
+      all three.</p>
   </div>
 
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap">The same rocks, imaged twice <span>&mdash; stack on the left, DQ on the right</span></p>
-        <canvas id="cMain" aria-label="A conventional stack section beside the DQ section built from the same model"></canvas>
+        <p class="cap">The rocks, the stack section and the DQ section
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
+        <canvas id="cMain" aria-label="The rock model with depth and two-way time scales, the stack section and the DQ section computed from it"></canvas>
       </div>
       <div>
-        <p class="cap">The rocks <span>&mdash; change them and both sections follow</span></p>
+        <p class="cap">The model <span>&mdash; all three panels redraw as a control moves</span></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
             <div class="ctl">
-              <label>Overburden <span class="val" id="overV">tight sandstone</span></label>
-              <div class="seg" role="group" aria-label="Overburden lithology">
+              <label>Rock above and below <span class="val" id="overV">tight sandstone</span></label>
+              <div class="seg" role="group" aria-label="Rock above and below the sand">
                 <button type="button" data-over="soft" aria-pressed="false">soft</button>
                 <button type="button" data-over="hard" aria-pressed="false">hard</button>
                 <button type="button" data-over="tight" aria-pressed="true">tight</button>
               </div>
             </div>
             <p class="hint-line" style="margin:2px 0 0;grid-column:1/-1">The sand keeps one thickness
-              across the line and its porosity climbs from left to right, from about 12% to about 29%.</p>
+              across the line and its porosity rises from 12% at the left to 33% at the right.</p>
             <div class="ctl">
               <label>Pore fluid <span class="val" id="fluidV">gas</span></label>
               <div class="seg" role="group" aria-label="Fluid filling the sand pores">
@@ -93,49 +94,52 @@
   </div>
 
   <section class="tabpane" id="p1" role="tabpanel">
-    <p class="lede">
-      Both pictures come from the same two partial stacks, so neither has more information in it than the
-      other. What differs is how much of that information has been brought to the surface.</p>
+    <p class="lede">The left panel is the model, the answer both seismic sections are trying to show. A sand
+      of constant thickness lies between layers of the rock chosen in the panel, with a thin contrasting bed
+      above it and a tight sandstone bed below. When the surrounding rock is itself tight sandstone, that
+      lower bed has no contrast and gives no reflection. The sand&rsquo;s <span class="g" data-g="porosity">porosity</span> rises
+      from 12% at the left of the line to 33% at the right, and the color of the sand shows its pore
+      fluid.</p>
 
-    <p class="lede">
-      On the stack section the sand is a pair of coloured bands with a gap between them, and reading it
-      means deciding which band is the top of the reservoir and which is the base. The bands are the
-      wavelet's response to two boundaries, so their brightness mixes the contrast at each boundary with
-      the thickness between them. That mixing is why amplitude interpretation is careful work.</p>
+    <p class="lede">On the stack section each boundary of the sand appears as a
+      <span class="g" data-g="wavelet">wavelet</span>, a <span class="g" data-g="trough">trough</span> or a
+      <span class="g" data-g="peak">peak</span> with <span class="g" data-g="sidelobe">sidelobes</span>
+      above and below it. The brightness of each band combines the
+      <span class="g" data-g="impedance">impedance</span> contrast at that boundary with the thickness of the
+      bed, and the interior of the sand sits near a <span class="g" data-g="zero-crossing">zero
+      crossing</span>.</p>
 
-    <p class="lede">
-      On the DQ section the same sand reads as <b>one body carrying one value</b>. Every sample between
-      the two boundaries has been given a number, so the interior of the bed is measured rather than
-      skipped.</p>
+    <p class="lede">On the DQ section the same sand appears as one filled body between its two boundaries.
+      Higher porosity lowers the sand&rsquo;s density and velocity, so its impedance falls. Under the default
+      tight sandstone that widens the contrast with the rock above, and the DQ color strengthens from left
+      to right with the porosity in the model. Under a soft shale the sand&rsquo;s impedance approaches the
+      shale&rsquo;s as porosity rises, so the contrast and the DQ value weaken instead. The DQ value
+      responds to the contrast between rocks, not to porosity alone. Changing the pore fluid changes the
+      color while the outline of the body stays in place.</p>
 
-    <p class="lede">
-      The sand in this line keeps one thickness and its porosity climbs from left to right, from about 12%
-      at the left edge to about 29% at the right. More porosity means lower density and velocity, so lower
-      impedance, so a bigger contrast against the seal above &mdash; and the DQ body brightens along the
-      line to match. Because the number is built from a near stack and a far stack together it also carries
-      offset behaviour: <b>change the fluid in the panel and watch the body change colour while its outline
-      stays where it is</b>.</p>
+    <p class="lede">Both sections are computed from the same two partial stacks. The DQ section does not add
+      information to them; it assigns a value to every sample inside the sand, where the stack section is
+      close to zero (Bedle et al., 2025a). The modules that follow build that step by step.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Samples in the sand, stack section</span><b id="s0a">&mdash;</b></div>
       <div class="stat key"><span>Samples carrying a DQ value</span><b id="s0b">&mdash;</b></div>
       <div class="stat"><span>DQ at the sand top, mid line</span><b id="s0c">&mdash;</b></div>
-      <div class="stat"><span>Angle there</span><b id="s0d">&mdash;</b></div>
+      <div class="stat"><span>Theta PX there</span><b id="s0d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s0e">&mdash;</b></div>
     </div>
 
     <div class="legend">
-      <span>A second attribute comes with the first and is not drawn here: the angle of the same vector
-        whose length gives the DQ colour. It responds to fluid and ignores bed thickness, which is the pair
-        this course is really about. Module 10 builds it and module 12 measures both against a
-        wedge.</span>
+      <span>The dashed outline on both sections is the sand in the rock model. A second attribute, the angle
+        of the same crossplot point (Theta PX, module 06), responds mainly to pore fluid and lithology and
+        is not drawn here. Module 09 compares the two attributes across a wedge.</span>
     </div>
 
     <section class="nextup" style="display:block;margin-top:26px">
       <p class="eyebrow">Where to start</p>
       <h3><a href="two-stacks.html">01 · Two stacks, and what AVO reads from them</a></h3>
       <p>The course runs in order, and each module builds one operation of the workflow that turns the
-        left-hand picture into the right-hand one. Eleven modules follow, each computed in the browser from
+        stack section into the DQ section. Eleven modules follow, each computed in the browser from
         the same rock model.</p>
       <a class="btn" href="two-stacks.html">Start the course →</a>
       <a class="btn ghost" href="../index.html">All modules</a>
@@ -151,16 +155,17 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -415,12 +420,10 @@
      long and drops them when it is short.
      ===================================================================== */
 
-  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
-     and then starts again. It does not run up to 9 and mirror back down. The
-     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
-     opens the next, which is why the published table gives both the 0 degree
-     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
-     coarse version as "4 quadrants". */
+  /* Published rule (Bedle et al., 2025a, steps 2 to 5 and Figure 4a): every
+     zero crossing is Q5, every trough Q1 and every peak Q9. Between each pair
+     of anchors the interior numbers run upward from the extremum, so below a
+     peak the sequence is 9, 2, 3, 4, 5 and below a trough 1, 2, 3, 4, 5. */
 
   function quadrants(tr, pk) {
     const nt = tr.length;
@@ -455,24 +458,25 @@
     };
 
     loops.forEach((L) => {
-      q[L.a] = 1;                                // opens this loop
+      q[L.a] = tr[L.a] < 0 ? 1 : 9;               // trough Q1, peak Q9
       q[L.x] = 5;
-      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
-      ends.add(L.b);                             // loop has already claimed it
+      q[L.b] = tr[L.b] < 0 ? 1 : 9;
+      ends.add(L.b);
       fill(L.a, L.x, [2, 3, 4]);
       fill(L.x, L.b, [6, 7, 8]);
     });
-    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
-    // same position and take the same filter, so either label is correct
-    loops.forEach((L) => { q[L.a] = 1; });
+    // troughs are Q1 and peaks Q9 wherever they sit; both take the 0 degree
+    // filter, so this changes the labels and not the DQ values
+    const tag = (i) => (tr[i] < 0 ? 1 : 9);
+    loops.forEach((L) => { q[L.a] = tag(L.a); q[L.b] = tag(L.b); });
 
     const anchors = [];
     loops.forEach((L) => {
-      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+      anchors.push({ i: L.a, q: q[L.a] }, { i: L.x, q: 5 });
     });
     if (loops.length) {
       const last = loops[loops.length - 1];
-      anchors.push({ i: last.b, q: q[last.b] || 9 });
+      anchors.push({ i: last.b, q: q[last.b] });
     }
     anchors.sort((a, b) => a.i - b.i);
     return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
@@ -514,7 +518,7 @@
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace rather than to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centres a sample runs the other way, so the filter is
+     the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
      ===================================================================== */
 
@@ -762,7 +766,7 @@
 
      The polar angle of the split coordinates, folded into 0-90 by sector and
      multiplied by the sign of the DQ trace. Quoted from the AASPI column
-     sequence; Paper 2 gives the same four rules labelled by sector.
+     sequence; Paper 2 gives the same four rules labeled by sector.
      ===================================================================== */
 
   function fold(deg) {
@@ -811,15 +815,15 @@
      THE FOUR AVO CLASSES
 
      Four fixed recipes in the shared rock model, one per quadrant of the
-     intercept-gradient plane, run through the identical chain. The class
-     label is computed from the modelled signs rather than asserted.
+     intercept-gradient plane, run through the identical workflow. The class
+     label is computed from the modeled signs rather than asserted.
      ===================================================================== */
 
   /* =====================================================================
      READING A DQ SECTION
 
-     The three colour conventions from the DQ display specification, applied
-     to one modelled line: symmetric for seismic, one-sided for DQ, banded
+     The three color conventions from the DQ display specification, applied
+     to one modeled line: symmetric for seismic, one-sided for DQ, banded
      two-sided for the angle.
      ===================================================================== */
 
@@ -859,7 +863,7 @@
       const dq = new Float64Array(nt), px = new Float64Array(nt);
       const has = new Uint8Array(nt);
       r.pts.forEach((p) => {
-        // signed, as module 07 defines it: the one-sided colour bar depends on
+        // signed, as module 07 defines it: the one-sided color bar depends on
         // the sign, and an unsigned distance would put every sample above zero
         const sgn = b.sgn[p.i] >= 0 ? 1 : -1;
         dq[p.i] = Math.hypot(p.x, p.y) * sgn;
@@ -874,10 +878,10 @@
     return traces;
   }
 
-  /* ---- the three colour bars, as the display specification defines them ---- */
+  /* ---- the three color bars, as the display specification defines them ---- */
 
   // symmetric red / white / blue, limits the same magnitude either side
-  function seisColour(v, lim) {
+  function seisColor(v, lim) {
     const u = Math.max(-1, Math.min(1, v / lim));
     if (u >= 0) {
       const t = u;
@@ -888,11 +892,11 @@
     return 'rgb(' + Math.round(255 - 190 * t) + ',' + Math.round(255 - 130 * t) + ','
       + Math.round(255 - 30 * t) + ')';
   }
-  // one-sided: full increments above zero, two below, light grey at the low end
+  // one-sided: full increments above zero, two below, light gray at the low end
   const DQ_UP = ['#EDEDEA', '#E8E86A', '#F2C64A', '#F09A45', '#E8683F',
                  '#DE4046', '#CE2B60', '#C2306B', '#A82563'];
   const DQ_DOWN = ['#C9CCD1', '#AEB4BC'];
-  function dqColour(v, lim) {
+  function dqColor(v, lim) {
     if (v < 0) {
       const t = Math.min(1, -v / lim);
       return DQ_DOWN[t > 0.5 ? 1 : 0];
@@ -901,7 +905,7 @@
     return DQ_UP[Math.floor(t * DQ_UP.length)];
   }
   // two-sided, ten degree bands, bolder on the positive side
-  function pxColour(v) {
+  function pxColor(v) {
     const b = Math.max(-9, Math.min(8, Math.floor(v / 10)));
     if (b >= 0) {
       const c = ['#F4E8B0', '#F2D072', '#F0AE4E', '#EC8244', '#E25444',
@@ -934,9 +938,9 @@
       for (let i = 0; i < nt; i++) {
         const y = rect.y + (i / (nt - 1)) * rect.h;
         let col;
-        if (mode === 'seis') col = seisColour(t.near[i], lim);
-        else if (mode === 'dq') col = t.has[i] ? dqColour(t.dq[i], lim) : DQ_DOWN[0];
-        else col = t.has[i] ? pxColour(t.px[i]) : '#E9EAEC';
+        if (mode === 'seis') col = seisColor(t.near[i], lim);
+        else if (mode === 'dq') col = t.has[i] ? dqColor(t.dq[i], lim) : DQ_DOWN[0];
+        else col = t.has[i] ? pxColor(t.px[i]) : '#E9EAEC';
         ctx.fillStyle = col;
         ctx.fillRect(x0, y - ch / 2, tw + 0.6, ch + 0.6);
       }
@@ -971,14 +975,14 @@
     return lim;
   }
 
-  function colourBar(ctx, x, y, w, h, mode, lim) {
+  function colorBar(ctx, x, y, w, h, mode, lim) {
     const N = 40;
     for (let k = 0; k < N; k++) {
       const u = 1 - k / (N - 1);
       let col, val;
-      if (mode === 'seis') { val = (u * 2 - 1) * lim; col = seisColour(val, lim); }
-      else if (mode === 'dq') { val = (u * 1.25 - 0.25) * lim; col = dqColour(val, lim); }
-      else { val = (u * 2 - 1) * 90; col = pxColour(val); }
+      if (mode === 'seis') { val = (u * 2 - 1) * lim; col = seisColor(val, lim); }
+      else if (mode === 'dq') { val = (u * 1.25 - 0.25) * lim; col = dqColor(val, lim); }
+      else { val = (u * 2 - 1) * 90; col = pxColor(val); }
       ctx.fillStyle = col;
       ctx.fillRect(x, y + (k / N) * h, w, h / N + 1);
     }
@@ -1012,7 +1016,7 @@
       (v) => String(Math.round(v)), { ticks: 6 });
     const lim = drawSection(ctx, rect, traces, mode);
     SEIS.axisBottom(ctx, rect, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: 5 });
-    colourBar(ctx, rect.x + rect.w + 14, rect.y, 14, rect.h, mode, lim);
+    colorBar(ctx, rect.x + rect.w + 14, rect.y, 14, rect.h, mode, lim);
     ctx.font = '9px "IBM Plex Mono", monospace';
     ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
     ctx.fillStyle = CRIM;
@@ -1028,29 +1032,128 @@
      a DQ section. Nothing is explained here; the rest of the course does that.
      ===================================================================== */
 
+  /* the rock model itself, in two-way time so it lines up with the sections,
+     with depth down its left side at the middle trace */
+  const LITHFILL = { soft: '#A3ABB3', hard: '#7E8790', tight: '#D6C9A2' };
+  const SANDHUE = { brine: [205, 55], oil: [95, 35], gas: [335, 60] };   // hue, saturation
+  const phiOf = (k) => Math.round(PH0 + (PH1 - PH0) * (0.15 + 0.75 * k / (NTR - 1)));
+  function sandFill(phi) {
+    const h = SANDHUE[S.fluid];
+    const light = 82 - (phi - 12) * 1.3;          // more porous, deeper color
+    return 'hsl(' + h[0] + ',' + h[1] + '%,' + Math.max(45, Math.min(85, light)).toFixed(0) + '%)';
+  }
+  function drawRocks(ctx, rect) {
+    const tb = TTOP + S.thick / 1000;
+    const other = (S.over === 'soft') ? 'hard' : 'soft';
+    const Y = (t) => rect.y + (t / TWIN) * rect.h;
+    const layers = [
+      [0, BEDA[0], S.over], [BEDA[0], BEDA[1], other], [BEDA[1], TTOP, S.over],
+      [TTOP, tb, 'sand'], [tb, BEDC[0], S.over], [BEDC[0], BEDC[1], 'tight'], [BEDC[1], TWIN, S.over],
+    ];
+    const tw = rect.w / NTR;
+    layers.forEach((L, n) => {
+      if (L[2] === 'sand') {
+        for (let k = 0; k < NTR; k++) {
+          ctx.fillStyle = sandFill(phiOf(k));
+          ctx.fillRect(rect.x + k * tw, Y(L[0]), tw + 0.6, Y(L[1]) - Y(L[0]));
+        }
+      } else {
+        ctx.fillStyle = LITHFILL[L[2]];
+        ctx.fillRect(rect.x, Y(L[0]), rect.w, Y(L[1]) - Y(L[0]));
+        if (n > 0 && layers[n - 1][2] !== L[2]) {   // a thin line marks each real boundary
+          ctx.fillStyle = 'rgba(255,255,255,0.7)';
+          ctx.fillRect(rect.x, Y(L[0]), rect.w, 1);
+        }
+      }
+    });
+    ctx.save();
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(22,25,28,0.78)';
+    ctx.fillText(LITHS[S.over].name, rect.x + rect.w / 2, Y((BEDA[1] + TTOP) / 2));
+    ctx.fillText(LITHS[other].name + ' bed', rect.x + rect.w / 2, Y((BEDA[0] + BEDA[1]) / 2));
+    if (S.over !== 'tight') ctx.fillText('tight sandstone bed', rect.x + rect.w / 2, Y((BEDC[0] + BEDC[1]) / 2));
+    ctx.fillText(LITHS[S.over].name, rect.x + rect.w / 2, Y((tb + BEDC[0]) / 2));
+    const sandName = FLUIDS[S.fluid].name + ' sand';
+    if (Y(tb) - Y(TTOP) > 13) {
+      ctx.fillStyle = '#5A0E0F';
+      ctx.fillText(sandName, rect.x + rect.w / 2, Y((TTOP + tb) / 2));
+    }
+    // porosity along the line, under the sand
+    ctx.fillStyle = '#5A0E0F';
+    ctx.textBaseline = 'top';
+    [[0, 'left'], [Math.floor(NTR / 2), 'center'], [NTR - 1, 'right']].forEach((q) => {
+      const x = q[1] === 'left' ? rect.x + 3 : q[1] === 'right' ? rect.x + rect.w - 3 : rect.x + rect.w / 2;
+      ctx.textAlign = q[1];
+      ctx.fillText('\u03C6 ' + phiOf(q[0]) + '%', x, Y(tb) + 3);
+    });
+    if (Y(tb) - Y(TTOP) <= 13) {
+      ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+      ctx.fillText(sandName, rect.x + rect.w / 2, Y(TTOP) - 2);
+    }
+    ctx.restore();
+    SEIS.frame(ctx, rect);
+
+    // depth at the middle trace, down the left side
+    const mid = sandRock(phiOf(Math.floor(NTR / 2)) / 100, S.fluid);
+    const vAt = (t) => {
+      if (t >= TTOP && t < tb) return mid.vp;
+      if (t >= BEDA[0] && t < BEDA[1]) return LITHS[other].vp;
+      if (t >= BEDC[0] && t < BEDC[1]) return LITHS.tight.vp;
+      return LITHS[S.over].vp;
+    };
+    const DTZ = 0.0005, zs = [0];
+    for (let t = 0; t < TWIN; t += DTZ) zs.push(zs[zs.length - 1] + vAt(t + DTZ / 2) * DTZ / 2);
+    const tOfZ = (z) => {
+      for (let i = 1; i < zs.length; i++) if (zs[i] >= z) return (i - 1 + (z - zs[i - 1]) / (zs[i] - zs[i - 1])) * DTZ;
+      return TWIN;
+    };
+    ctx.save();
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.fillStyle = 'rgba(22,25,28,0.6)'; ctx.strokeStyle = 'rgba(22,25,28,0.6)'; ctx.lineWidth = 1;
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    SEIS.niceTicks(0, zs[zs.length - 1], 5).forEach((z) => {
+      const y = Y(tOfZ(z));
+      if (y > rect.y + rect.h - 2) return;
+      ctx.beginPath(); ctx.moveTo(rect.x - 4, y); ctx.lineTo(rect.x, y); ctx.stroke();
+      ctx.fillText(String(Math.round(z)), rect.x - 6, y);
+    });
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillText('depth m', rect.x - 18, rect.y + rect.h + 6);
+    ctx.restore();
+  }
+
   function drawMain() {
     const c = $('cMain'); if (!c) return;
-    const W = width(c, 520), H = 360;
+    const W = width(c, 620), H = 360;
     const ctx = SEIS.fitCanvas(c, W, H);
     ctx.clearRect(0, 0, W, H);
     const traces = line();
-    const gap = 26;
-    const pw = (W - 62 - 34 - gap) / 2;
-    const rA = { x: 52, y: 30, w: pw, h: H - 70 };
-    const rB = { x: 52 + pw + gap, y: 30, w: pw, h: H - 70 };
-    SEIS.axisLeft(ctx, rA, 0, TWIN * 1000, 'two-way time (ms)',
-      (v) => String(Math.round(v)), { ticks: 6 });
+    const x0 = 44, gapT = 40, gap = 16, cb = 34;
+    const pw = (W - x0 - gapT - gap - cb) / 3;
+    const top = 30, h = H - 72;
+    const rR = { x: x0, y: top, w: pw, h };
+    const rA = { x: x0 + pw + gapT, y: top, w: pw, h };
+    const rB = { x: rA.x + pw + gap, y: top, w: pw, h };
+    drawRocks(ctx, rR);
+    SEIS.axisLeft(ctx, rA, 0, TWIN * 1000, null, (v) => String(Math.round(v)), { ticks: 6 });
+    ctx.save();
+    ctx.font = '9px "IBM Plex Mono", monospace'; ctx.fillStyle = 'rgba(22,25,28,0.6)';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillText('TWT ms', rA.x - 18, rA.y + rA.h + 6);
+    ctx.restore();
     drawSection(ctx, rA, traces, 'seis');
     const lim = drawSection(ctx, rB, traces, 'dq');
-    colourBar(ctx, rB.x + rB.w + 10, rB.y, 11, rB.h, 'dq', lim);
+    colorBar(ctx, rB.x + rB.w + 6, rB.y, 10, rB.h, 'dq', lim);
     ctx.font = '9px "IBM Plex Mono", monospace';
     ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
-    ctx.fillStyle = 'rgba(22,25,28,0.55)';
+    ctx.fillStyle = 'rgba(22,25,28,0.7)';
+    ctx.fillText('THE ROCKS', rR.x + rR.w / 2, rR.y - 8);
     ctx.fillText('STACK SECTION', rA.x + rA.w / 2, rA.y - 8);
     ctx.fillStyle = CRIM;
     ctx.fillText('DQ SECTION', rB.x + rB.w / 2, rB.y - 8);
 
-    // outline the modelled sand on both, so the reader can see where it is
+    // the sand in the rock model, outlined on both sections
     [rA, rB].forEach((r) => {
       ctx.save();
       ctx.beginPath(); ctx.rect(r.x, r.y, r.w, r.h); ctx.clip();
@@ -1071,8 +1174,12 @@
       ctx.setLineDash([]);
       ctx.restore();
     });
-    SEIS.tag(ctx, rA.x + 6, rA.y + rA.h + 12, 'dashed outline = the modelled sand',
-      'rgba(22,25,28,0.55)');
+    // guide lines carrying the sand top and base from the rocks across both sections
+    const yT = top + (TTOP / TWIN) * h, yB = top + ((TTOP + S.thick / 1000) / TWIN) * h;
+    SEIS.dashedLine(ctx, rR.x + rR.w, yT, rA.x, yT, 'rgba(132,22,23,0.6)', [3, 3], 1);
+    SEIS.dashedLine(ctx, rR.x + rR.w, yB, rA.x, yB, 'rgba(132,22,23,0.6)', [3, 3], 1);
+    SEIS.dashedLine(ctx, rA.x + rA.w, yT, rB.x, yT, 'rgba(132,22,23,0.6)', [3, 3], 1);
+    SEIS.dashedLine(ctx, rA.x + rA.w, yB, rB.x, yB, 'rgba(132,22,23,0.6)', [3, 3], 1);
 
     // the readouts
     const mid = traces[Math.floor(traces.length / 2)];
@@ -1088,11 +1195,10 @@
       + ' (' + (100 * numbered / Math.max(1, inSand)).toFixed(0) + '%)';
     $('s0c').textContent = topD.toFixed(4);
     $('s0d').textContent = (topP >= 0 ? '+' : '\u2212') + Math.abs(topP).toFixed(0) + '\u00B0';
-    $('s0e').textContent = 'On the middle trace the sand spans ' + inSand
-      + ' samples, and ' + numbered + ' of them carry a DQ value. Porosity climbs from left to right, so '
-      + 'the body brightens along the line. Change the fluid and the colour moves while the outline stays '
-      + 'where it is.';
+    $('s0e').textContent = 'On the middle trace the sand spans ' + inSand + ' samples, and ' + numbered
+      + ' of them carry a DQ value. The sand porosity there is ' + phiOf(Math.floor(NTR / 2)) + '%.';
   }
+  window.__DQ00 = { line, phiOf };
   function drawStep1() {}
   function drawStep2() {}
   function drawStep3() {}

@@ -34,8 +34,8 @@
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap" id="labCap">The front wall <span>&mdash; amplitude against gradient, coloured by half isochron</span></p>
-        <canvas id="cMain" aria-label="The RDQ crossplot front wall with points coloured by signed half isochron"></canvas>
+        <p class="cap" id="labCap">The front wall <span>&mdash; amplitude against gradient, colored by half isochron</span></p>
+        <canvas id="cMain" aria-label="The RDQ crossplot front wall with points colored by signed half isochron"></canvas>
       </div>
       <div>
         <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
@@ -132,7 +132,7 @@
       responding to thickness altogether. The panel below shows that directly.</p>
 
     <p class="lede">
-      <b>What that is useful for.</b> The AASPI attribute description gives two purposes and both follow
+      <b>What that is useful for.</b> The AASPI DQ attributes pamphlet gives two purposes and both follow
       from the waveform reading. A section of half isochron shows layers thinning, thickening and pinching
       out without anyone mapping a horizon, because a loop that shortens laterally is a bed that is
       thinning. It also separates <b>layers of uniform lithology from layers that are internally
@@ -173,11 +173,11 @@
 
     <p class="lede">
       Each view answers a different question about the same points. The front wall says what the AVO
-      behaviour is. The top and side views say where in the waveform those points came from, which is how
+      behavior is. The top and side views say where in the waveform those points came from, which is how
       you tell a cluster made of peak samples from one made of crossing samples.</p>
 
     <canvas id="c2a" aria-label="The crossplot unfolded into front, top and side views"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The same samples three ways. Colour is the quadrant
+    <p class="hint-line" style="margin:8px 0 18px">The same samples three ways. Color is the quadrant
       number, so you can follow where each point sits in its loop across all three panels.</p>
 
     <div class="stats" style="margin-top:16px">
@@ -188,9 +188,9 @@
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>The published displays add a fourth dimension by symbol and colour: shale an orange inverted
+      <span>The published displays add a fourth dimension by symbol and color: shale an orange inverted
         triangle, wet sand a blue cross, oil a green plus, gas a magenta triangle, with black circles for
-        samples not yet classified. On modelled data those labels are known; on real data they are what the
+        samples not yet classified. On modeled data those labels are known; on real data they are what the
         crossplot is being used to decide.</span>
     </div>
   </section>
@@ -214,8 +214,8 @@
       50th and 20th percentiles, and a count.</p>
 
     <canvas id="c3a" aria-label="The front wall with a half isochron delimiter applied, showing which samples survive"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Samples inside the half isochron band in colour,
-      excluded samples in grey. Drag the delimiter in the panel.</p>
+    <p class="hint-line" style="margin:8px 0 18px">Samples inside the half isochron band in color,
+      excluded samples in gray. Drag the delimiter in the panel.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat key"><span>Samples passing the delimiter</span><b id="s3a">&mdash;</b></div>
@@ -227,7 +227,7 @@
     <div class="legend">
       <span>The statistics matter more than they look. They are what turns a cluster on a screen into a
         number that can be carried forward &mdash; into a polygon definition, into a comparison between
-        time windows, or into the look-up catalogues module 11 described. A crossplot you can only look at
+        time windows, or into the look-up catalogs module 11 described. A crossplot you can only look at
         is a figure; one you can measure is an instrument.</span>
     </div>
   </section>
@@ -245,11 +245,10 @@
     <p class="lede">What makes this crossplot unusual is that it is built to be worked in polar
       coordinates as well as Cartesian ones. The baseline rotation of module 08 is a polar operation, the
       sector split of module 09 is defined by quadrant number, and Theta PX is an angle. So the natural way
-      to enclose a region here is with an angle range and a distance range rather than with a box, and the
-      software has to hold both coordinate systems at once. That is an uncommon requirement, and it is why the workflow needs purpose-built code rather than a standard crossplotting package.</p>
+      to enclose a region here is with an angle range and a distance range rather than with a box.</p>
 
     <div class="legend prose">
-      <span>Worth remembering what this module is and is not. It explains the plot and the operations
+      <span>This module explains the plot and the operations
         performed on it. It does not demonstrate that any particular cluster separation works on real
         data, which the papers address and a field dataset would show.</span>
     </div>
@@ -261,37 +260,37 @@
       <ol>
         <li><b>Check what the third axis responds to.</b> On step 1, drag the sand thickness across its
           range and watch the value at the sand top, then do the same with the wavelet frequency.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Thickness barely moves it once
+          <details class="reveal"><summary>Answer</summary><span class="ans">Thickness barely moves it once
             the bed is resolved; frequency moves it immediately. The half isochron at a sand top is
             measuring the half loop of the reflection there, and once the top and base reflections separate
             that loop is a property of the wavelet. Useful to know before reading too much into the axis:
             it tells you about the shape of the waveform at a sample, not about the thickness of the bed
             underneath it.</span></details></li>
         <li><b>Find the sign change.</b> On step 1, follow the half isochron down through a peak.
-          <details class="reveal"><summary>Hint</summary><span class="ans">It flips from positive to
+          <details class="reveal"><summary>Answer</summary><span class="ans">It flips from positive to
             negative at the peak, because the sign is set by whether the waveform is rising or falling and
             a peak is where that changes. That is the same convention module 07 gave the distance and
             module 10 gave the angle, which is what lets all three be plotted against each other without
             one arriving upside down.</span></details></li>
         <li><b>Compare the three views.</b> On step 2, find a cluster on the front wall and then locate the
           same points in the top and side views.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Points that sit together on the
-            front wall can be spread across the top view, because two samples with similar AVO behaviour
+          <details class="reveal"><summary>Answer</summary><span class="ans">Points that sit together on the
+            front wall can be spread across the top view, because two samples with similar AVO behavior
             may come from quite different parts of a loop. Without the third axis, samples are grouped by what they look like rather than by where they came from.</span></details></li>
         <li><b>Use the delimiter.</b> On step 3, narrow the half isochron band and watch the counts and the
           statistics.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The count falls and the median
+          <details class="reveal"><summary>Answer</summary><span class="ans">The count falls and the median
             distance shifts, because you are progressively excluding the samples nearest the zero
             crossings, which module 09 showed sit closest to the origin. Delimiting chooses which part of the waveform to look at rather than filtering out noise, and the statistics readout tells
             you what that choice cost you in sample count.</span></details></li>
         <li><b>Change the reservoir and watch the cluster move.</b> On step 3, switch the fluid from brine
           to gas.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The sand samples move as a group
+          <details class="reveal"><summary>Answer</summary><span class="ans">The sand samples move as a group
             while the background stays put. That movement is what the crossplot exists to show, and it is why the workflow crossplots sliding time windows: a cluster that shifts between windows
             means the AVO class has changed, which is the signal that a new calibration is needed rather
             than a new interpretation.</span></details></li>
         <li><b>Coarsen the sample rate.</b> Take it to 4 ms and look at step 2.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The plot empties out, because
+          <details class="reveal"><summary>Answer</summary><span class="ans">The plot empties out, because
             the quadrant numbering that admits a sample to the plot needs samples to number, and module 04
             measured how quickly those disappear. The half isochron suffers doubly: it is a count of
             samples between picks, so at 4 ms it can only take values that are multiples of four
@@ -327,12 +326,12 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>Everything upstream is as in modules 03 through 12. The axes follow the AASPI column
-        specification: for the RDQ crossplot, x is the rotated and split near-quadrant amplitude, y is the
+      <p>Everything upstream is as in modules 03 through 12. The axes follow the RDQ calculation notes
+        (Neff and Neff, unpublished): for the RDQ crossplot, x is the rotated and split near-quadrant amplitude, y is the
         rotated and split far-minus-near quadrant gradient, and z is the signed half isochron in
-        milliseconds. The specification gives a starting shale baseline of 330&deg; for the RDQ crossplot
+        milliseconds. The notes give a starting shale baseline of 330&deg; for the RDQ crossplot
         and 360&deg; for the plain AB crossplot; this page uses the baseline fitted in module 08.</p>
-      <p>The delimiter, polygon and statistics behaviour described on step 3 is taken from the same
+      <p>The delimiter, polygon and statistics behavior described on step 3 is taken from the same
         specification, which lists the columns that act as delimiters, the seven statistics to be reported,
         and the polar polygon definition by two corner clicks. The page implements the half isochron
         delimiter and the statistics for it; the polygon tool is described rather than built, since it
@@ -353,9 +352,12 @@
         axis is a waveform descriptor, and step 1 says so rather than leaving the reader to assume
         otherwise.</p>
       <ul>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
-        <li>Neff, D. B., and W. Neff, RDQ calculations, 3D crossplots and statistical readouts.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025b, Prediction of reservoir properties
+          using the RDQ crossplot workflow: <em>Interpretation</em>, doi: 10.1190/INT-2024-0096.1.</li>
+        <li>Neff, D. B., and W. Neff, RDQ calculations, 3D crossplots and statistical readouts, unpublished
+          notes.</li>
       </ul>
     </details>
   </section>
@@ -364,7 +366,7 @@
     <p class="eyebrow">Next up</p>
     <h3><a href="avo-classes.html">14 · The four AVO classes</a></h3>
     <p>Sections and histograms across classes 1, 2p, 3 and 4, and what each one looks like once it has been
-      through the whole chain.</p>
+      through the whole workflow.</p>
     <a class="btn" href="avo-classes.html">Open module 14 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
@@ -383,10 +385,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>
@@ -647,12 +648,10 @@
      long and drops them when it is short.
      ===================================================================== */
 
-  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
-     and then starts again. It does not run up to 9 and mirror back down. The
-     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
-     opens the next, which is why the published table gives both the 0 degree
-     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
-     coarse version as "4 quadrants". */
+  /* Published rule (Bedle et al., 2025a, steps 2 to 5 and Figure 4a): every
+     zero crossing is Q5, every trough Q1 and every peak Q9. Between each pair
+     of anchors the interior numbers run upward from the extremum, so below a
+     peak the sequence is 9, 2, 3, 4, 5 and below a trough 1, 2, 3, 4, 5. */
 
   function quadrants(tr, pk) {
     const nt = tr.length;
@@ -687,24 +686,25 @@
     };
 
     loops.forEach((L) => {
-      q[L.a] = 1;                                // opens this loop
+      q[L.a] = tr[L.a] < 0 ? 1 : 9;               // trough Q1, peak Q9
       q[L.x] = 5;
-      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
-      ends.add(L.b);                             // loop has already claimed it
+      q[L.b] = tr[L.b] < 0 ? 1 : 9;
+      ends.add(L.b);
       fill(L.a, L.x, [2, 3, 4]);
       fill(L.x, L.b, [6, 7, 8]);
     });
-    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
-    // same position and take the same filter, so either label is correct
-    loops.forEach((L) => { q[L.a] = 1; });
+    // troughs are Q1 and peaks Q9 wherever they sit; both take the 0 degree
+    // filter, so this changes the labels and not the DQ values
+    const tag = (i) => (tr[i] < 0 ? 1 : 9);
+    loops.forEach((L) => { q[L.a] = tag(L.a); q[L.b] = tag(L.b); });
 
     const anchors = [];
     loops.forEach((L) => {
-      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+      anchors.push({ i: L.a, q: q[L.a] }, { i: L.x, q: 5 });
     });
     if (loops.length) {
       const last = loops[loops.length - 1];
-      anchors.push({ i: last.b, q: q[last.b] || 9 });
+      anchors.push({ i: last.b, q: q[last.b] });
     }
     anchors.sort((a, b) => a.i - b.i);
     return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
@@ -746,7 +746,7 @@
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace rather than to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centres a sample runs the other way, so the filter is
+     the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
      ===================================================================== */
 
@@ -994,7 +994,7 @@
 
      The polar angle of the split coordinates, folded into 0-90 by sector and
      multiplied by the sign of the DQ trace. Quoted from the AASPI column
-     sequence; Paper 2 gives the same four rules labelled by sector.
+     sequence; Paper 2 gives the same four rules labeled by sector.
      ===================================================================== */
 
   function fold(deg) {
@@ -1277,7 +1277,7 @@
     $('s2c').textContent = loy.toFixed(3) + ' to ' + hiy.toFixed(3);
     $('s2d').textContent = loi.toFixed(0) + ' to +' + hii.toFixed(0) + ' ms';
     $('s2e').textContent = 'The same ' + S3.pts.length
-      + ' samples seen three ways. Colour is the quadrant number, so a point can be followed from one '
+      + ' samples seen three ways. Color is the quadrant number, so a point can be followed from one '
       + 'panel to the next.';
   }
 
@@ -1296,7 +1296,7 @@
       { xlab: 'amplitude, rotated and split', ylab: 'gradient', dim: true, title: 'FRONT WALL' });
     SEIS.tag(ctx, rect.x + rect.w + 16, rect.y + 16,
       'band: \u00B1' + S.iso + ' ms', CRIM);
-    SEIS.tag(ctx, rect.x + rect.w + 16, rect.y + 34, 'grey = excluded', 'rgba(22,25,28,0.5)');
+    SEIS.tag(ctx, rect.x + rect.w + 16, rect.y + 34, 'gray = excluded', 'rgba(22,25,28,0.5)');
 
     const inb = S3.pts.filter(passes).map((p) => p.d);
     const all = S3.pts.map((p) => p.d);

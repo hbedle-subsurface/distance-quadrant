@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reading a DQ section | How the DQ Trace Actually Works</title>
-<meta name="description" content="The display conventions the DQ papers use: a symmetric colour bar for seismic, a one-sided one for DQ, ten-degree bands for Theta PX, and why a DQ histogram needs a log axis.">
+<meta name="description" content="The display conventions the DQ papers use: a symmetric color bar for seismic, a one-sided one for DQ, ten-degree bands for Theta PX, and why a DQ histogram needs a log axis.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@
     <p class="eyebrow">Module 15 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Reading a DQ section</h1>
     <p class="sub">Every attribute so far has been shown as a curve. On a real project they arrive as
-      sections, and a DQ section is not coloured like a seismic section &mdash; deliberately. The display conventions are the subject here: what each colour bar is doing, why it is built that way, and what you would misread if it were built the ordinary way.</p>
+      sections, and a DQ section is not colored like a seismic section &mdash; deliberately. The display conventions are the subject here: what each color bar is doing, why it is built that way, and what you would misread if it were built the ordinary way.</p>
   </div>
 
   <div class="labhead">
@@ -74,7 +74,7 @@
             </div>
             <label class="check" style="grid-column:1/-1"><input type="checkbox" id="wiggle" checked>
               Draw the overlay trace</label>
-            <p class="hint-line" style="margin:-4px 0 0">The papers overlay a wiggle on the colour, scaled
+            <p class="hint-line" style="margin:-4px 0 0">The papers overlay a wiggle on the color, scaled
               up about twice for seismic and about one and a half times for DQ.</p>
           </div>
 
@@ -115,29 +115,29 @@
     </div>
 
     <p class="lede">
-      A seismic section is coloured red through white to blue, with the two ends the same distance from
+      A seismic section is colored red through white to blue, with the two ends the same distance from
       zero. That symmetry is not decoration: amplitude is a signed quantity whose two signs mean equally
-      important and opposite things, so a colour bar that treated them differently would be lying about the
+      important and opposite things, so a color bar that treated them differently would be lying about the
       data. The limits are set by scanning the volume and rounding up, and white sits at zero.</p>
 
     <p class="lede">
-      Over the colour goes a wiggle, scaled up so the deflections read &mdash; about twice the trace
+      Over the color goes a wiggle, scaled up so the deflections read &mdash; about twice the trace
       spacing is a usual starting point &mdash; and horizontal dotted reference lines every ten, twenty,
       twenty-five, fifty or a hundred milliseconds depending on how much time is on the page.</p>
 
-    <canvas id="c1a" aria-label="A seismic section with a symmetric red white blue colour bar and an overlay wiggle"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The near stack across the line, coloured by amplitude.
+    <canvas id="c1a" aria-label="A seismic section with a symmetric red white blue color bar and an overlay wiggle"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The near stack across the line, colored by amplitude.
       The sand thickens from left to right.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Traces on the line</span><b id="s1a">&mdash;</b></div>
-      <div class="stat"><span>Colour bar limits</span><b id="s1b">&mdash;</b></div>
+      <div class="stat"><span>Color bar limits</span><b id="s1b">&mdash;</b></div>
       <div class="stat key"><span>Zero sits at</span><b id="s1c">&mdash;</b></div>
       <div class="stat"><span>Reference line spacing</span><b id="s1d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>Note what the reader has to do here: the sand is a pair of coloured bands, and telling where it
+      <span>Note what the reader has to do here: the sand is a pair of colored bands, and telling where it
         starts and stops means deciding which band belongs to the top and which to the base. That is the
         ordinary work of seismic interpretation, and it is what the next display is trying to
         avoid.</span>
@@ -151,19 +151,19 @@
     </div>
 
     <p class="lede">
-      A DQ section is coloured differently, and the difference is deliberate. The colour bar is
+      A DQ section is colored differently, and the difference is deliberate. The color bar is
       <b>one-sided</b>: the full range of increments is spent on zero to the maximum, and everything
       negative gets two increments and no more. On a soft-sand play the sands are the positive samples,
       and the shales are mostly negative, so the bar spends its resolution where the interest is and
       compresses the rest.</p>
 
     <p class="lede">
-      The low and negative end is <b>light grey rather than white</b>. White washes out against the page
-      and makes the background look like missing data; grey reads as background. The overlay wiggle is
+      The low and negative end is <b>light gray rather than white</b>. White washes out against the page
+      and makes the background look like missing data; gray reads as background. The overlay wiggle is
       scaled up less than on a seismic section, about one and a half times, because the DQ trace is blocked
       rather than oscillatory and does not need as much exaggeration to be legible.</p>
 
-    <canvas id="c2a" aria-label="The same line as a DQ section with a one-sided colour bar"></canvas>
+    <canvas id="c2a" aria-label="The same line as a DQ section with a one-sided color bar"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The same line, as DQ distance. Compare where the sand
       reads against the seismic section above it.</p>
 
@@ -175,9 +175,9 @@
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>The sand now reads as a single coloured body rather than as two bands with a gap. That is the
+      <span>The sand now reads as a single colored body rather than as two bands with a gap. That is the
         practical payoff of everything modules 03 to 07 did: the picking, the numbering and the phase
-        filters exist to make each loop carry one value, and a one-sided colour bar is how you display
+        filters exist to make each loop carry one value, and a one-sided color bar is how you display
         something that is one value per loop rather than an oscillation.</span>
     </div>
   </section>
@@ -189,8 +189,8 @@
     </div>
 
     <p class="lede">
-      &thetas;<sub>px</sub> gets a third treatment: two-sided from &minus;90 to +90, but with <b>bolder
-      colours on the positive side</b> for the same reason the DQ bar is one-sided, and divided into
+      &theta;<sub>px</sub> gets a third treatment: two-sided from &minus;90 to +90, but with <b>bolder
+      colors on the positive side</b> for the same reason the DQ bar is one-sided, and divided into
       <b>ten-degree bands with the boundaries kept sharp</b> rather than smoothly graded.</p>
 
     <p class="lede">
@@ -198,11 +198,11 @@
       interpolate, and here it would be wrong: a feature confined to one ten-degree band &mdash; the papers
       give a flat spot as the example &mdash; disappears into a smooth ramp and survives a banded one. The
       two sections are meant to be read as a pair, so they share a sign convention and a geometry, and only
-      the colouring differs.</p>
+      the coloring differs.</p>
 
-    <canvas id="c3a" aria-label="The same line as a Theta PX section with banded ten degree colours"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The same line again, as &thetas;<sub>px</sub>. Toggle
-      the overlay in the panel to see the colour alone.</p>
+    <canvas id="c3a" aria-label="The same line as a Theta PX section with banded ten degree colors"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The same line again, as &theta;<sub>px</sub>. Toggle
+      the overlay in the panel to see the color alone.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Band width</span><b id="s3a">&mdash;</b></div>
@@ -226,7 +226,7 @@
       <span class="hint">Three bars, three arguments</span>
     </div>
 
-    <p class="lede">Each of these three colour bars encodes a claim about what its attribute is for. The
+    <p class="lede">Each of these three color bars encodes a claim about what its attribute is for. The
       seismic bar is symmetric because amplitude's two signs matter equally. The DQ bar is one-sided
       because the attribute is a distance and the interest is at one end. The angle bar is banded because
       the useful features are narrow and a smooth ramp would swallow them.</p>
@@ -249,21 +249,21 @@
       <h3>Exercises</h3>
       <ol>
         <li><b>Compare the two sections.</b> Look at step 1 and step 2 with the same model.
-          <details class="reveal"><summary>Hint</summary><span class="ans">On the seismic section the sand
+          <details class="reveal"><summary>Answer</summary><span class="ans">On the seismic section the sand
             is a pair of bands with a gap between them, and locating it means deciding which band is the
             top and which the base. On the DQ section it is one body. Nothing has been added &mdash; the
             DQ trace is computed from the same two partial stacks &mdash; but the display is showing one
             value per loop instead of an oscillation, which is what the picking and numbering of modules 03
             and 04 were for.</span></details></li>
-        <li><b>Count the increments.</b> On step 2, read how the colour bar is divided.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The full set above zero and
+        <li><b>Count the increments.</b> On step 2, read how the color bar is divided.
+          <details class="reveal"><summary>Answer</summary><span class="ans">The full set above zero and
             only two below. That is the published specification, and the reasoning is that on a soft-sand
             play the sands are the positive samples and the shales are mostly negative. A symmetric bar
             would spend half its resolution distinguishing shades of background from one another. This is a
             display choice that assumes a play type, and it would need rethinking on a hard-sand or
             carbonate project.</span></details></li>
         <li><b>Change the fluid and watch the angle section.</b> On step 3, switch between brine and gas.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The colours inside the sand
+          <details class="reveal"><summary>Answer</summary><span class="ans">The colors inside the sand
             shift, and the range at the sand top changes with them. Be careful reading more into this line
             than it can carry: it varies bed thickness across the traces, so its thin end is in the tuning
             regime and its weakest traces are near a crossover where module 10 showed the angle to be
@@ -272,22 +272,22 @@
             geometry is module 12's question, answered there on a model built for
             it.</span></details></li>
         <li><b>Turn off the overlay wiggle.</b> Untick the box in the panel.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The colour alone is easier to
+          <details class="reveal"><summary>Answer</summary><span class="ans">The color alone is easier to
             read for extent and harder to read for detail. The papers keep both because they answer
-            different questions: the colour shows you where a body is, the wiggle shows you what the trace
+            different questions: the color shows you where a body is, the wiggle shows you what the trace
             is doing sample by sample. The scaling differs too &mdash; about twice for a seismic wiggle,
             about one and a half times for a DQ wiggle, because a blocked trace needs less
             exaggeration.</span></details></li>
         <li><b>Add noise and see which display degrades first.</b> Take the noise to 30%.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The angle section goes first,
-            because banded colour has no tolerance: a sample that moves a few degrees crosses a boundary
-            and changes colour completely, where the same movement on a smooth bar would be invisible.
+          <details class="reveal"><summary>Answer</summary><span class="ans">The angle section goes first,
+            because banded color has no tolerance: a sample that moves a few degrees crosses a boundary
+            and changes color completely, where the same movement on a smooth bar would be invisible.
             Sharp bands make small real features visible and small spurious ones equally visible. That is a
             trade the convention accepts deliberately, and it is a reason to look at the DQ section and the
             angle section together rather than either alone.</span></details></li>
         <li><b>Look along the line rather than at one trace.</b> The sand thickens from left to right,
           so the section is a wedge.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The DQ body brightens toward the
+          <details class="reveal"><summary>Answer</summary><span class="ans">The DQ body brightens toward the
             thin end, which is module 12's tuning seen as a picture rather than as a curve. A reader
             looking only at the DQ section would call the thin part the better rock. That is the habit
             worth taking away: a section shows you where something is, and it will happily show you a
@@ -304,9 +304,9 @@
           rounded up, because amplitude's two signs matter equally.</li>
         <li><b>DQ sections use a one-sided bar:</b> full increments from zero to the maximum, two
           increments for everything negative.</li>
-        <li><b>Low and negative values are light grey, not white</b>, so the background reads as background
+        <li><b>Low and negative values are light gray, not white</b>, so the background reads as background
           rather than as missing data.</li>
-        <li><b>&thetas;<sub>px</sub> sections are two-sided from &minus;90 to +90</b>, bolder on the
+        <li><b>&theta;<sub>px</sub> sections are two-sided from &minus;90 to +90</b>, bolder on the
           positive side, in ten-degree bands.</li>
         <li><b>The band boundaries are kept sharp on purpose</b>, so that a feature confined to one band
           survives instead of dissolving into a ramp.</li>
@@ -315,7 +315,7 @@
         <li><b>DQ histograms need a logarithmic count axis</b>, because most samples in a clastic section
           are background near zero.</li>
         <li><b>The DQ and angle sections are meant to be read as a pair</b>, sharing a sign convention and
-          a geometry so that only the colouring differs.</li>
+          a geometry so that only the coloring differs.</li>
       </ul>
     </div>
   </section>
@@ -323,30 +323,32 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>The section is built by running the whole chain of modules 03 through 10 at each of twenty-one
+      <p>The section is built by running the whole workflow of modules 03 through 10 at each of twenty-one
         trace positions, with the sand thickening linearly across the line from about a third of the
         setting in the panel to about twice it. Everything else is held constant, so the only thing varying
         along the line is bed thickness.</p>
       <p>The display conventions are taken from the DQ display specification and reproduced as closely as
         this format allows: the symmetric seismic bar with limits scanned and rounded, the one-sided DQ bar
-        with two increments below zero and light grey rather than white at the low end, the two-sided
-        angle bar in ten-degree steps with sharp boundaries and bolder colours on the positive side, and
-        the overlay wiggle scalars. The specification also describes colour interpolation between samples
-        in six directions on a 3D cube, which this page does not attempt; here the colour is drawn as flat
+        with two increments below zero and light gray rather than white at the low end, the two-sided
+        angle bar in ten-degree steps with sharp boundaries and bolder colors on the positive side, and
+        the overlay wiggle scalars. The specification also describes color interpolation between samples
+        in six directions on a 3D cube, which this page does not attempt; here the color is drawn as flat
         cells one sample tall.</p>
       <p>The remark that roughly four samples in five are shale comes from the same specification and
         describes a field clastic section, not this model, where the proportion depends on how thick you
         make the sand. It is quoted because it is the reason for the logarithmic histogram axis, which
         module 14 uses.</p>
       <p><b>What this module does not do.</b> It does not reproduce the published sections, which come from
-        ray-traced synthetics over pseudo-well catalogues and from field data. It shows what the
+        ray-traced synthetics over pseudo-well catalogs and from field data. It shows what the
         conventions are and what each one is protecting, on a model simple enough that you can see the
         convention rather than the geology.</p>
       <ul>
         <li>Neff, D. B., and W. Neff, Seismic plots: the four display types used in the DQ and RDQ
-          papers.</li>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+          papers, unpublished notes.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025b, Prediction of reservoir properties
+          using the RDQ crossplot workflow: <em>Interpretation</em>, doi: 10.1190/INT-2024-0096.1.</li>
       </ul>
     </details>
   </section>
@@ -374,10 +376,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>
@@ -638,12 +639,10 @@
      long and drops them when it is short.
      ===================================================================== */
 
-  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
-     and then starts again. It does not run up to 9 and mirror back down. The
-     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
-     opens the next, which is why the published table gives both the 0 degree
-     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
-     coarse version as "4 quadrants". */
+  /* Published rule (Bedle et al., 2025a, steps 2 to 5 and Figure 4a): every
+     zero crossing is Q5, every trough Q1 and every peak Q9. Between each pair
+     of anchors the interior numbers run upward from the extremum, so below a
+     peak the sequence is 9, 2, 3, 4, 5 and below a trough 1, 2, 3, 4, 5. */
 
   function quadrants(tr, pk) {
     const nt = tr.length;
@@ -678,24 +677,25 @@
     };
 
     loops.forEach((L) => {
-      q[L.a] = 1;                                // opens this loop
+      q[L.a] = tr[L.a] < 0 ? 1 : 9;               // trough Q1, peak Q9
       q[L.x] = 5;
-      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
-      ends.add(L.b);                             // loop has already claimed it
+      q[L.b] = tr[L.b] < 0 ? 1 : 9;
+      ends.add(L.b);
       fill(L.a, L.x, [2, 3, 4]);
       fill(L.x, L.b, [6, 7, 8]);
     });
-    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
-    // same position and take the same filter, so either label is correct
-    loops.forEach((L) => { q[L.a] = 1; });
+    // troughs are Q1 and peaks Q9 wherever they sit; both take the 0 degree
+    // filter, so this changes the labels and not the DQ values
+    const tag = (i) => (tr[i] < 0 ? 1 : 9);
+    loops.forEach((L) => { q[L.a] = tag(L.a); q[L.b] = tag(L.b); });
 
     const anchors = [];
     loops.forEach((L) => {
-      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+      anchors.push({ i: L.a, q: q[L.a] }, { i: L.x, q: 5 });
     });
     if (loops.length) {
       const last = loops[loops.length - 1];
-      anchors.push({ i: last.b, q: q[last.b] || 9 });
+      anchors.push({ i: last.b, q: q[last.b] });
     }
     anchors.sort((a, b) => a.i - b.i);
     return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
@@ -737,7 +737,7 @@
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace rather than to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centres a sample runs the other way, so the filter is
+     the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
      ===================================================================== */
 
@@ -985,7 +985,7 @@
 
      The polar angle of the split coordinates, folded into 0-90 by sector and
      multiplied by the sign of the DQ trace. Quoted from the AASPI column
-     sequence; Paper 2 gives the same four rules labelled by sector.
+     sequence; Paper 2 gives the same four rules labeled by sector.
      ===================================================================== */
 
   function fold(deg) {
@@ -1034,15 +1034,15 @@
      THE FOUR AVO CLASSES
 
      Four fixed recipes in the shared rock model, one per quadrant of the
-     intercept-gradient plane, run through the identical chain. The class
-     label is computed from the modelled signs rather than asserted.
+     intercept-gradient plane, run through the identical workflow. The class
+     label is computed from the modeled signs rather than asserted.
      ===================================================================== */
 
   /* =====================================================================
      READING A DQ SECTION
 
-     The three colour conventions from the DQ display specification, applied
-     to one modelled line: symmetric for seismic, one-sided for DQ, banded
+     The three color conventions from the DQ display specification, applied
+     to one modeled line: symmetric for seismic, one-sided for DQ, banded
      two-sided for the angle.
      ===================================================================== */
 
@@ -1078,7 +1078,7 @@
       const dq = new Float64Array(nt), px = new Float64Array(nt);
       const has = new Uint8Array(nt);
       r.pts.forEach((p) => {
-        // signed, as module 07 defines it: the one-sided colour bar depends on
+        // signed, as module 07 defines it: the one-sided color bar depends on
         // the sign, and an unsigned distance would put every sample above zero
         const sgn = b.sgn[p.i] >= 0 ? 1 : -1;
         dq[p.i] = Math.hypot(p.x, p.y) * sgn;
@@ -1093,10 +1093,10 @@
     return traces;
   }
 
-  /* ---- the three colour bars, as the display specification defines them ---- */
+  /* ---- the three color bars, as the display specification defines them ---- */
 
   // symmetric red / white / blue, limits the same magnitude either side
-  function seisColour(v, lim) {
+  function seisColor(v, lim) {
     const u = Math.max(-1, Math.min(1, v / lim));
     if (u >= 0) {
       const t = u;
@@ -1107,11 +1107,11 @@
     return 'rgb(' + Math.round(255 - 190 * t) + ',' + Math.round(255 - 130 * t) + ','
       + Math.round(255 - 30 * t) + ')';
   }
-  // one-sided: full increments above zero, two below, light grey at the low end
+  // one-sided: full increments above zero, two below, light gray at the low end
   const DQ_UP = ['#EDEDEA', '#E8E86A', '#F2C64A', '#F09A45', '#E8683F',
                  '#DE4046', '#CE2B60', '#C2306B', '#A82563'];
   const DQ_DOWN = ['#C9CCD1', '#AEB4BC'];
-  function dqColour(v, lim) {
+  function dqColor(v, lim) {
     if (v < 0) {
       const t = Math.min(1, -v / lim);
       return DQ_DOWN[t > 0.5 ? 1 : 0];
@@ -1120,7 +1120,7 @@
     return DQ_UP[Math.floor(t * DQ_UP.length)];
   }
   // two-sided, ten degree bands, bolder on the positive side
-  function pxColour(v) {
+  function pxColor(v) {
     const b = Math.max(-9, Math.min(8, Math.floor(v / 10)));
     if (b >= 0) {
       const c = ['#F4E8B0', '#F2D072', '#F0AE4E', '#EC8244', '#E25444',
@@ -1153,9 +1153,9 @@
       for (let i = 0; i < nt; i++) {
         const y = rect.y + (i / (nt - 1)) * rect.h;
         let col;
-        if (mode === 'seis') col = seisColour(t.near[i], lim);
-        else if (mode === 'dq') col = t.has[i] ? dqColour(t.dq[i], lim) : DQ_DOWN[0];
-        else col = t.has[i] ? pxColour(t.px[i]) : '#E9EAEC';
+        if (mode === 'seis') col = seisColor(t.near[i], lim);
+        else if (mode === 'dq') col = t.has[i] ? dqColor(t.dq[i], lim) : DQ_DOWN[0];
+        else col = t.has[i] ? pxColor(t.px[i]) : '#E9EAEC';
         ctx.fillStyle = col;
         ctx.fillRect(x0, y - ch / 2, tw + 0.6, ch + 0.6);
       }
@@ -1190,14 +1190,14 @@
     return lim;
   }
 
-  function colourBar(ctx, x, y, w, h, mode, lim) {
+  function colorBar(ctx, x, y, w, h, mode, lim) {
     const N = 40;
     for (let k = 0; k < N; k++) {
       const u = 1 - k / (N - 1);
       let col, val;
-      if (mode === 'seis') { val = (u * 2 - 1) * lim; col = seisColour(val, lim); }
-      else if (mode === 'dq') { val = (u * 1.25 - 0.25) * lim; col = dqColour(val, lim); }
-      else { val = (u * 2 - 1) * 90; col = pxColour(val); }
+      if (mode === 'seis') { val = (u * 2 - 1) * lim; col = seisColor(val, lim); }
+      else if (mode === 'dq') { val = (u * 1.25 - 0.25) * lim; col = dqColor(val, lim); }
+      else { val = (u * 2 - 1) * 90; col = pxColor(val); }
       ctx.fillStyle = col;
       ctx.fillRect(x, y + (k / N) * h, w, h / N + 1);
     }
@@ -1231,7 +1231,7 @@
       (v) => String(Math.round(v)), { ticks: 6 });
     const lim = drawSection(ctx, rect, traces, mode);
     SEIS.axisBottom(ctx, rect, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: 5 });
-    colourBar(ctx, rect.x + rect.w + 14, rect.y, 14, rect.h, mode, lim);
+    colorBar(ctx, rect.x + rect.w + 14, rect.y, 14, rect.h, mode, lim);
     ctx.font = '9px "IBM Plex Mono", monospace';
     ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
     ctx.fillStyle = CRIM;
@@ -1249,7 +1249,7 @@
     SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
       (v) => String(Math.round(v)), { ticks: 5 });
     const lim = drawSection(ctx, rect, traces, 'dq');
-    colourBar(ctx, rect.x + rect.w + 12, rect.y, 12, rect.h, 'dq', lim);
+    colorBar(ctx, rect.x + rect.w + 12, rect.y, 12, rect.h, 'dq', lim);
     ctx.font = '9px "IBM Plex Mono", monospace';
     ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
     ctx.fillStyle = CRIM;
@@ -1257,7 +1257,7 @@
   }
 
   function drawStep1() {
-    const r = panel('c1a', 'seis', 'NEAR STACK, SYMMETRIC COLOUR BAR');
+    const r = panel('c1a', 'seis', 'NEAR STACK, SYMMETRIC COLOR BAR');
     if (!r) return;
     $('s1a').textContent = NTR + '';
     $('s1b').textContent = '\u00B1' + r.lim.toFixed(2) + ', same either side';
@@ -1268,7 +1268,7 @@
   }
 
   function drawStep2() {
-    const r = panel('c2a', 'dq', 'DQ DISTANCE, ONE-SIDED COLOUR BAR');
+    const r = panel('c2a', 'dq', 'DQ DISTANCE, ONE-SIDED COLOR BAR');
     if (!r) return;
     let pos = 0, tot = 0, mx = 0;
     r.traces.forEach((t) => {
@@ -1286,7 +1286,7 @@
     $('s2d').textContent = mx.toFixed(4);
     $('s2e').textContent = 'The bar spends ' + DQ_UP.length + ' increments above zero and '
       + DQ_DOWN.length + ' below, because on a soft-sand play the sands are the positive samples. '
-      + 'The low end is light grey rather than white so the background reads as background.';
+      + 'The low end is light gray rather than white so the background reads as background.';
   }
 
   function drawStep3() {

@@ -1,19 +1,27 @@
 # How the DQ Trace Actually Works
 
 An interactive teaching site on the distance and quadrant (DQ) trace and the
-attributes derived from it. Each page computes its own seismic model in the browser, with no build step and nothing to install.
+attributes derived from it. Each page computes its own seismic model in the
+browser, with no build step and nothing to install.
 
-Published at `hbedle-subsurface.github.io/distance-quadrant`.
+Published at [hbedle-subsurface.github.io/distance-quadrant](https://hbedle-subsurface.github.io/distance-quadrant/).
+
+The DQ workflow was developed by Dennis B. Neff and Warren Neff at Phillips
+Petroleum and published with the AASPI consortium at the University of Oklahoma.
+The site follows Bedle et al. (2025a, 2025b, 2025c) in *Interpretation* and
+Chaudhry et al. (2026); full references are on the landing page.
 
 ## Who it is for
 
 Undergraduate geology and geophysics students meeting these methods for the
-first time. The site assumes you know what a seismic trace is, what a reflector
-is, and roughly what AVO is trying to do. It does not assume you are comfortable
-with intercept, gradient or crossplots — those are explained in module 01, and
-readers who want more can work through the companion AVO basics site first.
+first time. The modules assume a working idea of a seismic trace, a reflection
+and what AVO sets out to measure. Intercept, gradient and crossplots are
+introduced in module 01; the companion
+[How AVO Actually Works](https://hbedle-subsurface.github.io/avo-basics/) site
+covers them from the beginning.
 
-Technical terms are explained where they first appear rather than avoided.
+Technical terms are explained where they first appear, and each links to a
+short glossary entry.
 
 ## The pages
 
@@ -24,7 +32,7 @@ the September 2026 versions and are replaced one at a time.
 | # | Module | Built from | Status |
 |---|---|---|---|
 | **Part 1** | **Why a new trace** | | |
-| 00 | Same rocks, two pictures | `orientation.html` | old |
+| 00 | The rocks, and two pictures of them | `orientation.html` | **rebuilt** |
 | 01 | Two stacks, and what AVO reads from them | `two-stacks.html` | **rebuilt** |
 | **Part 2** | **Building the DQ trace** | | |
 | 02 | Marking the waveform | `stickogram.html` + `quadrants.html` | old |
@@ -88,13 +96,13 @@ Follow these when adding or changing a module.
   (`data-popout="panel"`, `data-popout="exercises"`).
 - **Crossplot and amplitude axes are fixed**, never autoscaled.
 - **No `localStorage`.** State lives in the URL so a view can be linked.
-- **Every module has a method tab** stating its modelling choices and what it
+- **Every module has a method tab** stating its modeling choices and what it
   does not claim.
 - **Every quoted number is checked.** If the prose says a figure, a checker
   asserts it against what the page computes.
 - **The rock model is identical in every module**: quartz matrix, soft shale,
   hard shale, tight sandstone, and brine, oil and gas. Change it in one place
-  and you must change it everywhere, then re-run every checker.
+  and it must then be changed everywhere and every checker re-run.
 - **Color conventions**: near stack blue `#1D6FA3`, far stack pink `#C2306B`,
   crimson `#841617` for the attribute under discussion.
 - **A module built by copying another must be checked for controls it dropped.**

@@ -361,7 +361,7 @@
         <li><b>One sand, three classes.</b> Set the porosity to 20% and the fluid to oil, and leave the
           underburden following the overburden. Now step through the three overburden lithologies on step
           1, reading the class label each time.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Soft shale gives class 1, with
+          <details class="reveal"><summary>Answer</summary><span class="ans">Soft shale gives class 1, with
             an intercept near +0.11. Hard shale gives class 2, intercept near &minus;0.03. The tight
             sandstone gives class 4, intercept near &minus;0.22. Nothing about the reservoir changed
             between those three readings. AVO class describes the contrast across a boundary, not the rock
@@ -371,7 +371,7 @@
             the class at the start of the project is wrong over part of the field.</span></details></li>
         <li><b>Find the porosity where the sand vanishes.</b> Choose the soft shale overburden and a brine
           fill, then drag the porosity slider slowly and watch the intercept and the near-stack value.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Starting at 24% the label runs
+          <details class="reveal"><summary>Answer</summary><span class="ans">Starting at 24% the label runs
             class 1, then 2p, then 2, then 3. The intercept passes through zero between 32 and 33%: there
             the sand and the shale have the same acoustic impedance, the near stack sees nothing at all,
             and the whole response lives in the gradient. Just below the crossing the intercept is still
@@ -383,7 +383,7 @@
             perfectly good reservoirs.</span></details></li>
         <li><b>Substitute the fluid and watch three numbers move.</b> Soft shale, porosity 25%. Read the
           sand's V<sub>P</sub>, V<sub>S</sub> and density for brine, then oil, then gas.
-          <details class="reveal"><summary>Hint</summary><span class="ans">V<sub>P</sub> falls from about
+          <details class="reveal"><summary>Answer</summary><span class="ans">V<sub>P</sub> falls from about
             3300 to 3130 m/s and density falls from 2.24 to 2.04 g/cm&sup3;, both of which you would
             expect. V<sub>S</sub> <i>rises</i>, from about 1720 to 1800 m/s. Nothing stiffened: shear
             velocity is the square root of the shear modulus over the density, the pore fluid has no shear
@@ -392,7 +392,7 @@
             fluid.</span></details></li>
         <li><b>Open the torpedo.</b> On step 2, clear the underburden checkbox and put a different rock
           below the sand, watching the crossplot and the polar angle spread.
-          <details class="reveal"><summary>Hint</summary><span class="ans">While the underburden follows
+          <details class="reveal"><summary>Answer</summary><span class="ans">While the underburden follows
             the overburden the two reflection coefficients are equal and opposite, so the near stack and
             the far-minus-near difference are the same mixture of the same two wavelets at every sample.
             One is then a fixed multiple of the other and the crossplot has to be a straight segment
@@ -402,7 +402,7 @@
             symmetrically encased, which is why the torpedo is what turns up in field data.</span></details></li>
         <li><b>Collapse the loop.</b> On step 2, set the thickness to 60 ms and then reduce it to 8 ms,
           watching the crossplot.
-          <details class="reveal"><summary>Hint</summary><span class="ans">At 60 ms the top and base
+          <details class="reveal"><summary>Answer</summary><span class="ans">At 60 ms the top and base
             reflections are separate events and the loop has two clear ends, each near the two-layer answer
             for one boundary. As the bed thins the two events interfere, the loop shortens, rotates, and
             pulls away from the crimson cross. By 8 ms &mdash; about a third of a period at 40 Hz &mdash;
@@ -411,7 +411,7 @@
             property of the wavelet as much as of the rock.</span></details></li>
         <li><b>Change the sample rate and count.</b> On step 3, step the sample rate from 4 ms down to
           0.5 ms, reading both counters each time.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The number of samples in the
+          <details class="reveal"><summary>Answer</summary><span class="ans">The number of samples in the
             window goes up by a factor of eight. The number AVO can use stays at two per cycle, so the
             fraction discarded climbs from roughly 80% to roughly 97%. Finer sampling adds numbers, not
             information, as far as a two-layer method is concerned. The DQ process is the opposite: it
@@ -420,7 +420,7 @@
             earlier.</span></details></li>
         <li><b>Lose track of which extremum is the sand.</b> Set the wavelet to 20 Hz and the thickness to
           10 ms, then look at the marked trace on step 3 and count the filled circles.
-          <details class="reveal"><summary>Hint</summary><span class="ans">There are four, and only one of
+          <details class="reveal"><summary>Answer</summary><span class="ans">There are four, and only one of
             them is the top of the sand. The top and base have merged into a single event and the
             rest are the sidelobes of the wavelet. Nothing on the trace distinguishes them, so an
             auto-tracker following a loop will happily pick a sidelobe and an AVO analysis will happily
@@ -430,7 +430,7 @@
         <li><b>Check whether the background trend really sits at 45 degrees.</b> Set the fluid to brine and
           step the porosity across its whole range, watching the point against the dashed B = &minus;A line
           on the step 1 crossplot.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The brine sands trace out a line
+          <details class="reveal"><summary>Answer</summary><span class="ans">The brine sands trace out a line
             of their own, and under the soft shale it is a good deal steeper than B = &minus;A. That 315&deg;
             background trend comes from assuming V<sub>P</sub>/V<sub>S</sub> = 2 in both layers together
             with Gardner's density relation, and neither assumption holds in the model you just built.
@@ -476,7 +476,7 @@
         checkbox is cleared. These three are illustrative rather than measured, chosen to span the range an
         interpreter meets in one basin.</p>
       <p>The sand is not a preset. The brine case is computed from porosity alone, using the two relations
-        in Bedle et al. (2025): Wyllie's time average for velocity, 1/V<sub>P</sub> = &phi;/V<sub>fl</sub>
+        in Bedle et al. (2025a): Wyllie's time average for velocity, 1/V<sub>P</sub> = &phi;/V<sub>fl</sub>
         + (1&nbsp;&minus;&nbsp;&phi;)/V<sub>ma</sub> with a matrix velocity of 5486 m/s and a brine velocity
         of 1500 m/s, and the trend V<sub>P</sub>/V<sub>S</sub> = &minus;0.75&phi;&sup2; + 1.35&phi; + 1.63
         for shear velocity. Density is the volumetric mixture of quartz at 2.65 g/cm&sup3; with the pore
@@ -499,7 +499,7 @@
         2&Delta;V<sub>S</sub>/V<sub>S</sub>). The base-of-sand interface is computed the same way with the
         two layers swapped, so it is not simply assumed to be the negative of the top.</p>
       <p>The near and far stacks are formed by averaging R(&theta;) over 0&ndash;10&deg; and
-        20&ndash;30&deg;, the ranges specified in Bedle et al. (2025). Because R is linear in
+        20&ndash;30&deg;, the ranges specified in Bedle et al. (2025a). Because R is linear in
         sin&sup2;&theta;, the average over a band is A + B times the mean of sin&sup2;&theta; across it,
         which the page evaluates numerically. Angle-dependent tuning, normal-moveout stretch, transmission
         loss and mode conversion are all left out. Their absence flatters the conventional method, so the
@@ -536,7 +536,7 @@
           der Naturforschenden Gesellschaft in Z&uuml;rich</em>, 96, 1&ndash;23.</li>
         <li>Batzle, M., and Z. Wang, 1992, Seismic properties of pore fluids: <em>Geophysics</em>, 57,
           1396&ndash;1408.</li>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
       </ul>
     </details>
@@ -566,10 +566,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>

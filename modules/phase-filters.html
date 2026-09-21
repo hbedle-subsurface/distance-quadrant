@@ -110,7 +110,7 @@
     <button role="tab" data-tab="p1" aria-selected="false">1 · Eight copies of one trace</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · Reading one sample from each</button>
     <button role="tab" data-tab="p3" aria-selected="false">3 · What comes out</button>
-    <button role="tab" data-tab="p4" aria-selected="false">4 · Normalising the bank</button>
+    <button role="tab" data-tab="p4" aria-selected="false">4 · Normalizing the bank</button>
     <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
     <span class="gap"></span>
     <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
@@ -201,12 +201,10 @@
       repicking, and you get <b>QF</b>.</p>
 
     <p class="lede">
-      The numbering restarts at every extremum, which is what lets one table serve every loop. The phase
-      that centers a sample keeps advancing as you go down the trace, and the numbering advances with it,
-      so a limb running from a peak down to a trough takes exactly the same filters in the same order as
-      one running trough up to peak. Nothing has to be adjusted for direction. What does need care is the
-      sign convention for what a rotation means, and step 3 measures how much that
-      matters.</p>
+      The interior count restarts after every extremum, so one table serves every half cycle: a limb
+      running from a peak down to a trough takes the same filters in the same order as one running from a
+      trough down to a peak. The angles are applied as published (Bedle et al., 2025a). Step 3 shows what
+      happens to the result if their signs are inverted.</p>
 
     <canvas id="c2a" aria-label="One loop magnified, with each sample linked to the filtered trace it is read from"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">One loop, magnified. The gray curves are the eight
@@ -259,16 +257,14 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>This is also a useful check on an implementation. There are two conventions in circulation for
-        what a phase rotation means, and the enhanced trace only tracks the envelope under one of them. If
-        a DQ volume ever comes out looking like nothing in particular, the rotation sign is a quick thing
-        to rule out, and this comparison is how you rule it out.</span>
+      <span>Two sign conventions are in use for what a phase rotation means. With the published angles under the convention used here, the enhanced
+        trace follows the envelope closely; with the signs inverted it does not.</span>
     </div>
   </section>
 
   <section class="tabpane" id="p4" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
-      <h3><span class="stepno">4</span>Normalising the bank</h3>
+      <h3><span class="stepno">4</span>Normalizing the bank</h3>
       <span class="hint">The one scaling step the method specifies, and what it is worth</span>
     </div>
 
@@ -276,9 +272,9 @@
       Step 1 showed that a rotation preserves energy and does not preserve peak amplitude. Left alone that
       would make the filter bank inconsistent: a sample read through the 90&deg; filter would come back
       systematically smaller than one read through 0&deg;, for no reason to do with the rock. The method
-      corrects it in one line. <b>Each filter is normalised so that the peak amplitude of a three-layer
+      corrects it in one line. <b>Each filter is normalized so that the peak amplitude of a three-layer
       block model is 1.0</b>, and the papers add that power calculations must not be used for the
-      normalisation, because what the scheme needs is histograms of peak and trough amplitudes.</p>
+      normalization, because what the scheme needs is histograms of peak and trough amplitudes.</p>
 
     <canvas id="c4a" aria-label="A three-layer block model filtered at each phase, with the peak of each filtered response marked"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The reference block model, filtered at each phase. The
@@ -345,7 +341,7 @@
       <ol>
         <li><b>Watch the two weights trade off.</b> On step 1, step the highlighted filter through all
           eight and read cos&thinsp;&theta;, sin&thinsp;&theta; and their squares.
-          <details class="reveal"><summary>Hint</summary><span class="ans">At 0&deg; the weights are 1 and
+          <details class="reveal"><summary>Answer</summary><span class="ans">At 0&deg; the weights are 1 and
             0, so the output is the trace untouched. At &minus;90&deg; they are 0 and &minus;1, so the
             output is the quadrature with its sign flipped and every peak has become a zero crossing. In
             between they blend: at &plusmn;45&deg; both weights are 0.707. The squares always sum to
@@ -355,14 +351,14 @@
             precision, because they are the same operation written two ways.</span></details></li>
         <li><b>Check that a rotation conserves energy.</b> On step 1, step the highlighted filter through
           all eight and watch the energy readout and the peak amplitude.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The energy does not change at
+          <details class="reveal"><summary>Answer</summary><span class="ans">The energy does not change at
             all, because a phase rotation multiplies the spectrum by a unit-magnitude complex number and
             Parseval's theorem does the rest. The peak amplitude changes a great deal: a 90&deg; rotation
             of a Ricker peaks at 0.83 of the unrotated one. Energy and peak amplitude are different
             questions and this step separates them cleanly, which is the whole reason step 4 has something to
             do.</span></details></li>
         <li><b>Find the filter with the smallest peak.</b> Read the relative peak for each of the eight.
-          <details class="reveal"><summary>Hint</summary><span class="ans">90&deg;, at 0.827 of the
+          <details class="reveal"><summary>Answer</summary><span class="ans">90&deg;, at 0.827 of the
             unrotated peak. The sequence is 1.000, 0.988, 0.954, 0.899, 0.827 as the rotation goes from
             0&deg; to 90&deg; in steps of 22.5&deg;, and back up symmetrically. Those five numbers are the
             balancing scalars of step 4, upside down: dividing each filter's output by its own peak is what
@@ -370,16 +366,16 @@
             until you remember it is applied systematically by quadrant number and therefore correlates
             with waveform position rather than averaging out.</span></details></li>
         <li><b>Compare QN with the near stack.</b> On step 2, read the two peak amplitudes.
-          <details class="reveal"><summary>Hint</summary><span class="ans">QN's peak is larger &mdash; on
+          <details class="reveal"><summary>Answer</summary><span class="ans">QN's peak is larger &mdash; on
             the default model about 1.12 times the near stack's. Every extremum comes through untouched,
             because a Q1 or Q9 sample takes the 0&deg; filter, so the enhancement never lowers anything.
             What it does is lift the interior of every loop toward what that loop's extremum would be, and
             somewhere on the trace a lifted interior sample ends up above the largest extremum. That is
-            exactly the behaviour of an envelope, which sits on or above the trace everywhere and touches
+            exactly the behavior of an envelope, which sits on or above the trace everywhere and touches
             it only at the extrema.</span></details></li>
         <li><b>Measure how close to an envelope it is.</b> On step 3, read the difference and the
           correlation.
-          <details class="reveal"><summary>Hint</summary><span class="ans">On the default model, 1.5% of
+          <details class="reveal"><summary>Answer</summary><span class="ans">On the default model, 1.5% of
             the peak envelope, at a correlation of 0.999. The residual is not error &mdash; it is the
             coarseness of the scheme. Nine numbers across a half cycle means each covers 22.5&deg;, and a
             sample is assigned one by counting samples rather than by measuring its phase, so it is
@@ -389,17 +385,14 @@
             error on it, and an envelope has thrown away the polarity and the amplitude contrast the whole
             method exists to measure.</span></details></li>
         <li><b>Break it on purpose.</b> Tick the invert box in the panel and read step 3 again.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The difference goes from 1.5%
-            to 21.6% and the correlation from 0.999 to 0.78. There are two conventions in circulation for
-            what "rotate by theta" means &mdash; they differ by conjugating the analytic trace &mdash; and
-            the published angles are only correct under one of them. Nothing about the table is wrong; it
-            simply cannot tell you which convention its author had in mind. This test settles it, because
-            only one of the two reproduces the behaviour the method is documented to have before
-            balancing. If a DQ volume ever comes out looking like nothing in particular, this is the first
-            thing to check.</span></details></li>
+          <details class="reveal"><summary>Answer</summary><span class="ans">The difference goes from 1.5%
+            to 21.6% and the correlation from 0.999 to 0.78. Two sign conventions are in use for what "rotate by
+            theta" means; they differ by conjugating the analytic trace. The published angles are written for
+            one of them, and inverting the signs is equivalent to using the other. With the other convention the
+            enhanced trace no longer follows the envelope.</span></details></li>
         <li><b>Add noise and see how little the agreement cares.</b> Step the noise from zero to 30% on
           step 3.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The difference barely moves,
+          <details class="reveal"><summary>Answer</summary><span class="ans">The difference barely moves,
             from 1.5% to about 2%, and the correlation stays at 0.999. That sounds reassuring and is not.
             Both curves are computed from the same noisy trace, so a loop invented by noise gets an
             envelope and a quadrant enhancement that agree with each other perfectly well. The enhancement
@@ -425,8 +418,9 @@
           a quadrant number meaning the same thing on both traces.</li>
         <li><b>The numbering restarts at every extremum</b>, so one filter table serves every loop and
           nothing has to be adjusted for whether a limb rises or falls.</li>
-        <li><b>The published angles are correct under one of the two rotation conventions.</b> Under the
-          other they take the result from 1.5% off the envelope to 21.6%.</li>
+        <li><b>The published angles are applied as printed.</b> Inverting their signs, which is the same
+          as using the other rotation convention, moves the result from 1.5% off the envelope to
+          21.6%.</li>
         <li><b>A rotation conserves energy but not peak amplitude.</b> A 90&deg; rotation of a Ricker peaks
           at 0.827 of the unrotated one, and the five distinct values run 1.000, 0.988, 0.954, 0.899,
           0.827.</li>
@@ -445,29 +439,25 @@
       <p>A phase rotation is applied in the trace domain as
         x&nbsp;cos&thinsp;&theta;&nbsp;+&nbsp;H(x)&nbsp;sin&thinsp;&theta;, with H the Hilbert transform
         computed through the analytic signal. Doing it on the trace rather than on the wavelet means the
-        same code works when noise is switched on, and it is what the program would do to real data.
+        same operation applies when noise is present, as it would for recorded data.
         Quadrant enhancement then reads sample <i>i</i> from the rotated trace named by its quadrant
         number.</p>
-      <p><b>The falling-limb sign is a result, not a quotation.</b> The published table gives one filter per
-        quadrant number: Q1 and Q9 at 0&deg;, Q2 to Q4 at +22.5&deg;, +45&deg; and +67.5&deg;, Q5 at
-        &minus;90&deg;, Q6 to Q8 at &minus;67.5&deg;, &minus;45&deg; and &minus;22.5&deg;. Applied
-        with the angles inverted &mdash; equivalently, under the other of the two conventions for what a
-        phase rotation means &mdash; the enhanced trace no longer tracks the envelope: 21.6% of the peak
-        envelope at a correlation of 0.78, against 1.5% at 0.999 applied as printed under the convention
-        used here. That is how this page chose between the two conventions. This page does
-        the latter and offers the former as a switch. The equivalent statement is that the underlying angle
-        advances monotonically down the trace and the tabulated filter is that angle folded into
-        &plusmn;90&deg;, which is consistent with the angle column in the Chapter 1 draft. It should still
-        be confirmed against the AASPI implementation.</p>
+      <p><b>The filter angles.</b> The published table gives one filter per quadrant number: Q1 and Q9 at
+        0&deg;, Q2 to Q4 at +22.5&deg;, +45&deg; and +67.5&deg;, Q5 at &minus;90&deg;, Q6 to Q8 at
+        &minus;67.5&deg;, &minus;45&deg; and &minus;22.5&deg; (Bedle et al., 2025a). This page applies
+        them as printed, with the rotation defined as x&nbsp;cos&nbsp;&theta;&nbsp;+&nbsp;H(x)&nbsp;sin&nbsp;&theta;.
+        Under that definition the enhanced trace follows the Hilbert envelope to 1.5% at a correlation of
+        0.999. Inverting the signs, which is equivalent to the other rotation convention, gives 21.6% at a
+        correlation of 0.78. The panel offers the inverted version as a switch for comparison.</p>
       <p>The Hilbert envelope used for comparison on step 3 is the magnitude of the analytic near stack. The
         comparison is made only at samples that carry a quadrant number, since the enhancement is undefined
         outside the first and last pick.</p>
-      <p>The normalisation of step 4 is left out of steps 1 to 3, so that step 3 shows the filter bank
+      <p>The normalization of step 4 is left out of steps 1 to 3, so that step 3 shows the filter bank
         before any correction and step 4 shows the correction on its own.</p>
       <ul>
         <li>Taner, M. T., F. Koehler, and R. E. Sheriff, 1979, Complex seismic trace analysis:
           <em>Geophysics</em>, 44, 1041&ndash;1063.</li>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
       </ul>
     </details>
@@ -479,7 +469,7 @@
     <p>The two enhanced traces are combined into one number per sample by Pythagoras, and the same pair
       seen as a vector gives the crossplot the whole method is named after.</p>
     <p style="font-size:13px;color:var(--muted)">Amplitude balancing used to be planned as a module of
-      its own. It is the normalisation of step 6 rather than a separate pass, so it is step 4 above, and
+      its own. It is the normalization of step 6 rather than a separate pass, so it is step 4 above, and
       the course runs straight from the filters to the distance.</p>
     <a class="btn" href="dq-distance.html">Open module 07 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
@@ -499,10 +489,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>
@@ -763,12 +752,10 @@
      long and drops them when it is short.
      ===================================================================== */
 
-  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
-     and then starts again. It does not run up to 9 and mirror back down. The
-     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
-     opens the next, which is why the published table gives both the 0 degree
-     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
-     coarse version as "4 quadrants". */
+  /* Published rule (Bedle et al., 2025a, steps 2 to 5 and Figure 4a): every
+     zero crossing is Q5, every trough Q1 and every peak Q9. Between each pair
+     of anchors the interior numbers run upward from the extremum, so below a
+     peak the sequence is 9, 2, 3, 4, 5 and below a trough 1, 2, 3, 4, 5. */
 
   function quadrants(tr, pk) {
     const nt = tr.length;
@@ -803,24 +790,25 @@
     };
 
     loops.forEach((L) => {
-      q[L.a] = 1;                                // opens this loop
+      q[L.a] = tr[L.a] < 0 ? 1 : 9;               // trough Q1, peak Q9
       q[L.x] = 5;
-      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
-      ends.add(L.b);                             // loop has already claimed it
+      q[L.b] = tr[L.b] < 0 ? 1 : 9;
+      ends.add(L.b);
       fill(L.a, L.x, [2, 3, 4]);
       fill(L.x, L.b, [6, 7, 8]);
     });
-    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
-    // same position and take the same filter, so either label is correct
-    loops.forEach((L) => { q[L.a] = 1; });
+    // troughs are Q1 and peaks Q9 wherever they sit; both take the 0 degree
+    // filter, so this changes the labels and not the DQ values
+    const tag = (i) => (tr[i] < 0 ? 1 : 9);
+    loops.forEach((L) => { q[L.a] = tag(L.a); q[L.b] = tag(L.b); });
 
     const anchors = [];
     loops.forEach((L) => {
-      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+      anchors.push({ i: L.a, q: q[L.a] }, { i: L.x, q: 5 });
     });
     if (loops.length) {
       const last = loops[loops.length - 1];
-      anchors.push({ i: last.b, q: q[last.b] || 9 });
+      anchors.push({ i: last.b, q: q[last.b] });
     }
     anchors.sort((a, b) => a.i - b.i);
     return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
@@ -862,7 +850,7 @@
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace rather than to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centres a sample runs the other way, so the filter is
+     the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
      ===================================================================== */
 
@@ -902,8 +890,8 @@
   }
 
   /* Each sample is read from the filter its own quadrant number names, with no
-     sign adjustment. That works because module 04's numbering restarts at every
-     extremum, so the phase keeps advancing down the trace and the tabulated
+     sign adjustment. That works because module 04's interior count restarts
+     after every extremum, so the phase keeps advancing down the trace and the tabulated
      filter is always the right one. The switch in the panel mirrors the
      numbering on falling limbs instead, which is what an earlier draft of this
      course did, so that step 3 can measure what it costs. */
@@ -918,7 +906,7 @@
       if (!q) continue;
       /* The tabulated angle, applied as printed. Inverting the sign is the
          same as adopting the other rotation convention, and step 3 measures
-         how far that takes the result from the behaviour the method is
+         how far that takes the result from the behavior the method is
          documented to have. */
       let deg = (mirrored ? -1 : 1) * PHASE_OF[q];
       if (!(deg in cache)) cache[deg] = rotate(tr, deg);
@@ -1315,7 +1303,7 @@
   }
 
   /* ------------------------------- step 4 ------------------------------
-     Step 6 of the published sequence: normalise each filter so the peak
+     Step 6 of the published sequence: normalize each filter so the peak
      amplitude of a three-layer block model is 1.0. The gains come out close
      to one, and the measured effect on the enhanced trace is small.
      --------------------------------------------------------------------- */
@@ -1455,7 +1443,7 @@
 
   const PANES = ['p1', 'p2', 'p3', 'p4', 'pw', 'pe', 'pk', 'pm'];
   const STEPNAMES = {
-    p1: 'Eight copies', p2: 'Reading them', p3: 'What comes out', p4: 'Normalising',
+    p1: 'Eight copies', p2: 'Reading them', p3: 'What comes out', p4: 'Normalizing',
     pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
   };
 

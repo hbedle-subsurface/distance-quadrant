@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Quadrant numbers | How the DQ Trace Actually Works</title>
-<meta name="description" content="How every sample between the stick-o-gram picks is labelled Q1 to Q9, why loops usually repeat numbers rather than omit them, and which end of the loop gets to be Q1.">
+<meta name="description" content="How every sample between the StickOgram picks is labeled Q1 to Q9, why loops usually repeat numbers rather than omit them, and which end of the loop gets to be Q1.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -35,7 +35,7 @@
     <div class="labgrid">
       <div>
         <p class="cap" id="labCap">The rock model <span>&mdash; the layers, and the near stack they produce</span></p>
-        <canvas id="cMain" aria-label="The near-stack trace with each sample labelled by its quadrant number"></canvas>
+        <canvas id="cMain" aria-label="The near-stack trace with each sample labeled by its quadrant number"></canvas>
       </div>
       <div>
         <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
@@ -140,13 +140,14 @@
       and Q9.</p>
 
     <p class="lede">
-      <b>Then it starts again.</b> The Q9 that closes one loop is the Q1 that opens the next, which is why
-      the published filter table gives both of them 0&deg;. So the sequence down a trace reads 1, 2, 3, 4,
-      5, 6, 7, 8, 9=1, 2, 3, … and never counts backwards. The scheme is really modulo 8, and that is how
-      the method's authors describe it &mdash; eight quadrants for 1 ms data, and a coarse four-quadrant
-      version that was enough for 35 Hz data at 2 ms.</p>
+      <b>Then the count starts again.</b> Below a peak the interior numbers run 2, 3, 4 up to the next zero
+      crossing and 6, 7, 8 down to the next trough, so the sequence down a trace reads 1, 2, 3, 4, 5, 6, 7,
+      8, 9, 2, 3, 4, 5, 6, 7, 8, 1 (Bedle et al., 2025a, Figure 4a). Troughs are always Q1 and peaks always
+      Q9. Both take the unrotated trace, which is why the published filter table gives them the same
+      0&deg; filter. The papers describe this as eight quadrants for 1 ms data; a four-quadrant version was
+      used on 2 ms data (Neff, 2003).</p>
 
-    <canvas id="c1a" aria-label="The near-stack trace with every sample labelled by its quadrant number"></canvas>
+    <canvas id="c1a" aria-label="The near-stack trace with every sample labeled by its quadrant number"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Each sample is drawn at its quadrant number, with the
       picks marked. The three anchors are filled circles; everything between them was assigned by counting.
       Drag the frequency in the panel and watch the interior numbering stretch and compress.</p>
@@ -204,7 +205,7 @@
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>Repetition costs nothing much: several neighbouring samples are told to use the same phase
+      <span>Repetition costs nothing much: several neighboring samples are told to use the same phase
         filter, which is exactly what you would want in the middle of a long, smooth limb. Omission is
         worse, because a number that never appears is a phase rotation that never gets applied, and the
         enhanced trace at that loop is built from a smaller set of filters than everywhere else.</span>
@@ -298,14 +299,14 @@
       <ol>
         <li><b>Find the frequency that fits exactly.</b> On step 2, with 1 ms sampling, drag the frequency
           until the quarter cycle holds exactly three interior samples.
-          <details class="reveal"><summary>Hint</summary><span class="ans">It happens around 62 Hz, where
+          <details class="reveal"><summary>Answer</summary><span class="ans">It happens around 62 Hz, where
             the period is 16 ms and the quarter cycle is 4 ms. That is the only setting at which Q2, Q3 and
             Q4 each land on exactly one sample. Everything slower repeats numbers and everything faster
             starts dropping them, so an exact fit is a coincidence rather than a design target. Nothing in
             the method tries to achieve it.</span></details></li>
         <li><b>Check that repetition is the normal case.</b> Set the frequency to 25 Hz and read the two
           counters on step 2, then to 70 Hz and read them again.
-          <details class="reveal"><summary>Hint</summary><span class="ans">At 25 Hz every gap repeats
+          <details class="reveal"><summary>Answer</summary><span class="ans">At 25 Hz every gap repeats
             numbers and none omits any. At 70 Hz gaps start omitting. Since almost all seismic sits between
             about 15 and 50 Hz, repetition is what happens on real data essentially all of the time. The
             phrase "short isochron" in the method description &mdash; isochron here just means the time
@@ -313,7 +314,7 @@
             the usual one. Worth knowing before you read the papers.</span></details></li>
         <li><b>Coarsen the sampling instead.</b> Put the frequency back to 40 Hz and step the sample rate
           from 1 ms to 4 ms.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Omission arrives quickly,
+          <details class="reveal"><summary>Answer</summary><span class="ans">Omission arrives quickly,
             because what matters is samples per quarter cycle rather than milliseconds. At 40 Hz the
             quarter cycle is 6.3 ms, which is six samples at 1 ms and one or two at 4 ms. This is the same
             argument module 03 made about zero crossings, arriving from a different direction: the papers
@@ -321,7 +322,7 @@
             them to count.</span></details></li>
         <li><b>Watch a thin bed lose its interior numbers.</b> On step 1, drag the sand thickness down
           while watching the quadrant track.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The sand's own loop shortens
+          <details class="reveal"><summary>Answer</summary><span class="ans">The sand's own loop shortens
             until it holds only the anchors, and then until it is not a separate loop at all. The numbering
             does not report a problem. It numbers whatever loops the waveform presented, and a merged thin
             bed presents one loop where the geology has two boundaries. Everything downstream inherits
@@ -329,18 +330,15 @@
             error to be corrected.</span></details></li>
         <li><b>Skip the polarity flip on a class 1 sand.</b> On step 3, set the overburden to soft shale
           with oil at about 20% porosity so the sand is class 1, then tick the skip box.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The reservoir top changes from a
-            trough to a peak. The <em>numbers</em> do not change at all, and that is the point worth
-            taking away: because the numbering restarts at every extremum, it has no way of knowing a peak
-            from a trough, so Q1 marks whichever boundary happens to come first. With the flip, Q1 lands on
-            the top of the reservoir; without it, on the base. Nothing has gone wrong arithmetically
-            &mdash; the rule was applied correctly to a trace whose polarity happens to be reversed
-            &mdash; and that is what makes it dangerous. The volume looks fine. It is only when you compare
-            it against a class 3 area, or feed both to the same classifier, that the two halves turn out to
-            be describing the world in opposite terms.</span></details></li>
+          <details class="reveal"><summary>Answer</summary><span class="ans">The reservoir top changes from a
+            trough to a peak. The reservoir top is now a peak, so it is labeled Q9, and the base
+            becomes Q1. With the flip, the top is Q1 as it is for a class 3 sand. The rule has been applied
+            correctly to a trace of the opposite polarity, and no error is reported. The difference appears
+            only when this area is compared with a class 3 area, or when both are passed to the same
+            classifier: the same boundary carries opposite labels in the two.</span></details></li>
         <li><b>Compare a tight sandstone overburden.</b> With the flip left on, switch the overburden between
           soft shale and tight sandstone at a fixed porosity and fluid, and watch the flip indicator.
-          <details class="reveal"><summary>Hint</summary><span class="ans">A porous sand under tight sandstone
+          <details class="reveal"><summary>Answer</summary><span class="ans">A porous sand under tight sandstone
             is a strong negative coefficient, so it is a trough and needs no flip. It is the class 1 case
             &mdash; a sand slower than what sits above it &mdash; that gets reversed. The convention is
             really about which way round the reservoir contrast points, and the AVO class label is a
@@ -384,23 +382,19 @@
         uniform spacing the method calls for, gives an exact Q2 Q3 Q4 when <i>n</i> is three, repeats
         numbers when <i>n</i> is larger, and drops numbers from the outside in when <i>n</i> is smaller: a
         single interior sample becomes Q3, and two become Q2 and Q4.</p>
-      <p><b>The numbering restarts; it does not mirror.</b> Step 13 of the AASPI sequence states the rule
-        for a rising limb, Q1 through Q5 to Q9, and does not spell out the falling limb. It runs the same
-        way: 1 down to 9 again, starting over at each extremum. Three things say so. Dennis Neff describes
-        the scheme as <b>eight quadrants</b>, with a coarse four-quadrant version that sufficed for 35 Hz
-        data at 2 ms &mdash; eight per loop means Q9 and Q1 are the same position. The four-quadrant slide
-        tabulates consecutive samples as 1, 2, 3, 4, 1, 2, 3, 4, 1, plainly restarting. And step 17 gives
-        Q1 and Q9 the same 0&deg; filter, which is what you would expect of one position with two
-        names.</p>
-      <p><b>What that costs the polarity convention.</b> If the numbering restarts at every extremum then
-        it cannot tell a peak from a trough &mdash; Q1 lands on whichever comes first. So step 13's "the
-        trough will be assigned Q1" describes a rising limb, and the polarity flip does not change any
-        number. What it changes is which boundary the numbers land on, and that is why it is done at the stacking step.</p>
-      <p><b>Short loops are still an assumption.</b> The sources say a short loop omits some or all of the
+      <p><b>Troughs are Q1, peaks are Q9, and the interior count restarts after each.</b> This follows the
+        published description (Bedle et al., 2025a, steps 2 to 5 and Figure 4a): zero crossings are Q5, the
+        largest trough between two crossings is Q1 and the largest peak Q9, and the interior numbers below a
+        peak run 2, 3, 4 as they do below a trough. Q1 and Q9 take the same 0&deg; filter.</p>
+      <p><b>Why the polarity flip is done at the stacking step.</b> For classes 4, 3 and 2 the top of a soft
+        reservoir is a trough, so it is Q1. A class 1 top is a peak and would be Q9. Reversing both partial
+        stacks before picking gives a class 1 top the same label as a class 3 top, so the numbering rule
+        itself never changes.</p>
+      <p><b>Short loops are still an assumption.</b> The papers say a short loop omits some or all of the
         interior numbers without saying which go first. The proportional rule above drops the outer numbers
-        before the middle one, so a single interior sample becomes Q3 and two become Q2 and Q4. That should
-        be checked against the AASPI implementation before anything is read too closely into a specific
-        number.</p>
+        before the middle one, so a single interior sample becomes Q3 and two become Q2 and Q4. That choice
+        is this page's, and a specific interior number in a short loop should not be read too
+        closely.</p>
       <p>The polarity decision is made on the sign of the near-stack reflection coefficient at the top of
         the sand: positive means the reservoir top is a peak, so the traces are reversed. That reproduces
         the published grouping exactly &mdash; classes 4, 3 and 2 are left alone and class 1 is flipped
@@ -412,8 +406,9 @@
         takes &minus;90&deg;, and Q6 through Q8 take &minus;67.5&deg;, &minus;45&deg; and
         &minus;22.5&deg;. Seven filters across nine numbers.</p>
       <ul>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+        <li>Neff, D. B., 2003, Method of predicting rock properties from seismic data: U.S. Patent 6,654,692 B1.</li>
         <li>Chaudhry, N., H. Bedle, D. B. Neff, and W. Neff, 2026, Isochron-based seismic attributes for
           stratigraphic and facies interpretation: field examples, IMAGE expanded abstract.</li>
       </ul>
@@ -431,7 +426,7 @@
   </section>
 
   <div class="pager" id="pager" hidden>
-    <a class="btn ghost" href="stickogram.html">← The stick-o-gram</a>
+    <a class="btn ghost" href="stickogram.html">← The StickOgram</a>
     <a class="btn" href="isochron.html">Next: isochron and half isochron →</a>
   </div>
 
@@ -444,10 +439,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>
@@ -708,12 +702,10 @@
      long and drops them when it is short.
      ===================================================================== */
 
-  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
-     and then starts again. It does not run up to 9 and mirror back down. The
-     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
-     opens the next, which is why the published table gives both the 0 degree
-     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
-     coarse version as "4 quadrants". */
+  /* Published rule (Bedle et al., 2025a, steps 2 to 5 and Figure 4a): every
+     zero crossing is Q5, every trough Q1 and every peak Q9. Between each pair
+     of anchors the interior numbers run upward from the extremum, so below a
+     peak the sequence is 9, 2, 3, 4, 5 and below a trough 1, 2, 3, 4, 5. */
 
   function quadrants(tr, pk) {
     const nt = tr.length;
@@ -748,24 +740,28 @@
     };
 
     loops.forEach((L) => {
-      q[L.a] = 1;                                // opens this loop
+      q[L.a] = tr[L.a] < 0 ? 1 : 9;               // trough Q1, peak Q9
       q[L.x] = 5;
-      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
-      ends.add(L.b);                             // loop has already claimed it
+      q[L.b] = tr[L.b] < 0 ? 1 : 9;
+      ends.add(L.b);
       fill(L.a, L.x, [2, 3, 4]);
       fill(L.x, L.b, [6, 7, 8]);
     });
-    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
-    // same position and take the same filter, so either label is correct
-    loops.forEach((L) => { q[L.a] = 1; });
+    // Published rule (Bedle et al., 2025a, step 3): a trough is Q1 and a peak
+    // is Q9, wherever it sits. The interior numbers restart after every
+    // extremum (their Figure 4a: 9 at the peak, then 2, 3, 4, 5 below it).
+    // Q1 and Q9 take the same 0 degree filter, so the DQ values do not depend
+    // on this labeling; the labels do.
+    const tag = (i) => (tr[i] < 0 ? 1 : 9);
+    loops.forEach((L) => { q[L.a] = tag(L.a); q[L.b] = tag(L.b); });
 
     const anchors = [];
     loops.forEach((L) => {
-      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+      anchors.push({ i: L.a, q: q[L.a] }, { i: L.x, q: 5 });
     });
     if (loops.length) {
       const last = loops[loops.length - 1];
-      anchors.push({ i: last.b, q: q[last.b] || 9 });
+      anchors.push({ i: last.b, q: q[last.b] });
     }
     anchors.sort((a, b) => a.i - b.i);
     return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
@@ -1188,10 +1184,9 @@
       verdict = 'A class 1 sand. Both partial stacks were reversed before picking, so the reservoir top '
         + 'arrives at the picker as a trough and its loop behaves exactly as a class 3 sand\u2019s does.';
     } else {
-      verdict = 'The flip has been skipped. The numbers are the same \u2014 they always are, because the '
-        + 'numbering restarts at every extremum and does not know a peak from a trough \u2014 but they are '
-        + 'now attached to the wrong boundaries. Q1 marks the base of this reservoir instead of its top. '
-        + 'Nothing reports an error, which is what makes it worth being careful about.';
+      verdict = 'The flip has been skipped. The reservoir top is a peak, so it is labeled Q9, and the '
+        + 'base is Q1: the reverse of a class 3 sand. No error is reported, so the difference only appears '
+        + 'when this area is compared with a class 3 area.';
     }
     $('s3f').textContent = verdict;
   }

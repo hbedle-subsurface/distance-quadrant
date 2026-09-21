@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The stick-o-gram | How the DQ Trace Actually Works</title>
+<title>The StickOgram | How the DQ Trace Actually Works</title>
 <meta name="description" content="How the near stack is reduced to zero crossings, peak centers and trough centers, which sample gets picked when the crossing falls between two, and what the resulting section shows.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
 
   <div class="mod-head">
     <p class="eyebrow">Module 03 &nbsp;·&nbsp; The DQ trace</p>
-    <h1>The stick-o-gram</h1>
+    <h1>The StickOgram</h1>
     <p class="sub">The near stack is now thrown away and replaced by a list of picks: every zero crossing,
       every peak center and every trough center. Those picks are the acoustic layers, and the quadrant
       numbers of module 04 get written into the gaps between them. This module builds the picks, works
@@ -132,14 +132,14 @@
       measuring the waveform again.</p>
 
     <p class="lede">
-      The stick-o-gram is also used on its own. Reduced to picks, a seismic volume becomes a set of layer
+      The StickOgram is also used on its own. Reduced to picks, a seismic volume becomes a set of layer
       boundaries rather than a set of wiggles, which makes it easier to map horizons, follow faults and
       outline geo-bodies, and much lighter to feed to a machine learning program. Timeslices through it at
       ten or twenty millisecond spacing give a first time-structure map before anyone has picked a
       horizon.</p>
 
     <p class="lede">
-      The stick-o-gram is the center of every peak, the center of every trough, and every zero crossing
+      The StickOgram is the center of every peak, the center of every trough, and every zero crossing
       found on the near stack. Nothing else. The amplitudes between those picks are set aside, the wavelet
       shape is set aside, and what is left is a skeleton of where the acoustic layers begin and end.</p>
 
@@ -152,9 +152,9 @@
     <canvas id="c1a" aria-label="The near-stack trace with zero crossings, peak centers and trough centers marked"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Time runs down the page. Red dots are peak centers, blue
       dots are trough centers, and the open circles are zero crossings. The gray dots are every other
-      sample on the trace, all of which the stick-o-gram discards.</p>
+      sample on the trace, all of which the StickOgram discards.</p>
 
-    <p class="sublabel"><b>2</b> The same trace as a stick-o-gram
+    <p class="sublabel"><b>2</b> The same trace as a StickOgram
       <span class="note">the picks alone, with the waveform removed</span></p>
     <canvas id="c1b" aria-label="The picks drawn on their own as short colored sticks"></canvas>
 
@@ -168,7 +168,7 @@
     </div>
     <div class="legend">
       <span>Module 01 counted the samples conventional AVO can interpret and found two per waveform cycle.
-        The stick-o-gram keeps four: a peak, a trough and the two crossings between them. That is not yet
+        The StickOgram keeps four: a peak, a trough and the two crossings between them. That is not yet
         the every-sample method the course is heading for, but it is the frame the quadrant numbers are
         hung on, and everything after this is about filling in the gaps between these picks.</span>
     </div>
@@ -234,9 +234,9 @@
     <p class="lede">
       One trace of picks is not obviously worth having. A line of them is. Here is the same model run
       across seventy traces, with the sand thinning to the right and a normal fault partway along, drawn
-      first as ordinary amplitudes and then as the stick-o-gram.</p>
+      first as ordinary amplitudes and then as the StickOgram.</p>
 
-    <canvas id="c3a" aria-label="A seismic section drawn as amplitudes, and the same section drawn as a stick-o-gram"></canvas>
+    <canvas id="c3a" aria-label="A seismic section drawn as amplitudes, and the same section drawn as a StickOgram"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Left, the near-stack amplitudes. Right, the picks alone,
       colored by whether they are a peak or a trough. Drag the fault throw and the noise in the panel.</p>
 
@@ -263,7 +263,7 @@
       <span class="hint">Two different jobs, one set of picks</span>
     </div>
 
-    <p class="lede">The stick-o-gram has a life of its own as a display, and it is also the scaffolding for
+    <p class="lede">The StickOgram has a life of its own as a display, and it is also the scaffolding for
       everything else in the method. Those are worth keeping separate, because they explain why so much
       care goes into a rule about which of two samples to take.</p>
 
@@ -271,7 +271,7 @@
       As a display in its own right</h2>
     <ul class="lede" style="padding-left:20px">
       <li><b>Structure without picking horizons.</b> Every event in the volume is already tracked, in the
-        weak sense that its center is marked on every trace. Time slices through the stick-o-gram at ten or
+        weak sense that its center is marked on every trace. Time slices through the StickOgram at ten or
         twenty millisecond spacing give a first time structure map before anyone has picked a
         horizon.</li>
       <li><b>Faults as breaks rather than as dimming.</b> A fault interrupts the sticks. On an amplitude
@@ -308,17 +308,17 @@
       <ol>
         <li><b>Count what survives.</b> On step 1, with the default model, compare the number of samples on
           the trace with the number of picks.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Between 86% and 93% of the trace
+          <details class="reveal"><summary>Answer</summary><span class="ans">Between 86% and 93% of the trace
             is discarded, depending on the model. Where there is an event the picks come at four per
             waveform cycle &mdash; a peak, a trough and a crossing on either side &mdash; and where there
             is no event there is nothing to pick, which is most of why the fraction is as high as it is.
-            Module 01 counted two interpretable samples per cycle for conventional AVO, so the stick-o-gram
+            Module 01 counted two interpretable samples per cycle for conventional AVO, so the StickOgram
             is not yet an improvement in how much of the trace is usable. It is the same information,
             reorganized into a frame. The gain comes in module 06, when every sample between the picks is
             given a value.</span></details></li>
         <li><b>Coarsen the sampling and watch the crossings drift.</b> On step 2, step the sample rate from
           1 ms to 4 ms, reading the worst crossing error each time.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The error is bounded by half the
+          <details class="reveal"><summary>Answer</summary><span class="ans">The error is bounded by half the
             sample interval, because the rule always takes the nearer of the two samples to zero. At 1 ms
             that is at most half a millisecond and usually less. At 4 ms it can be two, which at 40 Hz is
             most of a tenth of a cycle. Everything after this counts samples away from that crossing, so the
@@ -326,10 +326,10 @@
             loop.</span></details></li>
         <li><b>Make a doublet.</b> With the default model &mdash; 30 ms of sand at 40 Hz &mdash; switch the
           tight streak on and off on step 2, watching the counter and the dashed circles.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Zero discarded extrema without
+          <details class="reveal"><summary>Answer</summary><span class="ans">Zero discarded extrema without
             the streak, two with it. The thin tight sandstone bed puts a second extremum inside a loop that
             previously held one, and the rule keeps only the larger. The smaller is a real reflection from
-            a real bed, and the stick-o-gram does not record it. That is a deliberate trade: the numbering
+            a real bed, and the StickOgram does not record it. That is a deliberate trade: the numbering
             scheme in module 04 needs exactly one extremum between each pair of crossings, and a rule that
             sometimes returned two would have nothing to number. Now try 45 ms of sand at 30 Hz with the
             streak switched off, and you will find three discarded extrema with no thin bed anywhere. A
@@ -338,7 +338,7 @@
             get one.</span></details></li>
         <li><b>Thin the sand until it holds no picks at all.</b> On step 1, drag the thickness down from
           30 ms, watching the count of peaks and troughs inside the sand.
-          <details class="reveal"><summary>Hint</summary><span class="ans">At 8 ms and below it reaches
+          <details class="reveal"><summary>Answer</summary><span class="ans">At 8 ms and below it reaches
             zero. The top and base have merged into one event, and the center of that event does not sit
             between the top and the base &mdash; it sits above the sand entirely. So the picks record that
             something is there while saying nothing whatever about its interior, and no attribute computed
@@ -346,7 +346,7 @@
             thickness where Theta PX does not, and this is where the sensitivity starts.</span></details></li>
         <li><b>Add noise and watch picks disappear.</b> On step 1, raise the noise from zero to 40% a few
           percent at a time, watching the pick count.
-          <details class="reveal"><summary>Hint</summary><span class="ans">It does not climb. With the
+          <details class="reveal"><summary>Answer</summary><span class="ans">It does not climb. With the
             default model it goes 21, 19, 15, then 13 at 30% noise, before climbing back to 19 at 40%.
             Noise destroys picks as readily as it invents them: a weak event that was a clean loop stops
             producing an extremum above the amplitude floor, and a crossing shifts by several samples or
@@ -356,10 +356,10 @@
             filter for signal to noise rather than for bandwidth.</span></details></li>
         <li><b>Find the fault on the wrong display.</b> On step 3, set the noise to 25% and try to locate
           the fault on the amplitude section, then on the sticks.
-          <details class="reveal"><summary>Hint</summary><span class="ans">On the amplitudes the fault is a
+          <details class="reveal"><summary>Answer</summary><span class="ans">On the amplitudes the fault is a
             subtle lateral shift inside a continuous field, and the noise sits on top of it. On the sticks
             it is a clean break in a set of lines, because the display has already thrown away everything
-            that was not an event. This is the argument for using the stick-o-gram as a structural display
+            that was not an event. This is the argument for using the StickOgram as a structural display
             rather than only as an intermediate product, and it is the same argument for feeding it to a
             classifier.</span></details></li>
       </ol>
@@ -371,7 +371,7 @@
     <div class="takeaway" style="max-width:none">
       <h3>The main points</h3>
       <ul>
-        <li><b>The stick-o-gram is the center of every peak, the center of every trough, and every zero
+        <li><b>The StickOgram is the center of every peak, the center of every trough, and every zero
           crossing</b>, found on the near stack and on nothing else.</li>
         <li><b>Of the two samples either side of a crossing, the method takes the one closer to zero.</b>
           That sample becomes Q5 in module 04, and the numbering counts away from it.</li>
@@ -396,11 +396,11 @@
       <summary>Method, assumptions, and where to read more</summary>
       <p>The rocks and the near stack are built exactly as in modules 01 and 02: three fixed enclosing
         lithologies, a brine sand computed from porosity through Wyllie's time average and the
-        V<sub>P</sub>/V<sub>S</sub> trend of Bedle et al. (2025), Gassmann substitution for oil and gas,
+        V<sub>P</sub>/V<sub>S</sub> trend of Bedle et al. (2025a), Gassmann substitution for oil and gas,
         Shuey's two-term approximation across each interface, and a near stack formed by averaging
         0&ndash;10&deg;. The optional tight streak is a four millisecond tight sandstone bed placed just above the
         base of the sand.</p>
-      <p>The picking follows the sequence given in the AASPI DQ documentation. Zero crossings are located
+      <p>The picking follows the published steps (Bedle et al., 2025a). Zero crossings are located
         first, as the places where consecutive samples change sign. Of the two samples bracketing each
         crossing, the one with the smaller absolute amplitude is taken, which is the sample nearer to the
         true crossing time; that sample is Q5 in the quadrant scheme. Between each consecutive pair of
@@ -421,8 +421,7 @@
         like something worth picking rather than like a lone reflection in an empty window.</p>
       <p>The section on step 3 is seventy traces. The top of the sand follows a gentle anticline, the sand
         thins linearly to the right, and a normal fault at the fortieth trace displaces everything below it
-        by the throw set in the panel. Each trace is modeled and picked independently, exactly as the
-        program would; nothing is smoothed or tracked laterally, so the continuity in the display is the
+        by the throw set in the panel. Each trace is modeled and picked independently; nothing is smoothed or tracked laterally, so the continuity in the display is the
         continuity in the model rather than something the picker imposed.</p>
       <p>Noise is band-limited with the same wavelet, drawn independently for each trace, and scaled as a
         percentage of the strongest reflection in the model. Where the sample rate is coarser than 1 ms the
@@ -435,7 +434,7 @@
       <ul>
         <li>Shuey, R. T., 1985, A simplification of the Zoeppritz equations: <em>Geophysics</em>, 50,
           609&ndash;614.</li>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
         <li>Chaudhry, N., H. Bedle, D. B. Neff, and W. Neff, 2026, Isochron-based seismic attributes for
           stratigraphic and facies interpretation: field examples, IMAGE expanded abstract.</li>
@@ -467,10 +466,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>

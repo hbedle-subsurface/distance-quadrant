@@ -301,7 +301,7 @@
       <ol>
         <li><b>Measure the background angle under each overburden.</b> On step 1, switch between soft
           shale, hard shale and tight sandstone.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The two shales land within half
+          <details class="reveal"><summary>Answer</summary><span class="ans">The two shales land within half
             a degree of each other &mdash; 344&deg; on the workflow axes, &minus;58.4&deg; and
             &minus;58.8&deg; in true A and B. The tight sandstone gives &minus;61.2&deg;, about three
             degrees steeper. Most of the direction is set by how the sand's own properties change with
@@ -310,7 +310,7 @@
             practical reading is that one baseline can serve a whole area of similar seals, and that it
             stops serving when either the reservoir trend or the seal changes character.</span></details></li>
         <li><b>Compare the two rotations.</b> On step 2, read the background spread after each.
-          <details class="reveal"><summary>Hint</summary><span class="ans">On the workflow axes: 0.106
+          <details class="reveal"><summary>Answer</summary><span class="ans">On the workflow axes: 0.106
             unrotated, <b>0.127</b> after the classical rotation, 0.025 after rotating onto the fitted
             trend. The classical rotation makes it worse, because the background was only 16&deg; off
             horizontal and 45&deg; of rotation carries it 29&deg; past. Now switch the axes to true A and
@@ -320,7 +320,7 @@
             stronger statement than it first looks.</span></details></li>
         <li><b>Find out why the spread does not go to zero.</b> Look at the shape of the background track
           on step 1.
-          <details class="reveal"><summary>Hint</summary><span class="ans">It is curved. The
+          <details class="reveal"><summary>Answer</summary><span class="ans">It is curved. The
             V<sub>P</sub>/V<sub>S</sub> trend the sand is built from is a quadratic in porosity, so the
             track bends, and a rotation is a straight-line operation. Laying the average direction flat
             leaves the curvature as residue, and that residue is the floor on how well any single rotation
@@ -328,20 +328,20 @@
             either.</span></details></li>
         <li><b>Check whether the anomaly actually separates.</b> On step 3, read the two separation
           figures for a gas sand at 28% porosity.
-          <details class="reveal"><summary>Hint</summary><span class="ans">Unrotated, the separation is
+          <details class="reveal"><summary>Answer</summary><span class="ans">Unrotated, the separation is
             well below one, meaning the gas sand sits inside the range the brine background already
             occupies &mdash; a large distance from the origin would be telling you about porosity, not
             about fluid. Rotated, it goes above two. The anomaly was always there; what the rotation does
             is put it on an axis where it can be seen without the background in the
             way.</span></details></li>
         <li><b>Blur the baseline.</b> Raise the scatter to 30% and read step 2 again.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The fitted angle wanders and the
+          <details class="reveal"><summary>Answer</summary><span class="ans">The fitted angle wanders and the
             rotated spread grows, because the rotation can only be as good as the estimate of where the
             background is. This is the limit of the technique on real data, where nobody hands you a clean brine track. It is also the argument for fitting the baseline on as much data as
             possible and for checking it against a well rather than taking it from the densest part of a
             cloud.</span></details></li>
         <li><b>Try a low-porosity sand.</b> Set the porosity to 12% with gas and look at step 3.
-          <details class="reveal"><summary>Hint</summary><span class="ans">The separation shrinks. A tight
+          <details class="reveal"><summary>Answer</summary><span class="ans">The separation shrinks. A tight
             gas sand is a small anomaly because there is very little pore space for the gas to be in, so
             the fluid substitution barely moves the rock. The rotation has not failed; there is less
             to see. Remember that when a DQ volume looks quiet, because a quiet answer can be a correct
@@ -385,7 +385,7 @@
       <summary>Method, assumptions, and where to read more</summary>
       <p>The rocks are the same as every module before this: three fixed enclosing lithologies, a brine
         sand built from porosity through Wyllie's time average and the V<sub>P</sub>/V<sub>S</sub> trend of
-        Bedle et al. (2025), Gassmann substitution for oil and gas, and Shuey's two-term approximation
+        Bedle et al. (2025a), Gassmann substitution for oil and gas, and Shuey's two-term approximation
         across the interface. This module works entirely in intercept-gradient space and does not build a
         trace, so no wavelet, sampling or picking is involved.</p>
       <p><b>Two sets of axes.</b> The DQ workflow crossplots the near stack against far minus near, which
@@ -395,12 +395,12 @@
         (a bearing of 344&deg;) on the workflow axes and &minus;58.4&deg; in true A and B, for the same
         rocks. The workflow figure is the one to rotate by, and it agrees with the field baselines the RDQ
         crossplots quote &mdash; 340&deg;, with rotation examples at 345&deg;, 333&deg; and 330&deg;.</p>
-      <p><b>The background is the brine sand track.</b> That is a modelling choice and worth being explicit
+      <p><b>The background is the brine sand track.</b> That is a modeling choice and worth being explicit
         about. A real shale baseline is fitted to a population of wet samples covering a range of
         lithologies and compaction states; here it is one rock type varying only in porosity, which makes
         it cleaner and more curved than a real trend would be. The angle it produces, near
         &minus;58.5&deg; under a shale, should be read as what this particular rock model implies rather than as a number
-        to carry into a field dataset. What survives the modelling choice is the direction of the argument:
+        to carry into a field dataset. What survives the modeling choice is the direction of the argument:
         the background is steeper than &minus;45&deg; and should be measured rather than assumed.</p>
       <p>The trend is fitted by ordinary least squares of B on A across the porosity range, and the
         rotation angle is the arctangent of that slope. Rotating "to &minus;45&deg;" means rotating by
@@ -418,11 +418,13 @@
         <li>Castagna, J. P., and H. W. Swan, 1997, Principles of AVO cross plotting: <em>The Leading
           Edge</em>, 16, 337&ndash;344.</li>
         <li>Neff, D. B., and W. Neff, 2023, DQ trace applications to hydrocarbon detection: a theoretical
-          review with pseudo wells and synthetic seismograms, presentation notes.</li>
+          review with pseudo wells and synthetic seismograms, unpublished presentation notes.</li>
         <li>Shuey, R. T., 1985, A simplification of the Zoeppritz equations: <em>Geophysics</em>, 50,
           609&ndash;614.</li>
-        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025b, Prediction of reservoir properties
+          using the RDQ crossplot workflow: <em>Interpretation</em>, doi: 10.1190/INT-2024-0096.1.</li>
       </ul>
     </details>
   </section>
@@ -450,10 +452,9 @@
         credited and adapted versions carry the same license.</p>
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
-        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+      <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
         count, so that I can show the university these are being used &mdash; no cookie, no account,
-        nothing about you.</p>
+        no personal information.</p>
     </div>
   </footer>
 </div>
