@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where AVO runs out | How the DQ Trace Actually Works</title>
+<meta name="description" content="Why conventional AVO can only be applied at peak maxima and trough minima, and what happens to the rest of the trace.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <a class="brand" href="../index.html"><span class="dot"></span>How the DQ trace <b>actually</b> works</a>
+    <nav>
+      <a href="../index.html">All modules</a>
+      <a href="#tabs" data-tab="pw">Why it matters</a>
+      <a href="#tabs" data-tab="pm">Method &amp; references</a>
+    </nav>
+  </header>
+
+  <div class="mod-head">
+    <p class="eyebrow">Module 01 &nbsp;·&nbsp; The DQ trace</p>
+    <h1>Where AVO runs out</h1>
+    <p class="sub">AVO theory describes a single boundary between two thick layers. Seismic data is a
+      stack of many thin layers convolved with a wavelet. The gap between those two statements is small
+      enough to ignore at a bright top-of-sand pick and large enough to invalidate everything else on the
+      trace. This module makes the gap visible, because the whole DQ method exists to close it.</p>
+  </div>
+
+  <!-- ============================== PINNED LAB ============================== -->
+  <div class="labhead">
+    <div class="labgrid">
+      <div>
+        <p class="cap" id="labCap">The near and far stacks <span>&mdash; one sand, two angle ranges</span></p>
+        <canvas id="cMain" aria-label="Near-stack and far-stack traces through a sand encased in shale"></canvas>
+      </div>
+      <div>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <div class="controls" id="labControls">
+          <div class="ctl-col">
+            <h2>Build the rocks</h2>
+            <div class="ctl">
+              <label>Overburden <span class="val" id="overV">soft shale</span></label>
+              <div class="seg" role="group" aria-label="Overburden lithology">
+                <button type="button" data-over="soft" aria-pressed="true">soft</button>
+                <button type="button" data-over="hard" aria-pressed="false">hard</button>
+                <button type="button" data-over="tight" aria-pressed="false">tight</button>
+              </div>
+            </div>
+            <div class="ctl" id="ctlUnder">
+              <label>Underburden <span class="val" id="underV">soft shale</span></label>
+              <div class="seg" role="group" aria-label="Underburden lithology">
+                <button type="button" data-under="soft" aria-pressed="true">soft</button>
+                <button type="button" data-under="hard" aria-pressed="false">hard</button>
+                <button type="button" data-under="tight" aria-pressed="false">tight</button>
+              </div>
+            </div>
+            <label class="check" style="grid-column:1/-1"><input type="checkbox" id="sameU" checked>
+              Underburden is the same rock as the overburden</label>
+            <div class="ctl">
+              <label for="phi">Sand porosity <span class="val" id="phiV">28%</span></label>
+              <input type="range" id="phi" min="8" max="36" step="1" value="28">
+            </div>
+            <div class="ctl">
+              <label>Pore fluid <span class="val" id="fluidV">gas</span></label>
+              <div class="seg" role="group" aria-label="Fluid filling the sand pores">
+                <button type="button" data-fluid="brine" aria-pressed="false">brine</button>
+                <button type="button" data-fluid="oil" aria-pressed="false">oil</button>
+                <button type="button" data-fluid="gas" aria-pressed="true">gas</button>
+              </div>
+            </div>
+            <div class="stats" style="margin:6px 0 0;grid-column:1/-1">
+              <div class="stat"><span>Sand V<sub>P</sub></span><b id="mVp">&mdash;</b></div>
+              <div class="stat"><span>Sand V<sub>S</sub></span><b id="mVs">&mdash;</b></div>
+              <div class="stat"><span>Sand density</span><b id="mRho">&mdash;</b></div>
+              <div class="stat key"><span>AVO class this produces</span><b id="mClass">&mdash;</b></div>
+            </div>
+          </div>
+
+          <div class="ctl-col" id="colThick">
+            <h2>How thick, and how sharp</h2>
+            <div class="ctl">
+              <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
+              <input type="range" id="thick" min="4" max="60" step="1" value="30">
+            </div>
+            <p class="hint-line" style="margin:-8px 0 14px">Two-way time from the top of the sand to its
+              base. Below about half a period the top and base reflections stop being separable and start
+              interfering.</p>
+            <div class="ctl">
+              <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
+              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+            </div>
+            <p class="hint-line" style="margin:-8px 0 0">A zero-phase Ricker, as used throughout the DQ
+              papers. Lower frequency means a longer wavelet and more interference for the same bed.</p>
+          </div>
+
+          <div class="ctl-col" id="colSamp">
+            <h2>How often it is sampled</h2>
+            <p class="hint-line" id="stepNote" style="margin:0 0 12px" hidden>These have no meaning yet:
+              step 1 has one boundary and no wavelet. They come alive at step 2.</p>
+            <div class="ctl">
+              <label for="dt">Sample rate <span class="val" id="dtV">1 ms</span></label>
+              <input type="range" id="dt" min="0" max="3" step="1" value="0">
+            </div>
+            <p class="hint-line" style="margin:-8px 0 14px">The interval between recorded samples. This
+              changes how many numbers the trace contains, and &mdash; as step 3 shows &mdash; barely
+              changes how many of them conventional AVO can use.</p>
+            <label class="check"><input type="checkbox" id="showRC" checked> Draw the reflection
+              coefficients behind the traces</label>
+            <p class="hint-line" style="margin:-4px 0 12px">The two spikes the traces are made from: one
+              at the top of the sand, one at its base.</p>
+            <button class="btn ghost small" id="resetBtn" type="button">Reset everything</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
+    Method and references are there when you want them.</p>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
+    <button role="tab" data-tab="p1" aria-selected="false">1 · One boundary, no wavelet</button>
+    <button role="tab" data-tab="p2" aria-selected="false">2 · What the wavelet does</button>
+    <button role="tab" data-tab="p3" aria-selected="false">3 · Two samples out of sixty</button>
+    <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
+    <span class="gap"></span>
+    <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
+    <button role="tab" data-tab="pk" aria-selected="false">Key points</button>
+    <button role="tab" data-tab="pm" aria-selected="false">Method</button>
+  </nav>
+
+  <!-- ================================ STEP 1 ================================ -->
+  <section class="tabpane" id="p1" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">1</span>One boundary, no wavelet</h3>
+      <span class="hint">The picture AVO theory actually describes</span>
+    </div>
+
+    <p class="lede">
+      Start with the simplest possible case: an infinitely thick overburden resting on an infinitely thick
+      sand, and a single boundary between them. Send a wave down at some angle and part of it comes back.
+      How much comes back depends on the angle, and that dependence is the entire content of AVO.</p>
+
+    <p class="lede">
+      Two terms first. <b>Acoustic impedance</b> is a rock's P-wave velocity multiplied by its density; a
+      reflection happens where impedance changes across a boundary, and the bigger the change, the stronger
+      the reflection. The <b>reflection coefficient</b> is the fraction of the incoming amplitude that
+      comes back, so it is a number between &minus;1 and +1 whose sign says whether the rock below is
+      faster and denser than the rock above, or slower and lighter.</p>
+
+    <p class="lede">
+      Shuey's approximation writes the angle dependence as a straight line in
+      <span class="k">sin&sup2;&theta;</span>: <b>R(&theta;) = A + B&nbsp;sin&sup2;&theta;</b>. <b>A</b> is
+      the <b>intercept</b>, the reflection coefficient the boundary would give at zero angle, controlled
+      mostly by the impedance contrast. <b>B</b> is the <b>gradient</b>, how fast the reflection changes as
+      the angle opens up. The gradient depends on how V<sub>P</sub>/V<sub>S</sub> changes across the
+      boundary, and because gas lowers a sand's V<sub>P</sub>/V<sub>S</sub> much more than it lowers its
+      density, the gradient is where a fluid change usually shows up.</p>
+
+    <p class="lede">
+      There is no button for AVO class in the panel above. You set three things &mdash; what the overburden
+      is, how porous the sand is, and what fluid fills its pores &mdash; and the class is whatever those
+      three choices produce. Drag the porosity slider and watch the class label change without you having
+      asked for it.</p>
+
+    <p class="lede">
+      That ordering is the point. The class comes out of the contrast between the sand and the rock above
+      it, so it belongs to the pair rather than to the reservoir. Everything you are setting by hand here
+      &mdash; the shale properties, the porosity, the fluid &mdash; is something nobody knows at the start
+      of a project, which is exactly where the DQ workflow is meant to be used.</p>
+
+    <canvas id="c1a" aria-label="Reflection coefficient plotted against incidence angle"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The shaded bands are the two angle ranges the DQ
+      workflow uses: 0&ndash;10&deg; for the near stack and 20&ndash;30&deg; for the far stack. Averaging
+      the curve inside each band gives one number per band, marked on the curve.</p>
+
+    <p class="sublabel"><b>2</b> The same two numbers, plotted against each other
+      <span class="note">this is an AB crossplot, and right now it holds one point</span></p>
+    <canvas id="c1b" aria-label="A single point on an intercept versus gradient crossplot"></canvas>
+    <p class="hint-line" id="overNote" style="margin:8px 0 0">&nbsp;</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat key"><span>Intercept A</span><b id="s1a">&mdash;</b></div>
+      <div class="stat key"><span>Gradient B</span><b id="s1b">&mdash;</b></div>
+      <div class="stat"><span>Near stack, 0&ndash;10&deg;</span><b id="s1c">&mdash;</b></div>
+      <div class="stat"><span>Far stack, 20&ndash;30&deg;</span><b id="s1d">&mdash;</b></div>
+      <div class="stat"><span>Overburden impedance</span><b id="s1f">&mdash;</b></div>
+      <div class="stat"><span>Sand impedance</span><b id="s1g">&mdash;</b></div>
+      <div class="stat wide"><span>What an interpreter would call this</span><b id="s1e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>The faint curves on the crossplot are where this sand would land at every other porosity, one
+        curve per fluid. Both plots keep the same axes whatever you build, so a weak sand stays near the
+        origin instead of being blown up to fill the box, and the difference in reflection strength between
+        one model and the next is something you can see rather than read off a tick label. Two corners of
+        the model run past the edge &mdash; soft shale over a tight sand, and tight sandstone over a very porous
+        gas sand &mdash; and there the point is pinned to the frame with an arrow while the exact numbers
+        stay in the boxes below. Nothing here is wrong: every quantity is exact for the model it
+        describes. The trouble is that the model has one
+        boundary, no bed thickness, and no wavelet, and seismic data has all three.</span>
+    </div>
+  </section>
+
+  <!-- ================================ STEP 2 ================================ -->
+  <section class="tabpane" id="p2" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">2</span>What the wavelet does to it</h3>
+      <span class="hint">Same sand, now with a base and a wavelet</span>
+    </div>
+
+    <p class="lede">
+      Give the sand a base as well as a top and you have two reflection coefficients instead of one, equal
+      and opposite. Convolve them with a wavelet and you no longer have two numbers on the trace &mdash; you
+      have a smooth waveform spread over tens of milliseconds, and every sample in it is a mixture of both
+      boundaries. That is the trace shown above.</p>
+
+    <p class="lede">
+      Now crossplot it. Take the near-stack amplitude at every sample as the x value and the far-minus-near
+      difference at every sample as the y value, exactly as an AB crossplot would. The single point from
+      step 1 spreads out into a long streak.</p>
+
+    <p class="lede">
+      The y axis here is the raw difference between the two stacks, which is what the DQ workflow uses as
+      its gradient. It is not the gradient of step 1 to scale. Subtracting the near stack from the far
+      stack leaves B multiplied by the difference in mean sin&sup2;&theta; between the two angle bands, and
+      that factor is only 0.17. The streak is wide and flat for that reason and not because the sand is
+      unusual: on square axes, a gradient always draws seventeen times smaller than an intercept of the
+      same size. Everything from module 08 onward has to cope with that, and the RDQ crossplot's rotation
+      is one of the ways it does.</p>
+
+    <canvas id="c2a" aria-label="Every sample of the trace plotted on an intercept versus gradient crossplot"></canvas>
+    <p class="hint-line" style="margin:8px 0 16px">Every sample in the window is plotted. The crimson
+      cross marks the two-layer answer from step 1 &mdash; where all of this data ought to be if the theory
+      described the data. The axes are the same ones step 1 used and do not rescale, so the streak really does shrink and grow as you change the model. Drag the thickness slider and watch it
+      breathe.</p>
+
+    <p class="hint-line" style="margin:0 0 16px"><b>Polar angle</b> below means the direction of a point
+      from the origin of the crossplot, measured as a bearing. The spread is how much that direction varies
+      across the samples: zero means every sample lies along one line through the origin. It becomes an
+      attribute in its own right in module 07.</p>
+
+    <div class="stats">
+      <div class="stat"><span>Samples plotted</span><b id="s2a">&mdash;</b></div>
+      <div class="stat"><span>Two-layer answer</span><b id="s2b">&mdash;</b></div>
+      <div class="stat key"><span>Samples within 10% of it</span><b id="s2c">&mdash;</b></div>
+      <div class="stat"><span>Spread of polar angle</span><b id="s2d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>With the underburden following the overburden, the base of the sand is the exact mirror of its
+        top, every sample is the same mixture of the two boundaries, and the crossplot collapses to a
+        straight segment through the origin. Clear the underburden checkbox and pick a different rock below
+        the sand: the segment opens into the loop the DQ papers call a torpedo, and the polar angle spread
+        stops reading zero. Neither shape is noise and neither is an error. Both follow from convolving a two-spike reflectivity with a band-limited wavelet, and the torpedo appears in every
+        real AVO crossplot ever made, where it is usually hidden inside a cloud of hundreds of thousands of
+        points.</span>
+    </div>
+  </section>
+
+  <!-- ================================ STEP 3 ================================ -->
+  <section class="tabpane" id="p3" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">3</span>Two samples out of sixty</h3>
+      <span class="hint">Which of those points is anyone allowed to interpret?</span>
+    </div>
+
+    <p class="lede">
+      The two-layer equation is cleanest where the waveform is at a peak maximum or a trough minimum. At
+      those two places the sample is dominated by one boundary and the wavelet's own shape is momentarily
+      flat, so reading an amplitude off the trace is close to reading a reflection coefficient. Move away
+      from an extremum and the sample becomes a blend of two boundaries in a proportion that depends on the
+      wavelet and the bed thickness, so an intercept and gradient measured there describe interference as
+      much as rock. The reading does not switch off; it degrades, and it degrades fastest in thin
+      beds.</p>
+
+    <p class="lede">
+      So a defensible AVO crossplot keeps only the extrema. Here they are marked on the near stack, and
+      here is the crossplot with everything else removed. Keep that count in mind: it is the number the
+      rest of the course is trying to raise, and module 07 is where you see whether it worked.</p>
+
+    <canvas id="c3a" aria-label="The near-stack trace drawn vertically in two-way time, with its peak maxima and trough minima marked"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">Time runs down the page, as on a seismic section.
+      Filled circles are the samples conventional AVO can interpret. Open circles are the ones it
+      cannot.</p>
+
+    <p class="sublabel"><b>2</b> The crossplot, before and after
+      <span class="note">gray is everything, crimson is what survives, axes fixed as before</span></p>
+    <canvas id="c3b" aria-label="Crossplot showing all samples in gray and the interpretable extrema in crimson"></canvas>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Samples in the window</span><b id="s3a">&mdash;</b></div>
+      <div class="stat key"><span>Samples AVO can use</span><b id="s3b">&mdash;</b></div>
+      <div class="stat"><span>Fraction discarded</span><b id="s3c">&mdash;</b></div>
+      <div class="stat"><span>Samples per waveform cycle</span><b id="s3d">&mdash;</b></div>
+      <div class="stat wide"><span>Verdict</span><b id="s3e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>Halve the sample rate and the trace holds twice as many numbers, while the number that can be
+        interpreted stays at two per cycle. Recording the data more finely does not buy any more AVO. That
+        is the observation the DQ trace was built on, and module 02 starts building it.</span>
+    </div>
+  </section>
+
+  <!-- ============================ WHY IT MATTERS ============================ -->
+  <section class="tabpane" id="pw" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">?</span>Why this is worth an entire course</h3>
+      <span class="hint">The cost of throwing away 95% of the trace</span>
+    </div>
+
+    <p class="lede">A discarded sample is not a neutral thing. Each one is a place in the reservoir where
+      the seismic data has something to say and the interpretation method has decided not to listen. The
+      losses fall in specific places, and they are the places that matter most.</p>
+
+    <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
+      What goes missing</h2>
+    <ul class="lede" style="padding-left:20px">
+      <li><b>The inside of the reservoir.</b> The peak and trough sit at the top and base of the sand. Every
+        sample between them &mdash; the part of the trace that is actually inside the pay &mdash; is
+        discarded. Vertical variation in porosity within a sand body is invisible to a method that only
+        looks at its edges.</li>
+      <li><b>Anything that is not a peak or a trough.</b> A thin bed whose response never develops a clean
+        extremum contributes nothing. Neither does a sand that sits on a zero crossing, which is exactly
+        what happens to a bed below about a quarter of a wavelength.</li>
+      <li><b>Class 2p sands.</b> When the polarity reverses across the gather, the stacked amplitude passes
+        through zero. The interpretation method most likely to be used on a class 2p sand is the one least
+        equipped to see it.</li>
+      <li><b>The shale.</b> The samples nearest a strong boundary carry the wavelet's sidelobes, and on a
+        crossplot those boundary shales land right on top of the sand clusters. Filtering them out is
+        module 08; recognizing that they are there at all is this module.</li>
+    </ul>
+
+    <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
+      The two ways out</h2>
+    <p class="lede">There are broadly two responses to this problem. One is <b>deconvolution and
+      inversion</b>: estimate the wavelet, remove it, and recover something closer to reflectivity or
+      impedance. It works, and it requires a wavelet estimate, well control, and a low-frequency model, none
+      of which exist at the start of a project. It also introduces its own artifacts through spectral
+      whitening.</p>
+    <p class="lede">The other is to <b>convert every sample into the equivalent of a peak or a trough</b>,
+      so that the two-layer equation becomes applicable everywhere without ever estimating a wavelet. That
+      is the DQ trace. It is a strange idea on first hearing, and the next four modules are spent making it
+      ordinary.</p>
+    <div class="legend prose">
+      <span>Neither route is a replacement for the other. The DQ process does not create events that were
+        not already in the data &mdash; it makes the events that are there easier to see and easier to
+        interpret, and it does so early, before the well correlation and wavelet estimation work has been
+        done.</span>
+    </div>
+  </section>
+
+  <!-- ============================== EXERCISES ============================== -->
+  <section class="tabpane" id="pe" role="tabpanel" hidden>
+    <div class="tryit" style="max-width:none">
+      <h3>Exercises</h3>
+      <ol>
+        <li><b>One sand, three classes.</b> Set the porosity to 20% and the fluid to oil, and leave the
+          underburden following the overburden. Now step through the three overburden lithologies on step
+          1, reading the class label each time.
+          <details class="reveal"><summary>Hint</summary><span class="ans">Soft shale gives class 1, with
+            an intercept near +0.11. Hard shale gives class 2, intercept near &minus;0.03. The tight
+            sandstone gives class 4, intercept near &minus;0.22. Nothing about the reservoir changed
+            between those three readings. AVO class describes the contrast across a boundary, not the rock
+            underneath it. Where the overburden changes along a single line &mdash; a shale passing
+            laterally into a cemented sand, or a compaction boundary crossing the interval &mdash; one
+            continuous pay sand will produce several different AVO responses, and an interpreter who fixed
+            the class at the start of the project is wrong over part of the field.</span></details></li>
+        <li><b>Find the porosity where the sand vanishes.</b> Choose the soft shale overburden and a brine
+          fill, then drag the porosity slider slowly and watch the intercept and the near-stack value.
+          <details class="reveal"><summary>Hint</summary><span class="ans">Starting at 24% the label runs
+            class 1, then 2p, then 2, then 3. The intercept passes through zero between 32 and 33%: there
+            the sand and the shale have the same acoustic impedance, the near stack sees nothing at all,
+            and the whole response lives in the gradient. Just below the crossing the intercept is still
+            faintly positive while the far stack has already gone negative, which is what class 2p means
+            &mdash; the reflection changes sign partway across the gather, and a full stack cancels much of
+            it. Switch to gas and the same sequence happens about seven porosity units earlier. Neither
+            number means anything on its own; both move the moment the shale does. What is worth keeping is
+            that being invisible on the near stack is a coincidence between two rocks, and it happens to
+            perfectly good reservoirs.</span></details></li>
+        <li><b>Substitute the fluid and watch three numbers move.</b> Soft shale, porosity 25%. Read the
+          sand's V<sub>P</sub>, V<sub>S</sub> and density for brine, then oil, then gas.
+          <details class="reveal"><summary>Hint</summary><span class="ans">V<sub>P</sub> falls from about
+            3300 to 3130 m/s and density falls from 2.24 to 2.04 g/cm&sup3;, both of which you would
+            expect. V<sub>S</sub> <i>rises</i>, from about 1720 to 1800 m/s. Nothing stiffened: shear
+            velocity is the square root of the shear modulus over the density, the pore fluid has no shear
+            strength and so leaves the modulus alone, and the density went down. The class moves from 1 to
+            2p on the way. A dim spot and a polarity reversal here are the same sand with different
+            fluid.</span></details></li>
+        <li><b>Open the torpedo.</b> On step 2, clear the underburden checkbox and put a different rock
+          below the sand, watching the crossplot and the polar angle spread.
+          <details class="reveal"><summary>Hint</summary><span class="ans">While the underburden follows
+            the overburden the two reflection coefficients are equal and opposite, so the near stack and
+            the far-minus-near difference are the same mixture of the same two wavelets at every sample.
+            One is then a fixed multiple of the other and the crossplot has to be a straight segment
+            through the origin; the polar angle spread reads zero because there is only one angle present.
+            Give the sand a different floor and the base is no longer the mirror of the top, the two axes
+            stop being proportional, and the segment opens into a loop. Real sands are almost never
+            symmetrically encased, which is why the torpedo is what turns up in field data.</span></details></li>
+        <li><b>Collapse the loop.</b> On step 2, set the thickness to 60 ms and then reduce it to 8 ms,
+          watching the crossplot.
+          <details class="reveal"><summary>Hint</summary><span class="ans">At 60 ms the top and base
+            reflections are separate events and the loop has two clear ends, each near the two-layer answer
+            for one boundary. As the bed thins the two events interfere, the loop shortens, rotates, and
+            pulls away from the crimson cross. By 8 ms &mdash; about a third of a period at 40 Hz &mdash;
+            nothing on the crossplot is close to the correct two-layer answer, even though the reflection
+            coefficients that generated the trace never changed. The AVO response of a thin bed is a
+            property of the wavelet as much as of the rock.</span></details></li>
+        <li><b>Change the sample rate and count.</b> On step 3, step the sample rate from 4 ms down to
+          0.5 ms, reading both counters each time.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The number of samples in the
+            window goes up by a factor of eight. The number AVO can use stays at two per cycle, so the
+            fraction discarded climbs from roughly 80% to roughly 97%. Finer sampling adds numbers, not
+            information, as far as a two-layer method is concerned. The DQ process is the opposite: it
+            converts the extra samples into usable ones, which is why the papers specify a 1 ms sample rate
+            and eight quadrants rather than the 2 ms and four quadrants used
+            earlier.</span></details></li>
+        <li><b>Lose track of which extremum is the sand.</b> Set the wavelet to 20 Hz and the thickness to
+          10 ms, then look at the marked trace on step 3 and count the filled circles.
+          <details class="reveal"><summary>Hint</summary><span class="ans">There are four, and only one of
+            them is the top of the sand. The top and base have merged into a single event and the
+            rest are the sidelobes of the wavelet. Nothing on the trace distinguishes them, so an
+            auto-tracker following a loop will happily pick a sidelobe and an AVO analysis will happily
+            interpret it. Thinning the bed does not just reduce the number of usable samples &mdash; it
+            makes the surviving ones harder to trust. This is the boundary shale problem that module 08
+            has to solve.</span></details></li>
+        <li><b>Check whether the background trend really sits at 45 degrees.</b> Set the fluid to brine and
+          step the porosity across its whole range, watching the point against the dashed B = &minus;A line
+          on the step 1 crossplot.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The brine sands trace out a line
+            of their own, and under the soft shale it is a good deal steeper than B = &minus;A. That 315&deg;
+            background trend comes from assuming V<sub>P</sub>/V<sub>S</sub> = 2 in both layers together
+            with Gardner's density relation, and neither assumption holds in the model you just built.
+            Change the overburden and the brine line tilts again. Module 08 returns to this: the RDQ
+            crossplot rotates the display so that whatever the local brine trend actually is lies along the
+            x axis, rather than assuming in advance where it ought to be.</span></details></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================== KEY POINTS ============================== -->
+  <section class="tabpane" id="pk" role="tabpanel" hidden>
+    <div class="takeaway" style="max-width:none">
+      <h3>The main points</h3>
+      <ul>
+        <li><b>AVO theory describes one boundary between two thick layers.</b> R(&theta;) = A + B sin&sup2;&theta;
+          is exact for that model and says nothing about bed thickness or wavelets.</li>
+        <li><b>AVO class is an outcome, not a property of the reservoir.</b> Change only the rock sitting
+          on top and one sand becomes class 1, class 2 and class 4 in turn. That is why a method which
+          needs no prior petrophysics is worth having.</li>
+        <li><b>Seismic data is many thin layers convolved with a wavelet.</b> Every sample is a blend of
+          several boundaries, in proportions that depend on the wavelet and the bed thickness.</li>
+        <li><b>The two-layer equation is cleanest at peak maxima and trough minima</b>, and degrades
+          between them. That is two well-conditioned samples per waveform cycle, regardless of how finely
+          the data was recorded.</li>
+        <li><b>Most of a 1 ms trace is therefore not used quantitatively</b> in a conventional AVO
+          analysis, including most of what lies inside the reservoir.</li>
+        <li><b>Thin beds lose the most.</b> Below about a quarter of a wavelength the extrema stop
+          corresponding to the top and base of the sand at all.</li>
+        <li><b>There are two ways to close the gap:</b> estimate and remove the wavelet, or convert every
+          sample into the equivalent of a peak or trough. This course is about the second.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- =============================== METHOD =============================== -->
+  <section class="tabpane" id="pm" role="tabpanel" hidden>
+    <details class="notes" id="notes" open>
+      <summary>Method, assumptions, and where to read more</summary>
+      <p>The model is a sand between two half spaces. The enclosing rock is one of three fixed lithologies:
+        soft shale (V<sub>P</sub> 2700 m/s, V<sub>S</sub> 1175 m/s, 2.33 g/cm&sup3;), hard shale (3350,
+        1675, 2.48) and tight sandstone (4800, 2595, 2.58). The underburden follows the overburden unless the
+        checkbox is cleared. These three are illustrative rather than measured, chosen to span the range an
+        interpreter meets in one basin.</p>
+      <p>The sand is not a preset. The brine case is computed from porosity alone, using the two relations
+        in Bedle et al. (2025): Wyllie's time average for velocity, 1/V<sub>P</sub> = &phi;/V<sub>fl</sub>
+        + (1&nbsp;&minus;&nbsp;&phi;)/V<sub>ma</sub> with a matrix velocity of 5486 m/s and a brine velocity
+        of 1500 m/s, and the trend V<sub>P</sub>/V<sub>S</sub> = &minus;0.75&phi;&sup2; + 1.35&phi; + 1.63
+        for shear velocity. Density is the volumetric mixture of quartz at 2.65 g/cm&sup3; with the pore
+        fluid. Porosity is the only control on the brine sand, and the resulting AVO class is read off the
+        computed intercept and gradient rather than declared.</p>
+      <p>The oil and gas cases are made from the brine case by <b>Gassmann (1951)</b> fluid substitution:
+        the dry-frame bulk modulus is recovered from the brine-saturated moduli, the new fluid is put in,
+        and the velocities are rebuilt from the result. The shear modulus is left unchanged, which is why
+        V<sub>S</sub> rises slightly when a light fluid replaces brine &mdash; the modulus holds while the
+        density drops. Fluid bulk moduli and densities are 2.60 GPa and 1.03 g/cm&sup3; for brine, 0.80 and
+        0.78 for oil, and 0.055 and 0.20 for gas, with a mineral modulus of 37 GPa. Saturation is treated as
+        complete and uniform; partial and patchy saturation, which matter a great deal in practice, are left
+        out. The <a href="https://hbedle-subsurface.github.io/avo-basics/">AVO basics</a> site works through
+        Gassmann properly.</p>
+      <p>Intercept and gradient come from the <b>Shuey (1985)</b> two-term approximation, computed from the
+        contrast across each interface rather than assumed. Writing &Delta; for the difference across the
+        boundary and a bar for the average of the two sides, A = &frac12;(&Delta;V<sub>P</sub>/V<sub>P</sub>
+        + &Delta;&rho;/&rho;) and B = &frac12;&Delta;V<sub>P</sub>/V<sub>P</sub> &minus;
+        2(V<sub>S</sub>/V<sub>P</sub>)&sup2;(&Delta;&rho;/&rho; +
+        2&Delta;V<sub>S</sub>/V<sub>S</sub>). The base-of-sand interface is computed the same way with the
+        two layers swapped, so it is not simply assumed to be the negative of the top.</p>
+      <p>The near and far stacks are formed by averaging R(&theta;) over 0&ndash;10&deg; and
+        20&ndash;30&deg;, the ranges specified in Bedle et al. (2025). Because R is linear in
+        sin&sup2;&theta;, the average over a band is A + B times the mean of sin&sup2;&theta; across it,
+        which the page evaluates numerically. Angle-dependent tuning, normal-moveout stretch, transmission
+        loss and mode conversion are all left out. Their absence flatters the conventional method, so the
+        loss demonstrated in step 3 is a lower bound.</p>
+      <p>Steps 2 and 3 plot the near stack against the raw far-minus-near difference, which is how the DQ
+        workflow forms its gradient, rather than against a calibrated B. Because R is linear in
+        sin&sup2;&theta;, F &minus; N is exactly B times the difference in mean sin&sup2;&theta; across the
+        two bands, a factor of 0.170 for 0&ndash;10&deg; and 20&ndash;30&deg;. Dividing it out would make
+        the two axes commensurate and the plots easier to read, at the cost of showing something the
+        processing never computes, so the module leaves it alone. Every crossplot in the module shares the
+        same fixed axes, &plusmn;0.5, and none of them rescale with the model: seeing how much the spread
+        itself changes between one set of rocks and the next is worth more than filling the box each time.
+        Anything past the edge is clipped and counted rather than drawn over the labels.</p>
+      <p>The traces are the two reflection coefficients convolved with a zero-phase Ricker wavelet. Peak
+        maxima and trough minima are found by scanning the near-stack trace for sign changes in the sample
+        to sample difference, which is the same test the DQ quadrant assignment uses in module 04. The
+        polar angle spread quoted in step 2 is the range of atan2(F &minus; N, N) across the samples whose
+        amplitude exceeds a tenth of the largest, which keeps near-zero samples with meaningless angles out
+        of the statistic.</p>
+      <p>No noise is added anywhere in this module. Everything shown is the consequence of convolution
+        alone.</p>
+      <ul>
+        <li>Shuey, R. T., 1985, A simplification of the Zoeppritz equations: <em>Geophysics</em>, 50,
+          609&ndash;614.</li>
+        <li>Rutherford, S. R., and R. H. Williams, 1989, Amplitude-versus-offset variations in gas sands:
+          <em>Geophysics</em>, 54, 680&ndash;688.</li>
+        <li>Castagna, J. P., and H. W. Swan, 1997, Principles of AVO cross plotting: <em>The Leading
+          Edge</em>, 16, 337&ndash;344.</li>
+        <li>Castagna, J. P., H. W. Swan, and D. J. Foster, 1998, Framework for AVO gradient and intercept
+          interpretation: <em>Geophysics</em>, 63, 948&ndash;956.</li>
+        <li>Wyllie, M. R. J., A. R. Gregory, and L. W. Gardner, 1956, Elastic wave velocities in
+          heterogeneous and porous media: <em>Geophysics</em>, 21, 41&ndash;70.</li>
+        <li>Gassmann, F., 1951, &Uuml;ber die Elastizit&auml;t por&ouml;ser Medien: <em>Vierteljahrsschrift
+          der Naturforschenden Gesellschaft in Z&uuml;rich</em>, 96, 1&ndash;23.</li>
+        <li>Batzle, M., and Z. Wang, 1992, Seismic properties of pore fluids: <em>Geophysics</em>, 57,
+          1396&ndash;1408.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+          quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="nextup" id="nextup" hidden>
+    <p class="eyebrow">Next up</p>
+    <h3><a href="near-far.html">02 · Near and far stacks</a></h3>
+    <p>Where the two traces the DQ process works on actually come from, why the angle ranges are
+      0&ndash;10&deg; and 20&ndash;30&deg; rather than everything available, and what the far-minus-near
+      difference is standing in for.</p>
+    <a class="btn" href="near-far.html">Open module 02 →</a>
+    <a class="btn ghost" href="../index.html">All modules</a>
+  </section>
+
+  <div class="pager" id="pager" hidden>
+    <a class="btn ghost" href="orientation.html">← What the DQ trace gives you</a>
+    <a class="btn" href="near-far.html">Next: near and far stacks →</a>
+  </div>
+
+  <footer>
+    <div class="foot-grid">
+      <p>Built for teaching by Heather Bedle, School of Geosciences, University of Oklahoma, with the
+        <a href="https://www.ou.edu/mcee/labs/aaspi">AASPI</a> consortium.</p>
+      <p class="lic">Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+        Free to use, share and adapt for any purpose, including training in industry, provided the source is
+        credited and adapted versions carry the same license.</p>
+      <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
+        Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
+      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
+        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        nothing about you.</p>
+    </div>
+  </footer>
+</div>
+
+<script src="../assets/count.js"></script>
+<script src="../assets/seismic.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  if (typeof SEIS === 'undefined') {
+    const el = document.createElement('div');
+    el.setAttribute('style', 'background:#841617;color:#fff;padding:14px 18px;margin:16px 0;' +
+      'font:13px/1.6 ui-monospace,Menlo,monospace');
+    el.textContent = 'This module could not load assets/seismic.js. It expects it one directory up, ' +
+      'at ../assets/, and file names are case-sensitive on GitHub Pages.';
+    const w = document.querySelector('.wrap');
+    (w || document.body).insertBefore(el, w ? w.firstChild : null);
+    return;
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const visible = (id) => { const el = $(id); return el && !el.hidden; };
+
+  /* =====================================================================
+     THE ROCKS
+
+     There are no AVO-class presets here. Three choices go in: what the
+     overburden is, how porous the sand is, and what fluid fills its pores.
+     Everything downstream is computed from those, so the class label is a
+     result that can be checked rather than a button that was pressed.
+     ===================================================================== */
+
+  const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };   // clean quartz sand grains
+
+  const FLUIDS = {
+    brine: { K: 2.60,  rho: 1.03, v: 1500, name: 'brine' },
+    oil:   { K: 0.80,  rho: 0.78, v: 1300, name: 'oil' },
+    gas:   { K: 0.055, rho: 0.20, v: 550,  name: 'gas' },
+  };
+
+  const LITHS = {
+    soft: { vp: 2700, vs: 1175, rho: 2.33, name: 'soft shale',
+            blurb: 'Young, undercompacted marine shale. It is slower than most sands, so a sand beneath it usually reads as hard.' },
+    hard: { vp: 3350, vs: 1675, rho: 2.48, name: 'hard shale',
+            blurb: 'Compacted, silty shale. Its impedance sits in the middle of the reservoir range, so a small change in the sand flips the sign of the contrast.' },
+    tight: { vp: 4800, vs: 2800, rho: 2.56, name: 'tight sandstone',
+            blurb: 'A well-cemented quartz sandstone. Everything below it is soft by comparison, so the contrast keeps its sign across the whole porosity range.' },
+  };
+
+  const PH0 = 8, PH1 = 36;                       // porosity slider range, percent
+
+  /* Every crossplot in this module uses these same axes, and they do not
+     rescale with the model. Autoscaling would redraw each case to fill the
+     box, which hides the one thing worth watching: how much the spread itself
+     changes between a tight sandstone-capped gas sand and a brine sand at matched
+     impedance.
+
+     0.5 is chosen to make the ordinary cases readable rather than to contain
+     the extreme ones. Two corners of the model overrun it, always in the
+     gradient and never in the intercept: soft shale over a tight sand below
+     about 13% porosity, and tight sandstone over a very porous gas sand. Everything
+     is clipped to the plot box, whatever falls outside is counted in the
+     readouts, and the step 1 point is pinned to the edge with an arrow so it
+     is never simply lost. */
+  const RLIM = 0.5;
+
+  // Nothing the model draws is allowed outside the frame, since the axes no
+  // longer grow to fit it.
+  function clipTo(ctx, rect, draw) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(rect.x, rect.y, rect.w, rect.h);
+    ctx.clip();
+    draw();
+    ctx.restore();
+  }
+  const clamp = (v) => Math.max(-RLIM, Math.min(RLIM, v));
+
+  const DTS = [0.001, 0.002, 0.003, 0.004];      // sample rate slider positions
+
+  const NEAR_A = [0, 10];                        // near-stack angle band, degrees
+  const FAR_A  = [20, 30];                       // far-stack angle band, degrees
+
+  const T0 = 0;                                  // window start, seconds
+  const TWIN = 0.140;                            // window length, seconds
+  const TTOP = 0.045;                            // top of sand within the window
+
+  const DEF = {
+    over: 'soft', under: 'soft', sameU: true, phi: 28, fluid: 'gas',
+    thick: 30, freq: 40, dt: 0, showRC: true, tab: 'p1',
+  };
+  let S = SEIS.readState(DEF);
+  if (!LITHS[S.over]) S.over = DEF.over;
+  if (!LITHS[S.under]) S.under = DEF.under;
+  if (!FLUIDS[S.fluid]) S.fluid = DEF.fluid;
+  S.phi = Math.min(PH1, Math.max(PH0, Math.round(S.phi) || DEF.phi));
+  if (S.sameU) S.under = S.over;
+
+  const CAN_LINK = location.protocol !== 'file:';
+  const saveState = () => {
+    if (!CAN_LINK) return;
+    try { SEIS.writeState(S, DEF); } catch (e) { /* nothing shareable */ }
+  };
+
+  /* ------------------------------- the physics ------------------------- */
+
+  // Shuey's two-term approximation, computed from the contrast across the
+  // boundary. l1 is the upper layer, l2 the lower.
+  function shuey(l1, l2) {
+    const vp = (l1.vp + l2.vp) / 2, dvp = l2.vp - l1.vp;
+    const vs = (l1.vs + l2.vs) / 2, dvs = l2.vs - l1.vs;
+    const rho = (l1.rho + l2.rho) / 2, drho = l2.rho - l1.rho;
+    const k = (vs / vp) * (vs / vp);
+    return {
+      A: 0.5 * (dvp / vp + drho / rho),
+      B: 0.5 * (dvp / vp) - 2 * k * (drho / rho + 2 * (dvs / vs)),
+    };
+  }
+
+  // Mean of sin squared theta across an angle band, evaluated numerically so
+  // that the band is averaged rather than sampled at its middle.
+  function meanSin2(band) {
+    const n = 64, a = band[0] * Math.PI / 180, b = band[1] * Math.PI / 180;
+    let sum = 0;
+    for (let i = 0; i < n; i++) {
+      const th = a + (b - a) * (i + 0.5) / n;
+      sum += Math.sin(th) * Math.sin(th);
+    }
+    return sum / n;
+  }
+  const S2N = meanSin2(NEAR_A), S2F = meanSin2(FAR_A);
+
+  // The brine sand, from porosity alone. Wyllie's time average for velocity,
+  // a volumetric mixture for density, and the Vp/Vs trend of the DQ paper.
+  function brineSand(phi) {
+    const vp = 1 / (phi / FLUIDS.brine.v + (1 - phi) / MATRIX.vp);
+    const rho = (1 - phi) * MATRIX.rho + phi * FLUIDS.brine.rho;
+    const vpvs = -0.75 * phi * phi + 1.35 * phi + 1.63;
+    return { vp, vs: vp / vpvs, rho };
+  }
+
+  // Gassmann, both ways. Moduli in GPa, velocities in m/s, density in g/cm3.
+  function ksatFromDry(kdry, phi, kfl) {
+    const num = Math.pow(1 - kdry / MATRIX.K, 2);
+    const den = phi / kfl + (1 - phi) / MATRIX.K - kdry / (MATRIX.K * MATRIX.K);
+    return kdry + num / den;
+  }
+  function kdryFromSat(ksat, phi, kfl) {
+    const a = phi * MATRIX.K / kfl;
+    return (ksat * (a + 1 - phi) - MATRIX.K) / (a + ksat / MATRIX.K - 1 - phi);
+  }
+
+  // Oil and gas cases are the brine case with the fluid swapped out. The shear
+  // modulus is untouched, which is why Vs rises a little as the rock lightens.
+  function sandRock(phi, fluidKey) {
+    const b = brineSand(phi);
+    if (fluidKey === 'brine') return b;
+    const mu = b.rho * b.vs * b.vs * 1e-6;
+    const ksat = b.rho * b.vp * b.vp * 1e-6 - (4 / 3) * mu;
+    const kdry = kdryFromSat(ksat, phi, FLUIDS.brine.K);
+    const f = FLUIDS[fluidKey];
+    const k2 = ksatFromDry(kdry, phi, f.K);
+    const rho = (1 - phi) * MATRIX.rho + phi * f.rho;
+    return {
+      vp: Math.sqrt((k2 + (4 / 3) * mu) * 1e6 / rho),
+      vs: Math.sqrt(mu * 1e6 / rho),
+      rho,
+    };
+  }
+
+  // Rutherford and Williams, read off the computed numbers. 2p is the case
+  // where the reflection changes sign somewhere inside the recorded angles.
+  function avoClass(A, B) {
+    const far = A + B * S2F;
+    const flips = (A * far < 0);
+    if (A > 0.03) return flips ? 'class 2p' : 'class 1';
+    if (A > -0.03) return flips ? 'class 2p' : 'class 2';
+    return B < 0 ? 'class 3' : 'class 4';
+  }
+
+  function model() {
+    const phi = S.phi / 100;
+    const sand = sandRock(phi, S.fluid);
+    const over = LITHS[S.over];
+    const under = LITHS[S.sameU ? S.over : S.under];
+    const top = shuey(over, sand);            // overburden over sand
+    const base = shuey(sand, under);          // sand over underburden
+    return {
+      sand, over, under, phi, top, base,
+      nearTop: top.A + top.B * S2N,
+      farTop:  top.A + top.B * S2F,
+      nearBase: base.A + base.B * S2N,
+      farBase:  base.A + base.B * S2F,
+    };
+  }
+
+  function traces() {
+    const m = model();
+    const dt = DTS[S.dt | 0];
+    const nt = Math.floor(TWIN / dt) + 1;
+    const wav = SEIS.makeWavelet({ type: 'ricker', f: S.freq });
+    const tb = TTOP + S.thick / 1000;
+    const near = SEIS.traceFromSpikes(
+      [{ t: TTOP, r: m.nearTop }, { t: tb, r: m.nearBase }], T0, dt, nt, wav);
+    const far = SEIS.traceFromSpikes(
+      [{ t: TTOP, r: m.farTop }, { t: tb, r: m.farBase }], T0, dt, nt, wav);
+    return { m, dt, nt, near, far, tb, wav };
+  }
+
+  // Peak maxima and trough minima on the near stack: the samples where the
+  // sample-to-sample difference changes sign. This is the same test the
+  // quadrant assignment uses later in the course.
+  function extrema(tr, nt) {
+    let peak = 1e-9;
+    for (let i = 0; i < nt; i++) peak = Math.max(peak, Math.abs(tr[i]));
+    const floor = 0.02 * peak;          // ignore the quiet tails, as a picker would
+    const out = [];
+    for (let i = 1; i < nt - 1; i++) {
+      if (Math.abs(tr[i]) < floor) continue;
+      const a = tr[i] - tr[i - 1], b = tr[i + 1] - tr[i];
+      if ((a > 0 && b <= 0) || (a < 0 && b >= 0)) out.push(i);
+    }
+    return out;
+  }
+
+  /* ------------------------------- drawing ----------------------------- */
+
+  const INK = '#16191C', SOFT = 'rgba(22,25,28,0.45)';
+  const CRIM = '#841617', NEARC = '#1D6FA3', FARC = '#C2306B';
+
+  function width(el, fallback) {
+    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    return Math.max(280, w || fallback);
+  }
+
+  // One trace drawn vertically inside rect, time downward.
+  function wiggle(ctx, tr, nt, rect, peak, color, fill) {
+    const x0 = rect.x + rect.w / 2;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    if (fill) {
+      ctx.beginPath();
+      ctx.moveTo(x0, rect.y);
+      for (let i = 0; i < nt; i++) {
+        const y = rect.y + (i / (nt - 1)) * rect.h;
+        ctx.lineTo(x0 + Math.max(0, tr[i] / peak) * (rect.w / 2) * 0.92, y);
+      }
+      ctx.lineTo(x0, rect.y + rect.h);
+      ctx.closePath();
+      ctx.fillStyle = fill;
+      ctx.fill();
+    }
+    ctx.beginPath();
+    for (let i = 0; i < nt; i++) {
+      const y = rect.y + (i / (nt - 1)) * rect.h;
+      const x = x0 + (tr[i] / peak) * (rect.w / 2) * 0.92;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = color; ctx.lineWidth = 1.6; ctx.stroke();
+    ctx.strokeStyle = SOFT; ctx.lineWidth = 0.8;
+    ctx.beginPath(); ctx.moveTo(x0, rect.y); ctx.lineTo(x0, rect.y + rect.h); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawMain() {
+    const c = $('cMain'); if (!c) return;
+    const W = width(c, 520), H = 320;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+
+    const top = 26, bot = H - 30;
+    const rect = { x: 56, y: top, w: W - 76, h: bot - top };
+    const yOf = (t) => rect.y + ((t - T0) / TWIN) * rect.h;
+
+    /* Step 1 has one boundary and no wavelet, so the panel shows exactly that:
+       two reflection coefficients and nothing else. Showing the convolved
+       traces here would contradict the step standing next to them. */
+    if (S.tab === 'p1') {
+      const m = model();
+      const peak = Math.max(1e-6, Math.abs(m.nearTop), Math.abs(m.farTop)) * 1.25;
+      SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+        (v) => String(Math.round(v)), { ticks: 6 });
+      SEIS.frame(ctx, rect);
+
+      ctx.fillStyle = 'rgba(132,22,23,0.05)';
+      ctx.fillRect(rect.x, yOf(TTOP), rect.w, rect.y + rect.h - yOf(TTOP));
+
+      const half = rect.w / 2;
+      [[rect.x + half * 0.5, m.nearTop, NEARC, 'NEAR 0-10'],
+       [rect.x + half * 1.5, m.farTop, FARC, 'FAR 20-30']].forEach((q) => {
+        const x0 = q[0];
+        ctx.strokeStyle = SOFT; ctx.lineWidth = 0.8;
+        ctx.beginPath(); ctx.moveTo(x0, rect.y); ctx.lineTo(x0, rect.y + rect.h); ctx.stroke();
+        ctx.strokeStyle = q[2]; ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(x0, yOf(TTOP));
+        ctx.lineTo(x0 + (q[1] / peak) * half * 0.40, yOf(TTOP));
+        ctx.stroke();
+        ctx.font = '10px "IBM Plex Mono", monospace';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+        ctx.fillStyle = q[2];
+        ctx.fillText(q[3] + String.fromCharCode(176), x0, rect.y - 6);
+      });
+
+      SEIS.dashedLine(ctx, rect.x, yOf(TTOP), rect.x + rect.w, yOf(TTOP),
+        'rgba(22,25,28,0.45)', [6, 4], 1.2);
+      ctx.font = '10px "IBM Plex Mono", monospace';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+      ctx.fillStyle = 'rgba(22,25,28,0.55)';
+      ctx.fillText(m.over.name + ', infinitely thick', rect.x + 6, yOf(TTOP) - 4);
+      ctx.textBaseline = 'top';
+      ctx.fillStyle = CRIM;
+      ctx.fillText(S.phi + '% porosity ' + FLUIDS[S.fluid].name + ' sand',
+        rect.x + 6, yOf(TTOP) + 4);
+      return;
+    }
+
+    const d = traces();
+    let peak = 1e-6;
+    for (let i = 0; i < d.nt; i++) {
+      peak = Math.max(peak, Math.abs(d.near[i]), Math.abs(d.far[i]));
+    }
+
+    // the sand interval, shaded
+    ctx.fillStyle = 'rgba(132,22,23,0.06)';
+    ctx.fillRect(rect.x, yOf(TTOP), rect.w, yOf(d.tb) - yOf(TTOP));
+
+    SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 6 });
+    SEIS.frame(ctx, rect);
+
+    const half = rect.w / 3;
+    const rNear = { x: rect.x + 6, y: rect.y, w: half - 12, h: rect.h };
+    const rFar  = { x: rect.x + half + 6, y: rect.y, w: half - 12, h: rect.h };
+    const rRC   = { x: rect.x + 2 * half + 6, y: rect.y, w: half - 12, h: rect.h };
+
+    wiggle(ctx, d.near, d.nt, rNear, peak, NEARC, 'rgba(29,111,163,0.28)');
+    wiggle(ctx, d.far, d.nt, rFar, peak, FARC, 'rgba(194,48,107,0.24)');
+
+    if (S.showRC) {
+      const x0 = rRC.x + rRC.w / 2;
+      ctx.strokeStyle = SOFT; ctx.lineWidth = 0.8;
+      ctx.beginPath(); ctx.moveTo(x0, rRC.y); ctx.lineTo(x0, rRC.y + rRC.h); ctx.stroke();
+      const spikes = [
+        { t: TTOP, n: d.m.nearTop, f: d.m.farTop },
+        { t: d.tb, n: d.m.nearBase, f: d.m.farBase },
+      ];
+      spikes.forEach((sp) => {
+        const y = yOf(sp.t);
+        [[sp.n, NEARC, -1], [sp.f, FARC, 1]].forEach((q) => {
+          ctx.strokeStyle = q[1]; ctx.lineWidth = 2.4;
+          ctx.beginPath();
+          ctx.moveTo(x0 + q[2] * 1.5, y);
+          ctx.lineTo(x0 + q[2] * 1.5 + (q[0] / peak) * (rRC.w / 2) * 0.92, y);
+          ctx.stroke();
+        });
+      });
+    }
+
+    ctx.font = '10px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = NEARC; ctx.fillText('NEAR 0-10' + String.fromCharCode(176),
+      rNear.x + rNear.w / 2, rect.y - 6);
+    ctx.fillStyle = FARC; ctx.fillText('FAR 20-30' + String.fromCharCode(176),
+      rFar.x + rFar.w / 2, rect.y - 6);
+    if (S.showRC) {
+      ctx.fillStyle = SOFT;
+      ctx.fillText('REFLECTIVITY', rRC.x + rRC.w / 2, rect.y - 6);
+    }
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(22,25,28,0.50)';
+    ctx.fillText(d.m.over.name, rect.x + 4, (rect.y + yOf(TTOP)) / 2);
+    ctx.fillText(d.m.under.name, rect.x + 4, (yOf(d.tb) + rect.y + rect.h) / 2);
+    ctx.fillStyle = CRIM;
+    ctx.fillText('sand', rect.x + 4, (yOf(TTOP) + yOf(d.tb)) / 2);
+  }
+
+  function drawStep1() {
+    const m = model();
+
+    // (a) R against angle
+    const ca = $('c1a');
+    if (ca) {
+      const W = width(ca, 640), H = 260;
+      const ctx = SEIS.fitCanvas(ca, W, H);
+      ctx.clearRect(0, 0, W, H);
+      const rect = { x: 62, y: 18, w: W - 84, h: H - 62 };
+      const lim = RLIM;
+      const xOf = (deg) => rect.x + (deg / 40) * rect.w;
+      const yOf = (r) => rect.y + rect.h / 2 - (r / lim) * (rect.h / 2);
+
+      [[NEAR_A, 'rgba(29,111,163,0.12)'], [FAR_A, 'rgba(194,48,107,0.12)']].forEach((b) => {
+        ctx.fillStyle = b[1];
+        ctx.fillRect(xOf(b[0][0]), rect.y, xOf(b[0][1]) - xOf(b[0][0]), rect.h);
+      });
+
+      SEIS.axisLeft(ctx, rect, -lim, lim, 'reflection coefficient', null,
+        { ticks: 7, flip: true, grid: true });
+      SEIS.axisBottom(ctx, rect, 0, 40, 'incidence angle (degrees)',
+        (v) => String(Math.round(v)), { ticks: 5 });
+      SEIS.frame(ctx, rect);
+      SEIS.dashedLine(ctx, rect.x, yOf(0), rect.x + rect.w, yOf(0), SOFT, [4, 4], 1);
+
+      clipTo(ctx, rect, () => {
+        ctx.beginPath();
+        for (let d = 0; d <= 40; d += 0.5) {
+          const th = d * Math.PI / 180;
+          const r = m.top.A + m.top.B * Math.sin(th) * Math.sin(th);
+          const x = xOf(d), y = yOf(r);
+          d === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = CRIM; ctx.lineWidth = 2.2; ctx.stroke();
+
+        const dot = (deg, r, col) => {
+          ctx.beginPath(); ctx.arc(xOf(deg), yOf(r), 4.5, 0, 2 * Math.PI);
+          ctx.fillStyle = col; ctx.fill();
+          ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.4; ctx.stroke();
+        };
+        dot(Math.asin(Math.sqrt(S2N)) * 180 / Math.PI, m.nearTop, NEARC);
+        dot(Math.asin(Math.sqrt(S2F)) * 180 / Math.PI, m.farTop, FARC);
+      });
+    }
+
+    // (b) the AB crossplot with one point on it
+    const cb = $('c1b');
+    if (cb) {
+      const W = width(cb, 640), H = 300;
+      const ctx = SEIS.fitCanvas(cb, W, H);
+      ctx.clearRect(0, 0, W, H);
+      // Where this sand would land at every other porosity, one curve per
+      // fluid. These are computed for the chosen overburden, so the whole
+      // picture tilts when the overburden changes.
+      const tracks = ['brine', 'oil', 'gas'].map((fl) => {
+        const pts = [];
+        for (let p = PH0; p <= PH1; p += 1) pts.push(shuey(LITHS[S.over], sandRock(p / 100, fl)));
+        return { fluid: fl, pts };
+      });
+
+      const lim = RLIM;
+
+      const side = Math.min(W - 90, H - 52);
+      const rect = { x: 62, y: 14, w: side, h: side };
+      const xOf = (v) => rect.x + (v / lim + 1) / 2 * rect.w;
+      const yOf = (v) => rect.y + rect.h - (v / lim + 1) / 2 * rect.h;
+
+      SEIS.axisLeft(ctx, rect, -lim, lim, 'gradient B', null, { ticks: 7, flip: true, grid: true });
+      SEIS.axisBottom(ctx, rect, -lim, lim, 'intercept A', null, { ticks: 7 });
+      SEIS.frame(ctx, rect);
+      SEIS.dashedLine(ctx, rect.x, yOf(0), rect.x + rect.w, yOf(0), SOFT, [4, 4], 1);
+      SEIS.dashedLine(ctx, xOf(0), rect.y, xOf(0), rect.y + rect.h, SOFT, [4, 4], 1);
+
+      // The four Rutherford and Williams regions, so that the class in the
+      // panel has a place on the picture and not only a value in a box.
+      ctx.save();
+      ctx.font = '9px "IBM Plex Mono", monospace';
+      ctx.fillStyle = 'rgba(22,25,28,0.30)';
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'right';
+      ctx.fillText('CLASS 3', xOf(-lim * 0.05), yOf(-lim * 0.90));
+      ctx.fillText('CLASS 4', xOf(-lim * 0.05), yOf(lim * 0.90));
+      ctx.textAlign = 'left';
+      ctx.fillText('CLASS 1', xOf(lim * 0.05), yOf(-lim * 0.90));
+      ctx.textAlign = 'center';
+      ctx.fillText('CLASS 2', xOf(0), rect.y + 11);
+      ctx.restore();
+
+      // the 45 degree line the literature draws the background trend along
+      SEIS.dashedLine(ctx, xOf(-lim), yOf(lim), xOf(lim), yOf(-lim),
+        'rgba(22,25,28,0.22)', [7, 5], 1.1);
+      ctx.save();
+      ctx.font = '9px "IBM Plex Mono", monospace';
+      ctx.fillStyle = 'rgba(22,25,28,0.45)';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+      ctx.fillText('B = -A', rect.x + 8, yOf(-lim * 0.94));
+      ctx.restore();
+
+      const FLCOL = { brine: NEARC, oil: '#4E7A2C', gas: FARC };
+      clipTo(ctx, rect, () => {
+        tracks.forEach((t) => {
+          const on = (t.fluid === S.fluid);
+          ctx.beginPath();
+          t.pts.forEach((q, i) => {
+            const x = xOf(q.A), y = yOf(q.B);
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          });
+          ctx.strokeStyle = on ? FLCOL[t.fluid] : 'rgba(22,25,28,0.17)';
+          ctx.lineWidth = on ? 2 : 1.1;
+          ctx.stroke();
+          if (on) {
+            const a = t.pts[0], z = t.pts[t.pts.length - 1];
+            SEIS.tag(ctx, xOf(clamp(a.A)) + 7, yOf(clamp(a.B)) - 11,
+              PH0 + '% porosity', FLCOL[t.fluid]);
+            SEIS.tag(ctx, xOf(clamp(z.A)) + 7, yOf(clamp(z.B)) + 13,
+              PH1 + '%', FLCOL[t.fluid]);
+          }
+        });
+      });
+
+      /* The point the student is steering must never disappear. If the model
+         puts it past the edge it is pinned there with an arrow, and the exact
+         value stays legible in the boxes below. */
+      const offB = (m.top.B > RLIM) ? 1 : (m.top.B < -RLIM) ? -1 : 0;
+      const offA = (m.top.A > RLIM) ? 1 : (m.top.A < -RLIM) ? -1 : 0;
+      const px = xOf(clamp(m.top.A)), py = yOf(clamp(m.top.B));
+      ctx.beginPath();
+      ctx.arc(px, py, 5.5, 0, 2 * Math.PI);
+      ctx.fillStyle = CRIM; ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.6; ctx.stroke();
+      if (offA || offB) {
+        // a chevron on the frame, pointing the way the point has gone
+        const dx = offA * 9, dy = -offB * 9;
+        ctx.beginPath();
+        ctx.moveTo(px + dx, py + dy);
+        ctx.lineTo(px + dx - (dy ? 5 : 0) - (dx ? 5 * Math.sign(dx) : 0),
+                   py + dy - (dx ? 5 : 0) - (dy ? 5 * Math.sign(dy) : 0));
+        ctx.moveTo(px + dx, py + dy);
+        ctx.lineTo(px + dx + (dy ? 5 : 0) - (dx ? 5 * Math.sign(dx) : 0),
+                   py + dy + (dx ? 5 : 0) - (dy ? 5 * Math.sign(dy) : 0));
+        ctx.strokeStyle = CRIM; ctx.lineWidth = 2; ctx.stroke();
+      }
+      SEIS.tag(ctx, px + 9, py - 14, avoClass(m.top.A, m.top.B) +
+        (offA || offB ? '  \u00B7  off scale' : ''), CRIM);
+    }
+
+    const f3 = (v) => (v >= 0 ? '+' : '\u2212') + Math.abs(v).toFixed(3);
+    $('s1a').textContent = f3(m.top.A);
+    $('s1b').textContent = f3(m.top.B);
+    $('s1c').textContent = f3(m.nearTop);
+    $('s1d').textContent = f3(m.farTop);
+    const ai = (r) => Math.round(r.vp * r.rho).toLocaleString('en-US');
+    $('s1f').textContent = ai(m.over) + '  ' + m.over.name;
+    $('s1g').textContent = ai(m.sand) + '  ' + S.phi + '% ' + FLUIDS[S.fluid].name;
+
+    const cls = avoClass(m.top.A, m.top.B);
+    const VERDICT = {
+      'class 1': 'A dim spot. Positive at zero angle and weakening with offset.',
+      'class 2': 'Almost nothing at zero angle. The whole response is in the gradient.',
+      'class 2p': 'The polarity reverses before 30 degrees, so a full stack cancels much of it.',
+      'class 3': 'A bright spot that gets brighter with offset.',
+      'class 4': 'Bright at zero angle but dimming with offset.',
+    };
+    $('s1e').textContent = 'C' + cls.slice(1) + '. ' + VERDICT[cls];
+    if ($('overNote')) {
+      $('overNote').textContent = m.over.name.charAt(0).toUpperCase() +
+        m.over.name.slice(1) + '. ' + m.over.blurb;
+    }
+  }
+
+  function drawStep2() {
+    const d = traces();
+    const c = $('c2a'); if (!c) return;
+    const W = width(c, 640), H = 340;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+
+    const lim = RLIM;
+    // the largest value actually present, used only to decide which samples
+    // are strong enough for the polar angle statistic to mean anything
+    let peak = 1e-6;
+    for (let i = 0; i < d.nt; i++) {
+      peak = Math.max(peak, Math.abs(d.near[i]), Math.abs(d.far[i] - d.near[i]));
+    }
+
+    const side = Math.min(W - 100, H - 56);
+    const rect = { x: 68, y: 14, w: side, h: side };
+    const xOf = (v) => rect.x + (v / lim + 1) / 2 * rect.w;
+    const yOf = (v) => rect.y + rect.h - (v / lim + 1) / 2 * rect.h;
+
+    SEIS.axisLeft(ctx, rect, -lim, lim, 'far minus near  (~ B)', null,
+      { ticks: 7, flip: true, grid: true });
+    SEIS.axisBottom(ctx, rect, -lim, lim, 'near stack  (~ A)', null, { ticks: 7 });
+    SEIS.frame(ctx, rect);
+    SEIS.dashedLine(ctx, rect.x, yOf(0), rect.x + rect.w, yOf(0), SOFT, [4, 4], 1);
+    SEIS.dashedLine(ctx, xOf(0), rect.y, xOf(0), rect.y + rect.h, SOFT, [4, 4], 1);
+
+    let offScale = 0;
+    for (let i = 0; i < d.nt; i++) {
+      if (Math.abs(d.near[i]) > lim || Math.abs(d.far[i] - d.near[i]) > lim) offScale++;
+    }
+
+    clipTo(ctx, rect, () => {
+      // the loop, drawn as a path so the sample order is visible
+      ctx.beginPath();
+      for (let i = 0; i < d.nt; i++) {
+        const x = xOf(d.near[i]), y = yOf(d.far[i] - d.near[i]);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = 'rgba(22,25,28,0.30)'; ctx.lineWidth = 1.2; ctx.stroke();
+      for (let i = 0; i < d.nt; i++) {
+        ctx.beginPath();
+        ctx.arc(xOf(d.near[i]), yOf(d.far[i] - d.near[i]), 2.6, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(29,111,163,0.60)'; ctx.fill();
+      }
+    });
+
+    // the two-layer answer for the top of the sand
+    const tx = xOf(clamp(d.m.nearTop)), ty = yOf(clamp(d.m.farTop - d.m.nearTop));
+    ctx.strokeStyle = CRIM; ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(tx - 8, ty); ctx.lineTo(tx + 8, ty);
+    ctx.moveTo(tx, ty - 8); ctx.lineTo(tx, ty + 8);
+    ctx.stroke();
+    SEIS.tag(ctx, tx + 10, ty - 12, 'two-layer answer', CRIM);
+
+    // how many samples land near it, and how wide the polar angle spread is
+    const tol = 0.10 * Math.sqrt(d.m.nearTop * d.m.nearTop +
+      Math.pow(d.m.farTop - d.m.nearTop, 2));
+    let close = 0, lo = 999, hi = -999;
+    const big = 0.10 * peak;
+    for (let i = 0; i < d.nt; i++) {
+      const gx = d.near[i], gy = d.far[i] - d.near[i];
+      if (Math.hypot(gx - d.m.nearTop, gy - (d.m.farTop - d.m.nearTop)) < tol) close++;
+      if (Math.hypot(gx, gy) > big) {
+        let a = Math.atan2(gy, gx) * 180 / Math.PI;
+        if (a < 0) a += 180;                     // the loop is symmetric about the origin
+        lo = Math.min(lo, a); hi = Math.max(hi, a);
+      }
+    }
+    const spread = (hi > lo) ? (hi - lo) : 0;
+
+    $('s2a').textContent = d.nt + ' samples' +
+      (offScale ? ',  ' + offScale + ' past the edge' : '');
+    $('s2b').textContent = '(' + d.m.nearTop.toFixed(3) + ', ' +
+      (d.m.farTop - d.m.nearTop).toFixed(3) + ')';
+    $('s2c').textContent = close + ' of ' + d.nt +
+      '  (' + (100 * close / d.nt).toFixed(0) + '%)';
+    $('s2d').textContent = spread.toFixed(0) + ' degrees';
+    const shape = (spread < 2)
+      ? 'A straight segment, because the sand is mirrored top and base. '
+      : 'A torpedo, because the base of the sand is not the mirror of its top. ';
+    $('s2e').textContent = shape + (close === 0
+      ? 'Not one sample in the window sits where the two-layer theory says the data should be.'
+      : 'Only the handful of samples nearest the top of the sand come close to the two-layer answer.');
+  }
+
+  function drawStep3() {
+    const d = traces();
+    const ext = extrema(d.near, d.nt);
+
+    const ca = $('c3a');
+    if (ca) {
+      const W = width(ca, 640), H = 440;
+      const ctx = SEIS.fitCanvas(ca, W, H);
+      ctx.clearRect(0, 0, W, H);
+      const rect = { x: 68, y: 18, w: Math.min(W - 96, 420), h: H - 62 };
+      let peak = 1e-6;
+      for (let i = 0; i < d.nt; i++) peak = Math.max(peak, Math.abs(d.near[i]));
+
+      const yOf = (i) => rect.y + (i / (d.nt - 1)) * rect.h;
+      const tOf = (t) => rect.y + ((t - T0) / TWIN) * rect.h;
+      const x0 = rect.x + rect.w / 2;
+      const xOf = (v) => x0 + (v / peak) * (rect.w / 2) * 0.90;
+
+      // the sand interval, so the extrema can be read against it
+      ctx.fillStyle = 'rgba(132,22,23,0.06)';
+      ctx.fillRect(rect.x, tOf(TTOP), rect.w, tOf(d.tb) - tOf(TTOP));
+
+      SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+        (v) => String(Math.round(v)), { ticks: 8 });
+      SEIS.axisBottom(ctx, rect, -peak, peak, 'near-stack amplitude', null, { ticks: 5 });
+      SEIS.frame(ctx, rect);
+      SEIS.dashedLine(ctx, x0, rect.y, x0, rect.y + rect.h, SOFT, [4, 4], 1);
+
+      ctx.beginPath();
+      for (let i = 0; i < d.nt; i++) {
+        const x = xOf(d.near[i]), y = yOf(i);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = NEARC; ctx.lineWidth = 1.8; ctx.stroke();
+
+      const isExt = new Set(ext);
+      for (let i = 0; i < d.nt; i++) {
+        ctx.beginPath();
+        ctx.arc(xOf(d.near[i]), yOf(i), isExt.has(i) ? 4.5 : 2.2, 0, 2 * Math.PI);
+        if (isExt.has(i)) {
+          ctx.fillStyle = CRIM; ctx.fill();
+          ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.3; ctx.stroke();
+        } else {
+          ctx.strokeStyle = 'rgba(22,25,28,0.35)'; ctx.lineWidth = 1; ctx.stroke();
+        }
+      }
+
+      ctx.font = '10px "IBM Plex Mono", monospace';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = CRIM;
+      ctx.fillText('sand', rect.x + 5, (tOf(TTOP) + tOf(d.tb)) / 2);
+    }
+
+    const cb = $('c3b');
+    if (cb) {
+      const W = width(cb, 640), H = 320;
+      const ctx = SEIS.fitCanvas(cb, W, H);
+      ctx.clearRect(0, 0, W, H);
+      const lim = RLIM;
+      const side = Math.min(W - 100, H - 56);
+      const rect = { x: 68, y: 14, w: side, h: side };
+      const xOf = (v) => rect.x + (v / lim + 1) / 2 * rect.w;
+      const yOf = (v) => rect.y + rect.h - (v / lim + 1) / 2 * rect.h;
+
+      SEIS.axisLeft(ctx, rect, -lim, lim, 'far minus near', null,
+        { ticks: 7, flip: true, grid: true });
+      SEIS.axisBottom(ctx, rect, -lim, lim, 'near stack', null, { ticks: 7 });
+      SEIS.frame(ctx, rect);
+      SEIS.dashedLine(ctx, rect.x, yOf(0), rect.x + rect.w, yOf(0), SOFT, [4, 4], 1);
+      SEIS.dashedLine(ctx, xOf(0), rect.y, xOf(0), rect.y + rect.h, SOFT, [4, 4], 1);
+
+      clipTo(ctx, rect, () => {
+        for (let i = 0; i < d.nt; i++) {
+          ctx.beginPath();
+          ctx.arc(xOf(d.near[i]), yOf(d.far[i] - d.near[i]), 2.4, 0, 2 * Math.PI);
+          ctx.fillStyle = 'rgba(22,25,28,0.16)'; ctx.fill();
+        }
+        ext.forEach((i) => {
+          ctx.beginPath();
+          ctx.arc(xOf(d.near[i]), yOf(d.far[i] - d.near[i]), 5, 0, 2 * Math.PI);
+          ctx.fillStyle = CRIM; ctx.fill();
+          ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.4; ctx.stroke();
+        });
+      });
+    }
+
+    const period = 1000 / S.freq;
+    const perCycle = period / (DTS[S.dt | 0] * 1000);
+    $('s3a').textContent = d.nt + ' samples';
+    $('s3b').textContent = ext.length + ' samples';
+    $('s3c').textContent = (100 * (1 - ext.length / d.nt)).toFixed(0) + '%';
+    $('s3d').textContent = perCycle.toFixed(0) + ' samples, 2 of them usable';
+    $('s3e').textContent = ext.length > 4
+      ? 'Only two of these extrema are the top and base of the sand. The rest are wavelet sidelobes, and nothing on the trace says which is which.'
+      : 'Every open circle is a measurement the seismic made and the interpretation method will not use.';
+  }
+
+  /* ------------------------------ the panel ---------------------------- */
+
+  function pushToInputs() {
+    $('thick').value = S.thick;
+    $('freq').value = S.freq;
+    $('dt').value = S.dt;
+    $('phi').value = S.phi;
+    $('showRC').checked = !!S.showRC;
+    $('sameU').checked = !!S.sameU;
+    $('thickV').textContent = S.thick + ' ms';
+    $('freqV').textContent = S.freq + ' Hz';
+    $('dtV').textContent = (DTS[S.dt | 0] * 1000).toFixed(0) + ' ms';
+    $('phiV').textContent = S.phi + '%';
+    $('overV').textContent = LITHS[S.over].name;
+    $('underV').textContent = LITHS[S.sameU ? S.over : S.under].name;
+    $('fluidV').textContent = FLUIDS[S.fluid].name;
+
+    document.querySelectorAll('[data-over]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.over === S.over);
+    });
+    document.querySelectorAll('[data-fluid]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.fluid === S.fluid);
+    });
+    const shown = S.sameU ? S.over : S.under;
+    document.querySelectorAll('[data-under]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.under === shown);
+      b.disabled = !!S.sameU;
+    });
+    if ($('ctlUnder')) $('ctlUnder').style.opacity = S.sameU ? '0.45' : '1';
+
+    const m = model();
+    $('mVp').textContent = Math.round(m.sand.vp) + ' m/s';
+    $('mVs').textContent = Math.round(m.sand.vs) + ' m/s';
+    $('mRho').textContent = m.sand.rho.toFixed(2) + ' g/cm\u00B3';
+    $('mClass').textContent = avoClass(m.top.A, m.top.B);
+  }
+
+  function drawAll() {
+    drawMain();
+    if (visible('p1')) drawStep1();
+    if (visible('p2')) drawStep2();
+    if (visible('p3')) drawStep3();
+  }
+
+  function onChange() { pushToInputs(); drawAll(); saveState(); }
+
+  ['thick', 'freq', 'dt', 'phi'].forEach((id) => {
+    $(id).addEventListener('input', () => { S[id] = parseFloat($(id).value); onChange(); });
+  });
+  $('showRC').addEventListener('change', () => { S.showRC = $('showRC').checked; onChange(); });
+  $('sameU').addEventListener('change', () => {
+    S.sameU = $('sameU').checked;
+    if (S.sameU) S.under = S.over;
+    onChange();
+  });
+  document.querySelectorAll('[data-over]').forEach((b) => {
+    b.addEventListener('click', () => {
+      S.over = b.dataset.over;
+      if (S.sameU) S.under = S.over;
+      onChange();
+    });
+  });
+  document.querySelectorAll('[data-under]').forEach((b) => {
+    b.addEventListener('click', () => {
+      if (S.sameU) return;
+      S.under = b.dataset.under;
+      onChange();
+    });
+  });
+  document.querySelectorAll('[data-fluid]').forEach((b) => {
+    b.addEventListener('click', () => { S.fluid = b.dataset.fluid; onChange(); });
+  });
+  $('resetBtn').addEventListener('click', () => {
+    const tab = S.tab;
+    S = Object.assign({}, DEF, { tab });
+    onChange();
+  });
+
+  /* -------------------------------- tabs ------------------------------- */
+
+  const PANES = ['p1', 'p2', 'p3', 'pw', 'pe', 'pk', 'pm'];
+  const STEPNAMES = {
+    p1: 'One boundary', p2: 'The wavelet', p3: 'Two samples',
+    pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
+  };
+
+  function buildStepNav() {
+    PANES.forEach((id, i) => {
+      const pane = $(id); if (!pane) return;
+      const prev = PANES[i - 1], next = PANES[i + 1];
+      const nav = document.createElement('div');
+      nav.className = 'stepnav';
+      const mk = (target, text, ghost) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'btn' + (ghost ? ' ghost' : '') + ' small';
+        b.textContent = text;
+        b.addEventListener('click', () => {
+          showTab(target);
+          const t = document.querySelector('.tabhint');
+          if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return b;
+      };
+      nav.appendChild(prev ? mk(prev, '\u2190 ' + STEPNAMES[prev], true)
+                           : document.createElement('span'));
+      const where = document.createElement('span');
+      where.className = 'where';
+      where.textContent = i < 3 ? 'step ' + (i + 1) + ' of 3' : STEPNAMES[id];
+      nav.appendChild(where);
+      nav.appendChild(next ? mk(next, STEPNAMES[next] + ' \u2192')
+                           : document.createElement('span'));
+      pane.appendChild(nav);
+    });
+  }
+
+  function showTab(id) {
+    PANES.forEach((q) => { const el = $(q); if (el) el.hidden = q !== id; });
+    document.querySelectorAll('#tabs button').forEach((b) => {
+      b.setAttribute('aria-selected', b.dataset.tab === id);
+    });
+    const lab = document.querySelector('.labhead');
+    if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3');
+
+    /* Step 1 is the two-layer picture: there is no bed thickness, no wavelet
+       and no sample rate in it. Rather than hide those controls and have them
+       appear from nowhere at step 2, they stay put and go inactive. */
+    const one = (id === 'p1');
+    ['thick', 'freq', 'dt', 'showRC'].forEach((k) => {
+      const el = $(k); if (el) el.disabled = one;
+    });
+    ['colThick', 'colSamp'].forEach((k) => {
+      const el = $(k);
+      if (el) { el.style.opacity = one ? '0.42' : '1'; }
+    });
+    if ($('stepNote')) $('stepNote').hidden = !one;
+    if ($('labCap')) {
+      $('labCap').innerHTML = one
+        ? 'One boundary <span>&mdash; two reflection coefficients, no wavelet</span>'
+        : 'The near and far stacks <span>&mdash; one sand, two angle ranges</span>';
+    }
+
+    const last = (id === 'pk' || id === 'pm');
+    if ($('nextup')) $('nextup').hidden = !last;
+    if ($('pager')) $('pager').hidden = !last;
+    S.tab = id;
+    drawAll();
+    saveState();
+  }
+  document.querySelectorAll('#tabs button').forEach((b) => {
+    b.addEventListener('click', () => showTab(b.dataset.tab));
+  });
+  document.querySelectorAll('.masthead a[data-tab]').forEach((a) => {
+    a.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      showTab(a.dataset.tab);
+      const strip = $('tabs');
+      if (strip && strip.scrollIntoView) strip.scrollIntoView({ block: 'start' });
+    });
+  });
+
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawAll, 140); });
+
+  pushToInputs();
+  buildStepNav();
+  showTab(PANES.indexOf(S.tab) >= 0 ? S.tab : 'p1');
+  document.fonts && document.fonts.ready.then(drawAll);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The stick-o-gram | How the DQ Trace Actually Works</title>
+<meta name="description" content="How the near stack is reduced to zero crossings, peak centers and trough centers, which sample gets picked when the crossing falls between two, and what the resulting section shows.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <a class="brand" href="../index.html"><span class="dot"></span>How the DQ trace <b>actually</b> works</a>
+    <nav>
+      <a href="../index.html">All modules</a>
+      <a href="#tabs" data-tab="pw">Why it matters</a>
+      <a href="#tabs" data-tab="pm">Method &amp; references</a>
+    </nav>
+  </header>
+
+  <div class="mod-head">
+    <p class="eyebrow">Module 03 &nbsp;·&nbsp; The DQ trace</p>
+    <h1>The stick-o-gram</h1>
+    <p class="sub">The near stack is now thrown away and replaced by a list of picks: every zero crossing,
+      every peak center and every trough center. Those picks are the acoustic layers, and the quadrant
+      numbers of module 04 get written into the gaps between them. This module builds the picks, works
+      through the rule that decides which sample a zero crossing lands on, and shows what a section made
+      of nothing but picks looks like.</p>
+  </div>
+
+  <!-- ============================== PINNED LAB ============================== -->
+  <div class="labhead">
+    <div class="labgrid">
+      <div>
+        <p class="cap" id="labCap">The rock model <span>&mdash; the layers, and the near stack they produce</span></p>
+        <canvas id="cMain" aria-label="The near-stack trace with its zero crossings, peak centers and trough centers marked"></canvas>
+      </div>
+      <div>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <div class="controls" id="labControls">
+          <div class="ctl-col">
+            <h2>Build the rocks</h2>
+            <div class="ctl">
+              <label>Overburden <span class="val" id="overV">soft shale</span></label>
+              <div class="seg" role="group" aria-label="Overburden lithology">
+                <button type="button" data-over="soft" aria-pressed="true">soft</button>
+                <button type="button" data-over="hard" aria-pressed="false">hard</button>
+                <button type="button" data-over="tight" aria-pressed="false">tight</button>
+              </div>
+            </div>
+            <div class="ctl">
+              <label for="phi">Sand porosity <span class="val" id="phiV">28%</span></label>
+              <input type="range" id="phi" min="8" max="36" step="1" value="28">
+            </div>
+            <div class="ctl">
+              <label>Pore fluid <span class="val" id="fluidV">gas</span></label>
+              <div class="seg" role="group" aria-label="Fluid filling the sand pores">
+                <button type="button" data-fluid="brine" aria-pressed="false">brine</button>
+                <button type="button" data-fluid="oil" aria-pressed="false">oil</button>
+                <button type="button" data-fluid="gas" aria-pressed="true">gas</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="ctl-col" id="colLayers">
+            <h2>The layers</h2>
+            <div class="ctl">
+              <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
+              <input type="range" id="thick" min="6" max="55" step="1" value="30">
+            </div>
+            <div class="ctl">
+              <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
+              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+            </div>
+            <label class="check" style="grid-column:1/-1"><input type="checkbox" id="streak">
+              Tight streak near the base of the sand</label>
+            <p class="hint-line" style="margin:-4px 0 12px">A three millisecond bed of the tight sandstone,
+              the kind cementation leaves behind. It puts a second extremum inside one loop, which is the
+              doublet case step 2 has to resolve.</p>
+          </div>
+
+          <div class="ctl-col" id="colData">
+            <h2>What the data does to it</h2>
+            <div class="ctl">
+              <label for="dt">Sample rate <span class="val" id="dtV">1 ms</span></label>
+              <input type="range" id="dt" min="0" max="3" step="1" value="0">
+            </div>
+            <div class="ctl">
+              <label for="noise">Noise <span class="val" id="noiseV">0%</span></label>
+              <input type="range" id="noise" min="0" max="40" step="1" value="0">
+            </div>
+            <div class="ctl">
+              <label for="throw">Fault throw <span class="val" id="throwV">14 ms</span></label>
+              <input type="range" id="throw" min="0" max="30" step="1" value="14">
+            </div>
+            <p class="hint-line" style="margin:-8px 0 14px">The fault only appears on step 3, which is
+              where the picks stop being one trace and become a section.</p>
+            <button class="btn ghost small" id="resetBtn" type="button">Reset everything</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
+    Method and references are there when you want them.</p>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
+    <button role="tab" data-tab="p1" aria-selected="false">1 · Three kinds of pick</button>
+    <button role="tab" data-tab="p2" aria-selected="false">2 · Which sample is the crossing?</button>
+    <button role="tab" data-tab="p3" aria-selected="false">3 · A section made of sticks</button>
+    <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
+    <span class="gap"></span>
+    <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
+    <button role="tab" data-tab="pk" aria-selected="false">Key points</button>
+    <button role="tab" data-tab="pm" aria-selected="false">Method</button>
+  </nav>
+
+  <!-- ================================ STEP 1 ================================ -->
+  <section class="tabpane" id="p1" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">1</span>Three kinds of pick</h3>
+      <span class="hint">What survives when the waveform is thrown away</span>
+    </div>
+
+    <p class="lede">
+      What this step buys: a short list of samples that mark real acoustic boundaries, so that later
+      modules can attach a number to every sample by counting from the nearest boundary rather than by
+      measuring the waveform again.</p>
+
+    <p class="lede">
+      The stick-o-gram is also used on its own. Reduced to picks, a seismic volume becomes a set of layer
+      boundaries rather than a set of wiggles, which makes it easier to map horizons, follow faults and
+      outline geo-bodies, and much lighter to feed to a machine learning program. Timeslices through it at
+      ten or twenty millisecond spacing give a first time-structure map before anyone has picked a
+      horizon.</p>
+
+    <p class="lede">
+      The stick-o-gram is the center of every peak, the center of every trough, and every zero crossing
+      found on the near stack. Nothing else. The amplitudes between those picks are set aside, the wavelet
+      shape is set aside, and what is left is a skeleton of where the acoustic layers begin and end.</p>
+
+    <p class="lede">
+      Only the near stack is picked. The far stack is noisier and its extrema sit at slightly different
+      times, and what follows depends on one set of picks being applied to both traces, so
+      that a quadrant number means the same thing on N as it does on F. Picking each trace separately would
+      break that before it started.</p>
+
+    <canvas id="c1a" aria-label="The near-stack trace with zero crossings, peak centers and trough centers marked"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">Time runs down the page. Red dots are peak centers, blue
+      dots are trough centers, and the open circles are zero crossings. The gray dots are every other
+      sample on the trace, all of which the stick-o-gram discards.</p>
+
+    <p class="sublabel"><b>2</b> The same trace as a stick-o-gram
+      <span class="note">the picks alone, with the waveform removed</span></p>
+    <canvas id="c1b" aria-label="The picks drawn on their own as short colored sticks"></canvas>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Samples on the trace</span><b id="s1a">&mdash;</b></div>
+      <div class="stat key"><span>Picks kept</span><b id="s1b">&mdash;</b></div>
+      <div class="stat"><span>Peaks and troughs</span><b id="s1c">&mdash;</b></div>
+      <div class="stat"><span>Zero crossings</span><b id="s1d">&mdash;</b></div>
+      <div class="stat"><span>Peaks and troughs inside the sand</span><b id="s1f">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>Module 01 counted the samples conventional AVO can interpret and found two per waveform cycle.
+        The stick-o-gram keeps four: a peak, a trough and the two crossings between them. That is not yet
+        the every-sample method the course is heading for, but it is the frame the quadrant numbers are
+        hung on, and everything after this is about filling in the gaps between these picks.</span>
+    </div>
+  </section>
+
+  <!-- ================================ STEP 2 ================================ -->
+  <section class="tabpane" id="p2" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">2</span>Which sample is the crossing?</h3>
+      <span class="hint">A rule that only exists because the data is sampled</span>
+    </div>
+
+    <p class="lede">
+      A zero crossing is a time, and almost never a sample. The trace goes from positive at one sample to
+      negative at the next, and the crossing is somewhere in between. The method needs a sample, because
+      every quadrant number afterwards is written to a sample, so it has to choose one of the two.</p>
+
+    <p class="lede">
+      The rule is: <b>of the two samples either side of a zero crossing, take the one with the smaller
+      absolute amplitude</b>. That is the sample closer to zero, so it is the closer of the two to the
+      crossing itself. In the quadrant scheme of module 04 this sample is called Q5, and it is the anchor
+      the rest of the numbering counts away from.</p>
+
+    <canvas id="c2a" aria-label="A zoomed view of one zero crossing showing the two candidate samples and which one is chosen"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">One crossing, magnified, with time running down as
+      usual. The two candidates are drawn hollow, the chosen one is filled, and the true crossing is the dashed line. Drag the sample rate in
+      the panel and watch the chosen sample move further from the truth.</p>
+
+    <p class="lede">
+      The second rule follows from the first. <b>Between each pair of consecutive crossings, take the
+      single largest peak or trough</b>. Usually there is only one and the rule does nothing. When
+      interference puts two extrema inside a single loop &mdash; a doublet &mdash; only the larger is kept
+      and the smaller is discarded along with the rest of the waveform. A thin bed will do it, and so will
+      a thick sand under a long wavelet, where the top and base loops overlap enough to leave a shoulder.
+      The counter below reports only the extrema discarded between the top and base of the sand, so that it
+      is about the sand rather than about whatever the beds above and below happen to be doing.</p>
+
+    <canvas id="c2b" aria-label="The trace with a doublet, showing which of the two extrema between a pair of crossings is kept"></canvas>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Sample rate</span><b id="s2a">&mdash;</b></div>
+      <div class="stat key"><span>Worst crossing error</span><b id="s2b">&mdash;</b></div>
+      <div class="stat"><span>Average crossing error</span><b id="s2c">&mdash;</b></div>
+      <div class="stat"><span>Extrema discarded inside the sand</span><b id="s2d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>This is why the papers specify a 1 ms sample rate and sync interpolation up to it before
+        anything else runs. The rule is the best available choice between two samples, and the way to make
+        it a good choice is to put the samples close together. At 4 ms the chosen crossing can sit two
+        milliseconds from the truth, and every quadrant number counted away from it inherits that
+        error.</span>
+    </div>
+  </section>
+
+  <!-- ================================ STEP 3 ================================ -->
+  <section class="tabpane" id="p3" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">3</span>A section made of sticks</h3>
+      <span class="hint">What the picks look like when there are hundreds of traces</span>
+    </div>
+
+    <p class="lede">
+      One trace of picks is not obviously worth having. A line of them is. Here is the same model run
+      across seventy traces, with the sand thinning to the right and a normal fault partway along, drawn
+      first as ordinary amplitudes and then as the stick-o-gram.</p>
+
+    <canvas id="c3a" aria-label="A seismic section drawn as amplitudes, and the same section drawn as a stick-o-gram"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">Left, the near-stack amplitudes. Right, the picks alone,
+      colored by whether they are a peak or a trough. Drag the fault throw and the noise in the panel.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Traces in the section</span><b id="s3a">&mdash;</b></div>
+      <div class="stat"><span>Samples per trace</span><b id="s3b">&mdash;</b></div>
+      <div class="stat key"><span>Picks in the whole section</span><b id="s3c">&mdash;</b></div>
+      <div class="stat"><span>Fraction of samples kept</span><b id="s3d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>The fault reads as a break in the sticks rather than as a change of amplitude, which is why the
+        display is used for structural work and for feeding machine learning: the events are already
+        separated from the wavelet and from each other, and there is far less of it to carry. The AASPI
+        pamphlet suggests slicing the same volume at ten or twenty millisecond intervals as a quick first
+        pass at a time structure map.</span>
+    </div>
+  </section>
+
+  <!-- ============================ WHY IT MATTERS ============================ -->
+  <section class="tabpane" id="pw" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">?</span>What the picks are for</h3>
+      <span class="hint">Two different jobs, one set of picks</span>
+    </div>
+
+    <p class="lede">The stick-o-gram has a life of its own as a display, and it is also the scaffolding for
+      everything else in the method. Those are worth keeping separate, because they explain why so much
+      care goes into a rule about which of two samples to take.</p>
+
+    <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
+      As a display in its own right</h2>
+    <ul class="lede" style="padding-left:20px">
+      <li><b>Structure without picking horizons.</b> Every event in the volume is already tracked, in the
+        weak sense that its center is marked on every trace. Time slices through the stick-o-gram at ten or
+        twenty millisecond spacing give a first time structure map before anyone has picked a
+        horizon.</li>
+      <li><b>Faults as breaks rather than as dimming.</b> A fault interrupts the sticks. On an amplitude
+        section the same fault is a subtle change in a continuous field, and the eye has to do the
+        work.</li>
+      <li><b>A much smaller volume to hand a machine.</b> Four numbers a cycle instead of forty. Feeding
+        picks rather than samples to a classifier removes the wavelet from the input, which is otherwise
+        the loudest thing in it.</li>
+    </ul>
+
+    <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
+      As the frame for everything after it</h2>
+    <p class="lede">Module 04 numbers the samples between the picks from one to nine. Module 05 measures the
+      time between them and calls it the isochron. Module 06 replaces the amplitude at each numbered sample
+      with the output of a phase filter chosen by that number. Every one of those steps counts outward from
+      a crossing or a peak, so a pick in the wrong place does not degrade the answer gracefully. It
+      renumbers everything downstream of it.</p>
+
+    <p class="lede">The rule is spelled out carefully for that reason, and it is why the papers ask for 1 ms data before any of it runs. The choice between two samples is small. What
+      hangs off it is not.</p>
+
+    <div class="legend prose">
+      <span>The picks are made on the near stack and then applied unchanged to the far stack and to the
+        difference between them. Nothing is picked twice. This is what keeps a quadrant number meaning the
+        same thing on all three traces, and it is the reason module 02 spent so long on whether the near
+        stack can be trusted.</span>
+    </div>
+  </section>
+
+  <!-- ============================== EXERCISES ============================== -->
+  <section class="tabpane" id="pe" role="tabpanel" hidden>
+    <div class="tryit" style="max-width:none">
+      <h3>Exercises</h3>
+      <ol>
+        <li><b>Count what survives.</b> On step 1, with the default model, compare the number of samples on
+          the trace with the number of picks.
+          <details class="reveal"><summary>Hint</summary><span class="ans">Between 86% and 93% of the trace
+            is discarded, depending on the model. Where there is an event the picks come at four per
+            waveform cycle &mdash; a peak, a trough and a crossing on either side &mdash; and where there
+            is no event there is nothing to pick, which is most of why the fraction is as high as it is.
+            Module 01 counted two interpretable samples per cycle for conventional AVO, so the stick-o-gram
+            is not yet an improvement in how much of the trace is usable. It is the same information,
+            reorganized into a frame. The gain comes in module 06, when every sample between the picks is
+            given a value.</span></details></li>
+        <li><b>Coarsen the sampling and watch the crossings drift.</b> On step 2, step the sample rate from
+          1 ms to 4 ms, reading the worst crossing error each time.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The error is bounded by half the
+            sample interval, because the rule always takes the nearer of the two samples to zero. At 1 ms
+            that is at most half a millisecond and usually less. At 4 ms it can be two, which at 40 Hz is
+            most of a tenth of a cycle. Everything after this counts samples away from that crossing, so the
+            error does not stay where it started &mdash; it shifts the quadrant numbering of the whole
+            loop.</span></details></li>
+        <li><b>Make a doublet.</b> With the default model &mdash; 30 ms of sand at 40 Hz &mdash; switch the
+          tight streak on and off on step 2, watching the counter and the dashed circles.
+          <details class="reveal"><summary>Hint</summary><span class="ans">Zero discarded extrema without
+            the streak, two with it. The thin tight sandstone bed puts a second extremum inside a loop that
+            previously held one, and the rule keeps only the larger. The smaller is a real reflection from
+            a real bed, and the stick-o-gram does not record it. That is a deliberate trade: the numbering
+            scheme in module 04 needs exactly one extremum between each pair of crossings, and a rule that
+            sometimes returned two would have nothing to number. Now try 45 ms of sand at 30 Hz with the
+            streak switched off, and you will find three discarded extrema with no thin bed anywhere. A
+            long wavelet over a thick sand overlaps the top and base loops enough to leave shoulders on
+            them. Doublets are an interference effect, and a thin bed is only one way to
+            get one.</span></details></li>
+        <li><b>Thin the sand until it holds no picks at all.</b> On step 1, drag the thickness down from
+          30 ms, watching the count of peaks and troughs inside the sand.
+          <details class="reveal"><summary>Hint</summary><span class="ans">At 8 ms and below it reaches
+            zero. The top and base have merged into one event, and the center of that event does not sit
+            between the top and the base &mdash; it sits above the sand entirely. So the picks record that
+            something is there while saying nothing whatever about its interior, and no attribute computed
+            from them can do better. Module 12 comes back to this: the DQ distance responds to bed
+            thickness where Theta PX does not, and this is where the sensitivity starts.</span></details></li>
+        <li><b>Add noise and watch picks disappear.</b> On step 1, raise the noise from zero to 40% a few
+          percent at a time, watching the pick count.
+          <details class="reveal"><summary>Hint</summary><span class="ans">It does not climb. With the
+            default model it goes 21, 19, 15, then 13 at 30% noise, before climbing back to 19 at 40%.
+            Noise destroys picks as readily as it invents them: a weak event that was a clean loop stops
+            producing an extremum above the amplitude floor, and a crossing shifts by several samples or
+            merges with its neighbor. Losing a pick is the worse outcome of the two, because a spurious
+            layer can be recognized as noise later while a missing one cannot be recovered at all. This is
+            why module 02 cared so much about the near stack being clean, and why the papers say to bandpass
+            filter for signal to noise rather than for bandwidth.</span></details></li>
+        <li><b>Find the fault on the wrong display.</b> On step 3, set the noise to 25% and try to locate
+          the fault on the amplitude section, then on the sticks.
+          <details class="reveal"><summary>Hint</summary><span class="ans">On the amplitudes the fault is a
+            subtle lateral shift inside a continuous field, and the noise sits on top of it. On the sticks
+            it is a clean break in a set of lines, because the display has already thrown away everything
+            that was not an event. This is the argument for using the stick-o-gram as a structural display
+            rather than only as an intermediate product, and it is the same argument for feeding it to a
+            classifier.</span></details></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================== KEY POINTS ============================== -->
+  <section class="tabpane" id="pk" role="tabpanel" hidden>
+    <div class="takeaway" style="max-width:none">
+      <h3>The main points</h3>
+      <ul>
+        <li><b>The stick-o-gram is the center of every peak, the center of every trough, and every zero
+          crossing</b>, found on the near stack and on nothing else.</li>
+        <li><b>Of the two samples either side of a crossing, the method takes the one closer to zero.</b>
+          That sample becomes Q5 in module 04, and the numbering counts away from it.</li>
+        <li><b>Between each pair of crossings, only the largest peak or trough is kept.</b> A doublet loses
+          its smaller extremum entirely, whether it came from a thin bed or from a thick sand under a long
+          wavelet.</li>
+        <li><b>The crossing error is bounded by half the sample interval</b>, which is why the papers ask
+          for 1 ms data, sync interpolated if necessary, before any of this runs.</li>
+        <li><b>The picks are made once and applied to all three traces</b>, near, far and their difference,
+          so that a quadrant number means the same thing on each.</li>
+        <li><b>As a display it shows structure and faults directly</b>, because a fault breaks the sticks
+          instead of subtly changing a continuous amplitude field.</li>
+        <li><b>A pick in the wrong place is not a small error.</b> Everything downstream counts samples away
+          from these picks, so a misplaced crossing renumbers a whole loop.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- =============================== METHOD =============================== -->
+  <section class="tabpane" id="pm" role="tabpanel" hidden>
+    <details class="notes" id="notes" open>
+      <summary>Method, assumptions, and where to read more</summary>
+      <p>The rocks and the near stack are built exactly as in modules 01 and 02: three fixed enclosing
+        lithologies, a brine sand computed from porosity through Wyllie's time average and the
+        V<sub>P</sub>/V<sub>S</sub> trend of Bedle et al. (2025), Gassmann substitution for oil and gas,
+        Shuey's two-term approximation across each interface, and a near stack formed by averaging
+        0&ndash;10&deg;. The optional tight streak is a four millisecond tight sandstone bed placed just above the
+        base of the sand.</p>
+      <p>The picking follows the sequence given in the AASPI DQ documentation. Zero crossings are located
+        first, as the places where consecutive samples change sign. Of the two samples bracketing each
+        crossing, the one with the smaller absolute amplitude is taken, which is the sample nearer to the
+        true crossing time; that sample is Q5 in the quadrant scheme. Between each consecutive pair of
+        those samples the largest magnitude peak or trough is taken, and where a doublet puts two extrema in
+        one interval only the larger survives. An extremum is taken in the strict sense, as a sample where
+        the sample-to-sample difference changes sign. An amplitude floor of one percent of the largest
+        sample keeps the dead ends of the trace out of the pick list; it plays no part in the method itself
+        and exists here only because a synthetic trace has exactly zero amplitude outside the modeled
+        interval. The count of discarded extrema on step 2 is restricted to the samples between the top and
+        base of the sand, so that it reports on the sand rather than on interference between the beds above
+        and below it.</p>
+      <p>The crossing error quoted on step 2 is the time between the chosen sample and the true crossing,
+        found by linear interpolation between the two bracketing samples. It is bounded above by half the
+        sample interval, which is a property of the rule rather than of the data.</p>
+      <p>The layer stack is a contrasting bed from 14 to 26 ms, the sand from 50 ms down, an optional four
+        millisecond tight sandstone streak three quarters of the way through it, and a tight bed from 118 to
+        130 ms. Structure moves the whole stack together. The extra beds are there so that the trace looks
+        like something worth picking rather than like a lone reflection in an empty window.</p>
+      <p>The section on step 3 is seventy traces. The top of the sand follows a gentle anticline, the sand
+        thins linearly to the right, and a normal fault at the fortieth trace displaces everything below it
+        by the throw set in the panel. Each trace is modeled and picked independently, exactly as the
+        program would; nothing is smoothed or tracked laterally, so the continuity in the display is the
+        continuity in the model rather than something the picker imposed.</p>
+      <p>Noise is band-limited with the same wavelet, drawn independently for each trace, and scaled as a
+        percentage of the strongest reflection in the model. Where the sample rate is coarser than 1 ms the
+        trace is modeled directly at that rate rather than decimated, which flatters the coarse cases
+        slightly, since real decimation would alias as well.</p>
+      <p>What this module leaves out is the polarity convention. For AVO classes 4, 3 and 2 the trough is
+        Q1 and the peak is Q9. For class 1 sands and carbonate plays the polarity of both partial stacks is
+        reversed at the stacking step instead, so that the numbering scheme never has to change. Module 04
+        takes that up.</p>
+      <ul>
+        <li>Shuey, R. T., 1985, A simplification of the Zoeppritz equations: <em>Geophysics</em>, 50,
+          609&ndash;614.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+          quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+        <li>Chaudhry, N., H. Bedle, D. B. Neff, and W. Neff, 2026, Isochron-based seismic attributes for
+          stratigraphic and facies interpretation: field examples, IMAGE expanded abstract.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="nextup" id="nextup" hidden>
+    <p class="eyebrow">Next up</p>
+    <h3><a href="quadrants.html">04 · Quadrant numbers</a></h3>
+    <p>The gaps between the picks get numbered from one to nine, spaced uniformly, with rules for what to
+      do when a loop is too short to hold all of them and when it is long enough to need some of them
+      twice.</p>
+    <a class="btn" href="quadrants.html">Open module 04 →</a>
+    <a class="btn ghost" href="../index.html">All modules</a>
+  </section>
+
+  <div class="pager" id="pager" hidden>
+    <a class="btn ghost" href="near-far.html">← Near and far stacks</a>
+    <a class="btn" href="quadrants.html">Next: quadrant numbers →</a>
+  </div>
+
+  <footer>
+    <div class="foot-grid">
+      <p>Built for teaching by Heather Bedle, School of Geosciences, University of Oklahoma, with the
+        <a href="https://www.ou.edu/mcee/labs/aaspi">AASPI</a> consortium.</p>
+      <p class="lic">Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+        Free to use, share and adapt for any purpose, including training in industry, provided the source is
+        credited and adapted versions carry the same license.</p>
+      <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
+        Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
+      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
+        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        nothing about you.</p>
+    </div>
+  </footer>
+</div>
+
+<script src="../assets/count.js"></script>
+<script src="../assets/seismic.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  if (typeof SEIS === 'undefined') {
+    const el = document.createElement('div');
+    el.setAttribute('style', 'background:#841617;color:#fff;padding:14px 18px;margin:16px 0;' +
+      'font:13px/1.6 ui-monospace,Menlo,monospace');
+    el.textContent = 'This module could not load assets/seismic.js. It expects it one directory up, ' +
+      'at ../assets/, and file names are case-sensitive on GitHub Pages.';
+    const w = document.querySelector('.wrap');
+    (w || document.body).insertBefore(el, w ? w.firstChild : null);
+    return;
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const visible = (id) => { const el = $(id); return el && !el.hidden; };
+
+  /* =====================================================================
+     THE ROCKS
+     Identical to modules 01 and 02.
+     ===================================================================== */
+
+  const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };
+
+  const FLUIDS = {
+    brine: { K: 2.60,  rho: 1.03, v: 1500, name: 'brine' },
+    oil:   { K: 0.80,  rho: 0.78, v: 1300, name: 'oil' },
+    gas:   { K: 0.055, rho: 0.20, v: 550,  name: 'gas' },
+  };
+
+  const LITHS = {
+    soft: { vp: 2700, vs: 1175, rho: 2.33, name: 'soft shale' },
+    hard: { vp: 3350, vs: 1675, rho: 2.48, name: 'hard shale' },
+    tight: { vp: 4800, vs: 2800, rho: 2.56, name: 'tight sandstone' },
+  };
+
+  const PH0 = 8, PH1 = 36;
+  const DTS = [0.001, 0.002, 0.003, 0.004];
+  const NEAR_A = [0, 10];
+  const T0 = 0, TWIN = 0.150, TTOP = 0.050;
+  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
+  const BEDC = [0.118, 0.130];                   // a tight bed below it
+  const STREAK_MS = 3;                           // tight streak thickness
+  const STREAK_POS = 0.75;                       // how far down the sand it sits
+  const NX = 70;                                 // traces in the step 3 section
+  const FAULT_AT = 40;                           // trace index of the fault
+
+  const DEF = {
+    over: 'soft', phi: 28, fluid: 'gas',
+    thick: 30, freq: 40, dt: 0, noise: 0, streak: false, throw: 14, tab: 'p1',
+  };
+  let S = SEIS.readState(DEF);
+  if (!LITHS[S.over]) S.over = DEF.over;
+  if (!FLUIDS[S.fluid]) S.fluid = DEF.fluid;
+  S.phi = Math.min(PH1, Math.max(PH0, Math.round(S.phi) || DEF.phi));
+
+  const CAN_LINK = location.protocol !== 'file:';
+  const saveState = () => {
+    if (!CAN_LINK) return;
+    try { SEIS.writeState(S, DEF); } catch (e) { /* nothing shareable */ }
+  };
+
+  /* ------------------------------- the physics ------------------------- */
+
+  function shuey(l1, l2) {
+    const vp = (l1.vp + l2.vp) / 2, dvp = l2.vp - l1.vp;
+    const vs = (l1.vs + l2.vs) / 2, dvs = l2.vs - l1.vs;
+    const rho = (l1.rho + l2.rho) / 2, drho = l2.rho - l1.rho;
+    const k = (vs / vp) * (vs / vp);
+    return {
+      A: 0.5 * (dvp / vp + drho / rho),
+      B: 0.5 * (dvp / vp) - 2 * k * (drho / rho + 2 * (dvs / vs)),
+    };
+  }
+  function meanSin2(a, b) {
+    const n = 256, lo = a * Math.PI / 180, hi = b * Math.PI / 180;
+    let sum = 0;
+    for (let i = 0; i < n; i++) {
+      const th = lo + (hi - lo) * (i + 0.5) / n;
+      sum += Math.sin(th) * Math.sin(th);
+    }
+    return sum / n;
+  }
+  const S2N = meanSin2(NEAR_A[0], NEAR_A[1]);
+
+  function brineSand(phi) {
+    const vp = 1 / (phi / FLUIDS.brine.v + (1 - phi) / MATRIX.vp);
+    const rho = (1 - phi) * MATRIX.rho + phi * FLUIDS.brine.rho;
+    const vpvs = -0.75 * phi * phi + 1.35 * phi + 1.63;
+    return { vp, vs: vp / vpvs, rho };
+  }
+  function ksatFromDry(kdry, phi, kfl) {
+    const num = Math.pow(1 - kdry / MATRIX.K, 2);
+    const den = phi / kfl + (1 - phi) / MATRIX.K - kdry / (MATRIX.K * MATRIX.K);
+    return kdry + num / den;
+  }
+  function kdryFromSat(ksat, phi, kfl) {
+    const a = phi * MATRIX.K / kfl;
+    return (ksat * (a + 1 - phi) - MATRIX.K) / (a + ksat / MATRIX.K - 1 - phi);
+  }
+  function sandRock(phi, fluidKey) {
+    const b = brineSand(phi);
+    if (fluidKey === 'brine') return b;
+    const mu = b.rho * b.vs * b.vs * 1e-6;
+    const ksat = b.rho * b.vp * b.vp * 1e-6 - (4 / 3) * mu;
+    const kdry = kdryFromSat(ksat, phi, FLUIDS.brine.K);
+    const f = FLUIDS[fluidKey];
+    const k2 = ksatFromDry(kdry, phi, f.K);
+    const rho = (1 - phi) * MATRIX.rho + phi * f.rho;
+    return {
+      vp: Math.sqrt((k2 + (4 / 3) * mu) * 1e6 / rho),
+      vs: Math.sqrt(mu * 1e6 / rho),
+      rho,
+    };
+  }
+
+  const dt = () => DTS[S.dt | 0];
+  const ntOf = () => Math.floor(TWIN / dt()) + 1;
+
+  /* --------------------------- the layer stack ------------------------- */
+
+  /* The near-stack reflectivity of one trace. A layered earth rather than a
+     lone sand, so that the trace looks like something worth picking: a
+     contrasting bed above, the sand with an optional tight streak inside it,
+     and a tight bed below. Every spike is computed from the two rocks it sits
+     between. */
+  function spikes(topT, thickS) {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const tight = LITHS.tight;
+    const other = (S.over === 'soft') ? LITHS.hard : LITHS.soft;
+    const n = (q) => q.A + q.B * S2N;
+    const shift = topT - TTOP;                   // structure moves everything together
+    const out = [];
+
+    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
+    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
+
+    const baseT = topT + thickS / 1000;
+    out.push({ t: topT, r: n(shuey(over, sand)) });
+    if (S.streak && thickS > STREAK_MS + 4) {
+      const sT = topT + (baseT - topT) * STREAK_POS - STREAK_MS / 2000;
+      out.push({ t: sT, r: n(shuey(sand, tight)) });
+      out.push({ t: sT + STREAK_MS / 1000, r: n(shuey(tight, sand)) });
+    }
+    out.push({ t: baseT, r: n(shuey(sand, over)) });
+
+    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
+    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
+    return out;
+  }
+
+  const wavelet = () => SEIS.makeWavelet({ type: 'ricker', f: S.freq });
+
+  function refAmp() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const q = shuey(over, sand);
+    return Math.max(Math.abs(q.A + q.B * S2N), 1e-4);
+  }
+
+  let noiseCache = null;
+  function noiseField(nx) {
+    const key = [S.over, S.phi, S.fluid, S.freq, S.noise, S.dt, nx].join('|');
+    if (noiseCache && noiseCache.key === key) return noiseCache.field;
+    let field = null;
+    if (S.noise > 0) {
+      const raw = SEIS.bandLimitedNoise(nx, ntOf(), dt(), wavelet(), 20260903, 0);
+      const amp = (S.noise / 100) * refAmp();
+      field = new Float32Array(raw.length);
+      for (let i = 0; i < raw.length; i++) field[i] = raw[i] * amp;
+    }
+    noiseCache = { key, field };
+    return field;
+  }
+
+  function trace(topT, thickS, noise, ix) {
+    const nt = ntOf();
+    const tr = SEIS.traceFromSpikes(spikes(topT, thickS), T0, dt(), nt, wavelet());
+    if (noise) for (let i = 0; i < nt; i++) tr[i] += noise[ix * nt + i];
+    return tr;
+  }
+
+  /* ------------------------------- the picker --------------------------
+     Zero crossings first. Of the two samples bracketing a crossing, keep
+     the one with the smaller magnitude; that sample is Q5. Then between
+     each consecutive pair of those, keep the single largest peak or
+     trough, so a doublet loses its smaller half.
+     --------------------------------------------------------------------- */
+
+  // an extremum in the strict sense: the sample-to-sample difference changes
+  // sign here, and the sample is above the amplitude floor
+  function isExtremum(tr, i, floor) {
+    if (i < 1 || i > tr.length - 2) return false;
+    if (Math.abs(tr[i]) <= floor) return false;
+    const a = tr[i] - tr[i - 1], b = tr[i + 1] - tr[i];
+    return (a > 0 && b <= 0) || (a < 0 && b >= 0);
+  }
+
+  function pick(tr, sandWin) {
+    const nt = tr.length;
+    let peak = 1e-12;
+    for (let i = 0; i < nt; i++) peak = Math.max(peak, Math.abs(tr[i]));
+    const floor = 0.01 * peak;
+
+    const cross = [];                      // { i, tTrue, err }
+    for (let i = 1; i < nt; i++) {
+      const a = tr[i - 1], b = tr[i];
+      if (a === 0 || b === 0) continue;
+      if ((a > 0) === (b > 0)) continue;
+      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
+      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
+      // where the crossing actually is, by linear interpolation
+      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
+      const tTrue = (i - 1 + frac) * dt();
+      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    }
+
+    /* Between each consecutive pair of crossings, keep the single largest
+       peak or trough. Where a thin bed has put two extrema in one interval,
+       the smaller is discarded; those are counted separately, and only inside
+       the sand, so that the count is about the sand and not about whatever
+       the beds above and below happen to be doing. */
+    const ext = [], dropped = [];
+    let doublets = 0, inSand = 0;
+    const inWin = (i) => !sandWin || (i >= sandWin[0] && i <= sandWin[1]);
+    for (let k = 0; k + 1 < cross.length; k++) {
+      const lo = cross[k].i, hi = cross[k + 1].i;
+      let best = -1, bv = 0;
+      const here = [];
+      for (let i = lo + 1; i < hi; i++) {
+        if (isExtremum(tr, i, floor)) here.push(i);
+        if (Math.abs(tr[i]) > bv) { bv = Math.abs(tr[i]); best = i; }
+      }
+      if (best < 0 || bv <= floor) continue;
+      ext.push({ i: best, sign: tr[best] > 0 ? 1 : -1, amp: tr[best] });
+      if (inWin(best)) inSand++;
+      here.forEach((i) => {
+        if (i === best) return;
+        dropped.push(i);
+        if (inWin(i)) doublets++;
+      });
+    }
+    return { cross, ext, dropped, doublets, inSand, peak, floor };
+  }
+
+  // the samples spanned by the sand, used to keep the doublet count local
+  function sandWindow(topT, thickS) {
+    const D = dt();
+    return [Math.max(0, Math.floor(topT / D)),
+            Math.min(ntOf() - 1, Math.ceil((topT + thickS / 1000) / D))];
+  }
+
+  /* ------------------------------- drawing ----------------------------- */
+
+  const SOFT = 'rgba(22,25,28,0.45)';
+  const CRIM = '#841617';
+  const PEAKC = '#C2306B', TROUGHC = '#1D6FA3';   // peaks pink, troughs blue
+
+  function width(el, fallback) {
+    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    return Math.max(280, w || fallback);
+  }
+
+  function traceCurve(ctx, tr, rect, peak, color, lw) {
+    const nt = tr.length, x0 = rect.x + rect.w / 2;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x - 2, rect.y, rect.w + 4, rect.h); ctx.clip();
+    ctx.beginPath();
+    for (let i = 0; i < nt; i++) {
+      const y = rect.y + (i / (nt - 1)) * rect.h;
+      const x = x0 + (tr[i] / peak) * (rect.w / 2) * 0.92;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = color; ctx.lineWidth = lw || 1.6; ctx.stroke();
+    ctx.restore();
+  }
+
+  // the trace with its picks marked, drawn vertically
+  function drawPicked(ctx, rect, tr, pk, opts) {
+    const nt = tr.length;
+    const x0 = rect.x + rect.w / 2;
+    const yOf = (i) => rect.y + (i / (nt - 1)) * rect.h;
+    const xOf = (v) => x0 + (v / pk.peak) * (rect.w / 2) * 0.92;
+
+    SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: (opts && opts.ticks) || 7 });
+    SEIS.frame(ctx, rect);
+    SEIS.dashedLine(ctx, x0, rect.y, x0, rect.y + rect.h, SOFT, [4, 4], 1);
+    traceCurve(ctx, tr, rect, pk.peak, 'rgba(22,25,28,0.55)', 1.5);
+
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    if (opts && opts.showAll) {
+      for (let i = 0; i < nt; i++) {
+        ctx.beginPath();
+        ctx.arc(xOf(tr[i]), yOf(i), 1.7, 0, 2 * Math.PI);
+        ctx.strokeStyle = 'rgba(22,25,28,0.28)'; ctx.lineWidth = 0.9; ctx.stroke();
+      }
+    }
+    pk.cross.forEach((c) => {
+      ctx.beginPath();
+      ctx.arc(xOf(tr[c.i]), yOf(c.i), 4, 0, 2 * Math.PI);
+      ctx.fillStyle = '#fff'; ctx.fill();
+      ctx.strokeStyle = 'rgba(22,25,28,0.75)'; ctx.lineWidth = 1.5; ctx.stroke();
+    });
+    pk.ext.forEach((e) => {
+      ctx.beginPath();
+      ctx.arc(xOf(tr[e.i]), yOf(e.i), 4.6, 0, 2 * Math.PI);
+      ctx.fillStyle = e.sign > 0 ? PEAKC : TROUGHC; ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.4; ctx.stroke();
+    });
+    ctx.restore();
+  }
+
+
+  /* The rock model itself, as bands in two-way time, so the layers are always
+     visible beside the wiggles rather than implied by them. */
+  const LITHFILL = {
+    soft: 'rgba(150,160,170,0.55)', hard: 'rgba(110,125,140,0.65)',
+    tight: 'rgba(214,171,74,0.55)', sand: 'rgba(194,48,107,0.30)',
+  };
+  function layerBands() {
+    const seal = S.over, other = (S.over === 'soft') ? 'hard' : 'soft';
+    const baseT = TTOP + S.thick / 1000;
+    const b = [
+      { t0: T0, t1: TWIN, name: '', fill: LITHFILL[seal] },
+      { t0: BEDA[0], t1: BEDA[1], name: LITHS[other].name, fill: LITHFILL[other] },
+      { t0: TTOP, t1: baseT, name: 'sand ' + S.phi + '%', fill: LITHFILL.sand },
+      { t0: BEDC[0], t1: BEDC[1], name: 'tight sandstone', fill: LITHFILL.tight },
+    ];
+    return b;
+  }
+
+  function drawModelPanel(ctx, W, H) {
+    const top = 26, bot = H - 30;
+    const lw = Math.min(96, (W - 74) * 0.30);
+    const rL = { x: 50, y: top, w: lw, h: bot - top };
+    SEIS.axisLeft(ctx, rL, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 6 });
+    SEIS.lithColumn(ctx, rL, layerBands(), T0, TWIN);
+
+    const noise = noiseField(1);
+    let tr = trace(TTOP, S.thick, noise, 0);
+    if (typeof flipApplied === 'function' && flipApplied()) {
+      const f = new Float64Array(tr.length);
+      for (let i = 0; i < tr.length; i++) f[i] = -tr[i];
+      tr = f;
+    }
+    const nt = tr.length;
+    let pk = 1e-12;
+    for (let i = 0; i < nt; i++) pk = Math.max(pk, Math.abs(tr[i]));
+    const rT = { x: rL.x + rL.w + 18, y: top, w: W - (rL.x + rL.w + 18) - 8, h: bot - top };
+    SEIS.frame(ctx, rT);
+    SEIS.dashedLine(ctx, rT.x + rT.w / 2, rT.y, rT.x + rT.w / 2, rT.y + rT.h,
+      'rgba(22,25,28,0.45)', [4, 4], 1);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rT.x, rT.y, rT.w, rT.h); ctx.clip();
+    ctx.beginPath();
+    for (let i = 0; i < nt; i++) {
+      const y = rT.y + (i / (nt - 1)) * rT.h;
+      const x = rT.x + rT.w / 2 + (tr[i] / pk) * (rT.w / 2) * 0.9;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = 'rgba(22,25,28,0.65)'; ctx.lineWidth = 1.7; ctx.stroke();
+    ctx.restore();
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(22,25,28,0.55)';
+    ctx.fillText('THE ROCKS', rL.x + rL.w / 2, rL.y - 6);
+    ctx.fillText('NEAR STACK', rT.x + rT.w / 2, rT.y - 6);
+  }
+
+  function drawMain() {
+    const c = $('cMain'); if (!c) return;
+    const W = width(c, 520), H = 330;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    drawModelPanel(ctx, W, H);
+  }
+
+  /* the stick display: one short horizontal dash per pick, per trace,
+     colored by whether it is a peak or a trough */
+  function drawSticks(ctx, rect, picks, traces, nx) {
+    const nt = traces[0].length;
+    const yOf = (i) => rect.y + (i / (nt - 1)) * rect.h;
+    const cw = rect.w / nx;
+    const half = Math.max(1.2, cw * 0.42);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    for (let k = 0; k < nx; k++) {
+      const pk = picks[k], tr = traces[k];
+      const xc = rect.x + (k + 0.5) * cw;
+      pk.cross.forEach((c) => {
+        ctx.beginPath();
+        ctx.moveTo(xc - half * 0.55, yOf(c.i)); ctx.lineTo(xc + half * 0.55, yOf(c.i));
+        ctx.strokeStyle = 'rgba(22,25,28,0.30)'; ctx.lineWidth = 1.1; ctx.stroke();
+      });
+      pk.ext.forEach((e) => {
+        const s = Math.min(1, Math.abs(tr[e.i]) / pk.peak);
+        ctx.beginPath();
+        ctx.moveTo(xc - half, yOf(e.i)); ctx.lineTo(xc + half, yOf(e.i));
+        ctx.strokeStyle = e.sign > 0
+          ? 'rgba(194,48,107,' + (0.35 + 0.65 * s).toFixed(2) + ')'
+          : 'rgba(29,111,163,' + (0.35 + 0.65 * s).toFixed(2) + ')';
+        ctx.lineWidth = 2.4; ctx.stroke();
+      });
+    }
+    ctx.restore();
+  }
+
+  /* ------------------------------- step 1 ------------------------------ */
+
+  function drawStep1() {
+    const noise = noiseField(1);
+    const tr = trace(TTOP, S.thick, noise, 0);
+    const pk = pick(tr, sandWindow(TTOP, S.thick));
+    const nt = tr.length;
+
+    const ca = $('c1a');
+    if (ca) {
+      const W = width(ca, 640), H = 430;
+      const ctx = SEIS.fitCanvas(ca, W, H);
+      ctx.clearRect(0, 0, W, H);
+      const rect = { x: 66, y: 20, w: Math.min(W - 96, 460), h: H - 56 };
+      drawPicked(ctx, rect, tr, pk, { showAll: true, ticks: 9 });
+    }
+
+    const cb = $('c1b');
+    if (cb) {
+      const W = width(cb, 640), H = 240;
+      const ctx = SEIS.fitCanvas(cb, W, H);
+      ctx.clearRect(0, 0, W, H);
+      const rect = { x: 66, y: 18, w: Math.min(W - 96, 200), h: H - 54 };
+      SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+        (v) => String(Math.round(v)), { ticks: 6 });
+      SEIS.frame(ctx, rect);
+      drawSticks(ctx, rect, [pk], [tr], 1);
+    }
+
+    const kept = pk.cross.length + pk.ext.length;
+    const period = 1000 / S.freq;
+    $('s1a').textContent = nt + ' samples';
+    $('s1b').textContent = kept + ' of ' + nt;
+    $('s1c').textContent = pk.ext.length + '';
+    $('s1d').textContent = pk.cross.length + '';
+    $('s1f').textContent = pk.inSand + '';
+    $('s1e').textContent = (100 * (1 - kept / nt)).toFixed(0)
+      + '% of the trace is discarded. Where there is an event, the picks come out at four per waveform '
+      + 'cycle \u2014 a peak, a trough and a crossing on either side \u2014 and one cycle here is '
+      + period.toFixed(0) + ' ms. Where there is no event there is nothing to pick.';
+  }
+
+  /* ------------------------------- step 2 ------------------------------ */
+
+  function drawStep2() {
+    const noise = noiseField(1);
+    const tr = trace(TTOP, S.thick, noise, 0);
+    const pk = pick(tr, sandWindow(TTOP, S.thick));
+    const D = dt();
+
+    // the crossing with the largest error, magnified
+    const ca = $('c2a');
+    if (ca && pk.cross.length) {
+      const W = width(ca, 640), H = 320;
+      const ctx = SEIS.fitCanvas(ca, W, H);
+      ctx.clearRect(0, 0, W, H);
+
+      let worst = pk.cross[0];
+      pk.cross.forEach((c) => { if (c.err > worst.err) worst = c; });
+      const i0 = Math.max(0, worst.i - 3), i1 = Math.min(tr.length - 1, worst.i + 3);
+
+      // time runs down, as on every other display in the course
+      const rect = { x: 78, y: 22, w: W - 108, h: H - 62 };
+      let lim = 1e-9;
+      for (let i = i0; i <= i1; i++) lim = Math.max(lim, Math.abs(tr[i]));
+      lim *= 1.25;
+
+      const yOf = (t) => rect.y + ((t - i0 * D) / ((i1 - i0) * D)) * rect.h;
+      const xOf = (v) => rect.x + rect.w / 2 + (v / lim) * (rect.w / 2);
+
+      SEIS.axisLeft(ctx, rect, i0 * D * 1000, i1 * D * 1000, 'two-way time (ms)',
+        (v) => v.toFixed(0), { ticks: 6 });
+      SEIS.axisBottom(ctx, rect, -lim, lim, 'near-stack amplitude', null, { ticks: 5 });
+      SEIS.frame(ctx, rect);
+      SEIS.dashedLine(ctx, xOf(0), rect.y, xOf(0), rect.y + rect.h, SOFT, [4, 4], 1);
+
+      ctx.beginPath();
+      for (let i = i0; i <= i1; i++) {
+        const x = xOf(tr[i]), y = yOf(i * D);
+        i === i0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = 'rgba(22,25,28,0.55)'; ctx.lineWidth = 1.6; ctx.stroke();
+
+      SEIS.dashedLine(ctx, rect.x, yOf(worst.tTrue), rect.x + rect.w, yOf(worst.tTrue),
+        CRIM, [5, 4], 1.6);
+      SEIS.tag(ctx, rect.x + 8, yOf(worst.tTrue) - 15, 'true crossing', CRIM);
+
+      for (let i = i0; i <= i1; i++) {
+        const isCand = (Math.abs(i - worst.i) <= 1) &&
+          ((i === worst.i) || (tr[i] > 0) !== (tr[worst.i] > 0));
+        const chosen = (i === worst.i);
+        ctx.beginPath();
+        ctx.arc(xOf(tr[i]), yOf(i * D), chosen ? 5.6 : isCand ? 5 : 3, 0, 2 * Math.PI);
+        if (chosen) {
+          ctx.fillStyle = CRIM; ctx.fill();
+          ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+        } else {
+          ctx.fillStyle = '#fff'; ctx.fill();
+          ctx.strokeStyle = isCand ? CRIM : 'rgba(22,25,28,0.45)';
+          ctx.lineWidth = isCand ? 1.7 : 1.1; ctx.stroke();
+        }
+      }
+      SEIS.tag(ctx, xOf(tr[worst.i]) + 10, yOf(worst.i * D) + 8, 'chosen, Q5', CRIM);
+    }
+
+    // the doublet picture
+    const cb = $('c2b');
+    if (cb) {
+      const W = width(cb, 640), H = 320;
+      const ctx = SEIS.fitCanvas(cb, W, H);
+      ctx.clearRect(0, 0, W, H);
+      const rect = { x: 66, y: 20, w: Math.min(W - 96, 380), h: H - 56 };
+      drawPicked(ctx, rect, tr, pk, { showAll: true, ticks: 7 });
+
+      // every local extremum, including the ones the rule discarded
+      const nt = tr.length;
+      const yOf = (i) => rect.y + (i / (nt - 1)) * rect.h;
+      const x0 = rect.x + rect.w / 2;
+      const xOf = (v) => x0 + (v / pk.peak) * (rect.w / 2) * 0.92;
+      ctx.save();
+      ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+      pk.dropped.forEach((i) => {
+        ctx.beginPath();
+        ctx.arc(xOf(tr[i]), yOf(i), 5.2, 0, 2 * Math.PI);
+        ctx.strokeStyle = CRIM; ctx.lineWidth = 1.6;
+        ctx.setLineDash([2.5, 2.5]); ctx.stroke(); ctx.setLineDash([]);
+      });
+      ctx.restore();
+      SEIS.tag(ctx, rect.x + rect.w + 10, rect.y + 14, 'dashed = extremum discarded', CRIM);
+    }
+
+    let worst = 0, sum = 0;
+    pk.cross.forEach((c) => { worst = Math.max(worst, c.err); sum += c.err; });
+    const avg = pk.cross.length ? sum / pk.cross.length : 0;
+
+    $('s2a').textContent = (D * 1000).toFixed(0) + ' ms';
+    $('s2b').textContent = (worst * 1000).toFixed(2) + ' ms';
+    $('s2c').textContent = (avg * 1000).toFixed(2) + ' ms';
+    $('s2d').textContent = pk.doublets + '';
+    $('s2e').textContent = 'The rule can never be wrong by more than half a sample, which here is '
+      + (D * 500).toFixed(1) + ' ms. '
+      + (pk.doublets
+        ? pk.doublets + ' extremum' + (pk.doublets > 1 ? 'a are' : ' is')
+          + ' being discarded as the smaller half of a doublet.'
+        : 'There are no doublets in this model. Switch the tight streak on to make one.');
+  }
+
+  /* ------------------------------- step 3 ------------------------------ */
+
+  function section() {
+    const noise = noiseField(NX);
+    const traces = [], picks = [];
+    for (let k = 0; k < NX; k++) {
+      const u = k / (NX - 1);
+      const arch = -0.012 * Math.sin(Math.PI * u);          // a gentle anticline
+      const down = (k >= FAULT_AT) ? S.throw / 1000 : 0;    // the fault
+      const thick = S.thick * (1 - 0.55 * u);               // thinning to the right
+      traces.push(trace(TTOP + arch + down, Math.max(4, thick), noise, k));
+      picks.push(pick(traces[k], sandWindow(TTOP + arch + down, Math.max(4, thick))));
+    }
+    return { traces, picks };
+  }
+
+  function drawStep3() {
+    const c = $('c3a'); if (!c) return;
+    const W = width(c, 640), H = 420;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+
+    const sec = section();
+    const nt = sec.traces[0].length;
+    let peak = 1e-9;
+    for (let k = 0; k < NX; k++) {
+      for (let i = 0; i < nt; i++) peak = Math.max(peak, Math.abs(sec.traces[k][i]));
+    }
+
+    const gap = 30;
+    const pw = (W - 80 - gap) / 2;
+    const rA = { x: 62, y: 22, w: pw, h: H - 62 };
+    const rB = { x: 62 + pw + gap, y: 22, w: pw, h: H - 62 };
+
+    SEIS.axisLeft(ctx, rA, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 7 });
+    SEIS.axisBottom(ctx, rA, 1, NX, 'trace', (v) => String(Math.round(v)), { ticks: 5 });
+    SEIS.frame(ctx, rA);
+    SEIS.axisBottom(ctx, rB, 1, NX, 'trace', (v) => String(Math.round(v)), { ticks: 5 });
+    SEIS.frame(ctx, rB);
+
+    // amplitudes, as a variable density image built from the traces
+    const cw = rA.w / NX;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rA.x, rA.y, rA.w, rA.h); ctx.clip();
+    for (let k = 0; k < NX; k++) {
+      const tr = sec.traces[k];
+      for (let i = 0; i < nt - 1; i++) {
+        const v = Math.max(-1, Math.min(1, tr[i] / peak));
+        const y = rA.y + (i / (nt - 1)) * rA.h;
+        const hh = rA.h / (nt - 1) + 0.7;
+        if (v > 0) ctx.fillStyle = 'rgba(194,48,107,' + (0.10 + 0.85 * v).toFixed(3) + ')';
+        else ctx.fillStyle = 'rgba(29,111,163,' + (0.10 + 0.85 * -v).toFixed(3) + ')';
+        ctx.fillRect(rA.x + k * cw, y, cw + 0.6, hh);
+      }
+    }
+    ctx.restore();
+
+    drawSticks(ctx, rB, sec.picks, sec.traces, NX);
+
+    ctx.font = '9.5px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(22,25,28,0.55)';
+    ctx.fillText('NEAR-STACK AMPLITUDE', rA.x + rA.w / 2, rA.y - 6);
+    ctx.fillStyle = CRIM;
+    ctx.fillText('STICK-O-GRAM', rB.x + rB.w / 2, rB.y - 6);
+
+    let kept = 0;
+    sec.picks.forEach((p) => { kept += p.cross.length + p.ext.length; });
+    const total = NX * nt;
+
+    $('s3a').textContent = NX + '';
+    $('s3b').textContent = nt + '';
+    $('s3c').textContent = kept.toLocaleString('en-US');
+    $('s3d').textContent = (100 * kept / total).toFixed(1) + '%';
+    $('s3e').textContent = S.throw === 0
+      ? 'With no throw the sticks run unbroken across the section, and the thinning of the sand shows '
+        + 'as the two events converging.'
+      : 'The fault at trace ' + FAULT_AT + ' breaks every stick that crosses it, at every level, '
+        + 'without anyone having picked a horizon or a fault plane.';
+  }
+
+  /* ------------------------------ the panel ---------------------------- */
+
+  function pushToInputs() {
+    $('phi').value = S.phi;
+    $('thick').value = S.thick;
+    $('freq').value = S.freq;
+    $('dt').value = S.dt;
+    $('noise').value = S.noise;
+    $('throw').value = S.throw;
+    $('streak').checked = !!S.streak;
+    $('phiV').textContent = S.phi + '%';
+    $('thickV').textContent = S.thick + ' ms';
+    $('freqV').textContent = S.freq + ' Hz';
+    $('dtV').textContent = (DTS[S.dt | 0] * 1000).toFixed(0) + ' ms';
+    $('noiseV').textContent = S.noise + '%';
+    $('throwV').textContent = S.throw + ' ms';
+    $('overV').textContent = LITHS[S.over].name;
+    $('fluidV').textContent = FLUIDS[S.fluid].name;
+
+    document.querySelectorAll('[data-over]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.over === S.over);
+    });
+    document.querySelectorAll('[data-fluid]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.fluid === S.fluid);
+    });
+  }
+
+  function drawAll() {
+    drawMain();
+    if (visible('p1')) drawStep1();
+    if (visible('p2')) drawStep2();
+    if (visible('p3')) drawStep3();
+  }
+
+  function onChange() { pushToInputs(); drawAll(); saveState(); }
+
+  ['phi', 'thick', 'freq', 'dt', 'noise', 'throw'].forEach((id) => {
+    $(id).addEventListener('input', () => { S[id] = parseFloat($(id).value); onChange(); });
+  });
+  $('streak').addEventListener('change', () => { S.streak = $('streak').checked; onChange(); });
+  document.querySelectorAll('[data-over]').forEach((b) => {
+    b.addEventListener('click', () => { S.over = b.dataset.over; onChange(); });
+  });
+  document.querySelectorAll('[data-fluid]').forEach((b) => {
+    b.addEventListener('click', () => { S.fluid = b.dataset.fluid; onChange(); });
+  });
+  $('resetBtn').addEventListener('click', () => {
+    const tab = S.tab;
+    S = Object.assign({}, DEF, { tab });
+    onChange();
+  });
+
+  /* -------------------------------- tabs ------------------------------- */
+
+  const PANES = ['p1', 'p2', 'p3', 'pw', 'pe', 'pk', 'pm'];
+  const STEPNAMES = {
+    p1: 'Three picks', p2: 'Which sample', p3: 'A section',
+    pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
+  };
+
+  function buildStepNav() {
+    PANES.forEach((id, i) => {
+      const pane = $(id); if (!pane) return;
+      const prev = PANES[i - 1], next = PANES[i + 1];
+      const nav = document.createElement('div');
+      nav.className = 'stepnav';
+      const mk = (target, text, ghost) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'btn' + (ghost ? ' ghost' : '') + ' small';
+        b.textContent = text;
+        b.addEventListener('click', () => {
+          showTab(target);
+          const t = document.querySelector('.tabhint');
+          if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return b;
+      };
+      nav.appendChild(prev ? mk(prev, '\u2190 ' + STEPNAMES[prev], true)
+                           : document.createElement('span'));
+      const where = document.createElement('span');
+      where.className = 'where';
+      where.textContent = i < 3 ? 'step ' + (i + 1) + ' of 3' : STEPNAMES[id];
+      nav.appendChild(where);
+      nav.appendChild(next ? mk(next, STEPNAMES[next] + ' \u2192')
+                           : document.createElement('span'));
+      pane.appendChild(nav);
+    });
+  }
+
+  function showTab(id) {
+    PANES.forEach((q) => { const el = $(q); if (el) el.hidden = q !== id; });
+    document.querySelectorAll('#tabs button').forEach((b) => {
+      b.setAttribute('aria-selected', b.dataset.tab === id);
+    });
+    const lab = document.querySelector('.labhead');
+    if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3');
+
+    /* The fault only exists in the section, so it goes inactive elsewhere
+       rather than sitting there implying it does something. */
+    const three = (id === 'p3');
+    const th = $('throw'); if (th) th.disabled = !three;
+
+    if ($('labCap')) {
+      $('labCap').innerHTML = 'The rock model <span>&mdash; the layers, and the near stack they produce</span>';
+    }
+
+    const last = (id === 'pk' || id === 'pm');
+    if ($('nextup')) $('nextup').hidden = !last;
+    if ($('pager')) $('pager').hidden = !last;
+    S.tab = id;
+    drawAll();
+    saveState();
+  }
+  document.querySelectorAll('#tabs button').forEach((b) => {
+    b.addEventListener('click', () => showTab(b.dataset.tab));
+  });
+  document.querySelectorAll('.masthead a[data-tab]').forEach((a) => {
+    a.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      showTab(a.dataset.tab);
+      const strip = $('tabs');
+      if (strip && strip.scrollIntoView) strip.scrollIntoView({ block: 'start' });
+    });
+  });
+
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawAll, 140); });
+
+  pushToInputs();
+  buildStepNav();
+  showTab(PANES.indexOf(S.tab) >= 0 ? S.tab : 'p1');
+  document.fonts && document.fonts.ready.then(drawAll);
+})();
+</script>
+</body>
+</html>

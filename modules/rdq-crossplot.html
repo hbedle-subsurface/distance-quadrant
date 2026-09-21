@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The 3D RDQ crossplot | How the DQ Trace Actually Works</title>
+<meta name="description" content="Amplitude, gradient and signed half isochron on three axes. What the third axis is, what it is not, and how the crossplot is used as a working tool.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <a class="brand" href="../index.html"><span class="dot"></span>How the DQ trace <b>actually</b> works</a>
+    <nav>
+      <a href="../index.html">All modules</a>
+      <a href="#tabs" data-tab="pw">Why it matters</a>
+      <a href="#tabs" data-tab="pm">Method &amp; references</a>
+    </nav>
+  </header>
+
+  <div class="mod-head">
+    <p class="eyebrow">Module 13 &nbsp;·&nbsp; The DQ trace</p>
+    <h1>The 3D RDQ crossplot</h1>
+    <p class="sub">Every module so far has produced one number per sample. This is where they are put on
+      one plot: amplitude across, gradient up, and the signed half isochron of module 05 as a third axis.
+      What follows is what each axis measures and how the plot is worked, rather than a claim about what
+      it can predict.</p>
+  </div>
+
+  <div class="labhead">
+    <div class="labgrid">
+      <div>
+        <p class="cap" id="labCap">The front wall <span>&mdash; amplitude against gradient, coloured by half isochron</span></p>
+        <canvas id="cMain" aria-label="The RDQ crossplot front wall with points coloured by signed half isochron"></canvas>
+      </div>
+      <div>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <div class="controls" id="labControls">
+          <div class="ctl-col">
+            <h2>Build the rocks</h2>
+            <div class="ctl">
+              <label>Overburden <span class="val" id="overV">soft shale</span></label>
+              <div class="seg" role="group" aria-label="Overburden lithology">
+                <button type="button" data-over="soft" aria-pressed="true">soft</button>
+                <button type="button" data-over="hard" aria-pressed="false">hard</button>
+                <button type="button" data-over="tight" aria-pressed="false">tight</button>
+              </div>
+            </div>
+            <div class="ctl">
+              <label for="phi">Sand porosity <span class="val" id="phiV">28%</span></label>
+              <input type="range" id="phi" min="8" max="36" step="1" value="28">
+            </div>
+            <div class="ctl">
+              <label>Pore fluid <span class="val" id="fluidV">gas</span></label>
+              <div class="seg" role="group" aria-label="Fluid filling the sand pores">
+                <button type="button" data-fluid="brine" aria-pressed="false">brine</button>
+                <button type="button" data-fluid="oil" aria-pressed="false">oil</button>
+                <button type="button" data-fluid="gas" aria-pressed="true">gas</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="ctl-col" id="colLayers">
+            <h2>The layers</h2>
+            <div class="ctl">
+              <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
+              <input type="range" id="thick" min="6" max="55" step="1" value="30">
+            </div>
+            <div class="ctl">
+              <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
+              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+            </div>
+            <div class="ctl">
+              <label for="iso">Half isochron delimiter <span class="val" id="isoV">&plusmn;14 ms</span></label>
+              <input type="range" id="iso" min="1" max="14" step="1" value="14">
+            </div>
+            <p class="hint-line" style="margin:-4px 0 0">Narrow it and samples outside the band drop out of
+              the plot. Step 3 is about what that is for.</p>
+          </div>
+
+          <div class="ctl-col" id="colData">
+            <h2>What the data does to it</h2>
+            <div class="ctl">
+              <label for="dt">Sample rate <span class="val" id="dtV">1 ms</span></label>
+              <input type="range" id="dt" min="0" max="3" step="1" value="0">
+            </div>
+            <div class="ctl">
+              <label for="noise">Noise <span class="val" id="noiseV">0%</span></label>
+              <input type="range" id="noise" min="0" max="40" step="1" value="0">
+            </div>
+            <button class="btn ghost small" id="resetBtn" type="button">Reset everything</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
+    Method and references are there when you want them.</p>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
+    <button role="tab" data-tab="p1" aria-selected="false">1 · The third axis</button>
+    <button role="tab" data-tab="p2" aria-selected="false">2 · Three views of one plot</button>
+    <button role="tab" data-tab="p3" aria-selected="false">3 · Working the plot</button>
+    <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
+    <span class="gap"></span>
+    <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
+    <button role="tab" data-tab="pk" aria-selected="false">Key points</button>
+    <button role="tab" data-tab="pm" aria-selected="false">Method</button>
+  </nav>
+
+  <section class="tabpane" id="p1" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">1</span>The third axis</h3>
+      <span class="hint">What the half isochron is, and what it is not</span>
+    </div>
+
+    <p class="lede">
+      Module 05 built the signed half isochron and then set it aside. Here is where it is used: the RDQ
+      crossplot carries it as the <b>z axis</b>, alongside the amplitude and gradient that modules 08
+      and 09 rotated and split.</p>
+
+    <p class="lede">
+      It is worth being precise about what it measures. The half isochron is the time from a sample to
+      the pick that bounds its half loop, signed positive from trough to peak. That makes it a
+      <b>description of the waveform's shape at that sample</b> &mdash; how long the loop is and which way
+      it runs &mdash; and not a measurement of how thick a bed is. Once a bed is resolved the loop at its
+      top belongs to the wavelet, so the half isochron settles to a value set by the bandwidth and stops
+      responding to thickness altogether. The panel below shows that directly.</p>
+
+    <p class="lede">
+      <b>What that is useful for.</b> The AASPI attribute description gives two purposes and both follow
+      from the waveform reading. A section of half isochron shows layers thinning, thickening and pinching
+      out without anyone mapping a horizon, because a loop that shortens laterally is a bed that is
+      thinning. It also separates <b>layers of uniform lithology from layers that are internally
+      variable</b>: a clean, homogeneous bed produces one long regular loop, while a bed with internal
+      contrasts breaks into several short ones, and the half isochron reports that difference sample by
+      sample. And because a shortening loop is what tuning looks like, the same section flags the zones
+      where amplitudes are tuned and therefore not to be read as rock. Merged with a velocity cube it
+      converts to a depth thickness and a gross rock volume.</p>
+
+    <canvas id="c1a" aria-label="The signed half isochron down the trace, beside the near stack and the picks that define it"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The near stack, the picks, and the signed half isochron
+      each sample carries. Positive counts trough to peak, negative counts peak to trough.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Samples with a half isochron</span><b id="s1a">&mdash;</b></div>
+      <div class="stat"><span>Range on this trace</span><b id="s1b">&mdash;</b></div>
+      <div class="stat key"><span>At the top of the sand</span><b id="s1c">&mdash;</b></div>
+      <div class="stat"><span>Quarter of the wavelet period</span><b id="s1d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>Drag the sand thickness and watch the value at the sand top barely move once the bed is
+        resolved; drag the wavelet frequency instead and it moves at once. So this axis is a waveform measure, sensitive to the bandwidth and to interference. It is on the plot because samples from different parts of a loop behave differently, not because it reports the geology directly.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="p2" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">2</span>Three views of one plot</h3>
+      <span class="hint">Front, top and side</span>
+    </div>
+
+    <p class="lede">
+      A 3D scatter is awkward to read on a page, so the DQ papers unfold it into three flat views: the
+      <b>front wall</b> is amplitude against gradient, the plot every earlier module has been drawing; the
+      <b>top view</b> looks down, putting amplitude against half isochron; and the <b>side view</b> looks
+      in from the right, putting half isochron against gradient.</p>
+
+    <p class="lede">
+      Each view answers a different question about the same points. The front wall says what the AVO
+      behaviour is. The top and side views say where in the waveform those points came from, which is how
+      you tell a cluster made of peak samples from one made of crossing samples.</p>
+
+    <canvas id="c2a" aria-label="The crossplot unfolded into front, top and side views"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The same samples three ways. Colour is the quadrant
+      number, so you can follow where each point sits in its loop across all three panels.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Samples plotted</span><b id="s2a">&mdash;</b></div>
+      <div class="stat"><span>Amplitude range</span><b id="s2b">&mdash;</b></div>
+      <div class="stat"><span>Gradient range</span><b id="s2c">&mdash;</b></div>
+      <div class="stat key"><span>Half isochron range</span><b id="s2d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>The published displays add a fourth dimension by symbol and colour: shale an orange inverted
+        triangle, wet sand a blue cross, oil a green plus, gas a magenta triangle, with black circles for
+        samples not yet classified. On modelled data those labels are known; on real data they are what the
+        crossplot is being used to decide.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="p3" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">3</span>Working the plot</h3>
+      <span class="hint">Delimiters, polygons and statistics</span>
+    </div>
+
+    <p class="lede">
+      The crossplot is a tool rather than a picture, and it is worked in three ways. First, every column
+      can act as a <b>delimiter</b>: set a range and only samples inside it are drawn. The half isochron
+      delimiter is in the panel &mdash; narrow it and watch the plot thin out.</p>
+
+    <p class="lede">
+      Second, regions of the plot are enclosed as <b>polygons</b>, defined either by corners in x and y or,
+      unusually, by a pair of polar coordinates &mdash; a minimum and maximum angle with a minimum and
+      maximum distance, which is a natural way to draw a region on a plot whose whole geometry is polar.
+      Third, <b>statistics</b> are read back for whatever is enclosed: maximum, median, minimum, the 80th,
+      50th and 20th percentiles, and a count.</p>
+
+    <canvas id="c3a" aria-label="The front wall with a half isochron delimiter applied, showing which samples survive"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">Samples inside the half isochron band in colour,
+      excluded samples in grey. Drag the delimiter in the panel.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat key"><span>Samples passing the delimiter</span><b id="s3a">&mdash;</b></div>
+      <div class="stat"><span>Median distance, passing</span><b id="s3b">&mdash;</b></div>
+      <div class="stat"><span>P80 / P20 distance</span><b id="s3c">&mdash;</b></div>
+      <div class="stat"><span>Median distance, all samples</span><b id="s3d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>The statistics matter more than they look. They are what turns a cluster on a screen into a
+        number that can be carried forward &mdash; into a polygon definition, into a comparison between
+        time windows, or into the look-up catalogues module 11 described. A crossplot you can only look at
+        is a figure; one you can measure is an instrument.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pw" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">?</span>Why a crossplot at all</h3>
+      <span class="hint">And why this one is built differently</span>
+    </div>
+
+    <p class="lede">A seismic section shows you where things are and a crossplot shows you what they are.
+      Neither replaces the other, and the DQ workflow uses both: the sections of modules 07 and 10 to
+      locate an anomaly, and this plot to characterise it.</p>
+
+    <p class="lede">What makes this crossplot unusual is that it is built to be worked in polar
+      coordinates as well as Cartesian ones. The baseline rotation of module 08 is a polar operation, the
+      sector split of module 09 is defined by quadrant number, and Theta PX is an angle. So the natural way
+      to enclose a region here is with an angle range and a distance range rather than with a box, and the
+      software has to hold both coordinate systems at once. That is an uncommon requirement, and it is why the workflow needs purpose-built code rather than a standard crossplotting package.</p>
+
+    <div class="legend prose">
+      <span>Worth remembering what this module is and is not. It explains the plot and the operations
+        performed on it. It does not demonstrate that any particular cluster separation works on real
+        data, which the papers address and a field dataset would show.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pe" role="tabpanel" hidden>
+    <div class="tryit" style="max-width:none">
+      <h3>Exercises</h3>
+      <ol>
+        <li><b>Check what the third axis responds to.</b> On step 1, drag the sand thickness across its
+          range and watch the value at the sand top, then do the same with the wavelet frequency.
+          <details class="reveal"><summary>Hint</summary><span class="ans">Thickness barely moves it once
+            the bed is resolved; frequency moves it immediately. The half isochron at a sand top is
+            measuring the half loop of the reflection there, and once the top and base reflections separate
+            that loop is a property of the wavelet. Useful to know before reading too much into the axis:
+            it tells you about the shape of the waveform at a sample, not about the thickness of the bed
+            underneath it.</span></details></li>
+        <li><b>Find the sign change.</b> On step 1, follow the half isochron down through a peak.
+          <details class="reveal"><summary>Hint</summary><span class="ans">It flips from positive to
+            negative at the peak, because the sign is set by whether the waveform is rising or falling and
+            a peak is where that changes. That is the same convention module 07 gave the distance and
+            module 10 gave the angle, which is what lets all three be plotted against each other without
+            one arriving upside down.</span></details></li>
+        <li><b>Compare the three views.</b> On step 2, find a cluster on the front wall and then locate the
+          same points in the top and side views.
+          <details class="reveal"><summary>Hint</summary><span class="ans">Points that sit together on the
+            front wall can be spread across the top view, because two samples with similar AVO behaviour
+            may come from quite different parts of a loop. Without the third axis, samples are grouped by what they look like rather than by where they came from.</span></details></li>
+        <li><b>Use the delimiter.</b> On step 3, narrow the half isochron band and watch the counts and the
+          statistics.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The count falls and the median
+            distance shifts, because you are progressively excluding the samples nearest the zero
+            crossings, which module 09 showed sit closest to the origin. Delimiting chooses which part of the waveform to look at rather than filtering out noise, and the statistics readout tells
+            you what that choice cost you in sample count.</span></details></li>
+        <li><b>Change the reservoir and watch the cluster move.</b> On step 3, switch the fluid from brine
+          to gas.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The sand samples move as a group
+            while the background stays put. That movement is what the crossplot exists to show, and it is why the workflow crossplots sliding time windows: a cluster that shifts between windows
+            means the AVO class has changed, which is the signal that a new calibration is needed rather
+            than a new interpretation.</span></details></li>
+        <li><b>Coarsen the sample rate.</b> Take it to 4 ms and look at step 2.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The plot empties out, because
+            the quadrant numbering that admits a sample to the plot needs samples to number, and module 04
+            measured how quickly those disappear. The half isochron suffers doubly: it is a count of
+            samples between picks, so at 4 ms it can only take values that are multiples of four
+            milliseconds and the axis becomes a set of stripes rather than a
+            continuum.</span></details></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pk" role="tabpanel" hidden>
+    <div class="takeaway" style="max-width:none">
+      <h3>The main points</h3>
+      <ul>
+        <li><b>The RDQ crossplot has three axes:</b> amplitude, gradient and the signed half isochron,
+          after the rotation of module 08 and the split of module 09.</li>
+        <li><b>The half isochron describes the waveform, not the bed.</b> It is the length and direction of
+          the half loop a sample sits in, and once a bed is resolved that loop belongs to the
+          wavelet.</li>
+        <li><b>It is on the plot so that samples can be grouped by where in a loop they came from</b>,
+          which the front wall alone cannot tell you.</li>
+        <li><b>Three flat views replace the 3D scatter:</b> front, top and side.</li>
+        <li><b>Every column can act as a delimiter</b>, restricting which samples are drawn.</li>
+        <li><b>Polygons can be defined in polar coordinates</b> &mdash; an angle range and a distance range
+          &mdash; which suits a plot whose geometry is polar throughout.</li>
+        <li><b>Statistics are read back from whatever is enclosed:</b> maximum, median, minimum, P80, P50,
+          P20 and a count.</li>
+        <li><b>Sliding the analysis window and watching the cluster move</b> is how the workflow detects
+          that the AVO class has changed and a new calibration is needed.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pm" role="tabpanel" hidden>
+    <details class="notes" id="notes" open>
+      <summary>Method, assumptions, and where to read more</summary>
+      <p>Everything upstream is as in modules 03 through 12. The axes follow the AASPI column
+        specification: for the RDQ crossplot, x is the rotated and split near-quadrant amplitude, y is the
+        rotated and split far-minus-near quadrant gradient, and z is the signed half isochron in
+        milliseconds. The specification gives a starting shale baseline of 330&deg; for the RDQ crossplot
+        and 360&deg; for the plain AB crossplot; this page uses the baseline fitted in module 08.</p>
+      <p>The delimiter, polygon and statistics behaviour described on step 3 is taken from the same
+        specification, which lists the columns that act as delimiters, the seven statistics to be reported,
+        and the polar polygon definition by two corner clicks. The page implements the half isochron
+        delimiter and the statistics for it; the polygon tool is described rather than built, since it
+        needs an interaction model this format does not have.</p>
+      <p>The two purposes given on step 1 &mdash; mapping thinning and pinch-out without horizon picking,
+        and separating homogeneous from heterogeneous layers &mdash; are from the AASPI attribute
+        description, which also notes that the half isochron identifies zones with tuned amplitudes and
+        that merging it with a velocity cube gives a depth thickness and a gross rock volume. This page
+        does not demonstrate those on field data; it explains what the axis measures and how the plot is
+        worked.</p>
+      <p><b>What this module deliberately does not claim.</b> It does not show that delimiting on the half
+        isochron improves any particular separation, and it does not reproduce the cluster patterns the
+        papers report from field data. This is a model with one sand in one seal, and the purpose here is
+        to explain what the plot is and how it is worked. Whether a given delimiter helps is a question
+        about a dataset, not about the method.</p>
+      <p>One measured caution is worth carrying: the half isochron at a sand top does not track bed
+        thickness. Across a wedge from 6 to 54 ms it settles to a constant once the bed is resolved. The
+        axis is a waveform descriptor, and step 1 says so rather than leaving the reader to assume
+        otherwise.</p>
+      <ul>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+          quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+        <li>Neff, D. B., and W. Neff, RDQ calculations, 3D crossplots and statistical readouts.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="nextup" id="nextup" hidden>
+    <p class="eyebrow">Next up</p>
+    <h3><a href="avo-classes.html">14 · The four AVO classes</a></h3>
+    <p>Sections and histograms across classes 1, 2p, 3 and 4, and what each one looks like once it has been
+      through the whole chain.</p>
+    <a class="btn" href="avo-classes.html">Open module 14 →</a>
+    <a class="btn ghost" href="../index.html">All modules</a>
+  </section>
+
+  <div class="pager" id="pager" hidden>
+    <a class="btn ghost" href="wedge.html">← Wedge models and tuning</a>
+    <a class="btn" href="avo-classes.html">Next: the four AVO classes →</a>
+  </div>
+
+  <footer>
+    <div class="foot-grid">
+      <p>Built for teaching by Heather Bedle, School of Geosciences, University of Oklahoma, with the
+        <a href="https://www.ou.edu/mcee/labs/aaspi">AASPI</a> consortium.</p>
+      <p class="lic">Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+        Free to use, share and adapt for any purpose, including training in industry, provided the source is
+        credited and adapted versions carry the same license.</p>
+      <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
+        Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
+      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
+        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        nothing about you.</p>
+    </div>
+  </footer>
+</div>
+
+<script src="../assets/count.js"></script>
+<script src="../assets/seismic.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  if (typeof SEIS === 'undefined') {
+    const el = document.createElement('div');
+    el.setAttribute('style', 'background:#841617;color:#fff;padding:14px 18px;margin:16px 0;' +
+      'font:13px/1.6 ui-monospace,Menlo,monospace');
+    el.textContent = 'This module could not load assets/seismic.js. It expects it one directory up, ' +
+      'at ../assets/, and file names are case-sensitive on GitHub Pages.';
+    const w = document.querySelector('.wrap');
+    (w || document.body).insertBefore(el, w ? w.firstChild : null);
+    return;
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const visible = (id) => { const el = $(id); return el && !el.hidden; };
+
+  /* =====================================================================
+     THE ROCKS
+     Identical to modules 01 and 02.
+     ===================================================================== */
+
+  const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };
+
+  const FLUIDS = {
+    brine: { K: 2.60,  rho: 1.03, v: 1500, name: 'brine' },
+    oil:   { K: 0.80,  rho: 0.78, v: 1300, name: 'oil' },
+    gas:   { K: 0.055, rho: 0.20, v: 550,  name: 'gas' },
+  };
+
+  const LITHS = {
+    soft: { vp: 2700, vs: 1175, rho: 2.33, name: 'soft shale' },
+    hard: { vp: 3350, vs: 1675, rho: 2.48, name: 'hard shale' },
+    tight: { vp: 4800, vs: 2800, rho: 2.56, name: 'tight sandstone' },
+  };
+
+  const PH0 = 8, PH1 = 36;
+  const DTS = [0.001, 0.002, 0.003, 0.004];
+  const NEAR_A = [0, 10];
+  const T0 = 0, TWIN = 0.150, TTOP = 0.050;
+  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
+  const BEDC = [0.118, 0.130];                   // a tight bed below it
+
+  const DEF = {
+    over: 'soft', phi: 28, fluid: 'gas',
+    thick: 30, freq: 40, dt: 0, noise: 0, iso: 14, tab: 'p1',
+  };
+  let S = SEIS.readState(DEF);
+  if (!LITHS[S.over]) S.over = DEF.over;
+  if (!FLUIDS[S.fluid]) S.fluid = DEF.fluid;
+  S.phi = Math.min(PH1, Math.max(PH0, Math.round(S.phi) || DEF.phi));
+
+  const CAN_LINK = location.protocol !== 'file:';
+  const saveState = () => {
+    if (!CAN_LINK) return;
+    try { SEIS.writeState(S, DEF); } catch (e) { /* nothing shareable */ }
+  };
+
+  /* ------------------------------- the physics ------------------------- */
+
+  function shuey(l1, l2) {
+    const vp = (l1.vp + l2.vp) / 2, dvp = l2.vp - l1.vp;
+    const vs = (l1.vs + l2.vs) / 2, dvs = l2.vs - l1.vs;
+    const rho = (l1.rho + l2.rho) / 2, drho = l2.rho - l1.rho;
+    const k = (vs / vp) * (vs / vp);
+    return {
+      A: 0.5 * (dvp / vp + drho / rho),
+      B: 0.5 * (dvp / vp) - 2 * k * (drho / rho + 2 * (dvs / vs)),
+    };
+  }
+  function meanSin2(a, b) {
+    const n = 256, lo = a * Math.PI / 180, hi = b * Math.PI / 180;
+    let sum = 0;
+    for (let i = 0; i < n; i++) {
+      const th = lo + (hi - lo) * (i + 0.5) / n;
+      sum += Math.sin(th) * Math.sin(th);
+    }
+    return sum / n;
+  }
+  const S2N = meanSin2(NEAR_A[0], NEAR_A[1]);
+
+  function brineSand(phi) {
+    const vp = 1 / (phi / FLUIDS.brine.v + (1 - phi) / MATRIX.vp);
+    const rho = (1 - phi) * MATRIX.rho + phi * FLUIDS.brine.rho;
+    const vpvs = -0.75 * phi * phi + 1.35 * phi + 1.63;
+    return { vp, vs: vp / vpvs, rho };
+  }
+  function ksatFromDry(kdry, phi, kfl) {
+    const num = Math.pow(1 - kdry / MATRIX.K, 2);
+    const den = phi / kfl + (1 - phi) / MATRIX.K - kdry / (MATRIX.K * MATRIX.K);
+    return kdry + num / den;
+  }
+  function kdryFromSat(ksat, phi, kfl) {
+    const a = phi * MATRIX.K / kfl;
+    return (ksat * (a + 1 - phi) - MATRIX.K) / (a + ksat / MATRIX.K - 1 - phi);
+  }
+  function sandRock(phi, fluidKey) {
+    const b = brineSand(phi);
+    if (fluidKey === 'brine') return b;
+    const mu = b.rho * b.vs * b.vs * 1e-6;
+    const ksat = b.rho * b.vp * b.vp * 1e-6 - (4 / 3) * mu;
+    const kdry = kdryFromSat(ksat, phi, FLUIDS.brine.K);
+    const f = FLUIDS[fluidKey];
+    const k2 = ksatFromDry(kdry, phi, f.K);
+    const rho = (1 - phi) * MATRIX.rho + phi * f.rho;
+    return {
+      vp: Math.sqrt((k2 + (4 / 3) * mu) * 1e6 / rho),
+      vs: Math.sqrt(mu * 1e6 / rho),
+      rho,
+    };
+  }
+
+  const dt = () => DTS[S.dt | 0];
+  const ntOf = () => Math.floor(TWIN / dt()) + 1;
+
+  /* --------------------------- the layer stack ------------------------- */
+
+  /* The near-stack reflectivity of one trace. A layered earth rather than a
+     lone sand, so that the trace looks like something worth picking: a
+     contrasting bed above, the sand with an optional tight streak inside it,
+     and a tight bed below. Every spike is computed from the two rocks it sits
+     between. */
+  function spikes(topT, thickS) {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const tight = LITHS.tight;
+    const other = (S.over === 'soft') ? LITHS.hard : LITHS.soft;
+    const n = (q) => q.A + q.B * S2N;
+    const shift = topT - TTOP;                   // structure moves everything together
+    const out = [];
+
+    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
+    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
+
+    const baseT = topT + thickS / 1000;
+    out.push({ t: topT, r: n(shuey(over, sand)) });
+    out.push({ t: baseT, r: n(shuey(sand, over)) });
+
+    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
+    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
+    return out;
+  }
+
+  const wavelet = () => SEIS.makeWavelet({ type: 'ricker', f: S.freq });
+
+  function refAmp() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const q = shuey(over, sand);
+    return Math.max(Math.abs(q.A + q.B * S2N), 1e-4);
+  }
+
+  let noiseCache = null;
+  function noiseField(nx) {
+    const key = [S.over, S.phi, S.fluid, S.freq, S.noise, S.dt, nx].join('|');
+    if (noiseCache && noiseCache.key === key) return noiseCache.field;
+    let field = null;
+    if (S.noise > 0) {
+      const raw = SEIS.bandLimitedNoise(nx, ntOf(), dt(), wavelet(), 20260903, 0);
+      const amp = (S.noise / 100) * refAmp();
+      field = new Float32Array(raw.length);
+      for (let i = 0; i < raw.length; i++) field[i] = raw[i] * amp;
+    }
+    noiseCache = { key, field };
+    return field;
+  }
+
+  function trace(topT, thickS, noise, ix) {
+    const nt = ntOf();
+    const tr = SEIS.traceFromSpikes(spikes(topT, thickS), T0, dt(), nt, wavelet());
+    if (noise) for (let i = 0; i < nt; i++) tr[i] += noise[ix * nt + i];
+    return tr;
+  }
+
+  /* ------------------------------- the picker --------------------------
+     Zero crossings first. Of the two samples bracketing a crossing, keep
+     the one with the smaller magnitude; that sample is Q5. Then between
+     each consecutive pair of those, keep the single largest peak or
+     trough, so a doublet loses its smaller half.
+     --------------------------------------------------------------------- */
+
+  // an extremum in the strict sense: the sample-to-sample difference changes
+  // sign here, and the sample is above the amplitude floor
+  function isExtremum(tr, i, floor) {
+    if (i < 1 || i > tr.length - 2) return false;
+    if (Math.abs(tr[i]) <= floor) return false;
+    const a = tr[i] - tr[i - 1], b = tr[i + 1] - tr[i];
+    return (a > 0 && b <= 0) || (a < 0 && b >= 0);
+  }
+
+  function pick(tr, sandWin) {
+    const nt = tr.length;
+    let peak = 1e-12;
+    for (let i = 0; i < nt; i++) peak = Math.max(peak, Math.abs(tr[i]));
+    const floor = 0.01 * peak;
+
+    const cross = [];                      // { i, tTrue, err }
+    for (let i = 1; i < nt; i++) {
+      const a = tr[i - 1], b = tr[i];
+      if (a === 0 || b === 0) continue;
+      if ((a > 0) === (b > 0)) continue;
+      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
+      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
+      // where the crossing actually is, by linear interpolation
+      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
+      const tTrue = (i - 1 + frac) * dt();
+      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    }
+
+    /* Between each consecutive pair of crossings, keep the single largest
+       peak or trough. Where a thin bed has put two extrema in one interval,
+       the smaller is discarded; those are counted separately, and only inside
+       the sand, so that the count is about the sand and not about whatever
+       the beds above and below happen to be doing. */
+    const ext = [], dropped = [];
+    let doublets = 0, inSand = 0;
+    const inWin = (i) => !sandWin || (i >= sandWin[0] && i <= sandWin[1]);
+    for (let k = 0; k + 1 < cross.length; k++) {
+      const lo = cross[k].i, hi = cross[k + 1].i;
+      let best = -1, bv = 0;
+      const here = [];
+      for (let i = lo + 1; i < hi; i++) {
+        if (isExtremum(tr, i, floor)) here.push(i);
+        if (Math.abs(tr[i]) > bv) { bv = Math.abs(tr[i]); best = i; }
+      }
+      if (best < 0 || bv <= floor) continue;
+      ext.push({ i: best, sign: tr[best] > 0 ? 1 : -1, amp: tr[best] });
+      if (inWin(best)) inSand++;
+      here.forEach((i) => {
+        if (i === best) return;
+        dropped.push(i);
+        if (inWin(i)) doublets++;
+      });
+    }
+    return { cross, ext, dropped, doublets, inSand, peak, floor };
+  }
+
+  // the samples spanned by the sand, used to keep the doublet count local
+  function sandWindow(topT, thickS) {
+    const D = dt();
+    return [Math.max(0, Math.floor(topT / D)),
+            Math.min(ntOf() - 1, Math.ceil((topT + thickS / 1000) / D))];
+  }
+
+  /* =====================================================================
+     QUADRANT NUMBERING
+
+     Anchors come from the picks: Q5 at every zero-crossing sample, Q1 at
+     every trough, Q9 at every peak. Between two anchors the three interior
+     numbers are spread by proportion, which repeats them when the gap is
+     long and drops them when it is short.
+     ===================================================================== */
+
+  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
+     and then starts again. It does not run up to 9 and mirror back down. The
+     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
+     opens the next, which is why the published table gives both the 0 degree
+     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
+     coarse version as "4 quadrants". */
+
+  function quadrants(tr, pk) {
+    const nt = tr.length;
+    const q = new Int8Array(nt);                 // 0 means unnumbered
+    const ends = new Set();                      // samples that close a loop
+    const cross = pk.cross.slice().sort((a, b) => a.i - b.i);
+    const ext = pk.ext.slice().sort((a, b) => a.i - b.i);
+
+    // one loop is extremum, crossing, extremum
+    const loops = [];
+    for (let k = 0; k + 1 < ext.length; k++) {
+      const a = ext[k], b = ext[k + 1];
+      const x = cross.find((c) => c.i > a.i && c.i < b.i);
+      if (x) loops.push({ a: a.i, x: x.i, b: b.i });
+    }
+
+    let repeated = 0, omitted = 0, gaps = 0, interior = 0;
+    const fill = (i0, i1, trip) => {
+      const n = i1 - i0 - 1;
+      gaps++;
+      interior += n;
+      if (n <= 0) { omitted++; return; }
+      const used = new Set(), count = {};
+      for (let m = 0; m < n; m++) {
+        const v = trip[Math.min(2, Math.floor((m + 0.5) * 3 / n))];
+        q[i0 + 1 + m] = v;
+        used.add(v);
+        count[v] = (count[v] || 0) + 1;
+      }
+      if (used.size < 3) omitted++;
+      if (Object.keys(count).some((v) => count[v] > 1)) repeated++;
+    };
+
+    loops.forEach((L) => {
+      q[L.a] = 1;                                // opens this loop
+      q[L.x] = 5;
+      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
+      ends.add(L.b);                             // loop has already claimed it
+      fill(L.a, L.x, [2, 3, 4]);
+      fill(L.x, L.b, [6, 7, 8]);
+    });
+    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
+    // same position and take the same filter, so either label is correct
+    loops.forEach((L) => { q[L.a] = 1; });
+
+    const anchors = [];
+    loops.forEach((L) => {
+      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+    });
+    if (loops.length) {
+      const last = loops[loops.length - 1];
+      anchors.push({ i: last.b, q: q[last.b] || 9 });
+    }
+    anchors.sort((a, b) => a.i - b.i);
+    return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
+  }
+
+  // how the three interior numbers land for a gap of n samples
+  function fillPattern(n) {
+    const out = [];
+    for (let m = 0; m < n; m++) out.push(2 + Math.min(2, Math.floor((m + 0.5) * 3 / n)));
+    return out;
+  }
+
+  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
+     or a carbonate play — both partial stacks are reversed at the stacking
+     step, before any picking, so that the numbering rule never changes. */
+  function needsFlip() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const t = shuey(over, sand);
+    return (t.A + t.B * S2N) > 0;
+  }
+  const flipApplied = () => needsFlip() && !S.skipflip;
+
+  function avoClass() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const t = shuey(over, sand);
+    const s2f = meanSin2(20, 30);
+    const far = t.A + t.B * s2f;
+    if (t.A > 0.03) return (t.A * far < 0) ? 'class 2p' : 'class 1';
+    if (t.A > -0.03) return (t.A * far < 0) ? 'class 2p' : 'class 2';
+    return t.B < 0 ? 'class 3' : 'class 4';
+  }
+
+
+  /* =====================================================================
+     THE PHASE FILTERS
+
+     A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
+     trace rather than to the wavelet so that it also works with noise on.
+     The tabulated filter is written for a rising limb; on a falling limb
+     the phase that centres a sample runs the other way, so the filter is
+     negated. Step 3 measures what happens if it is not.
+     ===================================================================== */
+
+  // the published table, one filter per quadrant number
+  const FILTERS = [0, 22.5, 45, 67.5, -90, -67.5, -45, -22.5];
+  const PHASE_OF = { 1: 0, 2: 22.5, 3: 45, 4: 67.5, 5: -90, 6: -67.5, 7: -45, 8: -22.5, 9: 0 };
+
+  function rotate(x, deg) {
+    if (Math.abs(deg) < 1e-9) return Float64Array.from(x);
+    const h = SEIS.hilbert(x);
+    const c = Math.cos(deg * Math.PI / 180), s = Math.sin(deg * Math.PI / 180);
+    const o = new Float64Array(x.length);
+    for (let i = 0; i < x.length; i++) o[i] = x[i] * c + h[i] * s;
+    return o;
+  }
+  function envelope(x) {
+    const h = SEIS.hilbert(x);
+    const o = new Float64Array(x.length);
+    for (let i = 0; i < x.length; i++) o[i] = Math.hypot(x[i], h[i]);
+    return o;
+  }
+
+  /* Which way each limb runs, so the filter sign can follow it. A limb is a
+     stretch from one extremum to the next, and the crossing sits inside it. */
+  function limbSigns(tr, pk, nt) {
+    const sign = new Int8Array(nt);                 // +1 rising, -1 falling
+    const ext = pk.ext.slice().sort((a, b) => a.i - b.i);
+    for (let k = 0; k + 1 < ext.length; k++) {
+      const a = ext[k], b = ext[k + 1];
+      const s = (tr[b.i] > tr[a.i]) ? 1 : -1;
+      for (let i = a.i; i <= b.i; i++) sign[i] = s;
+    }
+    return sign;
+  }
+
+  function enhance(tr, qd, pk) {
+    const nt = tr.length;
+    const sign = limbSigns(tr, pk, nt);
+    const cache = {};
+    const out = new Float64Array(nt);
+    const used = new Set();
+    for (let i = 0; i < nt; i++) {
+      const q = qd.q[i];
+      if (!q) continue;
+      let deg = PHASE_OF[q];
+      if (sign[i] < 0) deg = -deg;                   // falling limb runs the other way
+      if (!(deg in cache)) cache[deg] = rotate(tr, deg);
+      out[i] = cache[deg][i];
+      used.add(deg);
+    }
+    return { out, used, sign };
+  }
+
+
+  // the peak amplitude a rotated wavelet reaches, relative to the unrotated one
+  function filterPeaks() {
+    const wav = wavelet();
+    const out = {};
+    [0, 22.5, 45, 67.5, 90].forEach((p) => {
+      const w = SEIS.phaseRotate(wav, p);
+      let mx = 0;
+      for (let t = -0.08; t <= 0.08; t += 0.0002) mx = Math.max(mx, Math.abs(w.fn(t)));
+      out[p] = mx;
+    });
+    return out;
+  }
+
+  /* =====================================================================
+     THE DISTANCE
+
+     A is the quadrant-enhanced near stack and B is the enhanced far stack
+     minus it, so the two mean what they meant in module 02. The distance is
+     the length of that vector, and the sign is put on afterwards from the
+     slope of the near stack.
+     ===================================================================== */
+
+  const S2F = meanSin2(20, 30);
+
+  // the far stack of the same layer stack, formed exactly as the near one is
+  function farTrace(noise) {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const baseT = TTOP + S.thick / 1000;
+    const f = (q) => q.A + q.B * S2F;
+    const sp = [
+      { t: BEDA[0], r: f(shuey(over, (S.over === 'soft') ? LITHS.hard : LITHS.soft)) },
+      { t: BEDA[1], r: f(shuey((S.over === 'soft') ? LITHS.hard : LITHS.soft, over)) },
+      { t: TTOP, r: f(shuey(over, sand)) },
+      { t: baseT, r: f(shuey(sand, over)) },
+      { t: BEDC[0], r: f(shuey(over, LITHS.tight)) },
+      { t: BEDC[1], r: f(shuey(LITHS.tight, over)) },
+    ];
+    const nt = ntOf();
+    const tr = SEIS.traceFromSpikes(sp, T0, dt(), nt, wavelet());
+    if (noise) for (let i = 0; i < nt; i++) tr[i] += noise[i];
+    return tr;
+  }
+
+  function slopeSign(tr, qd) {
+    const nt = tr.length;
+    const s = new Int8Array(nt);
+    for (let i = 0; i < nt; i++) {
+      if (!qd.q[i]) continue;
+      if (qd.q[i] === 1 || qd.q[i] === 9) { s[i] = 1; continue; }   // extrema are positive
+      const a = tr[Math.max(0, i - 1)], b = tr[Math.min(nt - 1, i + 1)];
+      s[i] = (b > a) ? 1 : -1;
+    }
+    return s;
+  }
+
+  function build() {
+    const noise = noiseField(1);
+    let near = trace(TTOP, S.thick, noise, 0);
+    let far = farTrace(noise);
+    if (flipApplied()) {
+      for (let i = 0; i < near.length; i++) { near[i] = -near[i]; far[i] = -far[i]; }
+    }
+    const pk = pick(near, sandWindow(TTOP, S.thick));
+    const qd = quadrants(near, pk);
+    const QN = enhance(near, qd, pk).out;
+    const QF = enhance(far, qd, pk).out;
+
+    const nt = near.length;
+    const A = new Float64Array(nt), B = new Float64Array(nt);
+    const D = new Float64Array(nt), Dpub = new Float64Array(nt), Dsig = new Float64Array(nt);
+    const sgn = slopeSign(near, qd);
+    let worst = 0;
+    for (let i = 0; i < nt; i++) {
+      if (!qd.q[i]) continue;
+      A[i] = QN[i];
+      B[i] = QF[i] - QN[i];
+      D[i] = Math.hypot(A[i], B[i]);
+      // the form the papers print, evaluated independently
+      Dpub[i] = Math.sqrt(Math.max(0, 2 * QN[i] * QN[i] + QF[i] * QF[i] - 2 * QN[i] * QF[i]));
+      worst = Math.max(worst, Math.abs(D[i] - Dpub[i]));
+      Dsig[i] = S.signed ? sgn[i] * D[i] : D[i];
+    }
+    return { near, far, qd, pk, QN, QF, A, B, D, Dpub, Dsig, sgn, worst,
+             env: envelope(near) };
+  }
+
+  /* variation within each loop, as a fraction of that loop's mean magnitude.
+     A blocked trace scores near zero; an oscillating one scores badly. */
+  function blockiness(mag, b) {
+    const ext = b.pk.ext.slice().sort((x, y) => x.i - y.i);
+    const cv = [];
+    for (let k = 0; k + 1 < ext.length; k++) {
+      const lo = ext[k].i, hi = ext[k + 1].i;
+      if (hi - lo < 5) continue;
+      let s = 0, n = 0;
+      for (let i = lo; i <= hi; i++) { s += Math.abs(mag[i]); n++; }
+      const m = s / n;
+      if (m < 1e-9) continue;
+      let v = 0;
+      for (let i = lo; i <= hi; i++) v += (Math.abs(mag[i]) - m) * (Math.abs(mag[i]) - m);
+      cv.push(Math.sqrt(v / n) / m);
+    }
+    return { cv: cv.length ? cv.reduce((a, c) => a + c, 0) / cv.length : 0, n: cv.length };
+  }
+
+  /* =====================================================================
+     SECTOR SPLITTING
+
+     Paper 2: if the quadrant number is Q3, Q4, Q5, Q6 or Q7 then the data
+     are replotted with the gradient multiplied by -1. Applied after the
+     baseline rotation of module 08, never before it.
+     ===================================================================== */
+
+  const BASE_BEARING = 344;                        // this model's baseline, module 08
+  const TURN = 360 - BASE_BEARING;                 // spec [25] and [30]
+  const isSplit = (q) => q >= 3 && q <= 7;
+
+  function rotXY(x, y, deg) {
+    const t = deg * Math.PI / 180, c = Math.cos(t), s = Math.sin(t);
+    return [x * c - y * s, x * s + y * c];
+  }
+
+  function points() {
+    const b = build();
+    const nt = b.near.length;
+    const out = [];
+    for (let i = 0; i < nt; i++) {
+      const q = b.qd.q[i];
+      if (!q) continue;
+      const [x, y] = rotXY(b.A[i], b.B[i], TURN);
+      const flip = isSplit(q);
+      out.push({ i, q, x, y: flip ? -y : y, y0: y, moved: flip });
+    }
+    return { b, pts: out };
+  }
+
+  const bearing = (x, y) => (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+
+  /* mean, across the nine numbers, of the angular spread within a number.
+     Angles are unwrapped about each group's own mean first, so a group that
+     straddles zero is not credited with a huge spread for that reason. */
+  /* How consistently the samples carrying one quadrant number fall on the same
+     side of the background trend, averaged over the nine numbers. Reflecting a
+     whole group cannot change the spread within it, so spread is the wrong
+     measure here; agreement between loops is the right one. */
+  function sideAgreement(pts, useSplit) {
+    const by = {};
+    pts.forEach((p) => {
+      const y = useSplit ? p.y : p.y0;
+      (by[p.q] = by[p.q] || []).push(y >= 0 ? 1 : 0);
+    });
+    const fr = [];
+    Object.keys(by).forEach((k) => {
+      const a = by[k];
+      if (a.length < 3) return;
+      const up = a.reduce((s, v) => s + v, 0);
+      fr.push(Math.max(up, a.length - up) / a.length);
+    });
+    return fr.length ? 100 * fr.reduce((s, x) => s + x, 0) / fr.length : 0;
+  }
+
+  function angleSpread(pts, useSplit) {
+    const by = {};
+    pts.forEach((p) => {
+      const y = useSplit ? p.y : p.y0;
+      (by[p.q] = by[p.q] || []).push(bearing(p.x, y));
+    });
+    const sds = [];
+    Object.keys(by).forEach((k) => {
+      const a = by[k];
+      if (a.length < 3) return;
+      const rad = a.map((d) => d * Math.PI / 180);
+      const mx = rad.reduce((s, r) => s + Math.cos(r), 0) / rad.length;
+      const my = rad.reduce((s, r) => s + Math.sin(r), 0) / rad.length;
+      const mean = Math.atan2(my, mx);
+      let v = 0;
+      rad.forEach((r) => {
+        let d = r - mean;
+        while (d > Math.PI) d -= 2 * Math.PI;
+        while (d < -Math.PI) d += 2 * Math.PI;
+        v += d * d;
+      });
+      sds.push(Math.sqrt(v / rad.length) * 180 / Math.PI);
+    });
+    return sds.length ? sds.reduce((s, x) => s + x, 0) / sds.length : 0;
+  }
+
+  /* =====================================================================
+     THETA PX
+
+     The polar angle of the split coordinates, folded into 0-90 by sector and
+     multiplied by the sign of the DQ trace. Quoted from the AASPI column
+     sequence; Paper 2 gives the same four rules labelled by sector.
+     ===================================================================== */
+
+  function fold(deg) {
+    if (deg < 90) return deg;
+    if (deg < 180) return 180 - deg;
+    if (deg < 270) return deg - 180;
+    return 360 - deg;
+  }
+  function sectorName(deg) {
+    if (deg < 90) return 'I, upper right';
+    if (deg < 180) return 'IV, upper left';
+    if (deg < 270) return 'III, lower left';
+    return 'II, lower right';
+  }
+
+  // the sand-top sample, with everything the module reports about it
+  function atTop(over, fluid, phi) {
+    const keep = [S.over, S.fluid, S.phi];
+    if (over) { S.over = over; S.fluid = fluid; S.phi = phi; }
+    const { b, pts } = points();
+    const win = sandWindow(TTOP, S.thick);
+    let best = null, bd = 1e9;
+    pts.forEach((p) => { const d = Math.abs(p.i - win[0]); if (d < bd) { bd = d; best = p; } });
+    let out = null;
+    if (best) {
+      const ang = bearing(best.x, best.y);
+      const sgn = b.sgn[best.i] >= 0 ? 1 : -1;
+      out = { ang, sector: sectorName(ang), folded: fold(ang),
+              px: fold(ang) * (S.signed ? sgn : 1), sgn,
+              d: Math.hypot(best.x, best.y), q: best.q, i: best.i };
+    }
+    if (over) { S.over = keep[0]; S.fluid = keep[1]; S.phi = keep[2]; }
+    return out;
+  }
+
+  /* =====================================================================
+     THE 3D RDQ CROSSPLOT
+
+     Axes per the AASPI column specification: x is the rotated and split
+     near-quadrant amplitude, y the rotated and split gradient, z the signed
+     half isochron. The half isochron is a waveform descriptor — the length
+     and direction of the half loop a sample sits in — not a bed thickness.
+     ===================================================================== */
+
+  const SOFT = 'rgba(22,25,28,0.45)';
+  const CRIM = '#841617';
+  const QCOL = {
+    1: '#1D6FA3', 2: '#3E86B4', 3: '#6BA0C4', 4: '#9CBBD4',
+    5: '#8A8F95', 6: '#DCA8BF', 7: '#D07FA2', 8: '#C9578A', 9: '#C2306B',
+  };
+
+  function width(el, fallback) {
+    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    return Math.max(280, w || fallback);
+  }
+
+  /* The signed half isochron: for each sample, the duration of the half loop
+     it belongs to, positive trough-to-peak and negative peak-to-trough. */
+  function halfIsochron(pk, nt, D) {
+    const a = new Float64Array(nt);
+    const has = new Uint8Array(nt);
+    const anch = [];
+    pk.cross.forEach((c) => anch.push({ i: c.i, kind: 'x' }));
+    pk.ext.forEach((e) => anch.push({ i: e.i, kind: e.sign > 0 ? 'p' : 't' }));
+    anch.sort((u, v) => u.i - v.i);
+    for (let k = 0; k + 1 < anch.length; k++) {
+      const A = anch[k], B = anch[k + 1];
+      if (A.kind === B.kind) continue;
+      const ms = (B.i - A.i) * D * 1000;
+      const rising = (A.kind === 't' && B.kind === 'x') || (A.kind === 'x' && B.kind === 'p');
+      for (let i = A.i; i <= B.i; i++) { a[i] = rising ? ms : -ms; has[i] = 1; }
+    }
+    return { iso: a, has };
+  }
+
+  function scene() {
+    const r = points();
+    const b = r.b;
+    const nt = b.near.length;
+    const H = halfIsochron(b.pk, nt, dt());
+    const pts = [];
+    r.pts.forEach((q) => {
+      if (!H.has[q.i]) return;
+      pts.push({ i: q.i, q: q.q, x: q.x, y: q.y, iso: H.iso[q.i],
+                 d: Math.hypot(q.x, q.y) });
+    });
+    return { b, nt, H, pts };
+  }
+  const passes = (p) => Math.abs(p.iso) <= S.iso;
+
+  function pct(arr, p) {
+    if (!arr.length) return 0;
+    const a = arr.slice().sort((u, v) => u - v);
+    const k = (a.length - 1) * p;
+    const lo = Math.floor(k), hi = Math.ceil(k);
+    return lo === hi ? a[lo] : a[lo] + (a[hi] - a[lo]) * (k - lo);
+  }
+
+  function scatter(ctx, rect, pts, ax, ay, lims, opts) {
+    const o = opts || {};
+    const X = (v) => rect.x + ((v - lims[0]) / (lims[1] - lims[0])) * rect.w;
+    const Y = (v) => rect.y + rect.h - ((v - lims[2]) / (lims[3] - lims[2])) * rect.h;
+    SEIS.axisLeft(ctx, rect, lims[2], lims[3], o.ylab, o.yfmt, { ticks: 5, flip: true, grid: true });
+    SEIS.axisBottom(ctx, rect, lims[0], lims[1], o.xlab, o.xfmt, { ticks: 5 });
+    SEIS.frame(ctx, rect);
+    if (lims[0] < 0 && lims[1] > 0) {
+      SEIS.dashedLine(ctx, X(0), rect.y, X(0), rect.y + rect.h, SOFT, [4, 4], 1);
+    }
+    if (lims[2] < 0 && lims[3] > 0) {
+      SEIS.dashedLine(ctx, rect.x, Y(0), rect.x + rect.w, Y(0), SOFT, [4, 4], 1);
+    }
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    pts.forEach((p) => {
+      const on = o.dim ? passes(p) : true;
+      ctx.beginPath();
+      ctx.arc(X(ax(p)), Y(ay(p)), on ? 2.7 : 2, 0, 2 * Math.PI);
+      ctx.fillStyle = on ? (o.byQ ? (QCOL[p.q] || '#888') : CRIM) : 'rgba(22,25,28,0.16)';
+      ctx.globalAlpha = on ? 0.85 : 1;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    });
+    ctx.restore();
+    if (o.title) {
+      ctx.font = '9px "IBM Plex Mono", monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+      ctx.fillStyle = CRIM;
+      ctx.fillText(o.title, rect.x + rect.w / 2, rect.y - 8);
+    }
+    return { X, Y };
+  }
+
+  function ranges(pts) {
+    let ax = 1e-9, ay = 1e-9, ai = 1e-9;
+    pts.forEach((p) => {
+      ax = Math.max(ax, Math.abs(p.x));
+      ay = Math.max(ay, Math.abs(p.y));
+      ai = Math.max(ai, Math.abs(p.iso));
+    });
+    return [ax * 1.15, ay * 1.15, Math.max(6, ai * 1.15)];
+  }
+
+  function drawMain() {
+    const c = $('cMain'); if (!c) return;
+    const W = width(c, 520), H = 330;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const S3 = scene();
+    const [ax, ay] = ranges(S3.pts);
+    const side = Math.min(W - 92, H - 66);
+    const rect = { x: 58, y: 24, w: side, h: side };
+    const X = (v) => rect.x + ((v / ax + 1) / 2) * rect.w;
+    const Y = (v) => rect.y + rect.h - ((v / ay + 1) / 2) * rect.h;
+    SEIS.axisLeft(ctx, rect, -ay, ay, 'gradient', null, { ticks: 5, flip: true, grid: true });
+    SEIS.axisBottom(ctx, rect, -ax, ax, 'amplitude', null, { ticks: 5 });
+    SEIS.frame(ctx, rect);
+    SEIS.dashedLine(ctx, rect.x, Y(0), rect.x + rect.w, Y(0), SOFT, [4, 4], 1);
+    SEIS.dashedLine(ctx, X(0), rect.y, X(0), rect.y + rect.h, SOFT, [4, 4], 1);
+    let mi = 1e-9;
+    S3.pts.forEach((p) => { mi = Math.max(mi, Math.abs(p.iso)); });
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    S3.pts.forEach((p) => {
+      const u = Math.max(-1, Math.min(1, p.iso / mi));
+      const col = u >= 0
+        ? 'rgba(194,48,107,' + (0.25 + 0.6 * u).toFixed(2) + ')'
+        : 'rgba(29,111,163,' + (0.25 + 0.6 * -u).toFixed(2) + ')';
+      ctx.beginPath(); ctx.arc(X(p.x), Y(p.y), 2.8, 0, 2 * Math.PI);
+      ctx.fillStyle = col; ctx.fill();
+    });
+    ctx.restore();
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = CRIM;
+    ctx.fillText('FRONT WALL', rect.x + rect.w / 2, rect.y - 8);
+    SEIS.tag(ctx, rect.x + rect.w + 14, rect.y + 16, 'pink = +iso', '#C2306B');
+    SEIS.tag(ctx, rect.x + rect.w + 14, rect.y + 34, 'blue = \u2212iso', '#1D6FA3');
+  }
+
+  /* ------------------------------- step 1 ------------------------------ */
+
+  function drawStep1() {
+    const c = $('c1a'); if (!c) return;
+    const W = width(c, 640), H = 420;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const S3 = scene();
+    const nt = S3.nt, b = S3.b;
+    const rect = { x: 66, y: 32, w: W - 96, h: H - 76 };
+    SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 7 });
+    SEIS.frame(ctx, rect);
+    const cw = rect.w / 2;
+    const rT = { x: rect.x, y: rect.y, w: cw, h: rect.h };
+    const rI = { x: rect.x + cw, y: rect.y, w: cw, h: rect.h };
+    SEIS.dashedLine(ctx, rI.x, rI.y, rI.x, rI.y + rI.h, 'rgba(22,25,28,0.14)', [3, 3], 1);
+
+    let pk = 1e-12;
+    for (let i = 0; i < nt; i++) pk = Math.max(pk, Math.abs(b.near[i]));
+    SEIS.dashedLine(ctx, rT.x + rT.w / 2, rT.y, rT.x + rT.w / 2, rT.y + rT.h, SOFT, [4, 4], 0.8);
+    ctx.beginPath();
+    for (let i = 0; i < nt; i++) {
+      const y = rT.y + (i / (nt - 1)) * rT.h;
+      const x = rT.x + rT.w / 2 + (b.near[i] / pk) * (rT.w / 2) * 0.9;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = 'rgba(22,25,28,0.62)'; ctx.lineWidth = 1.6; ctx.stroke();
+    b.pk.ext.forEach((e) => {
+      const y = rT.y + (e.i / (nt - 1)) * rT.h;
+      ctx.beginPath(); ctx.arc(rT.x + rT.w / 2 + (b.near[e.i] / pk) * (rT.w / 2) * 0.9, y, 3, 0, 6.3);
+      ctx.fillStyle = e.sign > 0 ? '#C2306B' : '#1D6FA3'; ctx.fill();
+    });
+
+    let mi = 1e-9;
+    for (let i = 0; i < nt; i++) if (S3.H.has[i]) mi = Math.max(mi, Math.abs(S3.H.iso[i]));
+    SEIS.dashedLine(ctx, rI.x + rI.w / 2, rI.y, rI.x + rI.w / 2, rI.y + rI.h, SOFT, [4, 4], 0.8);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rI.x, rI.y, rI.w, rI.h); ctx.clip();
+    for (let i = 0; i < nt; i++) {
+      if (!S3.H.has[i]) continue;
+      const y = rI.y + (i / (nt - 1)) * rI.h;
+      const x = rI.x + rI.w / 2 + (S3.H.iso[i] / mi) * (rI.w / 2) * 0.85;
+      ctx.beginPath(); ctx.moveTo(rI.x + rI.w / 2, y); ctx.lineTo(x, y);
+      ctx.strokeStyle = S3.H.iso[i] >= 0 ? 'rgba(194,48,107,0.7)' : 'rgba(29,111,163,0.7)';
+      ctx.lineWidth = 1.6; ctx.stroke();
+    }
+    ctx.restore();
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(22,25,28,0.55)';
+    ctx.fillText('NEAR STACK AND PICKS', rT.x + rT.w / 2, rect.y - 8);
+    ctx.fillStyle = CRIM;
+    ctx.fillText('SIGNED HALF ISOCHRON (ms)', rI.x + rI.w / 2, rect.y - 8);
+
+    const vals = [];
+    for (let i = 0; i < nt; i++) if (S3.H.has[i]) vals.push(S3.H.iso[i]);
+    const i0 = sandWindow(TTOP, S.thick)[0];
+    let top = null, bd = 1e9;
+    S3.pts.forEach((p) => { const d = Math.abs(p.i - i0); if (d < bd) { bd = d; top = p; } });
+    const qt = 250 / S.freq;
+    $('s1a').textContent = vals.length + ' of ' + nt;
+    $('s1b').textContent = Math.min(...vals).toFixed(0) + ' to +' + Math.max(...vals).toFixed(0) + ' ms';
+    $('s1c').textContent = top ? (top.iso >= 0 ? '+' : '\u2212') + Math.abs(top.iso).toFixed(0) + ' ms' : '\u2014';
+    $('s1d').textContent = qt.toFixed(1) + ' ms';
+    $('s1e').textContent = 'At the top of the sand the half isochron reads '
+      + (top ? top.iso.toFixed(0) : '\u2014') + ' ms, against a quarter wavelet period of '
+      + qt.toFixed(1) + ' ms. Change the thickness and it barely moves; change the frequency and it does.';
+  }
+
+  /* ------------------------------- step 2 ------------------------------ */
+
+  function drawStep2() {
+    const c = $('c2a'); if (!c) return;
+    const W = width(c, 640), H = 300;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const S3 = scene();
+    const [ax, ay, ai] = ranges(S3.pts);
+    const gap = 30;
+    const pw = (W - 150 - 2 * gap) / 3;
+    const rows = [
+      { r: { x: 52, y: 30, w: pw, h: H - 76 }, ax: (p) => p.x, ay: (p) => p.y,
+        lims: [-ax, ax, -ay, ay], xlab: 'amplitude', ylab: 'gradient', title: 'FRONT' },
+      { r: { x: 52 + pw + gap + 46, y: 30, w: pw, h: H - 76 }, ax: (p) => p.x, ay: (p) => p.iso,
+        lims: [-ax, ax, -ai, ai], xlab: 'amplitude', ylab: 'half isochron', title: 'TOP' },
+      { r: { x: 52 + 2 * (pw + gap + 46), y: 30, w: pw, h: H - 76 }, ax: (p) => p.iso, ay: (p) => p.y,
+        lims: [-ai, ai, -ay, ay], xlab: 'half isochron', ylab: 'gradient', title: 'SIDE' },
+    ];
+    rows.forEach((v) => scatter(ctx, v.r, S3.pts, v.ax, v.ay, v.lims,
+      { xlab: v.xlab, ylab: v.ylab, title: v.title, byQ: true }));
+
+    let lox = 1e9, hix = -1e9, loy = 1e9, hiy = -1e9, loi = 1e9, hii = -1e9;
+    S3.pts.forEach((p) => {
+      lox = Math.min(lox, p.x); hix = Math.max(hix, p.x);
+      loy = Math.min(loy, p.y); hiy = Math.max(hiy, p.y);
+      loi = Math.min(loi, p.iso); hii = Math.max(hii, p.iso);
+    });
+    $('s2a').textContent = S3.pts.length + '';
+    $('s2b').textContent = lox.toFixed(3) + ' to ' + hix.toFixed(3);
+    $('s2c').textContent = loy.toFixed(3) + ' to ' + hiy.toFixed(3);
+    $('s2d').textContent = loi.toFixed(0) + ' to +' + hii.toFixed(0) + ' ms';
+    $('s2e').textContent = 'The same ' + S3.pts.length
+      + ' samples seen three ways. Colour is the quadrant number, so a point can be followed from one '
+      + 'panel to the next.';
+  }
+
+  /* ------------------------------- step 3 ------------------------------ */
+
+  function drawStep3() {
+    const c = $('c3a'); if (!c) return;
+    const W = width(c, 640), H = 420;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const S3 = scene();
+    const [ax, ay] = ranges(S3.pts);
+    const side = Math.min(W - 200, H - 76);
+    const rect = { x: 66, y: 30, w: side, h: side };
+    scatter(ctx, rect, S3.pts, (p) => p.x, (p) => p.y, [-ax, ax, -ay, ay],
+      { xlab: 'amplitude, rotated and split', ylab: 'gradient', dim: true, title: 'FRONT WALL' });
+    SEIS.tag(ctx, rect.x + rect.w + 16, rect.y + 16,
+      'band: \u00B1' + S.iso + ' ms', CRIM);
+    SEIS.tag(ctx, rect.x + rect.w + 16, rect.y + 34, 'grey = excluded', 'rgba(22,25,28,0.5)');
+
+    const inb = S3.pts.filter(passes).map((p) => p.d);
+    const all = S3.pts.map((p) => p.d);
+    $('s3a').textContent = inb.length + ' of ' + S3.pts.length
+      + ' (' + (100 * inb.length / Math.max(1, S3.pts.length)).toFixed(0) + '%)';
+    $('s3b').textContent = inb.length ? pct(inb, 0.5).toFixed(4) : '\u2014';
+    $('s3c').textContent = inb.length
+      ? pct(inb, 0.8).toFixed(4) + ' / ' + pct(inb, 0.2).toFixed(4) : '\u2014';
+    $('s3d').textContent = pct(all, 0.5).toFixed(4);
+    $('s3e').textContent = 'The delimiter keeps ' + inb.length + ' of ' + S3.pts.length
+      + ' samples. Median distance among those is ' + (inb.length ? pct(inb, 0.5).toFixed(3) : '\u2014')
+      + ', against ' + pct(all, 0.5).toFixed(3)
+      + ' for the whole population \u2014 the statistics move because the delimiter is choosing which '
+      + 'part of the waveform to look at.';
+  }
+  /* ------------------------------ the panel ---------------------------- */
+
+  function pushToInputs() {
+    $('phi').value = S.phi;
+    $('thick').value = S.thick;
+    $('freq').value = S.freq;
+    $('dt').value = S.dt;
+    $('noise').value = S.noise;
+    $('isoV').innerHTML = '&plusmn;' + S.iso + ' ms';
+    $('iso').value = S.iso;
+    $('phiV').textContent = S.phi + '%';
+    $('thickV').textContent = S.thick + ' ms';
+    $('freqV').textContent = S.freq + ' Hz';
+    $('dtV').textContent = (DTS[S.dt | 0] * 1000).toFixed(0) + ' ms';
+    $('noiseV').textContent = S.noise + '%';
+    $('overV').textContent = LITHS[S.over].name;
+    $('fluidV').textContent = FLUIDS[S.fluid].name;
+    document.querySelectorAll('[data-over]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.over === S.over);
+    });
+    document.querySelectorAll('[data-fluid]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.fluid === S.fluid);
+    });
+  }
+
+  function drawAll() {
+    drawMain();
+    if (visible('p1')) drawStep1();
+    if (visible('p2')) drawStep2();
+    if (visible('p3')) drawStep3();
+  }
+  function onChange() { pushToInputs(); drawAll(); saveState(); }
+
+  ['phi', 'thick', 'freq', 'dt', 'noise'].forEach((id) => {
+    $(id).addEventListener('input', () => { S[id] = parseFloat($(id).value); onChange(); });
+  });
+  $('iso').addEventListener('input', () => { S.iso = +$('iso').value; onChange(); });
+  document.querySelectorAll('[data-over]').forEach((b) => {
+    b.addEventListener('click', () => { S.over = b.dataset.over; onChange(); });
+  });
+  document.querySelectorAll('[data-fluid]').forEach((b) => {
+    b.addEventListener('click', () => { S.fluid = b.dataset.fluid; onChange(); });
+  });
+  $('resetBtn').addEventListener('click', () => {
+    const tab = S.tab;
+    S = Object.assign({}, DEF, { tab });
+    onChange();
+  });
+
+  /* -------------------------------- tabs ------------------------------- */
+
+  const PANES = ['p1', 'p2', 'p3', 'pw', 'pe', 'pk', 'pm'];
+  const STEPNAMES = {
+    p1: 'Third axis', p2: 'Three views', p3: 'Working it',
+    pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
+  };
+
+  function buildStepNav() {
+    PANES.forEach((id, i) => {
+      const pane = $(id); if (!pane) return;
+      const prev = PANES[i - 1], next = PANES[i + 1];
+      const nav = document.createElement('div');
+      nav.className = 'stepnav';
+      const mk = (target, text, ghost) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn' + (ghost ? ' ghost' : '') + ' small';
+        btn.textContent = text;
+        btn.addEventListener('click', () => {
+          showTab(target);
+          const t = document.querySelector('.tabhint');
+          if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return btn;
+      };
+      nav.appendChild(prev ? mk(prev, '\u2190 ' + STEPNAMES[prev], true)
+                           : document.createElement('span'));
+      const where = document.createElement('span');
+      where.className = 'where';
+      where.textContent = i < 3 ? 'step ' + (i + 1) + ' of 3' : STEPNAMES[id];
+      nav.appendChild(where);
+      nav.appendChild(next ? mk(next, STEPNAMES[next] + ' \u2192')
+                           : document.createElement('span'));
+      pane.appendChild(nav);
+    });
+  }
+
+  function showTab(id) {
+    PANES.forEach((q) => { const el = $(q); if (el) el.hidden = q !== id; });
+    document.querySelectorAll('#tabs button').forEach((b) => {
+      b.setAttribute('aria-selected', b.dataset.tab === id);
+    });
+    const lab = document.querySelector('.labhead');
+    if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3');
+
+    // the polarity switch only means anything on step 3
+    const three = (id === 'p3');
+    const sf = $('skipflip'); if (sf) sf.disabled = !three;
+
+    if ($('labCap')) {
+      $('labCap').innerHTML = 'The rock model <span>&mdash; the layers, and the near stack they produce</span>';
+    }
+
+    const last = (id === 'pk' || id === 'pm');
+    if ($('nextup')) $('nextup').hidden = !last;
+    if ($('pager')) $('pager').hidden = !last;
+    S.tab = id;
+    drawAll();
+    saveState();
+  }
+  document.querySelectorAll('#tabs button').forEach((b) => {
+    b.addEventListener('click', () => showTab(b.dataset.tab));
+  });
+  document.querySelectorAll('.masthead a[data-tab]').forEach((a) => {
+    a.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      showTab(a.dataset.tab);
+      const strip = $('tabs');
+      if (strip && strip.scrollIntoView) strip.scrollIntoView({ block: 'start' });
+    });
+  });
+
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawAll, 140); });
+
+  pushToInputs();
+  buildStepNav();
+  showTab(PANES.indexOf(S.tab) >= 0 ? S.tab : 'p1');
+  document.fonts && document.fonts.ready.then(drawAll);
+})();
+</script>
+</body>
+</html>

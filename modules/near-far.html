@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Near and far stacks | How the DQ Trace Actually Works</title>
+<meta name="description" content="Where the two traces the DQ process runs on come from, why the angle ranges are 0-10 and 20-30 degrees, and what the far-minus-near difference is standing in for.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <a class="brand" href="../index.html"><span class="dot"></span>How the DQ trace <b>actually</b> works</a>
+    <nav>
+      <a href="../index.html">All modules</a>
+      <a href="#tabs" data-tab="pw">Why it matters</a>
+      <a href="#tabs" data-tab="pm">Method &amp; references</a>
+    </nav>
+  </header>
+
+  <div class="mod-head">
+    <p class="eyebrow">Module 02 &nbsp;·&nbsp; The DQ trace</p>
+    <h1>Near and far stacks</h1>
+    <p class="sub">Everything after this module operates on two traces. They come from one CDP of
+      NMO-corrected gathers by averaging a narrow window of angles twice, at 0&ndash;10&deg; and at
+      20&ndash;30&deg;. This module builds those two traces, shows that they are the intercept and the
+      gradient in a thin disguise, and works through why the method takes two averages rather than fitting
+      a line through all the angles at once.</p>
+  </div>
+
+  <!-- ============================== PINNED LAB ============================== -->
+  <div class="labhead">
+    <div class="labgrid">
+      <div>
+        <p class="cap" id="labCap">The gather <span>&mdash; and the two traces made from it</span></p>
+        <canvas id="cMain" aria-label="An NMO-corrected angle gather with the near and far windows shaded, and the two stacked traces beside it"></canvas>
+      </div>
+      <div>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <div class="controls" id="labControls">
+          <div class="ctl-col">
+            <h2>Build the rocks</h2>
+            <div class="ctl">
+              <label>Overburden <span class="val" id="overV">soft shale</span></label>
+              <div class="seg" role="group" aria-label="Overburden lithology">
+                <button type="button" data-over="soft" aria-pressed="true">soft</button>
+                <button type="button" data-over="hard" aria-pressed="false">hard</button>
+                <button type="button" data-over="tight" aria-pressed="false">tight</button>
+              </div>
+            </div>
+            <div class="ctl">
+              <label for="phi">Sand porosity <span class="val" id="phiV">28%</span></label>
+              <input type="range" id="phi" min="8" max="36" step="1" value="28">
+            </div>
+            <div class="ctl">
+              <label>Pore fluid <span class="val" id="fluidV">gas</span></label>
+              <div class="seg" role="group" aria-label="Fluid filling the sand pores">
+                <button type="button" data-fluid="brine" aria-pressed="false">brine</button>
+                <button type="button" data-fluid="oil" aria-pressed="false">oil</button>
+                <button type="button" data-fluid="gas" aria-pressed="true">gas</button>
+              </div>
+            </div>
+            <div class="stats" style="margin:6px 0 0;grid-column:1/-1">
+              <div class="stat"><span>Sand V<sub>P</sub></span><b id="mVp">&mdash;</b></div>
+              <div class="stat"><span>Sand density</span><b id="mRho">&mdash;</b></div>
+              <div class="stat"><span>Intercept A</span><b id="mA">&mdash;</b></div>
+              <div class="stat key"><span>AVO class</span><b id="mClass">&mdash;</b></div>
+            </div>
+          </div>
+
+          <div class="ctl-col" id="colGather">
+            <h2>The angle gather</h2>
+            <div class="ctl">
+              <label for="far">Far window <span class="val" id="farV">20&ndash;30&deg;</span></label>
+              <input type="range" id="far" min="12" max="30" step="1" value="20">
+            </div>
+            <p class="hint-line" style="margin:-8px 0 14px">The near window is fixed at 0&ndash;10&deg;.
+              The far one is ten degrees wide and you choose where it starts. Both are data dependent in
+              practice, set by what the acquisition actually illuminated.</p>
+            <div class="ctl">
+              <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
+              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+            </div>
+            <p class="hint-line" style="margin:-8px 0 0">A zero-phase Ricker, as throughout the DQ
+              papers.</p>
+          </div>
+
+          <div class="ctl-col" id="colData">
+            <h2>What the data does to it</h2>
+            <div class="ctl">
+              <label for="noise">Noise <span class="val" id="noiseV">0%</span></label>
+              <input type="range" id="noise" min="0" max="60" step="1" value="0">
+            </div>
+            <p class="hint-line" style="margin:-8px 0 14px">Band-limited random noise, independent from
+              trace to trace, as a percentage of the strongest reflection in the model.</p>
+            <div class="ctl">
+              <label for="rmo">Residual moveout <span class="val" id="rmoV">0 ms</span></label>
+              <input type="range" id="rmo" min="0" max="12" step="1" value="0">
+            </div>
+            <p class="hint-line" style="margin:-8px 0 14px">Milliseconds of leftover curvature at
+              40&deg;, growing with sin&sup2;&theta;. No real gather is flat to the millisecond, and step
+              3 is about what that costs.</p>
+            <button class="btn ghost small" id="resetBtn" type="button">Reset everything</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
+    Method and references are there when you want them.</p>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
+    <button role="tab" data-tab="p1" aria-selected="false">1 · Two windows on a gather</button>
+    <button role="tab" data-tab="p2" aria-selected="false">2 · What the two traces are</button>
+    <button role="tab" data-tab="p3" aria-selected="false">3 · Why not fit a line?</button>
+    <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
+    <span class="gap"></span>
+    <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
+    <button role="tab" data-tab="pk" aria-selected="false">Key points</button>
+    <button role="tab" data-tab="pm" aria-selected="false">Method</button>
+  </nav>
+
+  <!-- ================================ STEP 1 ================================ -->
+  <section class="tabpane" id="p1" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">1</span>Two windows on a gather</h3>
+      <span class="hint">Where the two input traces come from</span>
+    </div>
+
+    <p class="lede">
+      The DQ process starts from one CDP of NMO-corrected gathers with relative amplitudes preserved. Every
+      trace in the gather is the same two boundaries seen at a different incidence angle, so the reflection
+      coefficient changes across the gather while the arrival time does not. That is what NMO correction is
+      for, and step 3 shows what happens when it has not quite worked.</p>
+
+    <p class="lede">
+      Two windows are cut from that gather and the traces inside each are averaged. The near window is
+      0&ndash;10&deg;, the far window is ten degrees wide starting wherever you put it, 20&ndash;30&deg; by
+      default. Averaging turns eleven traces into one, and the gather becomes two traces called N and F.</p>
+
+    <canvas id="c1a" aria-label="The angle gather drawn as wiggle traces with the near and far windows shaded"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">Time runs down the page. Each wiggle is one incidence
+      angle. Blue traces fall inside the near window, pink inside the far window, gray outside both. Turn
+      the noise up in the panel and the individual traces get worse while the two averages hold up.</p>
+
+    <p class="sublabel"><b>2</b> The two traces, and their difference
+      <span class="note">these three are the whole input to everything that follows</span></p>
+    <canvas id="c1b" aria-label="The near stack, the far stack and the far-minus-near difference drawn as traces"></canvas>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Traces averaged, near</span><b id="s1a">&mdash;</b></div>
+      <div class="stat"><span>Traces averaged, far</span><b id="s1b">&mdash;</b></div>
+      <div class="stat key"><span>Near stack at the sand top</span><b id="s1c">&mdash;</b></div>
+      <div class="stat key"><span>Far minus near, same sample</span><b id="s1d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>Nothing has been fitted, inverted or deconvolved. Two windows were averaged and one trace was
+        subtracted from another. Everything the DQ process does afterwards is built on these three traces
+        and on nothing else.</span>
+    </div>
+  </section>
+
+  <!-- ================================ STEP 2 ================================ -->
+  <section class="tabpane" id="p2" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">2</span>What the two traces are</h3>
+      <span class="hint">The near stack is the intercept, and the difference is the gradient</span>
+    </div>
+
+    <p class="lede">
+      Module 01 wrote the reflection as R(&theta;) = A + B&nbsp;sin&sup2;&theta;. Averaging that over an
+      angle window is easy, because R is linear in sin&sup2;&theta; and the average of a straight line over
+      an interval is the line evaluated at the average of the interval. So the near stack is
+      A + B&nbsp;&times;&nbsp;&#10216;sin&sup2;&theta;&#10217;<sub>near</sub> and the far stack is
+      A + B&nbsp;&times;&nbsp;&#10216;sin&sup2;&theta;&#10217;<sub>far</sub>, with no approximation
+      anywhere.</p>
+
+    <p class="lede">
+      Put the numbers in. Over 0&ndash;10&deg; the mean of sin&sup2;&theta; is <b>0.0101</b>, and over
+      20&ndash;30&deg; it is <b>0.1802</b>. That makes the near stack the intercept plus a hundredth of the
+      gradient, which is why the DQ papers write N and mean A. Subtract the two and the intercept cancels
+      exactly, leaving the gradient multiplied by the difference of those two numbers, <b>0.1701</b>.</p>
+
+    <canvas id="c2a" aria-label="Two scatter plots: the near stack against the intercept, and the far-minus-near difference against the gradient"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">Every porosity from 8 to 36% and all three fluids, under
+      the overburden you picked, computed with no wavelet and no noise. The dashed lines are N = A on the
+      left and F &minus; N = 0.1701&nbsp;B on the right. Both scatters sit on them.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Mean sin&sup2;&theta;, near</span><b id="s2a">&mdash;</b></div>
+      <div class="stat"><span>Mean sin&sup2;&theta;, far</span><b id="s2b">&mdash;</b></div>
+      <div class="stat key"><span>F &minus; N equals B times</span><b id="s2c">&mdash;</b></div>
+      <div class="stat"><span>Largest gap between N and A</span><b id="s2d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>Move the far window in the panel and watch the multiplier on the right change. Push the far
+        window out and the gradient is measured with more leverage, which is worth having; the reasons not
+        to keep pushing are noise, moveout error, and the fact that the two-term equation itself stops
+        holding much past 30&deg;.</span>
+    </div>
+  </section>
+
+  <!-- ================================ STEP 3 ================================ -->
+  <section class="tabpane" id="p3" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">3</span>Why not fit a line through all of it?</h3>
+      <span class="hint">The honest comparison, including the part that favors the regression</span>
+    </div>
+
+    <p class="lede">
+      An obvious objection: the gather has forty-one traces and the two windows use twenty-two of them. Why
+      not fit R = A + B&nbsp;sin&sup2;&theta; through every angle at every sample and get A and B directly?
+      That is a real method, it is what AVO inversion does, and on clean data it is the better estimator.
+      Fitting all forty-one angles measures the gradient with about four times less variance than taking
+      the difference of two window averages. There is no argument to be had about that.</p>
+
+    <p class="lede">
+      The reasons to take two averages instead are about what real gathers do. The readouts below separate
+      the two things that go wrong. <b>Noise</b> is the standard error each estimator carries, which follows
+      from the geometry and needs no particular realization to work out. <b>Bias</b> is measured on a
+      noiseless gather, so it is purely what the leftover moveout did. Turn the noise up first, then leave
+      it alone and drag the moveout.</p>
+
+    <p class="lede">
+      They do not win the same one. With four milliseconds of moveout at 40&deg; the two-stack gradient is
+      out by 30% and the fitted gradient by 71%. The intercept is starker: the near stack is still exact,
+      while the fitted intercept is out by 23%, and by eight milliseconds it is out by half. The fit is the
+      more precise estimator and the more biased one.</p>
+
+    <canvas id="c3a" aria-label="The near stack, far stack, far-minus-near difference and the least-squares intercept and gradient traces drawn side by side"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The same gather, read two ways. On the left the two
+      window averages and their difference. On the right the intercept and gradient from a least-squares
+      fit at every sample. All five are drawn at the same scale.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Moveout across the near window</span><b id="s3a">&mdash;</b></div>
+      <div class="stat"><span>Moveout across the whole gather</span><b id="s3c">&mdash;</b></div>
+      <div class="stat key"><span>Gradient bias, two stacks</span><b id="s3d">&mdash;</b></div>
+      <div class="stat key"><span>Gradient bias, least squares</span><b id="s3e">&mdash;</b></div>
+      <div class="stat"><span>Gradient noise, two stacks</span><b id="s3g">&mdash;</b></div>
+      <div class="stat"><span>Gradient noise, least squares</span><b id="s3h">&mdash;</b></div>
+      <div class="stat"><span>Intercept bias, near stack</span><b id="s3b">&mdash;</b></div>
+      <div class="stat"><span>Intercept bias, least squares</span><b id="s3i">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s3f">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>A window ten degrees wide spans a small fraction of the moveout across the gather, so the
+        traces inside it are still aligned with each other when they are averaged, and the near window
+        spans almost none of it at all. A fit across the whole gather compares the same sample index at
+        0&deg; and at 40&deg;, which after a few milliseconds of leftover curvature are different parts of
+        the waveform. The fit does not know that. It returns a confident number with a small standard
+        error and the wrong value in it.</span>
+    </div>
+  </section>
+
+  <!-- ============================ WHY IT MATTERS ============================ -->
+  <section class="tabpane" id="pw" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">?</span>Why the method wants traces, not coefficients</h3>
+      <span class="hint">The reason that has nothing to do with statistics</span>
+    </div>
+
+    <p class="lede">The strongest reason the DQ process takes partial stacks only becomes visible once you
+      know what happens next. Everything from module 03 onward reads structure off the near stack: where it
+      crosses zero, where its peaks are, where its troughs are. Those picks define the acoustic layers, and
+      every quadrant number and phase filter in the method hangs off them. So the question that matters is
+      not which estimator has the smaller error bar. It is which one gives you a near-angle trace you can
+      trust the shape of.</p>
+
+    <p class="lede">On that question step 3 is one-sided. The near stack averages ten degrees of angle, over
+      which the leftover moveout is a fraction of a millisecond, and its intercept stays exact however far
+      you push the moveout slider. The fitted intercept has to extrapolate back to zero angle from a lever
+      arm forty degrees long, and by eight milliseconds it is out by half. A trace that is wrong by half is
+      not something to pick zero crossings on.</p>
+
+    <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
+      The rest of the practical case</h2>
+    <ul class="lede" style="padding-left:20px">
+      <li><b>Partial stacks are what exists.</b> Near and far volumes are a standard deliverable. Full-fold
+        NMO-corrected gathers with relative amplitude preserved are often not handed to the interpreter at
+        all, and when they are, they arrive late.</li>
+      <li><b>Two traces can be scaled and checked.</b> The papers call for time-variant scaling on the far
+        trace so that its peak amplitudes match what AVO theory predicts. That is a tractable job on one
+        trace pair and an awkward one on a coefficient volume.</li>
+      <li><b>The two-term equation has a range.</b> Shuey's approximation is written for small angles and
+        starts to drift somewhere past 30&deg;. A window that stays inside the valid range is honest about
+        that; a fit that runs to 40&deg; and beyond quietly folds the error into the gradient.</li>
+      <li><b>Narrow windows survive imperfect processing.</b> Residual moveout, normal-moveout stretch and
+        angle-dependent tuning all get worse with offset. Averaging ten degrees of them is a much smaller
+        crime than regressing across forty.</li>
+    </ul>
+
+    <div class="legend prose">
+      <span>None of this makes AVO inversion wrong. It is a different tool with different inputs and a
+        different place in the sequence. The DQ trace is meant to run early, on what is available, before
+        the well ties and the wavelet estimation, and the two partial stacks are the earliest usable thing
+        there is.</span>
+    </div>
+  </section>
+
+  <!-- ============================== EXERCISES ============================== -->
+  <section class="tabpane" id="pe" role="tabpanel" hidden>
+    <div class="tryit" style="max-width:none">
+      <h3>Exercises</h3>
+      <ol>
+        <li><b>Check that the near stack really is the intercept.</b> On step 2, read the largest gap
+          between N and A, then compare it with the intercept itself for a few models.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The gap is A + 0.0101&nbsp;B
+            minus A, which is a hundredth of the gradient. Across the whole model it never exceeds about
+            0.007, and for most sands it is nearer 0.002. Set against intercepts of a tenth to half, that
+            is a rounding error, and it is why the DQ papers use the near stack as the intercept without
+            further comment. It is not an approximation to the physics &mdash; the physics is exact
+            &mdash; it is a decision that one hundredth of B is not worth carrying
+            around.</span></details></li>
+        <li><b>Move the far window and watch the gradient scale.</b> On step 2, drag the far window from
+          12&deg; out to 45&deg;, reading the multiplier on F &minus; N.
+          <details class="reveal"><summary>Hint</summary><span class="ans">It climbs steeply: 0.0775 at a
+            12&ndash;22&deg; window, 0.1701 at 20&ndash;30&deg;, 0.3198 at 30&ndash;40&deg;. Moving the
+            window out by eighteen degrees roughly quadruples it. A wider separation gives the gradient
+            more leverage and a larger number to work with, which is why acquisition geometry matters so
+            much for AVO. The catch is everything in the Why it matters tab: the far traces are the
+            noisiest, they carry the most moveout error and the most stretch, and past about 30&deg; the
+            two-term equation is no longer describing the same physics. 20&ndash;30&deg; is a compromise,
+            not a law.</span></details></li>
+        <li><b>Be fair to the fit first.</b> On step 3, leave the residual moveout at zero and raise the
+          noise to 40%, then read the two gradient noise figures.
+          <details class="reveal"><summary>Hint</summary><span class="ans">57% of the true gradient for the
+            two stacks against 28% for the fit &mdash; almost exactly half, which is the square root of the
+            factor of four in variance. The fit uses all forty-one traces; the difference of two window
+            averages uses eleven and eleven, and then divides by 0.1701, which magnifies whatever noise
+            survived. On a flat gather the fit is simply the better estimator, and if that were the whole
+            story this module would end differently.</span></details></li>
+        <li><b>Now break it with four milliseconds.</b> Set the noise back to zero and raise the residual
+          moveout to 4 ms, reading the two gradient bias figures.
+          <details class="reveal"><summary>Hint</summary><span class="ans">30% for the two stacks against
+            71% for the fit. The near window spans about a third of a millisecond of the moveout and the
+            far window about a millisecond, so the traces inside each are still lined up when they are
+            averaged. The fit compares the same sample index at 0&deg; and at 40&deg;, four milliseconds
+            apart on the waveform, and reports the difference between two parts of a wavelet as a property
+            of the rock. Four milliseconds is not a badly processed gather. It is an ordinary
+            one.</span></details></li>
+        <li><b>Watch the intercept while you do it.</b> Push the moveout on to 8 ms and read the two
+          intercept bias figures.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The near stack is still exact.
+            The fitted intercept is out by about half. The near stack averages ten degrees of angle, over
+            which the moveout is a fraction of a millisecond, and it never has to extrapolate anywhere. The
+            fit reaches back to zero angle along a forty degree lever arm, and every millisecond of
+            curvature along that arm tilts the answer. This is the one that decides the argument: module 03
+            picks zero crossings, peaks and troughs off the near stack, and module 04 writes quadrant
+            numbers into the gaps between them. Those picks have to be in the right place, and precision on
+            the gradient is no consolation if they are not.</span></details></li>
+        <li><b>Find a model where the far stack is the only thing that sees the sand.</b> Try the soft
+          shale with gas, around 25% porosity, and read the two key numbers on step 1.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The near stack sits close to
+            zero while F &minus; N is clearly negative, and the far stack has the opposite sign to the
+            near. This is the class 2p case from module 01, seen through the two traces the method actually
+            works on. A full stack would average the two and lose most of it. The DQ process never forms a
+            full stack, which is one of the quieter advantages of keeping the near and far
+            apart.</span></details></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================== KEY POINTS ============================== -->
+  <section class="tabpane" id="pk" role="tabpanel" hidden>
+    <div class="takeaway" style="max-width:none">
+      <h3>The main points</h3>
+      <ul>
+        <li><b>The DQ process runs on two traces.</b> A near stack over 0&ndash;10&deg; and a far stack
+          over 20&ndash;30&deg;, from one CDP of NMO-corrected, relative-amplitude gathers.</li>
+        <li><b>Averaging a window is exact, not approximate.</b> R is linear in sin&sup2;&theta;, so the
+          average over a window is A + B times the mean of sin&sup2;&theta; across it.</li>
+        <li><b>N = A + 0.0101 B.</b> The near stack is the intercept to within a hundredth of the gradient,
+          which across the whole model is never more than about 0.007.</li>
+        <li><b>F &minus; N = 0.1701 B.</b> The intercept cancels exactly and what is left is the gradient
+          scaled by the separation between the two windows. The scale factor is not divided out, so
+          gradients always plot small next to intercepts.</li>
+        <li><b>On a flat gather a least-squares fit is the better estimator</b>, carrying about half the
+          noise on the gradient. The case for partial stacks is robustness and availability, not
+          precision.</li>
+        <li><b>Residual moveout biases the fit about twice as hard.</b> At 4 ms the two-stack gradient is
+          out by 30% and the fitted gradient by 71%, because a ten degree window spans a fraction of the
+          moveout and a forty degree fit spans all of it.</li>
+        <li><b>The near stack's intercept is immune to moveout and the fitted one is not.</b> At 8 ms the
+          near stack is still exact while the fit is out by half, because the fit has to extrapolate to
+          zero angle along a forty degree lever arm.</li>
+        <li><b>That is what decides it.</b> Module 03 picks zero crossings, peaks and troughs off the near
+          stack, and every quadrant number afterwards depends on those picks landing in the right
+          place.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- =============================== METHOD =============================== -->
+  <section class="tabpane" id="pm" role="tabpanel" hidden>
+    <details class="notes" id="notes" open>
+      <summary>Method, assumptions, and where to read more</summary>
+      <p>The rocks are the same as module 01 and are computed the same way: three fixed enclosing
+        lithologies, a brine sand built from porosity through Wyllie's time average and the
+        V<sub>P</sub>/V<sub>S</sub> trend of Bedle et al. (2025), and Gassmann fluid substitution for the
+        oil and gas cases. The underburden follows the overburden throughout this module. Intercept and
+        gradient come from the Shuey (1985) two-term approximation across each interface.</p>
+      <p>The gather is forty-one traces at one degree spacing from 0 to 40&deg;. Each is the two reflection
+        coefficients evaluated at that angle and convolved with a zero-phase Ricker wavelet, sampled at
+        1 ms. Window averages are unweighted means of the traces whose angle falls inside the window, which
+        is what a partial stack is. Because R is linear in sin&sup2;&theta;, the average over a window
+        equals A + B times the mean of sin&sup2;&theta; across it; the page evaluates that mean numerically
+        rather than taking the value at the window center, and the difference between the two matters at
+        the third decimal.</p>
+      <p>The least-squares comparison in step 3 fits R = A + B&nbsp;sin&sup2;&theta; independently at every
+        time sample, using all forty-one traces, by ordinary least squares on sin&sup2;&theta;. Its
+        variance advantage over the two-window difference follows from the spread of sin&sup2;&theta; across
+        the gather against the eleven traces in each window, and works out at about a factor of four in the
+        gradient for this geometry.</p>
+      <p>Residual moveout is modeled as a time shift proportional to sin&sup2;&theta;, quoted in
+        milliseconds at 40&deg;. Real leftover moveout is not that tidy, but the point of the step is the
+        ratio between what a narrow window averages and what a full-gather fit averages, and that ratio is
+        set by the geometry rather than by the shape of the residual. Normal-moveout stretch, angle
+        dependent tuning, transmission loss and mode conversion are all left out. Every one of them would
+        make the fit look worse than it does here.</p>
+      <p>Noise is band-limited with the same wavelet, drawn independently for each trace in the gather, and
+        scaled as a percentage of the strongest reflection coefficient in the model. It is regenerated only
+        when the model changes, so dragging a slider does not make the noise dance.</p>
+      <p>The real workflow adds two steps this module leaves out. Both stacks are bandpass filtered if the
+        signal to noise demands it, since the method cares more about a clean trace than a high peak
+        frequency. The far trace is then given a time-variant scalar so that its peak amplitudes agree with
+        what AVO theory predicts, before anything else is computed. Both traces are sync interpolated to
+        1 ms and treated as integer samples from that point on.</p>
+      <ul>
+        <li>Shuey, R. T., 1985, A simplification of the Zoeppritz equations: <em>Geophysics</em>, 50,
+          609&ndash;614.</li>
+        <li>Rutherford, S. R., and R. H. Williams, 1989, Amplitude-versus-offset variations in gas sands:
+          <em>Geophysics</em>, 54, 680&ndash;688.</li>
+        <li>Castagna, J. P., and H. W. Swan, 1997, Principles of AVO cross plotting: <em>The Leading
+          Edge</em>, 16, 337&ndash;344.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+          quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="nextup" id="nextup" hidden>
+    <p class="eyebrow">Next up</p>
+    <h3><a href="stickogram.html">03 · The stick-o-gram</a></h3>
+    <p>The near stack stops being a waveform and becomes a set of picks: every zero crossing, every peak
+      and every trough. Those picks are the acoustic layers, and they are what the quadrant numbers get
+      written into.</p>
+    <a class="btn" href="stickogram.html">Open module 03 →</a>
+    <a class="btn ghost" href="../index.html">All modules</a>
+  </section>
+
+  <div class="pager" id="pager" hidden>
+    <a class="btn ghost" href="avo-limits.html">← Where AVO runs out</a>
+    <a class="btn" href="stickogram.html">Next: the stick-o-gram →</a>
+  </div>
+
+  <footer>
+    <div class="foot-grid">
+      <p>Built for teaching by Heather Bedle, School of Geosciences, University of Oklahoma, with the
+        <a href="https://www.ou.edu/mcee/labs/aaspi">AASPI</a> consortium.</p>
+      <p class="lic">Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+        Free to use, share and adapt for any purpose, including training in industry, provided the source is
+        credited and adapted versions carry the same license.</p>
+      <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
+        Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
+      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
+        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        nothing about you.</p>
+    </div>
+  </footer>
+</div>
+
+<script src="../assets/count.js"></script>
+<script src="../assets/seismic.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  if (typeof SEIS === 'undefined') {
+    const el = document.createElement('div');
+    el.setAttribute('style', 'background:#841617;color:#fff;padding:14px 18px;margin:16px 0;' +
+      'font:13px/1.6 ui-monospace,Menlo,monospace');
+    el.textContent = 'This module could not load assets/seismic.js. It expects it one directory up, ' +
+      'at ../assets/, and file names are case-sensitive on GitHub Pages.';
+    const w = document.querySelector('.wrap');
+    (w || document.body).insertBefore(el, w ? w.firstChild : null);
+    return;
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const visible = (id) => { const el = $(id); return el && !el.hidden; };
+
+  /* =====================================================================
+     THE ROCKS
+
+     Identical to module 01, so that a model built there behaves the same
+     way here. Three choices go in and everything else is computed.
+     ===================================================================== */
+
+  const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };   // clean quartz sand grains
+
+  const FLUIDS = {
+    brine: { K: 2.60,  rho: 1.03, v: 1500, name: 'brine' },
+    oil:   { K: 0.80,  rho: 0.78, v: 1300, name: 'oil' },
+    gas:   { K: 0.055, rho: 0.20, v: 550,  name: 'gas' },
+  };
+
+  const LITHS = {
+    soft: { vp: 2700, vs: 1175, rho: 2.33, name: 'soft shale' },
+    hard: { vp: 3350, vs: 1675, rho: 2.48, name: 'hard shale' },
+    tight: { vp: 4800, vs: 2800, rho: 2.56, name: 'tight sandstone' },
+  };
+
+  const PH0 = 8, PH1 = 36;                       // porosity slider range, percent
+
+  const DEG_MAX = 40;                            // angles present in the gather
+  const NEAR_A = [0, 10];                        // near window, degrees
+  const FAR_W = 10;                              // far window width, degrees
+
+  const DT = 0.001;                              // 1 ms, as the papers specify
+  const T0 = 0, TWIN = 0.140, TTOP = 0.045, THICK = 0.030;
+  const NT = Math.floor(TWIN / DT) + 1;
+
+  const DEF = {
+    over: 'soft', phi: 28, fluid: 'gas',
+    far: 20, freq: 40, noise: 0, rmo: 0, tab: 'p1',
+  };
+  let S = SEIS.readState(DEF);
+  if (!LITHS[S.over]) S.over = DEF.over;
+  if (!FLUIDS[S.fluid]) S.fluid = DEF.fluid;
+  S.phi = Math.min(PH1, Math.max(PH0, Math.round(S.phi) || DEF.phi));
+  S.far = Math.min(DEG_MAX - FAR_W, Math.max(12, Math.round(S.far) || DEF.far));
+
+  const CAN_LINK = location.protocol !== 'file:';
+  const saveState = () => {
+    if (!CAN_LINK) return;
+    try { SEIS.writeState(S, DEF); } catch (e) { /* nothing shareable */ }
+  };
+
+  /* ------------------------------- the physics ------------------------- */
+
+  function shuey(l1, l2) {
+    const vp = (l1.vp + l2.vp) / 2, dvp = l2.vp - l1.vp;
+    const vs = (l1.vs + l2.vs) / 2, dvs = l2.vs - l1.vs;
+    const rho = (l1.rho + l2.rho) / 2, drho = l2.rho - l1.rho;
+    const k = (vs / vp) * (vs / vp);
+    return {
+      A: 0.5 * (dvp / vp + drho / rho),
+      B: 0.5 * (dvp / vp) - 2 * k * (drho / rho + 2 * (dvs / vs)),
+    };
+  }
+
+  function meanSin2(a, b) {
+    const n = 256, lo = a * Math.PI / 180, hi = b * Math.PI / 180;
+    let sum = 0;
+    for (let i = 0; i < n; i++) {
+      const th = lo + (hi - lo) * (i + 0.5) / n;
+      sum += Math.sin(th) * Math.sin(th);
+    }
+    return sum / n;
+  }
+
+  function brineSand(phi) {
+    const vp = 1 / (phi / FLUIDS.brine.v + (1 - phi) / MATRIX.vp);
+    const rho = (1 - phi) * MATRIX.rho + phi * FLUIDS.brine.rho;
+    const vpvs = -0.75 * phi * phi + 1.35 * phi + 1.63;
+    return { vp, vs: vp / vpvs, rho };
+  }
+  function ksatFromDry(kdry, phi, kfl) {
+    const num = Math.pow(1 - kdry / MATRIX.K, 2);
+    const den = phi / kfl + (1 - phi) / MATRIX.K - kdry / (MATRIX.K * MATRIX.K);
+    return kdry + num / den;
+  }
+  function kdryFromSat(ksat, phi, kfl) {
+    const a = phi * MATRIX.K / kfl;
+    return (ksat * (a + 1 - phi) - MATRIX.K) / (a + ksat / MATRIX.K - 1 - phi);
+  }
+  function sandRock(phi, fluidKey) {
+    const b = brineSand(phi);
+    if (fluidKey === 'brine') return b;
+    const mu = b.rho * b.vs * b.vs * 1e-6;
+    const ksat = b.rho * b.vp * b.vp * 1e-6 - (4 / 3) * mu;
+    const kdry = kdryFromSat(ksat, phi, FLUIDS.brine.K);
+    const f = FLUIDS[fluidKey];
+    const k2 = ksatFromDry(kdry, phi, f.K);
+    const rho = (1 - phi) * MATRIX.rho + phi * f.rho;
+    return {
+      vp: Math.sqrt((k2 + (4 / 3) * mu) * 1e6 / rho),
+      vs: Math.sqrt(mu * 1e6 / rho),
+      rho,
+    };
+  }
+  function avoClass(A, B, s2f) {
+    const far = A + B * s2f;
+    const flips = (A * far < 0);
+    if (A > 0.03) return flips ? 'class 2p' : 'class 1';
+    if (A > -0.03) return flips ? 'class 2p' : 'class 2';
+    return B < 0 ? 'class 3' : 'class 4';
+  }
+
+  const farBand = () => [S.far, S.far + FAR_W];
+
+  function model() {
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const over = LITHS[S.over];
+    const top = shuey(over, sand);
+    const base = shuey(sand, over);
+    const s2n = meanSin2(NEAR_A[0], NEAR_A[1]);
+    const fb = farBand();
+    const s2f = meanSin2(fb[0], fb[1]);
+    return { sand, over, top, base, s2n, s2f, gain: s2f - s2n, fb };
+  }
+
+  /* ------------------------------- the gather -------------------------- */
+
+  const SIN2 = [];
+  for (let d = 0; d <= DEG_MAX; d++) {
+    const th = d * Math.PI / 180;
+    SIN2.push(Math.sin(th) * Math.sin(th));
+  }
+  const NANG = SIN2.length;
+  const SIN2_MAX = SIN2[DEG_MAX];
+
+  // mean and spread of sin^2(theta) across the gather, fixed by the geometry
+  const X_BAR = SIN2.reduce((a, b) => a + b, 0) / NANG;
+  const SXX = SIN2.reduce((s, v) => s + (v - X_BAR) * (v - X_BAR), 0);
+
+  const inBand = (d, band) => (d >= band[0] && d <= band[1]);
+
+  /* The noise field is keyed to the model rather than regenerated on every
+     draw, so that dragging a slider changes the model and not the luck. */
+  let noiseCache = null;
+  function noiseField(m) {
+    const key = [S.over, S.phi, S.fluid, S.freq, S.noise].join('|');
+    if (noiseCache && noiseCache.key === key) return noiseCache.field;
+    let field = null;
+    if (S.noise > 0) {
+      const wav = SEIS.makeWavelet({ type: 'ricker', f: S.freq });
+      const raw = SEIS.bandLimitedNoise(NANG, NT, DT, wav, 20260831, 0);
+      const amp = noiseAmp(m);
+      field = new Float32Array(raw.length);
+      for (let i = 0; i < raw.length; i++) field[i] = raw[i] * amp;
+    }
+    noiseCache = { key, field };
+    return field;
+  }
+
+  function gather(withNoise) {
+    const m = model();
+    const wav = SEIS.makeWavelet({ type: 'ricker', f: S.freq });
+    const noise = (withNoise === false) ? null : noiseField(m);
+    const shiftAt = (d) => (S.rmo / 1000) * (SIN2[d] / SIN2_MAX);
+
+    const traces = [];
+    for (let d = 0; d < NANG; d++) {
+      const s2 = SIN2[d], sh = shiftAt(d);
+      const tr = SEIS.traceFromSpikes([
+        { t: TTOP + sh, r: m.top.A + m.top.B * s2 },
+        { t: TTOP + THICK + sh, r: m.base.A + m.base.B * s2 },
+      ], T0, DT, NT, wav);
+      if (noise) for (let i = 0; i < NT; i++) tr[i] += noise[d * NT + i];
+      traces.push(tr);
+    }
+
+    const fb = m.fb;
+    const stack = (band) => {
+      const out = new Float32Array(NT);
+      let n = 0;
+      for (let d = 0; d < NANG; d++) {
+        if (!inBand(d, band)) continue;
+        n++;
+        for (let i = 0; i < NT; i++) out[i] += traces[d][i];
+      }
+      if (n) for (let i = 0; i < NT; i++) out[i] /= n;
+      return { tr: out, n };
+    };
+    const near = stack(NEAR_A), far = stack(fb);
+    const diff = new Float32Array(NT);
+    for (let i = 0; i < NT; i++) diff[i] = far.tr[i] - near.tr[i];
+
+    // ordinary least squares on sin^2(theta), independently at every sample
+    const fitA = new Float32Array(NT), fitB = new Float32Array(NT);
+    for (let i = 0; i < NT; i++) {
+      let sy = 0, sxy = 0;
+      for (let d = 0; d < NANG; d++) {
+        const v = traces[d][i];
+        sy += v;
+        sxy += (SIN2[d] - X_BAR) * v;
+      }
+      const b = sxy / SXX;
+      fitB[i] = b;
+      fitA[i] = sy / NANG - b * X_BAR;
+    }
+
+    return { m, traces, near, far, diff, fitA, fitB, fb };
+  }
+
+  const topSample = () => Math.round((TTOP - T0) / DT);
+
+  /* The two estimators are compared on bias and on noise separately, because
+     they do not win the same one. Bias is read off a noiseless gather, so it
+     is purely what the moveout did. Noise is the standard error each estimator
+     carries, which follows from the geometry and needs no realization:
+     the two-window difference averages eleven traces twice, while the fit
+     leans on the spread of sin^2(theta) across all forty-one. */
+  function compare() {
+    const clean = gather(false);
+    const i0 = topSample();
+    const m = clean.m;
+    const nNear = clean.near.n || 1, nFar = clean.far.n || 1;
+
+    const trueA = m.top.A, trueB = m.top.B;
+    const stackA = clean.near.tr[i0];
+    const stackB = clean.diff[i0] / (m.gain || 1e-9);
+    const fitA = clean.fitA[i0], fitB = clean.fitB[i0];
+
+    // at zero moveout the wavelet alone already displaces the sample slightly;
+    // that offset is subtracted out so the numbers show the moveout and nothing
+    // else, which is what the step is about
+    const base = BASELINE();
+    const sigma = noiseAmp(m);
+    return {
+      trueA, trueB,
+      biasA: [stackA - trueA - base.stackA, fitA - trueA - base.fitA],
+      biasB: [stackB - trueB - base.stackB, fitB - trueB - base.fitB],
+      sdA: [sigma * Math.sqrt(1 / nNear), sigma * Math.sqrt(1 / NANG + X_BAR * X_BAR / SXX)],
+      sdB: [sigma * Math.sqrt(1 / nNear + 1 / nFar) / (m.gain || 1e-9),
+            sigma / Math.sqrt(SXX)],
+    };
+  }
+
+  // the same measurement with the moveout switched off, cached per model
+  let baseCache = null;
+  function BASELINE() {
+    const key = [S.over, S.phi, S.fluid, S.freq, S.far].join('|');
+    if (baseCache && baseCache.key === key) return baseCache.v;
+    const keep = S.rmo;
+    S.rmo = 0;
+    const clean = gather(false);
+    S.rmo = keep;
+    const i0 = topSample(), m = clean.m;
+    const v = {
+      stackA: clean.near.tr[i0] - m.top.A,
+      stackB: clean.diff[i0] / (m.gain || 1e-9) - m.top.B,
+      fitA: clean.fitA[i0] - m.top.A,
+      fitB: clean.fitB[i0] - m.top.B,
+    };
+    baseCache = { key, v };
+    return v;
+  }
+
+  function noiseAmp(m) {
+    const ref = Math.max(Math.abs(m.top.A + m.top.B * SIN2_MAX), Math.abs(m.top.A), 1e-4);
+    return (S.noise / 100) * ref;
+  }
+
+  /* ------------------------------- drawing ----------------------------- */
+
+  const INK = '#16191C', SOFT = 'rgba(22,25,28,0.45)';
+  const CRIM = '#841617', NEARC = '#1D6FA3', FARC = '#C2306B';
+
+  function width(el, fallback) {
+    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    return Math.max(280, w || fallback);
+  }
+
+  // one trace drawn vertically inside rect, time downward
+  function wiggle(ctx, tr, rect, peak, color, fill, lw) {
+    const x0 = rect.x + rect.w / 2;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x - 2, rect.y, rect.w + 4, rect.h); ctx.clip();
+    if (fill) {
+      ctx.beginPath();
+      ctx.moveTo(x0, rect.y);
+      for (let i = 0; i < NT; i++) {
+        const y = rect.y + (i / (NT - 1)) * rect.h;
+        ctx.lineTo(x0 + Math.max(0, tr[i] / peak) * (rect.w / 2) * 0.94, y);
+      }
+      ctx.lineTo(x0, rect.y + rect.h);
+      ctx.closePath();
+      ctx.fillStyle = fill;
+      ctx.fill();
+    }
+    ctx.beginPath();
+    for (let i = 0; i < NT; i++) {
+      const y = rect.y + (i / (NT - 1)) * rect.h;
+      const x = x0 + (tr[i] / peak) * (rect.w / 2) * 0.94;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = color; ctx.lineWidth = lw || 1.5; ctx.stroke();
+    ctx.restore();
+  }
+
+  // the gather itself: one wiggle per angle, bands shaded behind them
+  function drawGather(ctx, rect, g, opts) {
+    const fb = g.fb;
+    const xOf = (d) => rect.x + (d / DEG_MAX) * rect.w;
+    let peak = 1e-6;
+    for (let d = 0; d < NANG; d++) {
+      for (let i = 0; i < NT; i++) peak = Math.max(peak, Math.abs(g.traces[d][i]));
+    }
+
+    // the two windows, behind everything
+    [[NEAR_A, 'rgba(29,111,163,0.11)'], [fb, 'rgba(194,48,107,0.11)']].forEach((q) => {
+      const a = Math.max(0, Math.min(DEG_MAX, q[0][0]));
+      const b = Math.max(0, Math.min(DEG_MAX, q[0][1]));
+      if (b <= a) return;
+      ctx.fillStyle = q[1];
+      ctx.fillRect(xOf(a), rect.y, xOf(b) - xOf(a), rect.h);
+    });
+
+    SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: opts && opts.ticks ? opts.ticks : 6 });
+    SEIS.axisBottom(ctx, rect, 0, DEG_MAX, 'incidence angle (degrees)',
+      (v) => String(Math.round(v)), { ticks: 5 });
+    SEIS.frame(ctx, rect);
+
+    const half = rect.w / DEG_MAX * 1.9;
+    for (let d = 0; d < NANG; d++) {
+      const col = inBand(d, NEAR_A) ? NEARC
+                : inBand(d, fb) ? FARC
+                : 'rgba(22,25,28,0.30)';
+      wiggle(ctx, g.traces[d], { x: xOf(d) - half, y: rect.y, w: 2 * half, h: rect.h },
+        peak, col, null, inBand(d, NEAR_A) || inBand(d, fb) ? 1.2 : 0.8);
+    }
+    return peak;
+  }
+
+  function drawMain() {
+    const c = $('cMain'); if (!c) return;
+    const W = width(c, 520), H = 330;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+
+    const g = gather();
+    const top = 26, bot = H - 44;
+    const gw = Math.round((W - 76) * 0.60);
+    const rG = { x: 52, y: top, w: gw, h: bot - top };
+    drawGather(ctx, rG, g, { ticks: 5 });
+
+    const rest = { x: rG.x + rG.w + 22, y: top, w: W - (rG.x + rG.w + 22) - 6, h: bot - top };
+    let peak = 1e-6;
+    for (let i = 0; i < NT; i++) {
+      peak = Math.max(peak, Math.abs(g.near.tr[i]), Math.abs(g.far.tr[i]));
+    }
+    SEIS.frame(ctx, rest);
+    const third = rest.w / 3;
+    wiggle(ctx, g.near.tr, { x: rest.x, y: rest.y, w: third, h: rest.h },
+      peak, NEARC, 'rgba(29,111,163,0.26)', 1.6);
+    wiggle(ctx, g.far.tr, { x: rest.x + third, y: rest.y, w: third, h: rest.h },
+      peak, FARC, 'rgba(194,48,107,0.22)', 1.6);
+    wiggle(ctx, g.diff, { x: rest.x + 2 * third, y: rest.y, w: third, h: rest.h },
+      peak, CRIM, null, 1.6);
+
+    ctx.font = '9.5px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = NEARC; ctx.fillText('N', rest.x + third / 2, rest.y - 5);
+    ctx.fillStyle = FARC; ctx.fillText('F', rest.x + 1.5 * third, rest.y - 5);
+    ctx.fillStyle = CRIM; ctx.fillText('F-N', rest.x + 2.5 * third, rest.y - 5);
+  }
+
+  /* ------------------------------- step 1 ------------------------------ */
+
+  function drawStep1() {
+    const g = gather();
+
+    const ca = $('c1a');
+    if (ca) {
+      const W = width(ca, 640), H = 400;
+      const ctx = SEIS.fitCanvas(ca, W, H);
+      ctx.clearRect(0, 0, W, H);
+      const rect = { x: 62, y: 18, w: W - 84, h: H - 62 };
+      drawGather(ctx, rect, g, { ticks: 8 });
+
+      ctx.font = '9.5px "IBM Plex Mono", monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      const xOf = (d) => rect.x + (d / DEG_MAX) * rect.w;
+      ctx.fillStyle = NEARC;
+      ctx.fillText('NEAR', xOf(5), rect.y + 4);
+      const mid = Math.min(DEG_MAX, (g.fb[0] + g.fb[1]) / 2);
+      ctx.fillStyle = FARC;
+      ctx.fillText('FAR', xOf(mid), rect.y + 4);
+    }
+
+    const cb = $('c1b');
+    if (cb) {
+      const W = width(cb, 640), H = 300;
+      const ctx = SEIS.fitCanvas(cb, W, H);
+      ctx.clearRect(0, 0, W, H);
+      const rect = { x: 62, y: 22, w: W - 84, h: H - 66 };
+      let peak = 1e-6;
+      for (let i = 0; i < NT; i++) {
+        peak = Math.max(peak, Math.abs(g.near.tr[i]), Math.abs(g.far.tr[i]),
+          Math.abs(g.diff[i]));
+      }
+      SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+        (v) => String(Math.round(v)), { ticks: 6 });
+      SEIS.frame(ctx, rect);
+
+      const third = rect.w / 3;
+      const cells = [
+        [g.near.tr, NEARC, 'rgba(29,111,163,0.26)', 'NEAR STACK  0-10' + String.fromCharCode(176)],
+        [g.far.tr, FARC, 'rgba(194,48,107,0.22)',
+          'FAR STACK  ' + g.fb[0] + '-' + g.fb[1] + String.fromCharCode(176)],
+        [g.diff, CRIM, null, 'F - N'],
+      ];
+      cells.forEach((q, k) => {
+        const r = { x: rect.x + k * third, y: rect.y, w: third, h: rect.h };
+        if (k) SEIS.dashedLine(ctx, r.x, r.y, r.x, r.y + r.h, 'rgba(22,25,28,0.20)', [3, 3], 1);
+        SEIS.dashedLine(ctx, r.x + r.w / 2, r.y, r.x + r.w / 2, r.y + r.h, SOFT, [4, 4], 0.8);
+        wiggle(ctx, q[0], r, peak, q[1], q[2], 1.7);
+        ctx.font = '9.5px "IBM Plex Mono", monospace';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+        ctx.fillStyle = q[1];
+        ctx.fillText(q[3], r.x + r.w / 2, rect.y - 6);
+      });
+
+      // the sample the readouts quote
+      const i0 = topSample();
+      const y = rect.y + (i0 / (NT - 1)) * rect.h;
+      SEIS.dashedLine(ctx, rect.x, y, rect.x + rect.w, y, 'rgba(132,22,23,0.55)', [5, 4], 1.2);
+      SEIS.tag(ctx, rect.x + 6, y - 12, 'top of sand', CRIM);
+    }
+
+    const f3 = (v) => (v >= 0 ? '+' : '\u2212') + Math.abs(v).toFixed(3);
+    const i0 = topSample();
+    $('s1a').textContent = g.near.n + ' traces';
+    $('s1b').textContent = g.far.n + ' traces';
+    $('s1c').textContent = f3(g.near.tr[i0]);
+    $('s1d').textContent = f3(g.diff[i0]);
+    $('s1e').textContent = 'The near stack is the intercept to within a hundredth of the gradient, and '
+      + 'the difference is the gradient scaled by ' + g.m.gain.toFixed(4)
+      + '. Step 2 shows where those two numbers come from.';
+  }
+
+  /* ------------------------------- step 2 ------------------------------ */
+
+  function drawStep2() {
+    const m = model();
+    const c = $('c2a'); if (!c) return;
+    const W = width(c, 640), H = 320;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+
+    // every porosity and fluid under the chosen overburden, no wavelet
+    const pts = [];
+    ['brine', 'oil', 'gas'].forEach((fl) => {
+      for (let p = PH0; p <= PH1; p++) {
+        const q = shuey(LITHS[S.over], sandRock(p / 100, fl));
+        pts.push({ fl, A: q.A, B: q.B, N: q.A + q.B * m.s2n, D: q.B * m.gain });
+      }
+    });
+
+    let lim = 0.1;
+    pts.forEach((q) => { lim = Math.max(lim, Math.abs(q.A), Math.abs(q.B), Math.abs(q.N)); });
+    lim *= 1.12;
+
+    const gap = 34;
+    const side = Math.min((W - 110 - gap) / 2, H - 62);
+    const FLCOL = { brine: NEARC, oil: '#4E7A2C', gas: FARC };
+
+    const panel = (rect, xv, yv, xlab, ylab, slope, note) => {
+      const xOf = (v) => rect.x + (v / lim + 1) / 2 * rect.w;
+      const yOf = (v) => rect.y + rect.h - (v / lim + 1) / 2 * rect.h;
+      SEIS.axisLeft(ctx, rect, -lim, lim, ylab, null, { ticks: 5, flip: true, grid: true });
+      SEIS.axisBottom(ctx, rect, -lim, lim, xlab, null, { ticks: 5 });
+      SEIS.frame(ctx, rect);
+      SEIS.dashedLine(ctx, rect.x, yOf(0), rect.x + rect.w, yOf(0), SOFT, [4, 4], 1);
+      SEIS.dashedLine(ctx, xOf(0), rect.y, xOf(0), rect.y + rect.h, SOFT, [4, 4], 1);
+      SEIS.dashedLine(ctx, xOf(-lim), yOf(-lim * slope), xOf(lim), yOf(lim * slope),
+        'rgba(132,22,23,0.55)', [6, 4], 1.4);
+      ctx.save();
+      ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+      pts.forEach((q) => {
+        ctx.beginPath();
+        ctx.arc(xOf(xv(q)), yOf(yv(q)), 2.6, 0, 2 * Math.PI);
+        ctx.fillStyle = FLCOL[q.fl]; ctx.fill();
+      });
+      ctx.restore();
+      ctx.font = '9px "IBM Plex Mono", monospace';
+      ctx.fillStyle = CRIM;
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillText(note, rect.x + 7, rect.y + 6);
+    };
+
+    const rL = { x: 58, y: 16, w: side, h: side };
+    const rR = { x: 58 + side + gap + 34, y: 16, w: side, h: side };
+    panel(rL, (q) => q.A, (q) => q.N, 'intercept A', 'near stack N', 1, 'N = A');
+    panel(rR, (q) => q.B, (q) => q.D, 'gradient B', 'F - N', m.gain,
+      'F - N = ' + m.gain.toFixed(4) + ' B');
+
+    let worst = 0;
+    pts.forEach((q) => { worst = Math.max(worst, Math.abs(q.N - q.A)); });
+
+    $('s2a').textContent = m.s2n.toFixed(4);
+    $('s2b').textContent = m.s2f.toFixed(4);
+    $('s2c').textContent = m.gain.toFixed(4);
+    $('s2d').textContent = worst.toFixed(4);
+    $('s2e').textContent = 'With the far window at ' + m.fb[0] + '\u2013' + m.fb[1]
+      + '\u00B0, one unit of gradient reaches the difference trace as '
+      + m.gain.toFixed(3) + '. Widening the separation raises that number.';
+  }
+
+  /* ------------------------------- step 3 ------------------------------ */
+
+  function drawStep3() {
+    const g = gather();
+    const c = $('c3a'); if (!c) return;
+    const W = width(c, 640), H = 400;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const rect = { x: 62, y: 26, w: W - 84, h: H - 74 };
+
+    let peak = 1e-6;
+    for (let i = 0; i < NT; i++) {
+      peak = Math.max(peak, Math.abs(g.near.tr[i]), Math.abs(g.far.tr[i]),
+        Math.abs(g.diff[i]), Math.abs(g.fitA[i]), Math.abs(g.fitB[i]) * g.m.gain);
+    }
+
+    SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 8 });
+    SEIS.frame(ctx, rect);
+
+    // the fitted gradient is scaled by the same factor as F - N so that the
+    // two are drawn as the same physical quantity rather than as two numbers
+    const fitBscaled = new Float32Array(NT);
+    for (let i = 0; i < NT; i++) fitBscaled[i] = g.fitB[i] * g.m.gain;
+
+    const cells = [
+      [g.near.tr, NEARC, 'rgba(29,111,163,0.26)', 'N'],
+      [g.far.tr, FARC, 'rgba(194,48,107,0.22)', 'F'],
+      [g.diff, CRIM, null, 'F - N'],
+      [g.fitA, 'rgba(22,25,28,0.75)', 'rgba(22,25,28,0.14)', 'FITTED A'],
+      [fitBscaled, 'rgba(22,25,28,0.75)', null, 'FITTED B'],
+    ];
+    const cw = rect.w / cells.length;
+    cells.forEach((q, k) => {
+      const r = { x: rect.x + k * cw, y: rect.y, w: cw, h: rect.h };
+      if (k) SEIS.dashedLine(ctx, r.x, r.y, r.x, r.y + r.h,
+        k === 3 ? 'rgba(22,25,28,0.45)' : 'rgba(22,25,28,0.18)', k === 3 ? [6, 4] : [3, 3], 1);
+      SEIS.dashedLine(ctx, r.x + r.w / 2, r.y, r.x + r.w / 2, r.y + r.h, SOFT, [4, 4], 0.8);
+      wiggle(ctx, q[0], r, peak, q[1], q[2], 1.6);
+      ctx.font = '9px "IBM Plex Mono", monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+      ctx.fillStyle = q[1];
+      ctx.fillText(q[3], r.x + r.w / 2, rect.y - 6);
+    });
+
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillStyle = 'rgba(22,25,28,0.55)';
+    ctx.fillText('two window averages', rect.x + 1.5 * cw, rect.y + rect.h + 8);
+    ctx.fillText('least squares, every sample', rect.x + 4 * cw, rect.y + rect.h + 8);
+
+    // how much moveout each estimator averages across
+    const span = (a, b) => (SIN2[Math.min(DEG_MAX, b)] - SIN2[Math.max(0, a)]) / SIN2_MAX;
+    const ms = (frac) => (frac * S.rmo).toFixed(2) + ' ms';
+    $('s3a').textContent = ms(span(NEAR_A[0], NEAR_A[1]));
+    $('s3c').textContent = ms(span(0, DEG_MAX));
+
+    const cmp = compare();
+    const pc = (v, ref) => (100 * Math.abs(v) / Math.max(1e-6, Math.abs(ref))).toFixed(0) + '%';
+    $('s3d').textContent = pc(cmp.biasB[0], cmp.trueB);
+    $('s3e').textContent = pc(cmp.biasB[1], cmp.trueB);
+    $('s3g').textContent = pc(cmp.sdB[0], cmp.trueB);
+    $('s3h').textContent = pc(cmp.sdB[1], cmp.trueB);
+    $('s3b').textContent = pc(cmp.biasA[0], cmp.trueA);
+    $('s3i').textContent = pc(cmp.biasA[1], cmp.trueA);
+
+    const bs = Math.abs(cmp.biasB[0]), bf = Math.abs(cmp.biasB[1]);
+    const ns = Math.abs(cmp.sdB[0]), nf = Math.abs(cmp.sdB[1]);
+    let verdict;
+    if (S.rmo === 0 && S.noise === 0) {
+      verdict = 'A clean, flat gather. Both estimators return the right answer, and nothing here argues '
+        + 'for one over the other. Add noise, then add moveout.';
+    } else if (S.rmo === 0) {
+      verdict = 'A flat gather with noise only. The fit carries about half the noise of the two stacks, '
+        + 'because it uses all ' + NANG + ' traces rather than ' + g.near.n + ' and ' + g.far.n
+        + '. On data like this it is the better estimator and there is nothing to discuss.';
+    } else if (S.noise === 0) {
+      verdict = 'Moveout only. Both gradients are now wrong, but the fit is wrong by about '
+        + (bs > 1e-9 ? (bf / bs).toFixed(1) : '\u2014') + ' times as much, because it compares the same '
+        + 'sample index at 0 and ' + DEG_MAX + ' degrees, ' + ms(span(0, DEG_MAX))
+        + ' apart on the waveform. The near stack is barely touched, and that is the trace module 03 '
+        + 'has to pick.';
+    } else {
+      verdict = 'Both effects at once, which is the realistic case. The fit is the more precise '
+        + 'estimator and the more biased one: less noise, more error from the moveout. Which matters '
+        + 'more depends on the gather in front of you, and neither is free.';
+    }
+    $('s3f').textContent = verdict
+      + (ns > 0 && nf > 0 && S.noise > 0 && S.rmo === 0 ? '' : '');
+  }
+
+  /* ------------------------------ the panel ---------------------------- */
+
+  function pushToInputs() {
+    $('phi').value = S.phi;
+    $('far').value = S.far;
+    $('freq').value = S.freq;
+    $('noise').value = S.noise;
+    $('rmo').value = S.rmo;
+    $('phiV').textContent = S.phi + '%';
+    $('farV').textContent = S.far + '\u2013' + (S.far + FAR_W) + '\u00B0';
+    $('freqV').textContent = S.freq + ' Hz';
+    $('noiseV').textContent = S.noise + '%';
+    $('rmoV').textContent = S.rmo + ' ms';
+    $('overV').textContent = LITHS[S.over].name;
+    $('fluidV').textContent = FLUIDS[S.fluid].name;
+
+    document.querySelectorAll('[data-over]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.over === S.over);
+    });
+    document.querySelectorAll('[data-fluid]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.fluid === S.fluid);
+    });
+
+    const m = model();
+    const f3 = (v) => (v >= 0 ? '+' : '\u2212') + Math.abs(v).toFixed(3);
+    $('mVp').textContent = Math.round(m.sand.vp) + ' m/s';
+    $('mRho').textContent = m.sand.rho.toFixed(2) + ' g/cm\u00B3';
+    $('mA').textContent = f3(m.top.A);
+    $('mClass').textContent = avoClass(m.top.A, m.top.B, m.s2f);
+  }
+
+  function drawAll() {
+    drawMain();
+    if (visible('p1')) drawStep1();
+    if (visible('p2')) drawStep2();
+    if (visible('p3')) drawStep3();
+  }
+
+  function onChange() { pushToInputs(); drawAll(); saveState(); }
+
+  ['phi', 'far', 'freq', 'noise', 'rmo'].forEach((id) => {
+    $(id).addEventListener('input', () => { S[id] = parseFloat($(id).value); onChange(); });
+  });
+  document.querySelectorAll('[data-over]').forEach((b) => {
+    b.addEventListener('click', () => { S.over = b.dataset.over; onChange(); });
+  });
+  document.querySelectorAll('[data-fluid]').forEach((b) => {
+    b.addEventListener('click', () => { S.fluid = b.dataset.fluid; onChange(); });
+  });
+  $('resetBtn').addEventListener('click', () => {
+    const tab = S.tab;
+    S = Object.assign({}, DEF, { tab });
+    onChange();
+  });
+
+  /* -------------------------------- tabs ------------------------------- */
+
+  const PANES = ['p1', 'p2', 'p3', 'pw', 'pe', 'pk', 'pm'];
+  const STEPNAMES = {
+    p1: 'Two windows', p2: 'What they are', p3: 'Why not fit',
+    pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
+  };
+
+  function buildStepNav() {
+    PANES.forEach((id, i) => {
+      const pane = $(id); if (!pane) return;
+      const prev = PANES[i - 1], next = PANES[i + 1];
+      const nav = document.createElement('div');
+      nav.className = 'stepnav';
+      const mk = (target, text, ghost) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'btn' + (ghost ? ' ghost' : '') + ' small';
+        b.textContent = text;
+        b.addEventListener('click', () => {
+          showTab(target);
+          const t = document.querySelector('.tabhint');
+          if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return b;
+      };
+      nav.appendChild(prev ? mk(prev, '\u2190 ' + STEPNAMES[prev], true)
+                           : document.createElement('span'));
+      const where = document.createElement('span');
+      where.className = 'where';
+      where.textContent = i < 3 ? 'step ' + (i + 1) + ' of 3' : STEPNAMES[id];
+      nav.appendChild(where);
+      nav.appendChild(next ? mk(next, STEPNAMES[next] + ' \u2192')
+                           : document.createElement('span'));
+      pane.appendChild(nav);
+    });
+  }
+
+  function showTab(id) {
+    PANES.forEach((q) => { const el = $(q); if (el) el.hidden = q !== id; });
+    document.querySelectorAll('#tabs button').forEach((b) => {
+      b.setAttribute('aria-selected', b.dataset.tab === id);
+    });
+    const lab = document.querySelector('.labhead');
+    if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3');
+
+    /* Step 2 is the noiseless algebra behind the two traces. Noise and moveout
+       have nothing to say about it, so they go inactive rather than vanish. */
+    const two = (id === 'p2');
+    ['noise', 'rmo'].forEach((k) => { const el = $(k); if (el) el.disabled = two; });
+    const cd = $('colData');
+    if (cd) cd.style.opacity = two ? '0.42' : '1';
+
+    if ($('labCap')) {
+      $('labCap').innerHTML = two
+        ? 'The gather <span>&mdash; step 2 works from the algebra, not the traces</span>'
+        : 'The gather <span>&mdash; and the two traces made from it</span>';
+    }
+
+    const last = (id === 'pk' || id === 'pm');
+    if ($('nextup')) $('nextup').hidden = !last;
+    if ($('pager')) $('pager').hidden = !last;
+    S.tab = id;
+    drawAll();
+    saveState();
+  }
+  document.querySelectorAll('#tabs button').forEach((b) => {
+    b.addEventListener('click', () => showTab(b.dataset.tab));
+  });
+  document.querySelectorAll('.masthead a[data-tab]').forEach((a) => {
+    a.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      showTab(a.dataset.tab);
+      const strip = $('tabs');
+      if (strip && strip.scrollIntoView) strip.scrollIntoView({ block: 'start' });
+    });
+  });
+
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawAll, 140); });
+
+  pushToInputs();
+  buildStepNav();
+  showTab(PANES.indexOf(S.tab) >= 0 ? S.tab : 'p1');
+  document.fonts && document.fonts.ready.then(drawAll);
+})();
+</script>
+</body>
+</html>

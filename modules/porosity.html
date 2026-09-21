@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DQ and porosity | How the DQ Trace Actually Works</title>
+<meta name="description" content="The DQ distance tracks porosity as tightly as acoustic impedance does, with a sign and a slope that belong to the overburden rather than to the method. Why that is the argument for calibrating per interval.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <a class="brand" href="../index.html"><span class="dot"></span>How the DQ trace <b>actually</b> works</a>
+    <nav>
+      <a href="../index.html">All modules</a>
+      <a href="#tabs" data-tab="pw">Why it matters</a>
+      <a href="#tabs" data-tab="pm">Method &amp; references</a>
+    </nav>
+  </header>
+
+  <div class="mod-head">
+    <p class="eyebrow">Module 11 &nbsp;·&nbsp; The DQ trace</p>
+    <h1>DQ and porosity</h1>
+    <p class="sub">Ten modules of machinery have produced a number. This is where it earns its keep: the DQ
+      distance tracks the porosity of a sand about as tightly as acoustic impedance does, without a well
+      tie, a wavelet estimate or an inversion. It also does so with a sign that belongs to the overburden
+      and not to the method, and that second fact is as important as the first.</p>
+  </div>
+
+  <div class="labhead">
+    <div class="labgrid">
+      <div>
+        <p class="cap" id="labCap">The rock model <span>&mdash; five sands of known porosity, and the DQ trace</span></p>
+        <canvas id="cMain" aria-label="The DQ distance and acoustic impedance plotted against porosity"></canvas>
+      </div>
+      <div>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <div class="controls" id="labControls">
+          <div class="ctl-col">
+            <h2>Build the rocks</h2>
+            <div class="ctl">
+              <label>Overburden <span class="val" id="overV">tight sandstone</span></label>
+              <div class="seg" role="group" aria-label="Overburden lithology">
+                <button type="button" data-over="soft" aria-pressed="false">soft</button>
+                <button type="button" data-over="hard" aria-pressed="false">hard</button>
+                <button type="button" data-over="tight" aria-pressed="true">tight</button>
+              </div>
+            </div>
+            <div class="ctl">
+              <label for="phi">Porosity marked <span class="val" id="phiV">24%</span></label>
+              <input type="range" id="phi" min="10" max="36" step="1" value="24">
+            </div>
+            <div class="ctl">
+              <label>Pore fluid <span class="val" id="fluidV">brine</span></label>
+              <div class="seg" role="group" aria-label="Fluid filling the sand pores">
+                <button type="button" data-fluid="brine" aria-pressed="true">brine</button>
+                <button type="button" data-fluid="oil" aria-pressed="false">oil</button>
+                <button type="button" data-fluid="gas" aria-pressed="false">gas</button>
+              </div>
+            </div>
+            <p class="hint-line" style="margin:2px 0 0;grid-column:1/-1">The porosity slider marks one
+              point on the curves rather than setting the model; the curves span the whole range.</p>
+          </div>
+
+          <div class="ctl-col" id="colLayers">
+            <h2>The layers</h2>
+            <div class="ctl">
+              <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
+              <input type="range" id="thick" min="6" max="55" step="1" value="30">
+            </div>
+            <div class="ctl">
+              <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
+              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+            </div>
+            <label class="check" style="grid-column:1/-1"><input type="checkbox" id="showall" checked>
+              Show all three overburdens on step 3</label>
+          </div>
+
+          <div class="ctl-col" id="colData">
+            <h2>What the data does to it</h2>
+            <div class="ctl">
+              <label for="dt">Sample rate <span class="val" id="dtV">1 ms</span></label>
+              <input type="range" id="dt" min="0" max="3" step="1" value="0">
+            </div>
+            <div class="ctl">
+              <label for="noise">Noise <span class="val" id="noiseV">0%</span></label>
+              <input type="range" id="noise" min="0" max="40" step="1" value="0">
+            </div>
+            <button class="btn ghost small" id="resetBtn" type="button">Reset everything</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
+    Method and references are there when you want them.</p>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
+    <button role="tab" data-tab="p1" aria-selected="false">1 · What porosity does to the rock</button>
+    <button role="tab" data-tab="p2" aria-selected="false">2 · What it does to the DQ trace</button>
+    <button role="tab" data-tab="p3" aria-selected="false">3 · The sign belongs to the seal</button>
+    <button role="tab" data-tab="p4" aria-selected="false">4 · Recovering a porosity log</button>
+    <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
+    <span class="gap"></span>
+    <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
+    <button role="tab" data-tab="pk" aria-selected="false">Key points</button>
+    <button role="tab" data-tab="pm" aria-selected="false">Method</button>
+  </nav>
+
+  <section class="tabpane" id="p1" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">1</span>What porosity does to the rock</h3>
+      <span class="hint">Before any seismic is involved</span>
+    </div>
+
+    <p class="lede">
+      This is where the DQ trace earns the description the AASPI documentation gives it: before any
+      inversion, it is a <b>relative porosity curve</b>. Relative because the vertical axis is in amplitude
+      units and nothing here converts them to porosity units; a curve, because it varies down the trace
+      with the rock rather than reporting a single number per layer. After an inversion tied to wells it
+      becomes a quantitative prediction of porosity or hydrocarbon pore volume, which is the third
+      paper.</p>
+
+    <p class="lede">
+      Start with no seismic at all. Porosity is the fraction of a rock's volume that is pore space rather
+      than mineral grains. Raising it replaces quartz, which is dense and fast, with brine or gas, which
+      are lighter and slower. So the bulk density falls, and the P-wave velocity falls with it because
+      sound travels more slowly through the fluid than through the frame. Acoustic impedance is velocity
+      multiplied by density, so both terms push the same way and the impedance falls steadily.</p>
+
+    <p class="lede">
+      The V<sub>P</sub>/V<sub>S</sub> ratio moves the other way. Pore fluid resists compression but not
+      shear, so adding porosity weakens the rock against a P-wave more than against an S-wave, and the
+      ratio of the two velocities rises. Both relationships are close to monotonic here, and both belong to
+      the sand alone &mdash; nothing above it enters into either.</p>
+
+    <canvas id="c1a" aria-label="Acoustic impedance and Vp over Vs plotted against porosity"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The two classical porosity indicators for this rock
+      model, across the full porosity range. The marker is the porosity set in the panel.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Impedance against porosity</span><b id="s1a">&mdash;</b></div>
+      <div class="stat"><span>V<sub>P</sub>/V<sub>S</sub> against porosity</span><b id="s1b">&mdash;</b></div>
+      <div class="stat"><span>Impedance at the marker</span><b id="s1c">&mdash;</b></div>
+      <div class="stat"><span>V<sub>P</sub>/V<sub>S</sub> there</span><b id="s1d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>Neither of these is measurable from seismic without work. Acoustic impedance needs an
+        inversion, which needs a wavelet and usually a well. V<sub>P</sub>/V<sub>S</sub> needs shear
+        information, which needs either converted waves or a simultaneous inversion. The question the next
+        step asks is how close the DQ distance gets to the same information with neither.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="p2" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">2</span>What it does to the DQ trace</h3>
+      <span class="hint">The same curve, from seismic amplitudes alone</span>
+    </div>
+
+    <p class="lede">
+      Now run the whole chain. For each porosity in turn, build the sand, model the near and far stacks,
+      pick, number, filter, enhance, and read the DQ distance at the top of the sand. No wavelet has been
+      estimated, no well has been used and nothing has been inverted.</p>
+
+    <p class="lede">
+      Under a tight sandstone seal the result is a near-straight line. The distance rises with porosity at a
+      correlation of about <b>0.99</b>, against 0.99 for acoustic impedance and 1.00 for
+      V<sub>P</sub>/V<sub>S</sub> &mdash; the same information, from amplitudes.</p>
+
+    <p class="lede">
+      The chain is worth following once, because the rest of the module depends on it. Porosity raises pore
+      volume, which lowers density and velocity, which lowers the sand's impedance. The seal's impedance
+      does not change, so the contrast across the top of the sand grows. A larger contrast gives a larger
+      reflection coefficient at both the near and the far angle, which gives a longer vector on the
+      crossplot, which gives a larger DQ distance. Each link is ordinary rock physics or ordinary
+      reflection theory; the attribute carries the result through to a number you can map.</p>
+
+    <p class="lede">
+      Read the correlation for what it is. It is measured on one modelled sand at a time under a fixed
+      seal, with no shale content and no lithological variation, so it is an upper bound rather than an
+      estimate of field performance. What it establishes is that the information is present in the
+      attribute.</p>
+
+    <canvas id="c2a" aria-label="The DQ distance plotted against porosity, beside acoustic impedance"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The DQ distance at the top of the sand across the
+      porosity range, with impedance behind it on its own scale for shape comparison.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat key"><span>Distance against porosity</span><b id="s2a">&mdash;</b></div>
+      <div class="stat"><span>Distance against impedance</span><b id="s2b">&mdash;</b></div>
+      <div class="stat"><span>Distance at the marker</span><b id="s2c">&mdash;</b></div>
+      <div class="stat"><span>Distance spans</span><b id="s2d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>Worth pausing on what has and has not been shown. The distance carries porosity information,
+        strongly. It does not yet give a porosity <em>value</em>: the vertical axis is in amplitude units
+        and the conversion from one to the other is a slope and an intercept that nothing here supplies.
+        A well tie supplies them, and that is the subject of the third of the DQ papers rather than of this course.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="p3" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">3</span>The sign belongs to the seal</h3>
+      <span class="hint">The result that decides how the method is used</span>
+    </div>
+
+    <p class="lede">
+      Change the rock above the sand and the relationship changes character. Under tight sandstone the distance
+      rises with porosity. Under a soft shale it <b>falls</b>, just as cleanly, because a porous sand
+      approaches the shale's own impedance and the contrast between them dies away entirely in the mid
+      thirties. Under a hard shale the
+      contrast passes through zero in the middle of the range and the relationship is a V, which no single
+      correlation describes at all.</p>
+
+    <p class="lede">
+      The sand is identical in all three. Nothing about the reservoir has changed, and the attribute has
+      reversed its sign. Whatever relationship holds between the DQ distance and porosity, it belongs to
+      the interval and not to the method.</p>
+
+    <canvas id="c3a" aria-label="The DQ distance against porosity under all three overburdens"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The same sand under each of the three seals. Untick the
+      box in the panel to show only the one you have selected.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat key"><span>Under tight sandstone</span><b id="s3a">&mdash;</b></div>
+      <div class="stat key"><span>Under soft shale</span><b id="s3b">&mdash;</b></div>
+      <div class="stat"><span>Under hard shale</span><b id="s3c">&mdash;</b></div>
+      <div class="stat"><span>Where the soft-shale contrast dies</span><b id="s3d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>This is the argument for the look-up catalogues the DQ workflow uses, made from first
+        principles rather than asserted. A catalogue is a relationship between attribute values and rock
+        properties that has been calibrated for one interval, and the reason you need a new one when the
+        petrophysics changes is on this plot: the same attribute means the opposite thing under a different
+        seal.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="p4" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">4</span>Recovering a porosity log</h3>
+      <span class="hint">One synthetic trace, five sands, a known answer</span>
+    </div>
+
+    <p class="lede">
+      The previous steps compared one model against another. This one does the test properly: a single
+      synthetic, a porosity log we chose, and a DQ trace computed from the seismic with no knowledge of
+      it. Five sand bodies of different porosity, each encased in the same seal, with shale between them
+      so that every sand's top is a contrast against the same rock.</p>
+
+    <p class="lede">
+      Read the DQ trace at each sand top and compare it with the porosity that built that sand. Under a
+      tight sandstone seal the two track each other at a correlation of <b>1.00</b> &mdash; the five
+      readings rank the five sands in exactly the right order; under a soft shale,
+      <b>&minus;1.00</b>, the same ranking reversed. The log has been recovered, up to a sign and a scale that step 3 explained and
+      that only a well can supply.</p>
+
+    <p class="lede">
+      The spacing matters more than it looks. These sands sit 62 ms apart, so the base of one is more
+      than a wavelength from the top of the next and each reflection stands on its own. Pack them to 24 ms
+      and the correlation falls to about 0.8, because the value read at a sand top is then contaminated by
+      its neighbours rather than describing its own rock. That is a limit on the seismic, not on the
+      attribute, and module 12 takes it up in earnest.</p>
+
+    <canvas id="c4a" aria-label="A five-sand porosity log beside the near stack and the DQ trace computed from it"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The porosity log we put in, the near stack that a
+      seismic survey would record, and the DQ trace that comes out. The markers show where each sand top
+      was read. Time runs down all three.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Sand tops found</span><b id="s4a">&mdash;</b></div>
+      <div class="stat"><span>Porosities put in</span><b id="s4b">&mdash;</b></div>
+      <div class="stat"><span>DQ read out</span><b id="s4c">&mdash;</b></div>
+      <div class="stat key"><span>Recovered at</span><b id="s4d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s4e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>One thing this does not show, and it matters. The sands here are separated by shale, so each
+        top is a contrast against a fixed rock. Stack sands directly on one another and the DQ trace
+        responds to the porosity <em>step</em> between them rather than to porosity itself, because a
+        reflection is a contrast and never an absolute. That is a real limit on what any amplitude
+        attribute can do, and it is why a DQ section reads a layered sequence well and a gradational one
+        badly.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pw" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">?</span>What this is and is not</h3>
+      <span class="hint">Detection, calibration, and the line between them</span>
+    </div>
+
+    <p class="lede">The DQ papers separate two things carefully and it is worth separating them here.
+      <b>Detection</b> asks where something interesting is, and does not need a well: the earlier modules
+      are all detection, and so is the correlation on step 2. <b>Quantitative prediction</b> asks how much
+      porosity is there, in porosity units, and does need a well, because the conversion from an amplitude
+      to a rock property has a slope and an intercept that only a calibration can supply.</p>
+
+    <p class="lede">The method's authors are explicit that this ordering was historical as well as logical.
+      The original work was built for quantitative inversion and required forward modelling from full well
+      log suites; the detection attributes were a by-product that turned out not to need any of it. Papers
+      1 and 2 are about the by-product. Paper 3 goes back to the original problem.</p>
+
+    <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
+      Why one catalogue is never enough</h2>
+    <p class="lede">Step 3 shows the sign flipping between seals. In a real basin the same thing happens
+      with depth: compaction moves both the sand trend and the shale trend, and where they cross, the
+      relationship inverts. The reported field practice matches &mdash; two catalogues over a two-second
+      window in one offshore dataset, a forced catalogue switch at an unconformity in another where the
+      petrophysics changed abruptly, and a single catalogue sufficing in a third field where it did not.
+      None of that is a weakness of the attribute. It is what any amplitude-based rock property estimate
+      has to live with, and the DQ workflow at least makes the boundary visible by letting you crossplot a
+      time window and watch the cluster move.</p>
+
+    <div class="legend prose">
+      <span>The honest summary of this module: the DQ distance sees the rock. It sees it through the
+        contrast with whatever is above it, which is true of every reflection attribute ever devised, and
+        the practical consequence is that you calibrate per interval rather than once.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pe" role="tabpanel" hidden>
+    <div class="tryit" style="max-width:none">
+      <h3>Exercises</h3>
+      <ol>
+        <li><b>Read the correlation under tight sandstone.</b> On step 2, with a tight sandstone seal and brine fill,
+          read the two correlation figures.
+          <details class="reveal"><summary>Hint</summary><span class="ans">About 0.99 against porosity and
+            about 1.00 against acoustic impedance. That is the headline result of this module: an attribute
+            computed from partial-stack amplitudes alone, with no wavelet estimate and no well, carrying
+            essentially the same porosity information that an impedance inversion would give you. Worth
+            being precise about the claim &mdash; it carries the information, it does not deliver a
+            porosity number, and step 2's legend says why.</span></details></li>
+        <li><b>Now switch to a soft shale seal.</b> Read the same figure.
+          <details class="reveal"><summary>Hint</summary><span class="ans">About &minus;0.97. The
+            correlation is nearly as strong and points the other way. A porous sand under a soft shale is
+            acoustically similar to the shale, so the reflection weakens as porosity rises, and the
+            distance falls. The rock has not changed; the seal has. Anyone who calibrated a DQ-to-porosity
+            relationship under tight sandstone and applied it under shale would have the sign
+            backwards.</span></details></li>
+        <li><b>Find where the contrast dies.</b> Still on soft shale, look at where the curve bottoms
+          out on step 3.
+          <details class="reveal"><summary>Hint</summary><span class="ans">In the mid thirties, where the
+            distance falls to under a hundredth &mdash; on the 2% sampling this page uses, the minimum
+            lands at 34%. That is the class 2 crossover: the sand and the shale have matched impedances,
+            there is almost no reflection, and the attribute has nothing to measure. Module 10 used the
+            same region as its example of an unreliable angle, for the same underlying reason. Near a
+            crossover, every attribute in this course is weak at once.</span></details></li>
+        <li><b>Try the hard shale.</b> Read its correlation on step 3.
+          <details class="reveal"><summary>Hint</summary><span class="ans">About 0.43, which is not a
+            useful number and is not meant to be. The crossover sits in the middle of the porosity range
+            rather than at one end, so the curve is a V and a straight-line correlation averages the two
+            halves into nonsense. This is a good reason to look at the shape before trusting a coefficient
+            &mdash; the correlation is low here not because the physics is noisy but because it is
+            two-sided.</span></details></li>
+        <li><b>Change the fluid.</b> Switch between brine, oil and gas under tight sandstone.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The curve shifts but keeps its shape and its sign. Which means a single DQ value is ambiguous: a brine sand at high porosity and a gas sand at lower porosity can give the same number. Porosity and fluid both move the distance the same way here, and only the angle of module 10 tells them apart. Hydrocarbon lowers the sand's impedance, which under a tight sandstone seal
+            increases the contrast and lifts the whole curve. So fluid and porosity both move the distance
+            in the same direction here, and the distance alone cannot separate them. That is exactly what
+            module 10's angle is for, and it is the clearest argument on the site for computing both
+            attributes rather than one.</span></details></li>
+        <li><b>Add noise.</b> Take the noise to 30% under tight sandstone and watch the correlation.
+          <details class="reveal"><summary>Hint</summary><span class="ans">It barely moves, and then it
+            gives way. The correlation stays around 0.98 or better all the way to about 35% noise, and
+            then drops sharply &mdash; to a little over 0.5 by 40% on the brine case, and further under
+            other fluids. That is a cliff rather than a slope, and the reason is the picking rather than the amplitudes: while the picks stay in the right places the
+            trend survives almost intact, and once noise starts inventing and destroying picks &mdash;
+            which module 03 measured directly &mdash; the chain downstream has nothing sound to work with.
+            The practical reading is that this holds up in ordinary data and is worth no trust at all in bad data, with less warning in between than you would like. Treat the figure as an upper bound in
+            any case: it is computed on one modelled sand at a time, not on a population of real
+            samples.</span></details></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pk" role="tabpanel" hidden>
+    <div class="takeaway" style="max-width:none">
+      <h3>The main points</h3>
+      <ul>
+        <li><b>The DQ distance tracks porosity about as tightly as acoustic impedance does</b>, and it does
+          so from partial-stack amplitudes with no wavelet estimate, no inversion and no well.</li>
+        <li><b>Under a tight sandstone seal the correlation is about +0.99</b> against porosity, and about 1.00
+          against impedance.</li>
+        <li><b>Under a soft shale it is about &minus;0.97.</b> The relationship is just as strong and
+          points the other way.</li>
+        <li><b>Under a hard shale it is about 0.43</b>, because the crossover falls mid-range and the curve
+          is a V that no single correlation describes.</li>
+        <li><b>The sand is identical in all three.</b> The attribute reads the contrast, and the contrast
+          belongs to the pair.</li>
+        <li><b>Near a crossover every attribute is weak at once</b> &mdash; the distance collapses and the
+          angle of module 10 becomes meaningless together.</li>
+        <li><b>Fluid and porosity move the distance the same way</b>, so the distance alone cannot separate
+          them. The angle can.</li>
+        <li><b>This is detection, not prediction.</b> Turning a distance into a porosity value needs a
+          slope and an intercept, and those come from a well.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pm" role="tabpanel" hidden>
+    <details class="notes" id="notes" open>
+      <summary>Method, assumptions, and where to read more</summary>
+      <p>Everything upstream is as in modules 03 through 10, unchanged: the same rocks, picks, quadrant
+        numbers, phase filters, enhancement, distance, baseline rotation and sector split. The distance is
+        read at the sample nearest the top of the sand, and the curve is built by rebuilding the whole
+        chain at each porosity from 10% to 36% in steps of two.</p>
+      <p>Acoustic impedance and V<sub>P</sub>/V<sub>S</sub> on step 1 are properties of the modelled sand
+        and involve no seismic: impedance is velocity times density, and both come from Wyllie's time
+        average and the volumetric density mix with the V<sub>P</sub>/V<sub>S</sub> trend of Bedle et al.
+        (2025). Correlations are ordinary Pearson coefficients across the porosity samples.</p>
+      <p><b>What the correlation figure does and does not represent.</b> It is computed on one modelled sand
+        at a time under a fixed seal, with no lithological variation, no shale content and no noise unless
+        you add it. A real correlation on a real basin would be lower, and the number here should be read as a demonstration that the information is present in the attribute rather than as an estimate of how well it would perform. The step 3 result &mdash; that the sign depends on the seal
+        &mdash; is the finding that holds generally, because it follows from the sign of an impedance contrast rather than from any detail of the rock model.</p>
+      <p>The module stops short of predicting a porosity value, deliberately. The vertical axis is in
+        amplitude units, and the conversion is a scaling that has to be calibrated. The method's authors
+        treat that as a separate paper requiring forward modelling from well logs, and this course covers
+        the detection side only.</p>
+      <ul>
+        <li>Wyllie, M. R. J., A. R. Gregory, and L. W. Gardner, 1956, Elastic wave velocities in
+          heterogeneous and porous media: <em>Geophysics</em>, 21, 41&ndash;70.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+          quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+        <li>Neff, D. B., and W. Neff, 2023, DQ trace applications to hydrocarbon detection: a theoretical
+          review with pseudo wells and synthetic seismograms, presentation notes.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="nextup" id="nextup" hidden>
+    <p class="eyebrow">Next up</p>
+    <h3><a href="wedge.html">12 · Wedge models and tuning</a></h3>
+    <p>The interference this module just ran into, taken seriously: bed thickness moves the distance by a
+      third and leaves the angle alone.</p>
+    <a class="btn" href="wedge.html">Open module 12 →</a>
+    <a class="btn ghost" href="../index.html">All modules</a>
+  </section>
+
+  <div class="pager" id="pager" hidden>
+    <a class="btn ghost" href="theta-px.html">← Theta PX</a>
+    <a class="btn" href="wedge.html">Next: wedge models and tuning →</a>
+  </div>
+
+  <footer>
+    <div class="foot-grid">
+      <p>Built for teaching by Heather Bedle, School of Geosciences, University of Oklahoma, with the
+        <a href="https://www.ou.edu/mcee/labs/aaspi">AASPI</a> consortium.</p>
+      <p class="lic">Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+        Free to use, share and adapt for any purpose, including training in industry, provided the source is
+        credited and adapted versions carry the same license.</p>
+      <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
+        Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
+      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
+        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        nothing about you.</p>
+    </div>
+  </footer>
+</div>
+
+<script src="../assets/count.js"></script>
+<script src="../assets/seismic.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  if (typeof SEIS === 'undefined') {
+    const el = document.createElement('div');
+    el.setAttribute('style', 'background:#841617;color:#fff;padding:14px 18px;margin:16px 0;' +
+      'font:13px/1.6 ui-monospace,Menlo,monospace');
+    el.textContent = 'This module could not load assets/seismic.js. It expects it one directory up, ' +
+      'at ../assets/, and file names are case-sensitive on GitHub Pages.';
+    const w = document.querySelector('.wrap');
+    (w || document.body).insertBefore(el, w ? w.firstChild : null);
+    return;
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const visible = (id) => { const el = $(id); return el && !el.hidden; };
+
+  /* =====================================================================
+     THE ROCKS
+     Identical to modules 01 and 02.
+     ===================================================================== */
+
+  const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };
+
+  const FLUIDS = {
+    brine: { K: 2.60,  rho: 1.03, v: 1500, name: 'brine' },
+    oil:   { K: 0.80,  rho: 0.78, v: 1300, name: 'oil' },
+    gas:   { K: 0.055, rho: 0.20, v: 550,  name: 'gas' },
+  };
+
+  const LITHS = {
+    soft: { vp: 2700, vs: 1175, rho: 2.33, name: 'soft shale' },
+    hard: { vp: 3350, vs: 1675, rho: 2.48, name: 'hard shale' },
+    tight: { vp: 4800, vs: 2800, rho: 2.56, name: 'tight sandstone' },
+  };
+
+  const PH0 = 8, PH1 = 36;
+  const DTS = [0.001, 0.002, 0.003, 0.004];
+  const NEAR_A = [0, 10];
+  const T0 = 0, TWIN = 0.400, TTOP = 0.050;
+  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
+  const BEDC = [0.118, 0.130];                   // a tight bed below it
+
+  const DEF = {
+    over: 'tight', phi: 24, fluid: 'brine',
+    thick: 30, freq: 40, dt: 0, noise: 0, showall: true, tab: 'p1',
+  };
+  let S = SEIS.readState(DEF);
+  if (!LITHS[S.over]) S.over = DEF.over;
+  if (!FLUIDS[S.fluid]) S.fluid = DEF.fluid;
+  S.phi = Math.min(PH1, Math.max(PH0, Math.round(S.phi) || DEF.phi));
+
+  const CAN_LINK = location.protocol !== 'file:';
+  const saveState = () => {
+    if (!CAN_LINK) return;
+    try { SEIS.writeState(S, DEF); } catch (e) { /* nothing shareable */ }
+  };
+
+  /* ------------------------------- the physics ------------------------- */
+
+  function shuey(l1, l2) {
+    const vp = (l1.vp + l2.vp) / 2, dvp = l2.vp - l1.vp;
+    const vs = (l1.vs + l2.vs) / 2, dvs = l2.vs - l1.vs;
+    const rho = (l1.rho + l2.rho) / 2, drho = l2.rho - l1.rho;
+    const k = (vs / vp) * (vs / vp);
+    return {
+      A: 0.5 * (dvp / vp + drho / rho),
+      B: 0.5 * (dvp / vp) - 2 * k * (drho / rho + 2 * (dvs / vs)),
+    };
+  }
+  function meanSin2(a, b) {
+    const n = 256, lo = a * Math.PI / 180, hi = b * Math.PI / 180;
+    let sum = 0;
+    for (let i = 0; i < n; i++) {
+      const th = lo + (hi - lo) * (i + 0.5) / n;
+      sum += Math.sin(th) * Math.sin(th);
+    }
+    return sum / n;
+  }
+  const S2N = meanSin2(NEAR_A[0], NEAR_A[1]);
+
+  function brineSand(phi) {
+    const vp = 1 / (phi / FLUIDS.brine.v + (1 - phi) / MATRIX.vp);
+    const rho = (1 - phi) * MATRIX.rho + phi * FLUIDS.brine.rho;
+    const vpvs = -0.75 * phi * phi + 1.35 * phi + 1.63;
+    return { vp, vs: vp / vpvs, rho };
+  }
+  function ksatFromDry(kdry, phi, kfl) {
+    const num = Math.pow(1 - kdry / MATRIX.K, 2);
+    const den = phi / kfl + (1 - phi) / MATRIX.K - kdry / (MATRIX.K * MATRIX.K);
+    return kdry + num / den;
+  }
+  function kdryFromSat(ksat, phi, kfl) {
+    const a = phi * MATRIX.K / kfl;
+    return (ksat * (a + 1 - phi) - MATRIX.K) / (a + ksat / MATRIX.K - 1 - phi);
+  }
+  function sandRock(phi, fluidKey) {
+    const b = brineSand(phi);
+    if (fluidKey === 'brine') return b;
+    const mu = b.rho * b.vs * b.vs * 1e-6;
+    const ksat = b.rho * b.vp * b.vp * 1e-6 - (4 / 3) * mu;
+    const kdry = kdryFromSat(ksat, phi, FLUIDS.brine.K);
+    const f = FLUIDS[fluidKey];
+    const k2 = ksatFromDry(kdry, phi, f.K);
+    const rho = (1 - phi) * MATRIX.rho + phi * f.rho;
+    return {
+      vp: Math.sqrt((k2 + (4 / 3) * mu) * 1e6 / rho),
+      vs: Math.sqrt(mu * 1e6 / rho),
+      rho,
+    };
+  }
+
+  const dt = () => DTS[S.dt | 0];
+  const ntOf = () => Math.floor(TWIN / dt()) + 1;
+
+  /* --------------------------- the layer stack ------------------------- */
+
+  /* The near-stack reflectivity of one trace. A layered earth rather than a
+     lone sand, so that the trace looks like something worth picking: a
+     contrasting bed above, the sand with an optional tight streak inside it,
+     and a tight bed below. Every spike is computed from the two rocks it sits
+     between. */
+  function spikes(topT, thickS) {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const tight = LITHS.tight;
+    const other = (S.over === 'soft') ? LITHS.hard : LITHS.soft;
+    const n = (q) => q.A + q.B * S2N;
+    const shift = topT - TTOP;                   // structure moves everything together
+    const out = [];
+
+    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
+    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
+
+    const baseT = topT + thickS / 1000;
+    out.push({ t: topT, r: n(shuey(over, sand)) });
+    out.push({ t: baseT, r: n(shuey(sand, over)) });
+
+    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
+    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
+    return out;
+  }
+
+  const wavelet = () => SEIS.makeWavelet({ type: 'ricker', f: S.freq });
+
+  function refAmp() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const q = shuey(over, sand);
+    return Math.max(Math.abs(q.A + q.B * S2N), 1e-4);
+  }
+
+  let noiseCache = null;
+  function noiseField(nx) {
+    const key = [S.over, S.phi, S.fluid, S.freq, S.noise, S.dt, nx].join('|');
+    if (noiseCache && noiseCache.key === key) return noiseCache.field;
+    let field = null;
+    if (S.noise > 0) {
+      const raw = SEIS.bandLimitedNoise(nx, ntOf(), dt(), wavelet(), 20260903, 0);
+      const amp = (S.noise / 100) * refAmp();
+      field = new Float32Array(raw.length);
+      for (let i = 0; i < raw.length; i++) field[i] = raw[i] * amp;
+    }
+    noiseCache = { key, field };
+    return field;
+  }
+
+  function trace(topT, thickS, noise, ix) {
+    const nt = ntOf();
+    const tr = SEIS.traceFromSpikes(spikes(topT, thickS), T0, dt(), nt, wavelet());
+    if (noise) for (let i = 0; i < nt; i++) tr[i] += noise[ix * nt + i];
+    return tr;
+  }
+
+  /* ------------------------------- the picker --------------------------
+     Zero crossings first. Of the two samples bracketing a crossing, keep
+     the one with the smaller magnitude; that sample is Q5. Then between
+     each consecutive pair of those, keep the single largest peak or
+     trough, so a doublet loses its smaller half.
+     --------------------------------------------------------------------- */
+
+  // an extremum in the strict sense: the sample-to-sample difference changes
+  // sign here, and the sample is above the amplitude floor
+  function isExtremum(tr, i, floor) {
+    if (i < 1 || i > tr.length - 2) return false;
+    if (Math.abs(tr[i]) <= floor) return false;
+    const a = tr[i] - tr[i - 1], b = tr[i + 1] - tr[i];
+    return (a > 0 && b <= 0) || (a < 0 && b >= 0);
+  }
+
+  function pick(tr, sandWin) {
+    const nt = tr.length;
+    let peak = 1e-12;
+    for (let i = 0; i < nt; i++) peak = Math.max(peak, Math.abs(tr[i]));
+    const floor = 0.01 * peak;
+
+    const cross = [];                      // { i, tTrue, err }
+    for (let i = 1; i < nt; i++) {
+      const a = tr[i - 1], b = tr[i];
+      if (a === 0 || b === 0) continue;
+      if ((a > 0) === (b > 0)) continue;
+      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
+      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
+      // where the crossing actually is, by linear interpolation
+      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
+      const tTrue = (i - 1 + frac) * dt();
+      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    }
+
+    /* Between each consecutive pair of crossings, keep the single largest
+       peak or trough. Where a thin bed has put two extrema in one interval,
+       the smaller is discarded; those are counted separately, and only inside
+       the sand, so that the count is about the sand and not about whatever
+       the beds above and below happen to be doing. */
+    const ext = [], dropped = [];
+    let doublets = 0, inSand = 0;
+    const inWin = (i) => !sandWin || (i >= sandWin[0] && i <= sandWin[1]);
+    for (let k = 0; k + 1 < cross.length; k++) {
+      const lo = cross[k].i, hi = cross[k + 1].i;
+      let best = -1, bv = 0;
+      const here = [];
+      for (let i = lo + 1; i < hi; i++) {
+        if (isExtremum(tr, i, floor)) here.push(i);
+        if (Math.abs(tr[i]) > bv) { bv = Math.abs(tr[i]); best = i; }
+      }
+      if (best < 0 || bv <= floor) continue;
+      ext.push({ i: best, sign: tr[best] > 0 ? 1 : -1, amp: tr[best] });
+      if (inWin(best)) inSand++;
+      here.forEach((i) => {
+        if (i === best) return;
+        dropped.push(i);
+        if (inWin(i)) doublets++;
+      });
+    }
+    return { cross, ext, dropped, doublets, inSand, peak, floor };
+  }
+
+  // the samples spanned by the sand, used to keep the doublet count local
+  function sandWindow(topT, thickS) {
+    const D = dt();
+    return [Math.max(0, Math.floor(topT / D)),
+            Math.min(ntOf() - 1, Math.ceil((topT + thickS / 1000) / D))];
+  }
+
+  /* =====================================================================
+     QUADRANT NUMBERING
+
+     Anchors come from the picks: Q5 at every zero-crossing sample, Q1 at
+     every trough, Q9 at every peak. Between two anchors the three interior
+     numbers are spread by proportion, which repeats them when the gap is
+     long and drops them when it is short.
+     ===================================================================== */
+
+  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
+     and then starts again. It does not run up to 9 and mirror back down. The
+     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
+     opens the next, which is why the published table gives both the 0 degree
+     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
+     coarse version as "4 quadrants". */
+
+  function quadrants(tr, pk) {
+    const nt = tr.length;
+    const q = new Int8Array(nt);                 // 0 means unnumbered
+    const ends = new Set();                      // samples that close a loop
+    const cross = pk.cross.slice().sort((a, b) => a.i - b.i);
+    const ext = pk.ext.slice().sort((a, b) => a.i - b.i);
+
+    // one loop is extremum, crossing, extremum
+    const loops = [];
+    for (let k = 0; k + 1 < ext.length; k++) {
+      const a = ext[k], b = ext[k + 1];
+      const x = cross.find((c) => c.i > a.i && c.i < b.i);
+      if (x) loops.push({ a: a.i, x: x.i, b: b.i });
+    }
+
+    let repeated = 0, omitted = 0, gaps = 0, interior = 0;
+    const fill = (i0, i1, trip) => {
+      const n = i1 - i0 - 1;
+      gaps++;
+      interior += n;
+      if (n <= 0) { omitted++; return; }
+      const used = new Set(), count = {};
+      for (let m = 0; m < n; m++) {
+        const v = trip[Math.min(2, Math.floor((m + 0.5) * 3 / n))];
+        q[i0 + 1 + m] = v;
+        used.add(v);
+        count[v] = (count[v] || 0) + 1;
+      }
+      if (used.size < 3) omitted++;
+      if (Object.keys(count).some((v) => count[v] > 1)) repeated++;
+    };
+
+    loops.forEach((L) => {
+      q[L.a] = 1;                                // opens this loop
+      q[L.x] = 5;
+      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
+      ends.add(L.b);                             // loop has already claimed it
+      fill(L.a, L.x, [2, 3, 4]);
+      fill(L.x, L.b, [6, 7, 8]);
+    });
+    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
+    // same position and take the same filter, so either label is correct
+    loops.forEach((L) => { q[L.a] = 1; });
+
+    const anchors = [];
+    loops.forEach((L) => {
+      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+    });
+    if (loops.length) {
+      const last = loops[loops.length - 1];
+      anchors.push({ i: last.b, q: q[last.b] || 9 });
+    }
+    anchors.sort((a, b) => a.i - b.i);
+    return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
+  }
+
+  // how the three interior numbers land for a gap of n samples
+  function fillPattern(n) {
+    const out = [];
+    for (let m = 0; m < n; m++) out.push(2 + Math.min(2, Math.floor((m + 0.5) * 3 / n)));
+    return out;
+  }
+
+  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
+     or a carbonate play — both partial stacks are reversed at the stacking
+     step, before any picking, so that the numbering rule never changes. */
+  function needsFlip() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const t = shuey(over, sand);
+    return (t.A + t.B * S2N) > 0;
+  }
+  const flipApplied = () => needsFlip() && !S.skipflip;
+
+  function avoClass() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const t = shuey(over, sand);
+    const s2f = meanSin2(20, 30);
+    const far = t.A + t.B * s2f;
+    if (t.A > 0.03) return (t.A * far < 0) ? 'class 2p' : 'class 1';
+    if (t.A > -0.03) return (t.A * far < 0) ? 'class 2p' : 'class 2';
+    return t.B < 0 ? 'class 3' : 'class 4';
+  }
+
+
+  /* =====================================================================
+     THE PHASE FILTERS
+
+     A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
+     trace rather than to the wavelet so that it also works with noise on.
+     The tabulated filter is written for a rising limb; on a falling limb
+     the phase that centres a sample runs the other way, so the filter is
+     negated. Step 3 measures what happens if it is not.
+     ===================================================================== */
+
+  // the published table, one filter per quadrant number
+  const FILTERS = [0, 22.5, 45, 67.5, -90, -67.5, -45, -22.5];
+  const PHASE_OF = { 1: 0, 2: 22.5, 3: 45, 4: 67.5, 5: -90, 6: -67.5, 7: -45, 8: -22.5, 9: 0 };
+
+  function rotate(x, deg) {
+    if (Math.abs(deg) < 1e-9) return Float64Array.from(x);
+    const h = SEIS.hilbert(x);
+    const c = Math.cos(deg * Math.PI / 180), s = Math.sin(deg * Math.PI / 180);
+    const o = new Float64Array(x.length);
+    for (let i = 0; i < x.length; i++) o[i] = x[i] * c + h[i] * s;
+    return o;
+  }
+  function envelope(x) {
+    const h = SEIS.hilbert(x);
+    const o = new Float64Array(x.length);
+    for (let i = 0; i < x.length; i++) o[i] = Math.hypot(x[i], h[i]);
+    return o;
+  }
+
+  /* Which way each limb runs, so the filter sign can follow it. A limb is a
+     stretch from one extremum to the next, and the crossing sits inside it. */
+  function limbSigns(tr, pk, nt) {
+    const sign = new Int8Array(nt);                 // +1 rising, -1 falling
+    const ext = pk.ext.slice().sort((a, b) => a.i - b.i);
+    for (let k = 0; k + 1 < ext.length; k++) {
+      const a = ext[k], b = ext[k + 1];
+      const s = (tr[b.i] > tr[a.i]) ? 1 : -1;
+      for (let i = a.i; i <= b.i; i++) sign[i] = s;
+    }
+    return sign;
+  }
+
+  function enhance(tr, qd, pk) {
+    const nt = tr.length;
+    const sign = limbSigns(tr, pk, nt);
+    const cache = {};
+    const out = new Float64Array(nt);
+    const used = new Set();
+    for (let i = 0; i < nt; i++) {
+      const q = qd.q[i];
+      if (!q) continue;
+      let deg = PHASE_OF[q];
+      if (sign[i] < 0) deg = -deg;                   // falling limb runs the other way
+      if (!(deg in cache)) cache[deg] = rotate(tr, deg);
+      out[i] = cache[deg][i];
+      used.add(deg);
+    }
+    return { out, used, sign };
+  }
+
+
+  // the peak amplitude a rotated wavelet reaches, relative to the unrotated one
+  function filterPeaks() {
+    const wav = wavelet();
+    const out = {};
+    [0, 22.5, 45, 67.5, 90].forEach((p) => {
+      const w = SEIS.phaseRotate(wav, p);
+      let mx = 0;
+      for (let t = -0.08; t <= 0.08; t += 0.0002) mx = Math.max(mx, Math.abs(w.fn(t)));
+      out[p] = mx;
+    });
+    return out;
+  }
+
+  /* =====================================================================
+     THE DISTANCE
+
+     A is the quadrant-enhanced near stack and B is the enhanced far stack
+     minus it, so the two mean what they meant in module 02. The distance is
+     the length of that vector, and the sign is put on afterwards from the
+     slope of the near stack.
+     ===================================================================== */
+
+  const S2F = meanSin2(20, 30);
+
+  // the far stack of the same layer stack, formed exactly as the near one is
+  function farTrace(noise) {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const baseT = TTOP + S.thick / 1000;
+    const f = (q) => q.A + q.B * S2F;
+    const sp = [
+      { t: BEDA[0], r: f(shuey(over, (S.over === 'soft') ? LITHS.hard : LITHS.soft)) },
+      { t: BEDA[1], r: f(shuey((S.over === 'soft') ? LITHS.hard : LITHS.soft, over)) },
+      { t: TTOP, r: f(shuey(over, sand)) },
+      { t: baseT, r: f(shuey(sand, over)) },
+      { t: BEDC[0], r: f(shuey(over, LITHS.tight)) },
+      { t: BEDC[1], r: f(shuey(LITHS.tight, over)) },
+    ];
+    const nt = ntOf();
+    const tr = SEIS.traceFromSpikes(sp, T0, dt(), nt, wavelet());
+    if (noise) for (let i = 0; i < nt; i++) tr[i] += noise[i];
+    return tr;
+  }
+
+  function slopeSign(tr, qd) {
+    const nt = tr.length;
+    const s = new Int8Array(nt);
+    for (let i = 0; i < nt; i++) {
+      if (!qd.q[i]) continue;
+      if (qd.q[i] === 1 || qd.q[i] === 9) { s[i] = 1; continue; }   // extrema are positive
+      const a = tr[Math.max(0, i - 1)], b = tr[Math.min(nt - 1, i + 1)];
+      s[i] = (b > a) ? 1 : -1;
+    }
+    return s;
+  }
+
+  function build() {
+    const noise = noiseField(1);
+    let near = trace(TTOP, S.thick, noise, 0);
+    let far = farTrace(noise);
+    if (flipApplied()) {
+      for (let i = 0; i < near.length; i++) { near[i] = -near[i]; far[i] = -far[i]; }
+    }
+    const pk = pick(near, sandWindow(TTOP, S.thick));
+    const qd = quadrants(near, pk);
+    const QN = enhance(near, qd, pk).out;
+    const QF = enhance(far, qd, pk).out;
+
+    const nt = near.length;
+    const A = new Float64Array(nt), B = new Float64Array(nt);
+    const D = new Float64Array(nt), Dpub = new Float64Array(nt), Dsig = new Float64Array(nt);
+    const sgn = slopeSign(near, qd);
+    let worst = 0;
+    for (let i = 0; i < nt; i++) {
+      if (!qd.q[i]) continue;
+      A[i] = QN[i];
+      B[i] = QF[i] - QN[i];
+      D[i] = Math.hypot(A[i], B[i]);
+      // the form the papers print, evaluated independently
+      Dpub[i] = Math.sqrt(Math.max(0, 2 * QN[i] * QN[i] + QF[i] * QF[i] - 2 * QN[i] * QF[i]));
+      worst = Math.max(worst, Math.abs(D[i] - Dpub[i]));
+      Dsig[i] = S.signed ? sgn[i] * D[i] : D[i];
+    }
+    return { near, far, qd, pk, QN, QF, A, B, D, Dpub, Dsig, sgn, worst,
+             env: envelope(near) };
+  }
+
+  /* variation within each loop, as a fraction of that loop's mean magnitude.
+     A blocked trace scores near zero; an oscillating one scores badly. */
+  function blockiness(mag, b) {
+    const ext = b.pk.ext.slice().sort((x, y) => x.i - y.i);
+    const cv = [];
+    for (let k = 0; k + 1 < ext.length; k++) {
+      const lo = ext[k].i, hi = ext[k + 1].i;
+      if (hi - lo < 5) continue;
+      let s = 0, n = 0;
+      for (let i = lo; i <= hi; i++) { s += Math.abs(mag[i]); n++; }
+      const m = s / n;
+      if (m < 1e-9) continue;
+      let v = 0;
+      for (let i = lo; i <= hi; i++) v += (Math.abs(mag[i]) - m) * (Math.abs(mag[i]) - m);
+      cv.push(Math.sqrt(v / n) / m);
+    }
+    return { cv: cv.length ? cv.reduce((a, c) => a + c, 0) / cv.length : 0, n: cv.length };
+  }
+
+  /* =====================================================================
+     SECTOR SPLITTING
+
+     Paper 2: if the quadrant number is Q3, Q4, Q5, Q6 or Q7 then the data
+     are replotted with the gradient multiplied by -1. Applied after the
+     baseline rotation of module 08, never before it.
+     ===================================================================== */
+
+  const BASE_BEARING = 344;                        // this model's baseline, module 08
+  const TURN = 360 - BASE_BEARING;                 // spec [25] and [30]
+  const isSplit = (q) => q >= 3 && q <= 7;
+
+  function rotXY(x, y, deg) {
+    const t = deg * Math.PI / 180, c = Math.cos(t), s = Math.sin(t);
+    return [x * c - y * s, x * s + y * c];
+  }
+
+  function points() {
+    const b = build();
+    const nt = b.near.length;
+    const out = [];
+    for (let i = 0; i < nt; i++) {
+      const q = b.qd.q[i];
+      if (!q) continue;
+      const [x, y] = rotXY(b.A[i], b.B[i], TURN);
+      const flip = isSplit(q);
+      out.push({ i, q, x, y: flip ? -y : y, y0: y, moved: flip });
+    }
+    return { b, pts: out };
+  }
+
+  const bearing = (x, y) => (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+
+  /* mean, across the nine numbers, of the angular spread within a number.
+     Angles are unwrapped about each group's own mean first, so a group that
+     straddles zero is not credited with a huge spread for that reason. */
+  /* How consistently the samples carrying one quadrant number fall on the same
+     side of the background trend, averaged over the nine numbers. Reflecting a
+     whole group cannot change the spread within it, so spread is the wrong
+     measure here; agreement between loops is the right one. */
+  function sideAgreement(pts, useSplit) {
+    const by = {};
+    pts.forEach((p) => {
+      const y = useSplit ? p.y : p.y0;
+      (by[p.q] = by[p.q] || []).push(y >= 0 ? 1 : 0);
+    });
+    const fr = [];
+    Object.keys(by).forEach((k) => {
+      const a = by[k];
+      if (a.length < 3) return;
+      const up = a.reduce((s, v) => s + v, 0);
+      fr.push(Math.max(up, a.length - up) / a.length);
+    });
+    return fr.length ? 100 * fr.reduce((s, x) => s + x, 0) / fr.length : 0;
+  }
+
+  function angleSpread(pts, useSplit) {
+    const by = {};
+    pts.forEach((p) => {
+      const y = useSplit ? p.y : p.y0;
+      (by[p.q] = by[p.q] || []).push(bearing(p.x, y));
+    });
+    const sds = [];
+    Object.keys(by).forEach((k) => {
+      const a = by[k];
+      if (a.length < 3) return;
+      const rad = a.map((d) => d * Math.PI / 180);
+      const mx = rad.reduce((s, r) => s + Math.cos(r), 0) / rad.length;
+      const my = rad.reduce((s, r) => s + Math.sin(r), 0) / rad.length;
+      const mean = Math.atan2(my, mx);
+      let v = 0;
+      rad.forEach((r) => {
+        let d = r - mean;
+        while (d > Math.PI) d -= 2 * Math.PI;
+        while (d < -Math.PI) d += 2 * Math.PI;
+        v += d * d;
+      });
+      sds.push(Math.sqrt(v / rad.length) * 180 / Math.PI);
+    });
+    return sds.length ? sds.reduce((s, x) => s + x, 0) / sds.length : 0;
+  }
+
+  /* =====================================================================
+     THETA PX
+
+     The polar angle of the split coordinates, folded into 0-90 by sector and
+     multiplied by the sign of the DQ trace. Quoted from the AASPI column
+     sequence; Paper 2 gives the same four rules labelled by sector.
+     ===================================================================== */
+
+  function fold(deg) {
+    if (deg < 90) return deg;
+    if (deg < 180) return 180 - deg;
+    if (deg < 270) return deg - 180;
+    return 360 - deg;
+  }
+  function sectorName(deg) {
+    if (deg < 90) return 'I, upper right';
+    if (deg < 180) return 'IV, upper left';
+    if (deg < 270) return 'III, lower left';
+    return 'II, lower right';
+  }
+
+  // the sand-top sample, with everything the module reports about it
+  function atTop(over, fluid, phi) {
+    const keep = [S.over, S.fluid, S.phi];
+    if (over) { S.over = over; S.fluid = fluid; S.phi = phi; }
+    const { b, pts } = points();
+    const win = sandWindow(TTOP, S.thick);
+    let best = null, bd = 1e9;
+    pts.forEach((p) => { const d = Math.abs(p.i - win[0]); if (d < bd) { bd = d; best = p; } });
+    let out = null;
+    if (best) {
+      const ang = bearing(best.x, best.y);
+      const sgn = b.sgn[best.i] >= 0 ? 1 : -1;
+      out = { ang, sector: sectorName(ang), folded: fold(ang),
+              px: fold(ang) * (S.signed ? sgn : 1), sgn,
+              d: Math.hypot(best.x, best.y), q: best.q, i: best.i };
+    }
+    if (over) { S.over = keep[0]; S.fluid = keep[1]; S.phi = keep[2]; }
+    return out;
+  }
+
+  /* =====================================================================
+     POROSITY
+
+     The whole chain rebuilt at each porosity, with the distance read at the
+     top of the sand. Impedance and Vp/Vs come from the rock alone and involve
+     no seismic at all.
+     ===================================================================== */
+
+  const PHI_LO = 10, PHI_HI = 36, PHI_STEP = 2;
+  const PHIS = [];
+  for (let p = PHI_LO; p <= PHI_HI; p += PHI_STEP) PHIS.push(p);
+
+  function pearson(a, b) {
+    const n = a.length;
+    if (n < 3) return 0;
+    const ma = a.reduce((s, x) => s + x, 0) / n, mb = b.reduce((s, x) => s + x, 0) / n;
+    let num = 0, da = 0, db = 0;
+    for (let i = 0; i < n; i++) { num += (a[i] - ma) * (b[i] - mb); da += (a[i] - ma) ** 2; db += (b[i] - mb) ** 2; }
+    return (da && db) ? num / Math.sqrt(da * db) : 0;
+  }
+
+  function rockCurve(fluid) {
+    return PHIS.map((p) => {
+      const r = sandRock(p / 100, fluid || S.fluid);
+      return { phi: p, ai: r.vp * r.rho, vpvs: r.vp / r.vs };
+    });
+  }
+
+  // the full chain, once per porosity — the expensive call in this module
+  const distCache = {};
+  function distCurve(over, fluid) {
+    const key = [over, fluid, S.thick, S.freq, S.dt, S.noise].join('|');
+    if (distCache[key]) return distCache[key];
+    const keep = [S.over, S.fluid, S.phi];
+    S.over = over; S.fluid = fluid;
+    const out = PHIS.map((p) => {
+      S.phi = p;
+      const r = points();
+      const win = sandWindow(TTOP, S.thick);
+      let best = null, bd = 1e9;
+      r.pts.forEach((q) => { const d = Math.abs(q.i - win[0]); if (d < bd) { bd = d; best = q; } });
+      return { phi: p, d: best ? Math.hypot(best.x, best.y) : 0 };
+    });
+    S.over = keep[0]; S.fluid = keep[1]; S.phi = keep[2];
+    distCache[key] = out;
+    return out;
+  }
+
+  const SOFT = 'rgba(22,25,28,0.45)';
+  const CRIM = '#841617';
+  const OVCOL = { soft: '#1D6FA3', hard: '#4E7A2C', tight: '#C2306B' };
+
+  function width(el, fallback) {
+    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    return Math.max(280, w || fallback);
+  }
+
+  // one curve against porosity, on its own vertical scale
+  function curveOn(ctx, rect, vals, lo, hi, col, lw, mark) {
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    const X = (p) => rect.x + ((p - PHI_LO) / (PHI_HI - PHI_LO)) * rect.w;
+    const Y = (v) => rect.y + rect.h - ((v - lo) / (hi - lo || 1)) * rect.h;
+    ctx.beginPath();
+    vals.forEach((q, k) => { k === 0 ? ctx.moveTo(X(q.phi), Y(q.v)) : ctx.lineTo(X(q.phi), Y(q.v)); });
+    ctx.strokeStyle = col; ctx.lineWidth = lw || 2; ctx.stroke();
+    vals.forEach((q) => {
+      ctx.beginPath(); ctx.arc(X(q.phi), Y(q.v), 2.4, 0, 2 * Math.PI);
+      ctx.fillStyle = col; ctx.fill();
+    });
+    if (mark != null) {
+      const near = vals.reduce((a, q) => Math.abs(q.phi - mark) < Math.abs(a.phi - mark) ? q : a, vals[0]);
+      ctx.beginPath(); ctx.arc(X(near.phi), Y(near.v), 6, 0, 2 * Math.PI);
+      ctx.fillStyle = col; ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+    }
+    ctx.restore();
+  }
+  const span = (vals) => {
+    let lo = Infinity, hi = -Infinity;
+    vals.forEach((q) => { lo = Math.min(lo, q.v); hi = Math.max(hi, q.v); });
+    const pad = (hi - lo) * 0.12 || 0.01;
+    return [lo - pad, hi + pad];
+  };
+
+
+  /* The pinned panel shows the rock model of step 4 — five sands of known
+     porosity in a seal — rather than repeating a plot the steps already draw. */
+  function drawMain() {
+    const c = $('cMain'); if (!c) return;
+    const W = width(c, 520), H = 330;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const top = 26, bot = H - 30;
+    const lw = Math.min(110, (W - 74) * 0.34);
+    const rL = { x: 50, y: top, w: lw, h: bot - top };
+    SEIS.axisLeft(ctx, rL, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 6 });
+    const sealFill = { soft: 'rgba(150,160,170,0.55)', hard: 'rgba(110,125,140,0.65)',
+                       tight: 'rgba(214,171,74,0.55)' }[S.over];
+    const bands = [{ t0: T0, t1: TWIN, name: '', fill: sealFill }];
+    LOG_PHI.forEach((phi, k) => {
+      const t = LOG_TOP + k * (SAND_MS + SHALE_MS) / 1000;
+      bands.push({ t0: t, t1: t + SAND_MS / 1000, name: phi + '%',
+                   fill: 'rgba(194,48,107,' + (0.18 + 0.5 * phi / 36).toFixed(2) + ')' });
+    });
+    SEIS.lithColumn(ctx, rL, bands, T0, TWIN);
+
+    const R = logRun();
+    const nt = R.nt;
+    let dpk = 1e-12;
+    for (let i = 0; i < nt; i++) dpk = Math.max(dpk, R.dq[i]);
+    const rD = { x: rL.x + rL.w + 20, y: top, w: W - (rL.x + rL.w + 20) - 8, h: bot - top };
+    SEIS.frame(ctx, rD);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rD.x, rD.y, rD.w, rD.h); ctx.clip();
+    ctx.beginPath();
+    let started = false;
+    for (let i = 0; i < nt; i++) {
+      if (!R.qd.q[i]) { started = false; continue; }
+      const x = rD.x + (R.dq[i] / dpk) * rD.w * 0.9;
+      const y = rD.y + (i / (nt - 1)) * rD.h;
+      started ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      started = true;
+    }
+    ctx.strokeStyle = CRIM; ctx.lineWidth = 1.9; ctx.stroke();
+    ctx.restore();
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(22,25,28,0.55)';
+    ctx.fillText('THE ROCKS', rL.x + rL.w / 2, rL.y - 6);
+    ctx.fillStyle = CRIM;
+    ctx.fillText('DQ TRACE', rD.x + rD.w / 2, rD.y - 6);
+  }
+
+  function drawStep1() {
+    const c = $('c1a'); if (!c) return;
+    const W = width(c, 640), H = 380;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const rock = rockCurve();
+    const gap = 40;
+    const pw = (W - 110 - gap) / 2;
+    const rA = { x: 62, y: 28, w: pw, h: H - 72 };
+    const rB = { x: 62 + pw + gap + 36, y: 28, w: pw, h: H - 72 };
+    const av = rock.map((q) => ({ phi: q.phi, v: q.ai }));
+    const vv = rock.map((q) => ({ phi: q.phi, v: q.vpvs }));
+    const [alo, ahi] = span(av), [vlo, vhi] = span(vv);
+    SEIS.axisLeft(ctx, rA, alo, ahi, 'acoustic impedance', (v) => (v / 1000).toFixed(1) + 'k',
+      { ticks: 5, flip: true, grid: true });
+    SEIS.axisBottom(ctx, rA, PHI_LO, PHI_HI, 'porosity (%)', (v) => String(Math.round(v)), { ticks: 5 });
+    SEIS.frame(ctx, rA);
+    SEIS.axisLeft(ctx, rB, vlo, vhi, 'Vp / Vs', (v) => v.toFixed(2),
+      { ticks: 5, flip: true, grid: true });
+    SEIS.axisBottom(ctx, rB, PHI_LO, PHI_HI, 'porosity (%)', (v) => String(Math.round(v)), { ticks: 5 });
+    SEIS.frame(ctx, rB);
+    curveOn(ctx, rA, av, alo, ahi, '#1D6FA3', 2.2, S.phi);
+    curveOn(ctx, rB, vv, vlo, vhi, '#4E7A2C', 2.2, S.phi);
+
+    const phis = rock.map((q) => q.phi);
+    const rAI = pearson(rock.map((q) => q.ai), phis);
+    const rVV = pearson(rock.map((q) => q.vpvs), phis);
+    const at = rock.reduce((a, q) => Math.abs(q.phi - S.phi) < Math.abs(a.phi - S.phi) ? q : a, rock[0]);
+    $('s1a').textContent = 'r = ' + rAI.toFixed(3);
+    $('s1b').textContent = 'r = ' + rVV.toFixed(3);
+    $('s1c').textContent = Math.round(at.ai).toLocaleString('en-US');
+    $('s1d').textContent = at.vpvs.toFixed(3);
+    $('s1e').textContent = 'Impedance falls with porosity and Vp/Vs rises, both almost perfectly. '
+      + 'Neither is measurable from seismic without an inversion, which is what makes the next step '
+      + 'worth doing.';
+  }
+
+  function drawStep2() {
+    const c = $('c2a'); if (!c) return;
+    const W = width(c, 640), H = 400;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const rock = rockCurve();
+    const dist = distCurve(S.over, S.fluid);
+    const dv = dist.map((q) => ({ phi: q.phi, v: q.d }));
+    const av = rock.map((q) => ({ phi: q.phi, v: q.ai }));
+    const [dlo, dhi] = span(dv), [alo, ahi] = span(av);
+    const rect = { x: 66, y: 28, w: W - 96, h: H - 72 };
+    SEIS.axisLeft(ctx, rect, dlo, dhi, 'DQ distance', (v) => v.toFixed(2),
+      { ticks: 5, flip: true, grid: true });
+    SEIS.axisBottom(ctx, rect, PHI_LO, PHI_HI, 'porosity (%)', (v) => String(Math.round(v)), { ticks: 5 });
+    SEIS.frame(ctx, rect);
+    curveOn(ctx, rect, av, alo, ahi, 'rgba(22,25,28,0.22)', 2, null);
+    curveOn(ctx, rect, dv, dlo, dhi, CRIM, 2.4, S.phi);
+    SEIS.tag(ctx, rect.x + 8, rect.y + 10, 'crimson = DQ distance', CRIM);
+    SEIS.tag(ctx, rect.x + 8, rect.y + 28, 'grey = impedance, own scale', 'rgba(22,25,28,0.5)');
+
+    const phis = dist.map((q) => q.phi);
+    const rD = pearson(dist.map((q) => q.d), phis);
+    const rDA = pearson(dist.map((q) => q.d), rock.map((q) => q.ai));
+    const at = dist.reduce((a, q) => Math.abs(q.phi - S.phi) < Math.abs(a.phi - S.phi) ? q : a, dist[0]);
+    let lo = Infinity, hi = -Infinity;
+    dist.forEach((q) => { lo = Math.min(lo, q.d); hi = Math.max(hi, q.d); });
+    $('s2a').textContent = 'r = ' + rD.toFixed(3);
+    $('s2b').textContent = 'r = ' + rDA.toFixed(3);
+    $('s2c').textContent = at.d.toFixed(4);
+    $('s2d').textContent = lo.toFixed(3) + ' to ' + hi.toFixed(3);
+    $('s2e').textContent = 'Across this porosity range the distance correlates with porosity at '
+      + rD.toFixed(2) + ' and with impedance at ' + rDA.toFixed(2)
+      + ', from partial-stack amplitudes alone. The units are amplitude, not porosity.';
+  }
+
+  function drawStep3() {
+    const c = $('c3a'); if (!c) return;
+    const W = width(c, 640), H = 400;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const overs = S.showall ? ['tight', 'soft', 'hard'] : [S.over];
+    const curves = {};
+    overs.forEach((o) => { curves[o] = distCurve(o, S.fluid); });
+    let lo = Infinity, hi = -Infinity;
+    overs.forEach((o) => curves[o].forEach((q) => { lo = Math.min(lo, q.d); hi = Math.max(hi, q.d); }));
+    const pad = (hi - lo) * 0.12 || 0.01;
+    lo -= pad; hi += pad;
+    const rect = { x: 66, y: 28, w: W - 96, h: H - 72 };
+    SEIS.axisLeft(ctx, rect, lo, hi, 'DQ distance', (v) => v.toFixed(2),
+      { ticks: 5, flip: true, grid: true });
+    SEIS.axisBottom(ctx, rect, PHI_LO, PHI_HI, 'porosity (%)', (v) => String(Math.round(v)), { ticks: 5 });
+    SEIS.frame(ctx, rect);
+    overs.forEach((o, k) => {
+      curveOn(ctx, rect, curves[o].map((q) => ({ phi: q.phi, v: q.d })), lo, hi,
+        OVCOL[o], 2.2, o === S.over ? S.phi : null);
+      SEIS.tag(ctx, rect.x + 8, rect.y + 10 + k * 18, LITHS[o].name, OVCOL[o]);
+    });
+
+    const phis = PHIS;
+    const rOf = (o) => pearson(distCurve(o, S.fluid).map((q) => q.d), phis);
+    const rl = rOf('tight'), rs = rOf('soft'), rh = rOf('hard');
+    const softC = distCurve('soft', S.fluid);
+    const dip = softC.reduce((a, q) => (q.d < a.d ? q : a), softC[0]);
+    $('s3a').textContent = 'r = ' + rl.toFixed(3);
+    $('s3b').textContent = 'r = ' + rs.toFixed(3);
+    $('s3c').textContent = 'r = ' + rh.toFixed(3);
+    $('s3d').textContent = dip.phi + '%, distance ' + dip.d.toFixed(4);
+    $('s3e').textContent = 'The same sand gives ' + rl.toFixed(2) + ' under tight sandstone and '
+      + rs.toFixed(2) + ' under soft shale \u2014 nearly as strong, opposite in sign. Under hard shale the '
+      + 'crossover falls mid-range and a single correlation, ' + rh.toFixed(2) + ', describes nothing.';
+  }
+
+  /* ------------------------------- step 4 ------------------------------
+     A synthetic with a porosity log we chose: five sands, each encased in the
+     same seal so that every sand top is a contrast against the same rock.
+     Stack sands directly on one another instead and the trace responds to the
+     porosity step between them, because a reflection is a contrast.
+     --------------------------------------------------------------------- */
+
+  const LOG_PHI = [14, 22, 30, 18, 26];
+  /* 26 ms of sand with 36 ms of shale between. At 40 Hz the wavelet period is
+     25 ms, so each sand is above tuning and, more importantly, the base of one
+     sand is more than a wavelength from the top of the next. Pack them closer
+     and the trace measures interference instead of rock. */
+  const SAND_MS = 26, SHALE_MS = 36, LOG_TOP = 0.030;
+
+  function logSpikes(s2) {
+    const seal = LITHS[S.over];
+    const sp = [];
+    let t = LOG_TOP;
+    LOG_PHI.forEach((phi) => {
+      const rock = sandRock(phi / 100, S.fluid);
+      let q = shuey(seal, rock);
+      sp.push({ t, r: q.A + q.B * s2 });
+      t += SAND_MS / 1000;
+      q = shuey(rock, seal);
+      sp.push({ t, r: q.A + q.B * s2 });
+      t += SHALE_MS / 1000;
+    });
+    return sp;
+  }
+
+  function logRun() {
+    const nt = ntOf(), D = dt();
+    const noise = noiseField(1);
+    let near = SEIS.traceFromSpikes(logSpikes(meanSin2(0, 10)), T0, D, nt, wavelet());
+    let far = SEIS.traceFromSpikes(logSpikes(meanSin2(20, 30)), T0, D, nt, wavelet());
+    if (noise) for (let i = 0; i < nt; i++) { near[i] += noise[i]; far[i] += noise[i]; }
+    const pk = pick(near, null);
+    const qd = quadrants(near, pk);
+    const QN = enhance(near, qd, pk).out, QF = enhance(far, qd, pk).out;
+    const dq = new Float64Array(nt);
+    for (let i = 0; i < nt; i++) if (qd.q[i]) dq[i] = Math.hypot(QN[i], QF[i] - QN[i]);
+
+    // porosity as a function of time, for drawing
+    const phiT = new Float64Array(nt);
+    LOG_PHI.forEach((phi, k) => {
+      const a = Math.round((LOG_TOP + k * (SAND_MS + SHALE_MS) / 1000) / D);
+      const b = Math.round((LOG_TOP + k * (SAND_MS + SHALE_MS) / 1000 + SAND_MS / 1000) / D);
+      for (let i = a; i <= b && i < nt; i++) phiT[i] = phi;
+    });
+
+    // read the DQ trace at each sand top
+    const reads = [];
+    LOG_PHI.forEach((phi, k) => {
+      const i0 = Math.round((LOG_TOP + k * (SAND_MS + SHALE_MS) / 1000) / D);
+      let best = null, bd = 1e9;
+      for (let j = Math.max(0, i0 - 4); j <= Math.min(nt - 1, i0 + 4); j++) {
+        if (!qd.q[j]) continue;
+        const d = Math.abs(j - i0);
+        if (d < bd) { bd = d; best = j; }
+      }
+      if (best != null) reads.push({ phi, i: best, d: dq[best] });
+    });
+    return { near, dq, qd, phiT, reads, nt };
+  }
+
+  function drawStep4() {
+    const c = $('c4a'); if (!c) return;
+    const W = width(c, 640), H = 440;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const R = logRun();
+    const nt = R.nt;
+    const rect = { x: 66, y: 32, w: W - 96, h: H - 76 };
+    SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 8 });
+    SEIS.frame(ctx, rect);
+    const cw = rect.w / 3;
+    const cell = (k) => ({ x: rect.x + k * cw, y: rect.y, w: cw, h: rect.h });
+    const Y = (i) => rect.y + (i / (nt - 1)) * rect.h;
+
+    // the porosity log we put in
+    const rP = cell(0);
+    let pmax = 1;
+    for (let i = 0; i < nt; i++) pmax = Math.max(pmax, R.phiT[i]);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rP.x, rP.y, rP.w, rP.h); ctx.clip();
+    ctx.beginPath(); ctx.moveTo(rP.x, Y(0));
+    for (let i = 0; i < nt; i++) ctx.lineTo(rP.x + (R.phiT[i] / pmax) * rP.w * 0.9, Y(i));
+    ctx.lineTo(rP.x, Y(nt - 1)); ctx.closePath();
+    ctx.fillStyle = 'rgba(214,171,74,0.5)'; ctx.fill();
+    ctx.strokeStyle = 'rgba(150,110,20,0.85)'; ctx.lineWidth = 1.4; ctx.stroke();
+    ctx.restore();
+
+    // the near stack a survey would record
+    const rN = cell(1);
+    let npk = 1e-12;
+    for (let i = 0; i < nt; i++) npk = Math.max(npk, Math.abs(R.near[i]));
+    SEIS.dashedLine(ctx, rN.x + rN.w / 2, rN.y, rN.x + rN.w / 2, rN.y + rN.h, SOFT, [4, 4], 0.8);
+    ctx.beginPath();
+    for (let i = 0; i < nt; i++) {
+      const x = rN.x + rN.w / 2 + (R.near[i] / npk) * (rN.w / 2) * 0.9;
+      i === 0 ? ctx.moveTo(x, Y(i)) : ctx.lineTo(x, Y(i));
+    }
+    ctx.strokeStyle = 'rgba(22,25,28,0.62)'; ctx.lineWidth = 1.5; ctx.stroke();
+
+    // the DQ trace that comes out
+    const rD = cell(2);
+    let dpk = 1e-12;
+    for (let i = 0; i < nt; i++) dpk = Math.max(dpk, R.dq[i]);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rD.x, rD.y, rD.w, rD.h); ctx.clip();
+    ctx.beginPath();
+    let started = false;
+    for (let i = 0; i < nt; i++) {
+      if (!R.qd.q[i]) { started = false; continue; }
+      const x = rD.x + (R.dq[i] / dpk) * rD.w * 0.9;
+      started ? ctx.lineTo(x, Y(i)) : ctx.moveTo(x, Y(i));
+      started = true;
+    }
+    ctx.strokeStyle = CRIM; ctx.lineWidth = 1.9; ctx.stroke();
+    R.reads.forEach((q) => {
+      ctx.beginPath();
+      ctx.arc(rD.x + (q.d / dpk) * rD.w * 0.9, Y(q.i), 5, 0, 2 * Math.PI);
+      ctx.fillStyle = CRIM; ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.6; ctx.stroke();
+    });
+    ctx.restore();
+    R.reads.forEach((q) => {
+      SEIS.dashedLine(ctx, rP.x, Y(q.i), rD.x + rD.w, Y(q.i), 'rgba(132,22,23,0.25)', [4, 4], 1);
+    });
+
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(150,110,20,0.9)';
+    ctx.fillText('POROSITY LOG, PUT IN', rP.x + rP.w / 2, rect.y - 8);
+    ctx.fillStyle = 'rgba(22,25,28,0.55)';
+    ctx.fillText('NEAR STACK', rN.x + rN.w / 2, rect.y - 8);
+    ctx.fillStyle = CRIM;
+    ctx.fillText('DQ TRACE, READ OUT', rD.x + rD.w / 2, rect.y - 8);
+
+    const ph = R.reads.map((q) => q.phi), dd = R.reads.map((q) => q.d);
+    const rr = pearson(dd, ph);
+    $('s4a').textContent = R.reads.length + ' of ' + LOG_PHI.length;
+    $('s4b').textContent = ph.join(', ') + '%';
+    $('s4c').textContent = dd.map((x) => x.toFixed(3)).join(', ');
+    $('s4d').textContent = 'r = ' + rr.toFixed(3);
+    $('s4e').textContent = 'Five sands went in at ' + LOG_PHI.join(', ')
+      + '% porosity and the DQ trace read them back at a correlation of ' + rr.toFixed(2)
+      + ', from the seismic alone. The sign is set by the seal and the scale by nothing here \u2014 that '
+      + 'is what a well tie would supply.';
+  }
+
+  /* ------------------------------ the panel ---------------------------- */
+
+  function pushToInputs() {
+    $('phi').value = S.phi;
+    $('thick').value = S.thick;
+    $('freq').value = S.freq;
+    $('dt').value = S.dt;
+    $('noise').value = S.noise;
+    $('showall').checked = !!S.showall;
+    $('phiV').textContent = S.phi + '%';
+    $('thickV').textContent = S.thick + ' ms';
+    $('freqV').textContent = S.freq + ' Hz';
+    $('dtV').textContent = (DTS[S.dt | 0] * 1000).toFixed(0) + ' ms';
+    $('noiseV').textContent = S.noise + '%';
+    $('overV').textContent = LITHS[S.over].name;
+    $('fluidV').textContent = FLUIDS[S.fluid].name;
+    document.querySelectorAll('[data-over]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.over === S.over);
+    });
+    document.querySelectorAll('[data-fluid]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.fluid === S.fluid);
+    });
+  }
+
+  function drawAll() {
+    drawMain();
+    if (visible('p1')) drawStep1();
+    if (visible('p2')) drawStep2();
+    if (visible('p3')) drawStep3();
+    if (visible('p4')) drawStep4();
+  }
+  function onChange() { pushToInputs(); drawAll(); saveState(); }
+
+  ['phi', 'thick', 'freq', 'dt', 'noise'].forEach((id) => {
+    $(id).addEventListener('input', () => { S[id] = parseFloat($(id).value); onChange(); });
+  });
+  $('showall').addEventListener('change', () => { S.showall = $('showall').checked; onChange(); });
+  document.querySelectorAll('[data-over]').forEach((b) => {
+    b.addEventListener('click', () => { S.over = b.dataset.over; onChange(); });
+  });
+  document.querySelectorAll('[data-fluid]').forEach((b) => {
+    b.addEventListener('click', () => { S.fluid = b.dataset.fluid; onChange(); });
+  });
+  $('resetBtn').addEventListener('click', () => {
+    const tab = S.tab;
+    S = Object.assign({}, DEF, { tab });
+    onChange();
+  });
+
+  /* -------------------------------- tabs ------------------------------- */
+
+  const PANES = ['p1', 'p2', 'p3', 'p4', 'pw', 'pe', 'pk', 'pm'];
+  const STEPNAMES = {
+    p1: 'The rock', p2: 'The attribute', p3: 'The seal', p4: 'A log recovered',
+    pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
+  };
+
+  function buildStepNav() {
+    PANES.forEach((id, i) => {
+      const pane = $(id); if (!pane) return;
+      const prev = PANES[i - 1], next = PANES[i + 1];
+      const nav = document.createElement('div');
+      nav.className = 'stepnav';
+      const mk = (target, text, ghost) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn' + (ghost ? ' ghost' : '') + ' small';
+        btn.textContent = text;
+        btn.addEventListener('click', () => {
+          showTab(target);
+          const t = document.querySelector('.tabhint');
+          if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return btn;
+      };
+      nav.appendChild(prev ? mk(prev, '\u2190 ' + STEPNAMES[prev], true)
+                           : document.createElement('span'));
+      const where = document.createElement('span');
+      where.className = 'where';
+      where.textContent = i < 4 ? 'step ' + (i + 1) + ' of 4' : STEPNAMES[id];
+      nav.appendChild(where);
+      nav.appendChild(next ? mk(next, STEPNAMES[next] + ' \u2192')
+                           : document.createElement('span'));
+      pane.appendChild(nav);
+    });
+  }
+
+  function showTab(id) {
+    PANES.forEach((q) => { const el = $(q); if (el) el.hidden = q !== id; });
+    document.querySelectorAll('#tabs button').forEach((b) => {
+      b.setAttribute('aria-selected', b.dataset.tab === id);
+    });
+    const lab = document.querySelector('.labhead');
+    if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3' || id === 'p4');
+
+    // the polarity switch only means anything on step 3
+    const three = (id === 'p3');
+    const sf = $('skipflip'); if (sf) sf.disabled = !three;
+
+    if ($('labCap')) {
+      $('labCap').innerHTML = 'The rock model <span>&mdash; five sands of known porosity, and the DQ trace</span>';
+    }
+
+    const last = (id === 'pk' || id === 'pm');
+    if ($('nextup')) $('nextup').hidden = !last;
+    if ($('pager')) $('pager').hidden = !last;
+    S.tab = id;
+    drawAll();
+    saveState();
+  }
+  document.querySelectorAll('#tabs button').forEach((b) => {
+    b.addEventListener('click', () => showTab(b.dataset.tab));
+  });
+  document.querySelectorAll('.masthead a[data-tab]').forEach((a) => {
+    a.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      showTab(a.dataset.tab);
+      const strip = $('tabs');
+      if (strip && strip.scrollIntoView) strip.scrollIntoView({ block: 'start' });
+    });
+  });
+
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawAll, 140); });
+
+  pushToInputs();
+  buildStepNav();
+  showTab(PANES.indexOf(S.tab) >= 0 ? S.tab : 'p1');
+  document.fonts && document.fonts.ready.then(drawAll);
+})();
+</script>
+</body>
+</html>

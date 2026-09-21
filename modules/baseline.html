@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shale baseline rotation | How the DQ Trace Actually Works</title>
+<meta name="description" content="The background trend in AB space does not run at minus forty-five degrees. Rotating it onto the x axis instead of to minus forty-five is what turns distance from the origin into departure from the background.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <a class="brand" href="../index.html"><span class="dot"></span>How the DQ trace <b>actually</b> works</a>
+    <nav>
+      <a href="../index.html">All modules</a>
+      <a href="#tabs" data-tab="pw">Why it matters</a>
+      <a href="#tabs" data-tab="pm">Method &amp; references</a>
+    </nav>
+  </header>
+
+  <div class="mod-head">
+    <p class="eyebrow">Module 08 &nbsp;·&nbsp; The DQ trace</p>
+    <h1>Shale baseline rotation</h1>
+    <p class="sub">The DQ distance measures how far a sample sits from the origin of AB space. That is only
+      useful if the background rock sits at the origin, and it does not &mdash; it sits along a line
+      through it. Rotating that line flat is what converts a distance from the origin into a departure
+      from the background, and the angle you rotate by is not the one the textbooks use.</p>
+  </div>
+
+  <div class="labhead">
+    <div class="labgrid">
+      <div>
+        <p class="cap" id="labCap">AB space <span>&mdash; the background trend and one sand</span></p>
+        <canvas id="cMain" aria-label="An intercept against gradient crossplot showing the background trend and the selected sand"></canvas>
+      </div>
+      <div>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <div class="controls" id="labControls">
+          <div class="ctl-col">
+            <h2>Build the rocks</h2>
+            <div class="ctl">
+              <label>Overburden <span class="val" id="overV">soft shale</span></label>
+              <div class="seg" role="group" aria-label="Overburden lithology">
+                <button type="button" data-over="soft" aria-pressed="true">soft</button>
+                <button type="button" data-over="hard" aria-pressed="false">hard</button>
+                <button type="button" data-over="tight" aria-pressed="false">tight</button>
+              </div>
+            </div>
+            <div class="ctl">
+              <label for="phi">Sand porosity <span class="val" id="phiV">28%</span></label>
+              <input type="range" id="phi" min="8" max="36" step="1" value="28">
+            </div>
+            <div class="ctl">
+              <label>Pore fluid <span class="val" id="fluidV">gas</span></label>
+              <div class="seg" role="group" aria-label="Fluid filling the sand pores">
+                <button type="button" data-fluid="brine" aria-pressed="false">brine</button>
+                <button type="button" data-fluid="oil" aria-pressed="false">oil</button>
+                <button type="button" data-fluid="gas" aria-pressed="true">gas</button>
+              </div>
+            </div>
+            <div class="stats" style="margin:6px 0 0;grid-column:1/-1">
+              <div class="stat"><span>Background slope</span><b id="mSlope">&mdash;</b></div>
+              <div class="stat key"><span>Background angle</span><b id="mAngle">&mdash;</b></div>
+            </div>
+          </div>
+
+          <div class="ctl-col" id="colRot">
+            <h2>The rotation</h2>
+            <div class="ctl">
+              <label>Applied to the crossplot <span class="val" id="rotV">onto the x axis</span></label>
+              <div class="seg seg-wrap" role="group" aria-label="Which rotation to apply">
+                <button type="button" data-rot="none" aria-pressed="false">none</button>
+                <button type="button" data-rot="c45" aria-pressed="false">to &minus;45&deg;</button>
+                <button type="button" data-rot="flat" aria-pressed="true">onto the x axis</button>
+              </div>
+            </div>
+            <p class="hint-line" style="margin:-4px 0 12px">The middle option is the classical AVO
+              rotation, which assumes the background runs along B&nbsp;=&nbsp;&minus;A. The third is what
+              the DQ workflow does: measure the background where it actually is, and rotate that
+              flat.</p>
+            <label class="check" style="grid-column:1/-1"><input type="checkbox" id="showall" checked>
+              Show the oil and gas tracks as well</label>
+            <div class="ctl" style="margin-top:10px">
+              <label>Crossplot axes <span class="val" id="axesV">near stack, F &minus; N</span></label>
+              <div class="seg seg-wrap" role="group" aria-label="Which pair of axes to crossplot">
+                <button type="button" data-axes="nf" aria-pressed="true">N and F &minus; N</button>
+                <button type="button" data-axes="ab" aria-pressed="false">true A and B</button>
+              </div>
+            </div>
+            <p class="hint-line" style="margin:-4px 0 0">The workflow crossplots the near stack against
+              far minus near, not the true intercept against the true gradient. It matters more than it
+              sounds.</p>
+          </div>
+
+          <div class="ctl-col" id="colData">
+            <h2>The background</h2>
+            <div class="ctl">
+              <label for="scatter">Scatter on the background <span class="val" id="scatterV">0%</span></label>
+              <input type="range" id="scatter" min="0" max="40" step="1" value="0">
+            </div>
+            <p class="hint-line" style="margin:-8px 0 14px">Real shale trends are a cloud, not a line. This
+              adds spread so you can see what the rotation does when the baseline is only approximately
+              known.</p>
+            <button class="btn ghost small" id="resetBtn" type="button">Reset everything</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
+    Method and references are there when you want them.</p>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
+    <button role="tab" data-tab="p1" aria-selected="false">1 · Where the background sits</button>
+    <button role="tab" data-tab="p2" aria-selected="false">2 · Two rotations</button>
+    <button role="tab" data-tab="p3" aria-selected="false">3 · What it buys</button>
+    <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
+    <span class="gap"></span>
+    <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
+    <button role="tab" data-tab="pk" aria-selected="false">Key points</button>
+    <button role="tab" data-tab="pm" aria-selected="false">Method</button>
+  </nav>
+
+  <section class="tabpane" id="p1" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">1</span>Where the background sits</h3>
+      <span class="hint">Measured, rather than assumed</span>
+    </div>
+
+    <p class="lede">
+      Module 01 crossplotted intercept against gradient and drew B&nbsp;=&nbsp;&minus;A on it as a
+      reference line, because that is what AVO crossplotting has used since Castagna and Swan. The
+      background trend is supposed to run along it, and anomalies are supposed to be departures from
+      it.</p>
+
+    <p class="lede">
+      Here is the same crossplot with the background actually fitted. The brine sand track across the full
+      porosity range is the background: same rock, same fluid, varying only in how much of it there is.</p>
+
+    <p class="lede">
+      <b>Which axes you use changes the answer.</b> The DQ workflow crossplots the near stack against far
+      minus near, and module 02 established that far minus near is the gradient multiplied by 0.17. That
+      compresses the vertical axis, so the same physical trend reads much flatter than it does in true
+      intercept-gradient space. On the workflow's own axes the background comes out at about
+      <b>&minus;16&deg;</b>, a bearing of <b>344&deg;</b>. In true A and B it is
+      <b>&minus;58&deg;</b>. Same rocks, same data, two very different numbers &mdash; and only one of
+      them is the one to rotate by.</p>
+
+    <p class="lede">
+      The workflow figure is the one that matters, and 344&deg; is not a number this model invented. The
+      published RDQ crossplots quote field shale baselines at 340&deg;, with rotation examples at
+      345&deg;, 333&deg; and 330&deg;. Switch the axes control in the panel to see both.</p>
+
+    <canvas id="c1a" aria-label="Intercept against gradient with the brine sand background track and the fitted trend line"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">Blue is the brine sand track from 8% to 36% porosity,
+      the solid crimson line is the fit through it, and the dashed gray line is B&nbsp;=&nbsp;&minus;A for
+      comparison. The gap between them is the whole subject of this module.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Fitted slope</span><b id="s1a">&mdash;</b></div>
+      <div class="stat key"><span>Fitted angle</span><b id="s1b">&mdash;</b></div>
+      <div class="stat"><span>Castagna reference</span><b id="s1c">&mdash;</b></div>
+      <div class="stat key"><span>Difference</span><b id="s1d">&mdash;</b></div>
+      <div class="stat"><span>As a bearing</span><b id="s1f">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>The number moves very little with the overburden. The two shales give 344&deg; on the workflow
+        axes, within half a degree of each other; the tight sandstone gives 342&deg;, about three degrees
+        steeper, because its own V<sub>P</sub>/V<sub>S</sub> is much lower than a shale's and that tilts the
+        gradient. So the direction is mostly set by how the sand's properties change with porosity, with a
+        smaller contribution from the seal. The classical reference line comes from assuming a fixed
+        V<sub>P</sub>/V<sub>S</sub> of 2, and real rocks do not oblige.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="p2" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">2</span>Two rotations</h3>
+      <span class="hint">Rotating to a convention, or rotating to the data</span>
+    </div>
+
+    <p class="lede">
+      Rotating a crossplot is just a change of coordinates: the points do not move relative to each other,
+      only the axes do. The question is what you rotate <em>to</em>.</p>
+
+    <p class="lede">
+      Classical AVO crossplotting rotates so that B&nbsp;=&nbsp;&minus;A lies along the horizontal. If the
+      background really ran at &minus;45&deg;, that would lay it flat. It does not, and on the workflow's
+      own axes it is not even on the same side: the background is at &minus;16&deg;, which is
+      <em>shallower</em> than &minus;45&deg;, so the classical rotation turns it past the horizontal and
+      out the other side. The DQ workflow rotates by the measured angle instead, putting the fitted trend
+      itself on the horizontal.</p>
+
+    <canvas id="c2a" aria-label="The same crossplot after rotating to minus forty-five degrees and after rotating the fitted trend onto the x axis"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The same points, twice. On the left the classical
+      rotation, on the right the measured one. The shaded band on each is how far the background spreads
+      from the horizontal after the rotation.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Background spread, no rotation</span><b id="s2a">&mdash;</b></div>
+      <div class="stat"><span>After rotating to &minus;45&deg;</span><b id="s2b">&mdash;</b></div>
+      <div class="stat key"><span>After rotating onto the x axis</span><b id="s2c">&mdash;</b></div>
+      <div class="stat"><span>Tilt left by the &minus;45&deg; rotation</span><b id="s2d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>On the workflow axes the classical rotation makes matters <b>worse</b>: the background spread
+        goes from 0.106 to 0.127, because turning a trend that was only 16&deg; off horizontal by a full
+        45&deg; leaves it 29&deg; off on the other side. Rotating onto the measured trend takes it to
+        0.025, a factor of four. Switch the axes to true A and B and the picture flips &mdash; there the
+        background is steeper than &minus;45&deg;, so the classical rotation helps by 2.7 times and the
+        measured one by 8. The convention is not simply wrong; it is right about the idea and wrong about
+        the number, and how wrong depends on axes most people never think about. The residue is curvature,
+        which no straight rotation can remove.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="p3" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">3</span>What it buys</h3>
+      <span class="hint">Departure from the background, not distance from nothing</span>
+    </div>
+
+    <p class="lede">
+      With the background flat, the vertical coordinate of a point is how far it departs from the
+      background, and the horizontal coordinate is where along the background it sits. Those are two
+      separately meaningful numbers, which is what the unrotated pair was not.</p>
+
+    <p class="lede">
+      The test is whether a hydrocarbon sand now stands clear of the brine trend. Unrotated it does not:
+      the gas track runs right through the range the brine track already covers, so a large distance from
+      the origin means a porous rock rather than a charged one. After the rotation the brine track collapses
+      onto the horizontal and the gas track lifts off it.</p>
+
+    <canvas id="c3a" aria-label="The brine, oil and gas tracks before and after rotating the background onto the x axis"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">All three fluid tracks, before and after. The measure
+      below is how far the selected sand sits from the horizontal, against how far the brine background
+      spreads &mdash; a separation of one means the anomaly is no bigger than the background scatter.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Selected sand, departure</span><b id="s3a">&mdash;</b></div>
+      <div class="stat"><span>Background spread</span><b id="s3b">&mdash;</b></div>
+      <div class="stat key"><span>Separation, rotated</span><b id="s3c">&mdash;</b></div>
+      <div class="stat key"><span>Separation, unrotated</span><b id="s3d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>This is also where module 07's distance becomes interpretable. An unrotated distance is
+        measured from the origin, and the origin is not a meaningful place &mdash; it is where a rock
+        identical to its overburden would sit, which is nothing in particular. After the rotation the
+        distance from the horizontal is measured from the background, and that is a place with a
+        meaning.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pw" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">?</span>Why the textbook angle is wrong here</h3>
+      <span class="hint">Where minus forty-five came from, and what it assumed</span>
+    </div>
+
+    <p class="lede">The B&nbsp;=&nbsp;&minus;A line is not arbitrary. It falls out of the two-term Shuey
+      equation when the background rocks have a V<sub>P</sub>/V<sub>S</sub> ratio of 2 and the density
+      contrast is small. Under those assumptions the intercept and gradient of a wet rock move together in
+      opposite directions at equal rates, and the background is a line at &minus;45&deg;.</p>
+
+    <p class="lede">Neither assumption is safe. The V<sub>P</sub>/V<sub>S</sub> of a sand varies with
+      porosity &mdash; in this model it runs from about 1.75 at low porosity to over 2 at high &mdash; and
+      density does contrast. So the real background is steeper, and how much steeper depends on the rocks.
+      The DQ workflow does not try to predict the angle. It measures it and rotates by what it
+      finds.</p>
+
+    <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
+      What this does not fix</h2>
+    <ul class="lede" style="padding-left:20px">
+      <li><b>The background is a curve, not a line.</b> A single rotation lays the average direction flat
+        and leaves the curvature behind. That residue is visible in the numbers on step 2 and is the floor
+        on how well any straight rotation can work.</li>
+      <li><b>The angle has to be estimated from somewhere.</b> Here it is fitted to a known brine track,
+        which is a luxury. On real data it comes from a wet zone, a well tie, or the densest part of the
+        cloud, and every one of those is an assumption about which samples are background.</li>
+      <li><b>One angle for a whole volume is optimistic.</b> The background trend changes with depth, with
+        compaction and with lithology. Module 09's sector splitting is partly a response to that.</li>
+    </ul>
+
+    <div class="legend prose">
+      <span>Worth being clear that this rotation is a change of coordinates and nothing more. It adds no
+        information and removes none. What it does is put the axes somewhere that makes the two
+        coordinates individually interpretable, and that is the whole of its contribution.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pe" role="tabpanel" hidden>
+    <div class="tryit" style="max-width:none">
+      <h3>Exercises</h3>
+      <ol>
+        <li><b>Measure the background angle under each overburden.</b> On step 1, switch between soft
+          shale, hard shale and tight sandstone.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The two shales land within half
+            a degree of each other &mdash; 344&deg; on the workflow axes, &minus;58.4&deg; and
+            &minus;58.8&deg; in true A and B. The tight sandstone gives &minus;61.2&deg;, about three
+            degrees steeper. Most of the direction is set by how the sand's own properties change with
+            porosity, which is identical in all three cases; the residue comes from the seal's own
+            V<sub>P</sub>/V<sub>S</sub>, and the tight sandstone's is far lower than a shale's. The
+            practical reading is that one baseline can serve a whole area of similar seals, and that it
+            stops serving when either the reservoir trend or the seal changes character.</span></details></li>
+        <li><b>Compare the two rotations.</b> On step 2, read the background spread after each.
+          <details class="reveal"><summary>Hint</summary><span class="ans">On the workflow axes: 0.106
+            unrotated, <b>0.127</b> after the classical rotation, 0.025 after rotating onto the fitted
+            trend. The classical rotation makes it worse, because the background was only 16&deg; off
+            horizontal and 45&deg; of rotation carries it 29&deg; past. Now switch the axes to true A and
+            B: 0.62, 0.24, 0.08, and there the classical rotation helps by 2.7 times. The same convention
+            is useful in one plot and harmful in the other, and the DQ workflow uses the one where it is
+            harmful. That is the practical content of "to the x axis, not minus forty-five", and it is a
+            stronger statement than it first looks.</span></details></li>
+        <li><b>Find out why the spread does not go to zero.</b> Look at the shape of the background track
+          on step 1.
+          <details class="reveal"><summary>Hint</summary><span class="ans">It is curved. The
+            V<sub>P</sub>/V<sub>S</sub> trend the sand is built from is a quadratic in porosity, so the
+            track bends, and a rotation is a straight-line operation. Laying the average direction flat
+            leaves the curvature as residue, and that residue is the floor on how well any single rotation
+            can separate background from anomaly. Nothing later in the method removes it
+            either.</span></details></li>
+        <li><b>Check whether the anomaly actually separates.</b> On step 3, read the two separation
+          figures for a gas sand at 28% porosity.
+          <details class="reveal"><summary>Hint</summary><span class="ans">Unrotated, the separation is
+            well below one, meaning the gas sand sits inside the range the brine background already
+            occupies &mdash; a large distance from the origin would be telling you about porosity, not
+            about fluid. Rotated, it goes above two. The anomaly was always there; what the rotation does
+            is put it on an axis where it can be seen without the background in the
+            way.</span></details></li>
+        <li><b>Blur the baseline.</b> Raise the scatter to 30% and read step 2 again.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The fitted angle wanders and the
+            rotated spread grows, because the rotation can only be as good as the estimate of where the
+            background is. This is the limit of the technique on real data, where nobody hands you a clean brine track. It is also the argument for fitting the baseline on as much data as
+            possible and for checking it against a well rather than taking it from the densest part of a
+            cloud.</span></details></li>
+        <li><b>Try a low-porosity sand.</b> Set the porosity to 12% with gas and look at step 3.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The separation shrinks. A tight
+            gas sand is a small anomaly because there is very little pore space for the gas to be in, so
+            the fluid substitution barely moves the rock. The rotation has not failed; there is less
+            to see. Remember that when a DQ volume looks quiet, because a quiet answer can be a correct
+            one.</span></details></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pk" role="tabpanel" hidden>
+    <div class="takeaway" style="max-width:none">
+      <h3>The main points</h3>
+      <ul>
+        <li><b>The background trend is not at &minus;45&deg;</b>, and where it does sit depends on the
+          axes. On the workflow's near-stack against far-minus-near plot it is at about
+          &minus;16&deg;, a bearing of 344&deg; under either shale and 342&deg; under the tight sandstone;
+          in true intercept and gradient it is &minus;58.5&deg; and &minus;61.2&deg;.</li>
+        <li><b>344&deg; matches published field baselines</b>, which the RDQ crossplots quote at 340&deg;
+          with rotation examples from 330&deg; to 345&deg;.</li>
+        <li><b>The angle is set mostly by the reservoir rock trend.</b> The two shales agree to within
+          half a degree; the tight sandstone is about three degrees steeper, because its own
+          V<sub>P</sub>/V<sub>S</sub> is much lower.</li>
+        <li><b>On the workflow axes the classical rotation makes the spread worse</b>, 0.106 to 0.127,
+          because it turns a shallow trend past the horizontal.</li>
+        <li><b>Rotating onto the measured trend cuts it by a factor of four</b>, to 0.025, and that is what
+          the DQ workflow does.</li>
+        <li><b>In true A and B the classical rotation does help</b>, 2.7 times against 8 for the measured
+          one. The convention is right about the idea and wrong about the number.</li>
+        <li><b>The residue is curvature.</b> The background is a curved track and a rotation is a straight
+          operation, so some spread always survives.</li>
+        <li><b>After the rotation the two coordinates mean something individually</b>: departure from the
+          background, and position along it.</li>
+        <li><b>This is what makes a distance interpretable.</b> Measured from the origin it reports
+          porosity; measured from the background it reports departure from the background.</li>
+        <li><b>The rotation is a change of coordinates.</b> It adds no information and removes none.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pm" role="tabpanel" hidden>
+    <details class="notes" id="notes" open>
+      <summary>Method, assumptions, and where to read more</summary>
+      <p>The rocks are the same as every module before this: three fixed enclosing lithologies, a brine
+        sand built from porosity through Wyllie's time average and the V<sub>P</sub>/V<sub>S</sub> trend of
+        Bedle et al. (2025), Gassmann substitution for oil and gas, and Shuey's two-term approximation
+        across the interface. This module works entirely in intercept-gradient space and does not build a
+        trace, so no wavelet, sampling or picking is involved.</p>
+      <p><b>Two sets of axes.</b> The DQ workflow crossplots the near stack against far minus near, which
+        is what the published RDQ crossplots show. That is not intercept against gradient: far minus near
+        is the gradient multiplied by 0.1701, so the vertical axis is compressed and the background trend
+        reads far flatter. This page computes both and lets you switch. The angles are &minus;15.7&deg;
+        (a bearing of 344&deg;) on the workflow axes and &minus;58.4&deg; in true A and B, for the same
+        rocks. The workflow figure is the one to rotate by, and it agrees with the field baselines the RDQ
+        crossplots quote &mdash; 340&deg;, with rotation examples at 345&deg;, 333&deg; and 330&deg;.</p>
+      <p><b>The background is the brine sand track.</b> That is a modelling choice and worth being explicit
+        about. A real shale baseline is fitted to a population of wet samples covering a range of
+        lithologies and compaction states; here it is one rock type varying only in porosity, which makes
+        it cleaner and more curved than a real trend would be. The angle it produces, near
+        &minus;58.5&deg; under a shale, should be read as what this particular rock model implies rather than as a number
+        to carry into a field dataset. What survives the modelling choice is the direction of the argument:
+        the background is steeper than &minus;45&deg; and should be measured rather than assumed.</p>
+      <p>The trend is fitted by ordinary least squares of B on A across the porosity range, and the
+        rotation angle is the arctangent of that slope. Rotating "to &minus;45&deg;" means rotating by
+        whatever brings the B&nbsp;=&nbsp;&minus;A direction onto the horizontal, so that the classical
+        convention is applied properly rather than as a strawman. The background spread reported on steps 2
+        and 3 is the largest absolute vertical coordinate reached by the brine track after the rotation.</p>
+      <p>The scatter control adds Gaussian noise to both coordinates of the background points, scaled as a
+        percentage of the track's own extent, and the trend is refitted to the scattered points. It exists
+        to show how the rotation degrades when the baseline is only approximately known; the noise is
+        regenerated only when the model changes, so dragging a slider does not make it dance.</p>
+      <p>What this module leaves out is the sector splitting of module 09, which is the next thing the
+        workflow does to the rotated crossplot, and the polar angle of module 10, which is measured in the
+        rotated frame and only makes sense once the background is flat.</p>
+      <ul>
+        <li>Castagna, J. P., and H. W. Swan, 1997, Principles of AVO cross plotting: <em>The Leading
+          Edge</em>, 16, 337&ndash;344.</li>
+        <li>Neff, D. B., and W. Neff, 2023, DQ trace applications to hydrocarbon detection: a theoretical
+          review with pseudo wells and synthetic seismograms, presentation notes.</li>
+        <li>Shuey, R. T., 1985, A simplification of the Zoeppritz equations: <em>Geophysics</em>, 50,
+          609&ndash;614.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+          quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="nextup" id="nextup" hidden>
+    <p class="eyebrow">Next up</p>
+    <h3><a href="sectors.html">09 · Sector splitting</a></h3>
+    <p>Four sectors rather than two, assigned by quadrant number, so that the two halves of a loop are kept
+      apart in the rotated crossplot rather than averaged together.</p>
+    <a class="btn" href="sectors.html">Open module 09 →</a>
+    <a class="btn ghost" href="../index.html">All modules</a>
+  </section>
+
+  <div class="pager" id="pager" hidden>
+    <a class="btn ghost" href="dq-distance.html">← The DQ distance</a>
+    <a class="btn" href="sectors.html">Next: sector splitting →</a>
+  </div>
+
+  <footer>
+    <div class="foot-grid">
+      <p>Built for teaching by Heather Bedle, School of Geosciences, University of Oklahoma, with the
+        <a href="https://www.ou.edu/mcee/labs/aaspi">AASPI</a> consortium.</p>
+      <p class="lic">Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+        Free to use, share and adapt for any purpose, including training in industry, provided the source is
+        credited and adapted versions carry the same license.</p>
+      <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
+        Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
+      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
+        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        nothing about you.</p>
+    </div>
+  </footer>
+</div>
+
+<script src="../assets/count.js"></script>
+<script src="../assets/seismic.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  if (typeof SEIS === 'undefined') {
+    const el = document.createElement('div');
+    el.setAttribute('style', 'background:#841617;color:#fff;padding:14px 18px;margin:16px 0;' +
+      'font:13px/1.6 ui-monospace,Menlo,monospace');
+    el.textContent = 'This module could not load assets/seismic.js. It expects it one directory up, ' +
+      'at ../assets/, and file names are case-sensitive on GitHub Pages.';
+    const w = document.querySelector('.wrap');
+    (w || document.body).insertBefore(el, w ? w.firstChild : null);
+    return;
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const visible = (id) => { const el = $(id); return el && !el.hidden; };
+
+  const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };
+
+  const FLUIDS = {
+    brine: { K: 2.60,  rho: 1.03, v: 1500, name: 'brine' },
+    oil:   { K: 0.80,  rho: 0.78, v: 1300, name: 'oil' },
+    gas:   { K: 0.055, rho: 0.20, v: 550,  name: 'gas' },
+  };
+
+  const LITHS = {
+    soft: { vp: 2700, vs: 1175, rho: 2.33, name: 'soft shale' },
+    hard: { vp: 3350, vs: 1675, rho: 2.48, name: 'hard shale' },
+    tight: { vp: 4800, vs: 2800, rho: 2.56, name: 'tight sandstone' },
+  };
+
+  function shuey(l1, l2) {
+    const vp = (l1.vp + l2.vp) / 2, dvp = l2.vp - l1.vp;
+    const vs = (l1.vs + l2.vs) / 2, dvs = l2.vs - l1.vs;
+    const rho = (l1.rho + l2.rho) / 2, drho = l2.rho - l1.rho;
+    const k = (vs / vp) * (vs / vp);
+    return {
+      A: 0.5 * (dvp / vp + drho / rho),
+      B: 0.5 * (dvp / vp) - 2 * k * (drho / rho + 2 * (dvs / vs)),
+    };
+  }
+  function meanSin2(a, b) {
+    const n = 256, lo = a * Math.PI / 180, hi = b * Math.PI / 180;
+    let sum = 0;
+    for (let i = 0; i < n; i++) {
+      const th = lo + (hi - lo) * (i + 0.5) / n;
+      sum += Math.sin(th) * Math.sin(th);
+    }
+    return sum / n;
+  }
+
+  function brineSand(phi) {
+    const vp = 1 / (phi / FLUIDS.brine.v + (1 - phi) / MATRIX.vp);
+    const rho = (1 - phi) * MATRIX.rho + phi * FLUIDS.brine.rho;
+    const vpvs = -0.75 * phi * phi + 1.35 * phi + 1.63;
+    return { vp, vs: vp / vpvs, rho };
+  }
+  function ksatFromDry(kdry, phi, kfl) {
+    const num = Math.pow(1 - kdry / MATRIX.K, 2);
+    const den = phi / kfl + (1 - phi) / MATRIX.K - kdry / (MATRIX.K * MATRIX.K);
+    return kdry + num / den;
+  }
+  function kdryFromSat(ksat, phi, kfl) {
+    const a = phi * MATRIX.K / kfl;
+    return (ksat * (a + 1 - phi) - MATRIX.K) / (a + ksat / MATRIX.K - 1 - phi);
+  }
+  function sandRock(phi, fluidKey) {
+    const b = brineSand(phi);
+    if (fluidKey === 'brine') return b;
+    const mu = b.rho * b.vs * b.vs * 1e-6;
+    const ksat = b.rho * b.vp * b.vp * 1e-6 - (4 / 3) * mu;
+    const kdry = kdryFromSat(ksat, phi, FLUIDS.brine.K);
+    const f = FLUIDS[fluidKey];
+    const k2 = ksatFromDry(kdry, phi, f.K);
+    const rho = (1 - phi) * MATRIX.rho + phi * f.rho;
+    return {
+      vp: Math.sqrt((k2 + (4 / 3) * mu) * 1e6 / rho),
+      vs: Math.sqrt(mu * 1e6 / rho),
+      rho,
+    };
+  }
+
+  const PH0 = 8, PH1 = 36;
+  const S2N = meanSin2(0, 10), S2F = meanSin2(20, 30);
+  const GAIN = S2F - S2N;                 // F - N is B times this, from module 02
+  const LIMS = { ab: 0.75, nf: 0.35 };    // fixed axes per domain, as in module 01
+  const rlim = () => LIMS[S.axes];
+
+  /* The DQ workflow crossplots the near stack against far-minus-near. That is
+     not the same plot as intercept against gradient: the vertical axis carries
+     the 0.17 factor of module 02, so the background trend reads much flatter.
+     Everything here can be seen in either domain. */
+  function toAxes(q) {
+    if (S.axes === 'ab') return { A: q.A, B: q.B, phi: q.phi };
+    return { A: q.A + q.B * S2N, B: q.B * GAIN, phi: q.phi };
+  }
+  const AXLAB = {
+    ab: { x: 'intercept A', y: 'gradient B' },
+    nf: { x: 'near stack N', y: 'far minus near' },
+  };
+
+  const DEF = {
+    over: 'soft', phi: 28, fluid: 'gas', rot: 'flat', axes: 'nf',
+    scatter: 0, showall: true, tab: 'p1',
+  };
+  let S = SEIS.readState(DEF);
+  if (!LITHS[S.over]) S.over = DEF.over;
+  if (!FLUIDS[S.fluid]) S.fluid = DEF.fluid;
+  if (!['none', 'c45', 'flat'].includes(S.rot)) S.rot = DEF.rot;
+  if (!['ab', 'nf'].includes(S.axes)) S.axes = DEF.axes;
+  S.phi = Math.min(PH1, Math.max(PH0, Math.round(S.phi) || DEF.phi));
+
+  const CAN_LINK = location.protocol !== 'file:';
+  const saveState = () => {
+    if (!CAN_LINK) return;
+    try { SEIS.writeState(S, DEF); } catch (e) { /* nothing shareable */ }
+  };
+
+  const ROTNAME = { none: 'none', c45: 'to \u221245\u00B0', flat: 'onto the x axis' };
+
+  /* --------------------------- the crossplot ---------------------------- */
+
+  function track(fluid) {
+    const over = LITHS[S.over];
+    const pts = [];
+    for (let p = PH0; p <= PH1; p++) {
+      const q = shuey(over, sandRock(p / 100, fluid));
+      pts.push(toAxes({ A: q.A, B: q.B, phi: p }));
+    }
+    return pts;
+  }
+
+  // scatter is keyed to the model so dragging a slider does not make it dance
+  let scatterCache = null;
+  function background() {
+    const key = [S.over, S.scatter, S.axes].join('|');
+    if (scatterCache && scatterCache.key === key) return scatterCache.pts;
+    const pts = track('brine');
+    if (S.scatter > 0) {
+      let lo = 1e9, hi = -1e9;
+      pts.forEach((q) => { lo = Math.min(lo, q.A); hi = Math.max(hi, q.A); });
+      const amp = (S.scatter / 100) * (hi - lo);
+      const rnd = SEIS.mulberry32(20260909);
+      pts.forEach((q) => {
+        q.A += amp * SEIS.gaussRand(rnd) * 0.5;
+        q.B += amp * SEIS.gaussRand(rnd) * 0.5;
+      });
+    }
+    scatterCache = { key, pts };
+    return pts;
+  }
+
+  function fitTrend(pts) {
+    const n = pts.length;
+    let sx = 0, sy = 0;
+    pts.forEach((q) => { sx += q.A; sy += q.B; });
+    const mx = sx / n, my = sy / n;
+    let sxy = 0, sxx = 0;
+    pts.forEach((q) => { sxy += (q.A - mx) * (q.B - my); sxx += (q.A - mx) * (q.A - mx); });
+    const slope = sxx > 1e-12 ? sxy / sxx : -1;
+    return { slope, deg: Math.atan(slope) * 180 / Math.PI };
+  }
+
+  // how far the crossplot is turned, for each of the three choices
+  function rotationDeg(mode) {
+    if (mode === 'none') return 0;
+    if (mode === 'c45') return 45;                 // brings B = -A onto the horizontal
+    return -fitTrend(background()).deg;
+  }
+  function turn(q, deg) {
+    const t = deg * Math.PI / 180, c = Math.cos(t), s = Math.sin(t);
+    return { A: q.A * c - q.B * s, B: q.A * s + q.B * c, phi: q.phi };
+  }
+  function spreadOf(pts, deg) {
+    let m = 0;
+    pts.forEach((q) => { m = Math.max(m, Math.abs(turn(q, deg).B)); });
+    return m;
+  }
+
+  function selected() {
+    const q = shuey(LITHS[S.over], sandRock(S.phi / 100, S.fluid));
+    return toAxes({ A: q.A, B: q.B, phi: S.phi });
+  }
+
+  /* ------------------------------- drawing ----------------------------- */
+
+  const SOFT = 'rgba(22,25,28,0.45)';
+  const CRIM = '#841617';
+  const FLCOL = { brine: '#1D6FA3', oil: '#4E7A2C', gas: '#C2306B' };
+
+  function width(el, fallback) {
+    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    return Math.max(280, w || fallback);
+  }
+
+  function plot(ctx, rect, deg, opts) {
+    const o = opts || {};
+    const L = rlim();
+    const xOf = (v) => rect.x + (v / L + 1) / 2 * rect.w;
+    const yOf = (v) => rect.y + rect.h - (v / L + 1) / 2 * rect.h;
+    SEIS.axisLeft(ctx, rect, -L, L, o.ylab || AXLAB[S.axes].y, null,
+      { ticks: 5, flip: true, grid: true });
+    SEIS.axisBottom(ctx, rect, -L, L, o.xlab || AXLAB[S.axes].x, null, { ticks: 5 });
+    SEIS.frame(ctx, rect);
+    SEIS.dashedLine(ctx, rect.x, yOf(0), rect.x + rect.w, yOf(0), SOFT, [4, 4], 1);
+    SEIS.dashedLine(ctx, xOf(0), rect.y, xOf(0), rect.y + rect.h, SOFT, [4, 4], 1);
+
+    const bg = background();
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+
+    // the band the background occupies after this rotation
+    if (o.band !== false) {
+      const sp = spreadOf(bg, deg);
+      ctx.fillStyle = 'rgba(29,111,163,0.10)';
+      ctx.fillRect(rect.x, yOf(sp), rect.w, Math.max(1, yOf(-sp) - yOf(sp)));
+    }
+
+    // the reference lines, turned by the same angle
+    const line = (slope, color, dash, lw) => {
+      const a = turn({ A: -L * 2, B: -L * 2 * slope }, deg);
+      const b = turn({ A: L * 2, B: L * 2 * slope }, deg);
+      SEIS.dashedLine(ctx, xOf(a.A), yOf(a.B), xOf(b.A), yOf(b.B), color, dash, lw);
+    };
+    line(-1, 'rgba(22,25,28,0.35)', [5, 4], 1.2);
+    const fit = fitTrend(bg);
+    line(fit.slope, 'rgba(132,22,23,0.85)', [], 1.8);
+
+    const drawTrack = (pts, col, r) => {
+      pts.forEach((q) => {
+        const t = turn(q, deg);
+        ctx.beginPath();
+        ctx.arc(xOf(t.A), yOf(t.B), r, 0, 2 * Math.PI);
+        ctx.fillStyle = col; ctx.fill();
+      });
+    };
+    drawTrack(bg, FLCOL.brine, 2.6);
+    if (o.all !== false && S.showall) {
+      drawTrack(track('oil'), FLCOL.oil, 2.2);
+      drawTrack(track('gas'), FLCOL.gas, 2.2);
+    }
+    const sel = turn(selected(), deg);
+    ctx.beginPath();
+    ctx.arc(xOf(sel.A), yOf(sel.B), 6, 0, 2 * Math.PI);
+    ctx.fillStyle = FLCOL[S.fluid]; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.restore();
+
+    if (o.title) {
+      ctx.font = '9.5px "IBM Plex Mono", monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+      ctx.fillStyle = CRIM;
+      ctx.fillText(o.title, rect.x + rect.w / 2, rect.y - 8);
+    }
+  }
+
+  function square(W, H, pad) {
+    const side = Math.min(W - pad.l - pad.r, H - pad.t - pad.b);
+    return { x: pad.l, y: pad.t, w: side, h: side };
+  }
+
+  function drawMain() {
+    const c = $('cMain'); if (!c) return;
+    const W = width(c, 520), H = 340;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const rect = square(W, H, { l: 58, r: 14, t: 22, b: 44 });
+    plot(ctx, rect, rotationDeg(S.rot), { band: S.rot !== 'none' });
+  }
+
+  /* ------------------------------- step 1 ------------------------------ */
+
+  function drawStep1() {
+    const c = $('c1a'); if (!c) return;
+    const W = width(c, 640), H = 430;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const rect = square(W, H, { l: 66, r: 20, t: 24, b: 48 });
+    plot(ctx, rect, 0, { band: false, all: false });
+
+    const fit = fitTrend(background());
+    $('s1a').textContent = fit.slope.toFixed(2);
+    $('s1b').textContent = fit.deg.toFixed(1) + '\u00B0';
+    $('s1c').textContent = '\u221245.0\u00B0';
+    $('s1d').textContent = (fit.deg + 45).toFixed(1) + '\u00B0';
+    $('s1f').textContent = (360 + fit.deg).toFixed(0) + '\u00B0';
+    $('s1e').textContent = 'The fitted background runs at ' + fit.deg.toFixed(1)
+      + ' degrees, or ' + (360 + fit.deg).toFixed(0) + ' as a bearing, which is '
+      + Math.abs(fit.deg + 45).toFixed(1) + ' degrees '
+      + (fit.deg < -45 ? 'steeper' : 'shallower') + ' than the B = \u2212A reference. '
+      + (S.axes === 'nf'
+        ? 'These are the axes the DQ workflow uses, and the published field baselines sit at 330 to 345 '
+          + 'degrees, which is where this model lands.'
+        : 'These are the true Shuey coefficients. Switch to the workflow axes and the same trend reads '
+          + 'much flatter.');
+  }
+
+  /* ------------------------------- step 2 ------------------------------ */
+
+  function drawStep2() {
+    const c = $('c2a'); if (!c) return;
+    const W = width(c, 640), H = 400;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const gap = 34;
+    const side = Math.min((W - 76 - gap) / 2, H - 76);
+    const rL = { x: 62, y: 30, w: side, h: side };
+    const rR = { x: 62 + side + gap + 34, y: 30, w: side, h: side };
+    plot(ctx, rL, rotationDeg('c45'), { title: 'ROTATED TO \u221245\u00B0', all: false,
+      xlab: 'rotated A', ylab: 'rotated B' });
+    plot(ctx, rR, rotationDeg('flat'), { title: 'ROTATED ONTO THE X AXIS', all: false,
+      xlab: 'rotated A', ylab: 'departure' });
+
+    const bg = background();
+    const s0 = spreadOf(bg, 0), s45 = spreadOf(bg, rotationDeg('c45')),
+          sf = spreadOf(bg, rotationDeg('flat'));
+    const fit = fitTrend(bg);
+    $('s2a').textContent = s0.toFixed(3);
+    $('s2b').textContent = s45.toFixed(3);
+    $('s2c').textContent = sf.toFixed(3);
+    $('s2d').textContent = (fit.deg + 45).toFixed(1) + '\u00B0';
+    const r45 = s0 / Math.max(1e-9, s45);
+    $('s2e').textContent = (r45 < 1
+        ? 'Rotating to \u221245 degrees makes the background spread ' + (1 / r45).toFixed(1)
+          + ' times worse, because it carries a shallow trend past the horizontal. '
+        : 'Rotating to \u221245 degrees cuts the background spread by a factor of ' + r45.toFixed(1) + '. ')
+      + 'Rotating onto the measured trend cuts it by ' + (s0 / Math.max(1e-9, sf)).toFixed(1)
+      + '. The tilt figure is how far from horizontal the background still sits afterwards.';
+  }
+
+  /* ------------------------------- step 3 ------------------------------ */
+
+  function drawStep3() {
+    const c = $('c3a'); if (!c) return;
+    const W = width(c, 640), H = 400;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const gap = 34;
+    const side = Math.min((W - 76 - gap) / 2, H - 76);
+    const rL = { x: 62, y: 30, w: side, h: side };
+    const rR = { x: 62 + side + gap + 34, y: 30, w: side, h: side };
+    plot(ctx, rL, 0, { title: 'BEFORE', band: false });
+    plot(ctx, rR, rotationDeg('flat'), { title: 'AFTER',
+      xlab: 'rotated A', ylab: 'departure' });
+
+    const bg = background();
+    const deg = rotationDeg('flat');
+    const sp = spreadOf(bg, deg), sp0 = spreadOf(bg, 0);
+    const sel = Math.abs(turn(selected(), deg).B);
+    const sel0 = Math.abs(selected().B);
+    $('s3a').textContent = sel.toFixed(3);
+    $('s3b').textContent = sp.toFixed(3);
+    $('s3c').textContent = (sel / Math.max(1e-9, sp)).toFixed(2);
+    $('s3d').textContent = (sel0 / Math.max(1e-9, sp0)).toFixed(2);
+    const r = sel / Math.max(1e-9, sp);
+    $('s3e').textContent = r > 1.5
+      ? 'The selected sand sits ' + r.toFixed(1) + ' times the background spread off the horizontal, so '
+        + 'it stands clear of the background. Unrotated the same sand scored '
+        + (sel0 / Math.max(1e-9, sp0)).toFixed(2) + '.'
+      : 'The selected sand is only ' + r.toFixed(2) + ' times the background spread off the horizontal, '
+        + 'so it does not stand clear. A tight sand or a brine fill will do this, and the rotation '
+        + 'cannot manufacture an anomaly that is not there.';
+  }
+
+  /* ------------------------------ the panel ---------------------------- */
+
+  function pushToInputs() {
+    $('phi').value = S.phi;
+    $('scatter').value = S.scatter;
+    $('showall').checked = !!S.showall;
+    $('axesV').innerHTML = S.axes === 'ab' ? 'true A and B' : 'near stack, F &minus; N';
+    document.querySelectorAll('[data-axes]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.axes === S.axes);
+    });
+    $('phiV').textContent = S.phi + '%';
+    $('scatterV').textContent = S.scatter + '%';
+    $('overV').textContent = LITHS[S.over].name;
+    $('fluidV').textContent = FLUIDS[S.fluid].name;
+    $('rotV').innerHTML = ROTNAME[S.rot];
+    document.querySelectorAll('[data-over]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.over === S.over);
+    });
+    document.querySelectorAll('[data-fluid]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.fluid === S.fluid);
+    });
+    document.querySelectorAll('[data-rot]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.rot === S.rot);
+    });
+    const fit = fitTrend(background());
+    $('mSlope').textContent = fit.slope.toFixed(2);
+    $('mAngle').textContent = fit.deg.toFixed(1) + '\u00B0';
+  }
+
+  function drawAll() {
+    drawMain();
+    if (visible('p1')) drawStep1();
+    if (visible('p2')) drawStep2();
+    if (visible('p3')) drawStep3();
+  }
+  function onChange() { pushToInputs(); drawAll(); saveState(); }
+
+  ['phi', 'scatter'].forEach((id) => {
+    $(id).addEventListener('input', () => { S[id] = parseFloat($(id).value); onChange(); });
+  });
+  $('showall').addEventListener('change', () => { S.showall = $('showall').checked; onChange(); });
+  document.querySelectorAll('[data-axes]').forEach((b) => {
+    b.addEventListener('click', () => { S.axes = b.dataset.axes; onChange(); });
+  });
+  document.querySelectorAll('[data-over]').forEach((b) => {
+    b.addEventListener('click', () => { S.over = b.dataset.over; onChange(); });
+  });
+  document.querySelectorAll('[data-fluid]').forEach((b) => {
+    b.addEventListener('click', () => { S.fluid = b.dataset.fluid; onChange(); });
+  });
+  document.querySelectorAll('[data-rot]').forEach((b) => {
+    b.addEventListener('click', () => { S.rot = b.dataset.rot; onChange(); });
+  });
+  $('resetBtn').addEventListener('click', () => {
+    const tab = S.tab;
+    S = Object.assign({}, DEF, { tab });
+    onChange();
+  });
+
+  /* -------------------------------- tabs ------------------------------- */
+
+  const PANES = ['p1', 'p2', 'p3', 'pw', 'pe', 'pk', 'pm'];
+  const STEPNAMES = {
+    p1: 'The background', p2: 'Two rotations', p3: 'What it buys',
+    pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
+  };
+
+  function buildStepNav() {
+    PANES.forEach((id, i) => {
+      const pane = $(id); if (!pane) return;
+      const prev = PANES[i - 1], next = PANES[i + 1];
+      const nav = document.createElement('div');
+      nav.className = 'stepnav';
+      const mk = (target, text, ghost) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn' + (ghost ? ' ghost' : '') + ' small';
+        btn.textContent = text;
+        btn.addEventListener('click', () => {
+          showTab(target);
+          const t = document.querySelector('.tabhint');
+          if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return btn;
+      };
+      nav.appendChild(prev ? mk(prev, '\u2190 ' + STEPNAMES[prev], true)
+                           : document.createElement('span'));
+      const where = document.createElement('span');
+      where.className = 'where';
+      where.textContent = i < 3 ? 'step ' + (i + 1) + ' of 3' : STEPNAMES[id];
+      nav.appendChild(where);
+      nav.appendChild(next ? mk(next, STEPNAMES[next] + ' \u2192')
+                           : document.createElement('span'));
+      pane.appendChild(nav);
+    });
+  }
+
+  function showTab(id) {
+    PANES.forEach((q) => { const el = $(q); if (el) el.hidden = q !== id; });
+    document.querySelectorAll('#tabs button').forEach((b) => {
+      b.setAttribute('aria-selected', b.dataset.tab === id);
+    });
+    const lab = document.querySelector('.labhead');
+    if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3');
+
+    /* Steps 2 and 3 draw their own rotations, so the panel switch has nothing
+       to change there. */
+    const own = (id === 'p2' || id === 'p3');
+    document.querySelectorAll('[data-rot]').forEach((b) => { b.disabled = own; });
+    const cr = $('colRot');
+    if (cr) cr.style.opacity = own ? '0.65' : '1';
+
+    if ($('labCap')) {
+      $('labCap').innerHTML = own
+        ? 'AB space <span>&mdash; the steps below draw both rotations</span>'
+        : 'AB space <span>&mdash; the background trend and one sand</span>';
+    }
+
+    const last = (id === 'pk' || id === 'pm');
+    if ($('nextup')) $('nextup').hidden = !last;
+    if ($('pager')) $('pager').hidden = !last;
+    S.tab = id;
+    drawAll();
+    saveState();
+  }
+  document.querySelectorAll('#tabs button').forEach((b) => {
+    b.addEventListener('click', () => showTab(b.dataset.tab));
+  });
+  document.querySelectorAll('.masthead a[data-tab]').forEach((a) => {
+    a.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      showTab(a.dataset.tab);
+      const strip = $('tabs');
+      if (strip && strip.scrollIntoView) strip.scrollIntoView({ block: 'start' });
+    });
+  });
+
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawAll, 140); });
+
+  pushToInputs();
+  buildStepNav();
+  showTab(PANES.indexOf(S.tab) >= 0 ? S.tab : 'p1');
+  document.fonts && document.fonts.ready.then(drawAll);
+})();
+</script>
+</body>
+</html>

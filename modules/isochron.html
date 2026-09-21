@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Isochron and half isochron | How the DQ Trace Actually Works</title>
+<meta name="description" content="The signed isochron is the time between one extremum and the next; the half isochron splits it at the zero crossing. What the sign means, and why the asymmetry between the two halves tracks the grading of a sand.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <a class="brand" href="../index.html"><span class="dot"></span>How the DQ trace <b>actually</b> works</a>
+    <nav>
+      <a href="../index.html">All modules</a>
+      <a href="#tabs" data-tab="pw">Why it matters</a>
+      <a href="#tabs" data-tab="pm">Method &amp; references</a>
+    </nav>
+  </header>
+
+  <div class="mod-head">
+    <p class="eyebrow">Module 05 &nbsp;·&nbsp; The DQ trace</p>
+    <h1>Isochron and half isochron</h1>
+    <p class="sub">A quadrant number says where in a loop a sample sits but nothing about how long the loop
+      was. The isochron measures exactly that: the time from one extremum to the next, carrying a sign
+      taken from the slope. Splitting it at the zero crossing gives the half isochron, and the asymmetry
+      between the two halves turns out to say something about how the sand is graded.</p>
+  </div>
+
+  <div class="labhead">
+    <div class="labgrid">
+      <div>
+        <p class="cap" id="labCap">The rock model <span>&mdash; the sand shaded by porosity, and the near stack</span></p>
+        <canvas id="cMain" aria-label="The near-stack trace beside its signed isochron and half isochron zones"></canvas>
+      </div>
+      <div>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <div class="controls" id="labControls">
+          <div class="ctl-col">
+            <h2>Build the rocks</h2>
+            <div class="ctl">
+              <label>Overburden <span class="val" id="overV">soft shale</span></label>
+              <div class="seg" role="group" aria-label="Overburden lithology">
+                <button type="button" data-over="soft" aria-pressed="true">soft</button>
+                <button type="button" data-over="hard" aria-pressed="false">hard</button>
+                <button type="button" data-over="tight" aria-pressed="false">tight</button>
+              </div>
+            </div>
+            <div class="ctl">
+              <label for="phi">Sand porosity <span class="val" id="phiV">28%</span></label>
+              <input type="range" id="phi" min="8" max="36" step="1" value="28">
+            </div>
+            <div class="ctl">
+              <label>Pore fluid <span class="val" id="fluidV">gas</span></label>
+              <div class="seg" role="group" aria-label="Fluid filling the sand pores">
+                <button type="button" data-fluid="brine" aria-pressed="false">brine</button>
+                <button type="button" data-fluid="oil" aria-pressed="false">oil</button>
+                <button type="button" data-fluid="gas" aria-pressed="true">gas</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="ctl-col" id="colProfile">
+            <h2>How the sand is graded</h2>
+            <div class="ctl">
+              <label>Vertical profile <span class="val" id="profV">blocky</span></label>
+              <div class="seg seg-wrap" role="group" aria-label="Vertical porosity profile through the sand">
+                <button type="button" data-prof="blocky" aria-pressed="true">blocky</button>
+                <button type="button" data-prof="coarsen" aria-pressed="false">coarsening up</button>
+                <button type="button" data-prof="fining" aria-pressed="false">fining up</button>
+                <button type="button" data-prof="streak" aria-pressed="false">tight streak</button>
+              </div>
+            </div>
+            <p class="hint-line" style="margin:-4px 0 12px">A blocky channel sand has both boundaries
+              sharp. A coarsening-upward sand is cleanest at the top and grades into the shale below it; a
+              fining-upward sand is the other way round. The tight streak is a thin cemented bed of the
+              tight sandstone near the base of an otherwise blocky sand.</p>
+            <div class="ctl">
+              <label for="thick">Sand thickness <span class="val" id="thickV">24 ms</span></label>
+              <input type="range" id="thick" min="10" max="50" step="1" value="24">
+            </div>
+          </div>
+
+          <div class="ctl-col" id="colData">
+            <h2>The wavelet and the data</h2>
+            <div class="ctl">
+              <label for="freq">Wavelet frequency <span class="val" id="freqV">25 Hz</span></label>
+              <input type="range" id="freq" min="15" max="60" step="1" value="25">
+            </div>
+            <div class="ctl">
+              <label for="dt">Sample rate <span class="val" id="dtV">1 ms</span></label>
+              <input type="range" id="dt" min="0" max="3" step="1" value="0">
+            </div>
+            <div class="ctl">
+              <label for="noise">Noise <span class="val" id="noiseV">0%</span></label>
+              <input type="range" id="noise" min="0" max="40" step="1" value="0">
+            </div>
+            <button class="btn ghost small" id="resetBtn" type="button">Reset everything</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
+    Method and references are there when you want them.</p>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
+    <button role="tab" data-tab="p1" aria-selected="false">1 · The signed isochron</button>
+    <button role="tab" data-tab="p2" aria-selected="false">2 · Splitting it in half</button>
+    <button role="tab" data-tab="p3" aria-selected="false">3 · What the asymmetry says</button>
+    <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
+    <span class="gap"></span>
+    <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
+    <button role="tab" data-tab="pk" aria-selected="false">Key points</button>
+    <button role="tab" data-tab="pm" aria-selected="false">Method</button>
+  </nav>
+
+  <section class="tabpane" id="p1" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">1</span>The signed isochron</h3>
+      <span class="hint">Time between one extremum and the next, with a sign</span>
+    </div>
+
+    <p class="lede">
+      What this step buys: a measure of how long each half loop lasts and which way it runs. It becomes
+      the third axis of the crossplot in module 13, and a way of selecting which part of a waveform to
+      look at.</p>
+
+    <p class="lede">
+      The isochron is the simplest measurement in the whole method. Take two consecutive extrema on the
+      near stack &mdash; a trough and the peak below it, or a peak and the trough below it &mdash; and
+      record the time between them. Write that number to every sample in the interval. That is the
+      isochron.</p>
+
+    <p class="lede">
+      The sign comes from the slope. Going down the trace from a trough to a peak the waveform is rising,
+      and the isochron is positive. From a peak down to a trough it is falling, and the isochron is
+      negative. So a signed isochron of <b>+13</b> means thirteen milliseconds of rising limb, and
+      <b>&minus;18</b> means eighteen milliseconds of falling limb. The magnitude is a time thickness; the
+      sign is a direction.</p>
+
+    <canvas id="c1a" aria-label="The near-stack trace beside its signed isochron, signed half isochron and signed slope columns"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The four columns of Figure 1 of the isochron paper,
+      built from whatever model is in the panel. Amplitude, then the signed isochron, then the signed half
+      isochron of step 2, then the slope polarity on its own.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Isochron zones on the trace</span><b id="s1a">&mdash;</b></div>
+      <div class="stat key"><span>Largest positive isochron</span><b id="s1b">&mdash;</b></div>
+      <div class="stat key"><span>Largest negative isochron</span><b id="s1c">&mdash;</b></div>
+      <div class="stat"><span>Wavelet trough to peak</span><b id="s1d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>Notice how close some of the isochron values sit to the wavelet's own trough-to-peak time.
+        For a Ricker wavelet that is &radic;1.5&nbsp;/&nbsp;&pi;f, about 15.6 ms at 25 Hz, and an isolated
+        boundary can return nothing else, because the waveform there is just the wavelet. The isochron
+        only starts saying something about geology where two boundaries are close enough to pull the
+        extrema off those positions, which is the whole subject of step 3.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="p2" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">2</span>Splitting it in half</h3>
+      <span class="hint">The zero crossing divides the isochron, and rarely down the middle</span>
+    </div>
+
+    <p class="lede">
+      Every isochron has a zero crossing inside it, because the waveform has to pass through zero on its
+      way from a trough to a peak. Cutting the isochron there gives two half isochrons, both carrying the
+      same sign as the whole. The four zones that result are trough to crossing, crossing to peak, peak to
+      crossing, and crossing to trough.</p>
+
+    <p class="lede">
+      The two halves are not equal, and their inequality is the measurement. A symmetric loop splits evenly
+      because the crossing sits midway between the two extrema. Anything that pulls the crossing off center
+      &mdash; a stronger reflection at one end of a layer than the other, a thin bed, an interfering event
+      &mdash; makes one half longer than the other while their sum stays the same.</p>
+
+    <canvas id="c2a" aria-label="One isochron drawn large, showing where the zero crossing splits it and how unequal the two halves are"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The strongest isochron on the trace, magnified. The two
+      halves are shaded separately, and their sum is the isochron above them.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Isochron measured</span><b id="s2a">&mdash;</b></div>
+      <div class="stat key"><span>Upper half</span><b id="s2b">&mdash;</b></div>
+      <div class="stat key"><span>Lower half</span><b id="s2c">&mdash;</b></div>
+      <div class="stat"><span>Split, upper as a share</span><b id="s2d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>The half isochron depends on the position of a zero crossing, and a zero crossing is by
+        definition a low-amplitude sample &mdash; the least stable pick on the trace, and the one a strong
+        reflection nearby will move first. Module 03 spent a step on choosing which sample a crossing lands
+        on; this is what that choice was for. Random noise at the signal's own frequency turns out to be a
+        gentle test of that: on this model 40% noise moves the split by about three points. It is
+        <em>interference</em> that moves it, which is what step 3 is about.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="p3" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">3</span>What the asymmetry says</h3>
+      <span class="hint">Four sand profiles, four different splits</span>
+    </div>
+
+    <p class="lede">
+      Here are three sands of the same thickness under the same shale, differing only in how porosity is
+      distributed through them. A blocky channel sand with both boundaries sharp. A coarsening-upward sand,
+      cleanest at the top, grading down into the shale below. And a fining-upward sand, cleanest at the
+      base.</p>
+
+    <canvas id="c3a" aria-label="Four sand profiles side by side with their half isochron zones and porosity logs"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">Each panel shows the near-stack waveform, the signed
+      half isochron zones, and the porosity profile through the sand. The two positive zones are the sand's
+      own rising limb, split at its zero crossing.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Blocky, upper / lower</span><b id="s3a">&mdash;</b></div>
+      <div class="stat key"><span>Coarsening up, upper / lower</span><b id="s3b">&mdash;</b></div>
+      <div class="stat key"><span>Fining up, upper / lower</span><b id="s3c">&mdash;</b></div>
+      <div class="stat"><span>Wavelet trough to peak</span><b id="s3d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>The blocky sand splits evenly. The graded sands do not, and the shorter half sits at the
+        cleaner end &mdash; at the top for a coarsening-upward sand and at the base for a fining-upward
+        one. A sharper contrast makes a tighter, better-centered extremum, which pulls the crossing toward
+        it and shortens the half on that side. This is the observation the isochron paper builds its facies
+        argument on: the sign separates sand from shale, and the asymmetry within the sand separates one
+        kind of sand from another.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pw" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">?</span>What the isochron is for</h3>
+      <span class="hint">An isopach that lives in the seismic cube</span>
+    </div>
+
+    <p class="lede">Isochron maps are older than any of this. The new part is computing one at every sample
+      of every trace rather than between two picked horizons, so that time thickness becomes a volume you
+      can slice, crossplot and hand to a classifier alongside amplitude. Nothing had to be interpreted
+      first, which is the point.</p>
+
+    <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
+      What the sign buys</h2>
+    <p class="lede">In the field examples of the isochron paper, sand intervals carry a positive slope and
+      the shales and silts around them carry a negative one. That is not a law of nature &mdash; it follows
+      from a soft reservoir under a harder overburden, which is the same convention module 04 enforces with
+      its polarity flip &mdash; but where it holds it means a single signed number separates the two
+      lithologies before any amplitude is looked at. Moderate to high amplitude combined with a positive
+      isochron slope is a sand prediction, and machine learning algorithms can use the distinction directly
+      during training.</p>
+
+    <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
+      Uniform where the geology is uniform</h2>
+    <p class="lede">A homogeneous layer produces the same isochron reading on every trace through it,
+      because the waveform is the same on every trace. Variability in lithology or thickness produces
+      variable readings, and a real disruption &mdash; a fault, a channel margin, an erosional surface
+      &mdash; produces erratic and locally large ones. So the texture of an isochron volume is itself the
+      display: flat where the geology is layered, noisy where it is not.</p>
+
+    <p class="lede">The half isochron adds sensitivity and gives up stability to get it. Peaks and troughs
+      at medium and high amplitude are relatively immune to thin beds and to noise, and they tend to sit at
+      the boundary of a high impedance layer. Zero crossings are always low amplitude samples, and a strong
+      reflection nearby will move them. That is why the half isochron becomes erratic in high-energy
+      depositional settings, and why it is the more informative of the two attributes in quiet, well
+      layered ones.</p>
+
+    <div class="legend prose">
+      <span>The isochron is also the third axis of the crossplot in module 13. The DQ distance and Theta PX
+        describe the amplitude behaviour at a sample; the signed half isochron describes the geometry of
+        the waveform it sits in. They are close to independent, which is what makes the three of them worth
+        plotting together.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pe" role="tabpanel" hidden>
+    <div class="tryit" style="max-width:none">
+      <h3>Exercises</h3>
+      <ol>
+        <li><b>Check that the halves add up.</b> On step 2, read the isochron and its two halves for a few
+          models.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The two halves always sum to
+            the isochron exactly, because the crossing is a sample inside the interval and the two pieces
+            are measured to it and from it. Nothing is lost in the split, which means the half isochron
+            carries strictly more information than the isochron and the isochron can always be recovered
+            from it. That is why the papers compute and store both rather than treating one as a summary of
+            the other.</span></details></li>
+        <li><b>Find out what sets the isochron in a thick layer.</b> On step 1, set the sand thickness to
+          its maximum with a blocky profile, then drag the wavelet frequency.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The isochron zones that belong
+            to isolated boundaries track the wavelet and have almost nothing to do with the sand. For a
+            Ricker wavelet the trough-to-peak time is &radic;1.5&nbsp;/&nbsp;&pi;f, which is 15.6 ms at
+            25 Hz and 7.8 ms at 50 Hz, and the measured isochron follows it to within a sample. Note that
+            this is <em>not</em> half a period &mdash; half a period at 25 Hz would be 20 ms &mdash;
+            because a Ricker's side lobes sit closer in than a sinusoid's would. A layer thick enough that
+            its top and base do not interfere gives you back the wavelet and no more. The isochron becomes
+            a geological measurement only once two boundaries are close enough to interfere, which is the
+            tuning regime module 12 works in.</span></details></li>
+        <li><b>Split a blocky sand.</b> On step 3, read the blocky panel's two halves.
+          <details class="reveal"><summary>Hint</summary><span class="ans">They are equal. Both boundaries
+            of the sand are equally sharp and equally strong, so the waveform between them is symmetric and
+            the crossing lands midway. That is the baseline everything else is read against &mdash; not
+            because blocky sands are common, but because any departure from an even split has to be caused
+            by something, and the something is what you are looking for.</span></details></li>
+        <li><b>Grade the sand and watch the split move.</b> Compare the coarsening-upward and
+          fining-upward panels on step 3.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The shorter half sits at the
+            cleaner end: at the top for a coarsening-upward sand, at the base for a fining-upward one. The
+            cleaner end has the sharper impedance contrast, which produces a tighter extremum sitting
+            closer to the boundary, and that pulls the crossing toward it. So the asymmetry is a read on
+            which end of the sand has the better rock &mdash; the same conclusion the isochron paper draws
+            from its Figure 2, and it comes out of the wavelet rather than out of any assumption about
+            depositional environment.</span></details></li>
+        <li><b>Try to move the crossing with noise.</b> On step 2, with a blocky 24 ms sand at 25 Hz,
+          walk the noise from zero to 40% and watch the isochron and the split.
+          <details class="reveal"><summary>Hint</summary><span class="ans">Very little happens. The
+            isochron drifts from 22 ms to 19 and the split never leaves the high forties. That is worth knowing, because
+            it is the opposite of what the setup invites you to expect, and because it tells you what kind
+            of test this is: band-limited noise at the signal's own frequency perturbs a strong, isolated
+            loop hardly at all. The instability the isochron paper reports on field data &mdash; half
+            isochron readings becoming varied and sometimes erratic in high-energy settings &mdash; comes
+            from strong reflections interfering with each other and dragging the low-amplitude crossing
+            around, not from random noise. Step 3 is where you can see that mechanism working, and this
+            synthetic understates it.</span></details></li>
+        <li><b>Coarsen the sampling.</b> On step 1, step the sample rate from 1 ms to 4 ms with everything
+          else fixed.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The isochron can only take
+            values that are whole multiples of the sample interval, so at 4 ms it jumps in steps of four
+            milliseconds and the fine distinctions between one zone and the next disappear. The half
+            isochron suffers twice over, because it is a shorter interval measured to a pick that is itself
+            less well located. Every module in this course has ended up at the same place on sampling, from
+            a different direction each time.</span></details></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pk" role="tabpanel" hidden>
+    <div class="takeaway" style="max-width:none">
+      <h3>The main points</h3>
+      <ul>
+        <li><b>The signed isochron is the time between two consecutive extrema</b>, written to every sample
+          between them.</li>
+        <li><b>The sign is the slope.</b> Trough down to peak is positive, peak down to trough is
+          negative.</li>
+        <li><b>The half isochron splits the isochron at its zero crossing</b>, giving four zones per cycle:
+          trough to crossing, crossing to peak, peak to crossing, crossing to trough.</li>
+        <li><b>The two halves sum to the isochron exactly</b>, so nothing is lost by splitting and the half
+          isochron carries strictly more.</li>
+        <li><b>At an isolated boundary the isochron is just the wavelet's trough-to-peak time</b>,
+          &radic;1.5&nbsp;/&nbsp;&pi;f for a Ricker. It becomes a geological measurement only where two
+          boundaries are close enough to interfere.</li>
+        <li><b>A blocky sand splits evenly; a graded sand does not</b>, and the shorter half sits at the
+          cleaner end.</li>
+        <li><b>The half isochron is the more sensitive of the two</b>, because it depends on the position
+          of a zero crossing, which is always a low-amplitude sample. What moves a crossing is interference
+          from a nearby strong reflection rather than random noise.</li>
+        <li><b>Where sands are soft and shales are not, the sign alone separates them</b>, which is what
+          makes the attribute useful as a machine learning input.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pm" role="tabpanel" hidden>
+    <details class="notes" id="notes" open>
+      <summary>Method, assumptions, and where to read more</summary>
+      <p>The rocks and the near stack are built as in modules 01 through 04. The sand is divided into forty
+        sublayers so that a porosity profile can be imposed through it, and a reflection coefficient is
+        computed at every sublayer boundary from the two rocks either side. The blocky profile holds
+        porosity constant; the coarsening-upward and fining-upward profiles hold it constant over the
+        cleaner half of the sand and then ramp it down toward a shale-like value across the other, which is
+        a gradational contact. The tight streak is a tight sandstone bed near the base of an otherwise blocky
+        sand.</p>
+      <p>The picks are made exactly as in module 03. The isochron is the time between consecutive extrema
+        and the half isochron is that interval cut at the zero-crossing sample between them, both written
+        to every sample in their zone and both signed by the slope, positive from trough down to peak.
+        This reproduces Figure 1 of the isochron abstract, including its property that the two halves sum
+        to the isochron.</p>
+      <p>Step 3 compares three profiles rather than four. The tight streak is still a model you can select
+        in the panel, and its effect on the isochron is real, but it is left out of the facies comparison:
+        the direction it moves the split in this model does not match the one shown in Figure 2d of the
+        isochron abstract, and the likeliest reason is that the published model is built from a real sand
+        log whose contrast, thickness and position this page is only approximating. A comparison meant to
+        teach a facies signature is the wrong place for a result that is not settled.</p>
+      <p>The window holds the sand and nothing else. An earlier draft put a bed above and below it so the
+        display would look like a layered earth, and that was a mistake: a neighbour close enough to fill
+        the panel is also close enough to shift the sand's zero crossing, which is the measurement step 3
+        depends on. With those beds in place a blocky sand stopped splitting evenly, which it should always
+        do. The window is sized to the sand's own response instead.</p>
+      <p>Noise is band-limited with the same wavelet and scaled as a percentage of the strongest reflection
+        in the model, as in the earlier modules. The isochron is quantized to the sample interval by
+        construction, so a coarse sample rate limits it directly rather than through any modelling
+        choice.</p>
+      <p>What this module leaves out is the use the signed half isochron is put to as the third axis of the
+        RDQ crossplot, which is module 13, and the relationship between isochron and bed thickness in the
+        tuning regime, which is module 12.</p>
+      <ul>
+        <li>Chaudhry, N., H. Bedle, D. B. Neff, and W. Neff, 2026, Isochron-based seismic attributes for
+          stratigraphic and facies interpretation: field examples, IMAGE expanded abstract.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+          quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="nextup" id="nextup" hidden>
+    <p class="eyebrow">Next up</p>
+    <h3><a href="phase-filters.html">06 · The phase filters</a></h3>
+    <p>Seven filters across nine quadrant numbers, applied by convolution rather than deconvolution. The
+      quadrant number chooses which phase-rotated version of the trace each sample is read from, and the
+      result is the quadrant-enhanced pair the DQ distance is built out of.</p>
+    <a class="btn" href="phase-filters.html">Open module 06 →</a>
+    <a class="btn ghost" href="../index.html">All modules</a>
+  </section>
+
+  <div class="pager" id="pager" hidden>
+    <a class="btn ghost" href="quadrants.html">← Quadrant numbers</a>
+    <a class="btn" href="phase-filters.html">Next: the phase filters →</a>
+  </div>
+
+  <footer>
+    <div class="foot-grid">
+      <p>Built for teaching by Heather Bedle, School of Geosciences, University of Oklahoma, with the
+        <a href="https://www.ou.edu/mcee/labs/aaspi">AASPI</a> consortium.</p>
+      <p class="lic">Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+        Free to use, share and adapt for any purpose, including training in industry, provided the source is
+        credited and adapted versions carry the same license.</p>
+      <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
+        Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
+      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
+        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        nothing about you.</p>
+    </div>
+  </footer>
+</div>
+
+<script src="../assets/count.js"></script>
+<script src="../assets/seismic.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  if (typeof SEIS === 'undefined') {
+    const el = document.createElement('div');
+    el.setAttribute('style', 'background:#841617;color:#fff;padding:14px 18px;margin:16px 0;' +
+      'font:13px/1.6 ui-monospace,Menlo,monospace');
+    el.textContent = 'This module could not load assets/seismic.js. It expects it one directory up, ' +
+      'at ../assets/, and file names are case-sensitive on GitHub Pages.';
+    const w = document.querySelector('.wrap');
+    (w || document.body).insertBefore(el, w ? w.firstChild : null);
+    return;
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const visible = (id) => { const el = $(id); return el && !el.hidden; };
+
+  /* =====================================================================
+     THE ROCKS
+     Identical to modules 01 and 02.
+     ===================================================================== */
+
+  const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };
+
+  const FLUIDS = {
+    brine: { K: 2.60,  rho: 1.03, v: 1500, name: 'brine' },
+    oil:   { K: 0.80,  rho: 0.78, v: 1300, name: 'oil' },
+    gas:   { K: 0.055, rho: 0.20, v: 550,  name: 'gas' },
+  };
+
+  const LITHS = {
+    soft: { vp: 2700, vs: 1175, rho: 2.33, name: 'soft shale' },
+    hard: { vp: 3350, vs: 1675, rho: 2.48, name: 'hard shale' },
+    tight: { vp: 4800, vs: 2800, rho: 2.56, name: 'tight sandstone' },
+  };
+
+  const PH0 = 8, PH1 = 36;
+  const DTS = [0.001, 0.002, 0.003, 0.004];
+  const NEAR_A = [0, 10];
+  const T0 = 0, TWIN = 0.130, TTOP = 0.035;
+
+  const DEF = {
+    over: 'soft', phi: 28, fluid: 'gas', prof: 'blocky',
+    thick: 24, freq: 25, dt: 0, noise: 0, tab: 'p1',
+  };
+  let S = SEIS.readState(DEF);
+  if (!LITHS[S.over]) S.over = DEF.over;
+  if (!FLUIDS[S.fluid]) S.fluid = DEF.fluid;
+  S.phi = Math.min(PH1, Math.max(PH0, Math.round(S.phi) || DEF.phi));
+  if (!['blocky', 'coarsen', 'fining', 'streak'].includes(S.prof)) S.prof = DEF.prof;
+
+  const CAN_LINK = location.protocol !== 'file:';
+  const saveState = () => {
+    if (!CAN_LINK) return;
+    try { SEIS.writeState(S, DEF); } catch (e) { /* nothing shareable */ }
+  };
+
+  /* ------------------------------- the physics ------------------------- */
+
+  function shuey(l1, l2) {
+    const vp = (l1.vp + l2.vp) / 2, dvp = l2.vp - l1.vp;
+    const vs = (l1.vs + l2.vs) / 2, dvs = l2.vs - l1.vs;
+    const rho = (l1.rho + l2.rho) / 2, drho = l2.rho - l1.rho;
+    const k = (vs / vp) * (vs / vp);
+    return {
+      A: 0.5 * (dvp / vp + drho / rho),
+      B: 0.5 * (dvp / vp) - 2 * k * (drho / rho + 2 * (dvs / vs)),
+    };
+  }
+  function meanSin2(a, b) {
+    const n = 256, lo = a * Math.PI / 180, hi = b * Math.PI / 180;
+    let sum = 0;
+    for (let i = 0; i < n; i++) {
+      const th = lo + (hi - lo) * (i + 0.5) / n;
+      sum += Math.sin(th) * Math.sin(th);
+    }
+    return sum / n;
+  }
+  const S2N = meanSin2(NEAR_A[0], NEAR_A[1]);
+
+  function brineSand(phi) {
+    const vp = 1 / (phi / FLUIDS.brine.v + (1 - phi) / MATRIX.vp);
+    const rho = (1 - phi) * MATRIX.rho + phi * FLUIDS.brine.rho;
+    const vpvs = -0.75 * phi * phi + 1.35 * phi + 1.63;
+    return { vp, vs: vp / vpvs, rho };
+  }
+  function ksatFromDry(kdry, phi, kfl) {
+    const num = Math.pow(1 - kdry / MATRIX.K, 2);
+    const den = phi / kfl + (1 - phi) / MATRIX.K - kdry / (MATRIX.K * MATRIX.K);
+    return kdry + num / den;
+  }
+  function kdryFromSat(ksat, phi, kfl) {
+    const a = phi * MATRIX.K / kfl;
+    return (ksat * (a + 1 - phi) - MATRIX.K) / (a + ksat / MATRIX.K - 1 - phi);
+  }
+  function sandRock(phi, fluidKey) {
+    const b = brineSand(phi);
+    if (fluidKey === 'brine') return b;
+    const mu = b.rho * b.vs * b.vs * 1e-6;
+    const ksat = b.rho * b.vp * b.vp * 1e-6 - (4 / 3) * mu;
+    const kdry = kdryFromSat(ksat, phi, FLUIDS.brine.K);
+    const f = FLUIDS[fluidKey];
+    const k2 = ksatFromDry(kdry, phi, f.K);
+    const rho = (1 - phi) * MATRIX.rho + phi * f.rho;
+    return {
+      vp: Math.sqrt((k2 + (4 / 3) * mu) * 1e6 / rho),
+      vs: Math.sqrt(mu * 1e6 / rho),
+      rho,
+    };
+  }
+
+  const dt = () => DTS[S.dt | 0];
+  const ntOf = () => Math.floor(TWIN / dt()) + 1;
+
+  const wavelet = () => SEIS.makeWavelet({ type: 'ricker', f: S.freq });
+
+  function refAmp() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const q = shuey(over, sand);
+    return Math.max(Math.abs(q.A + q.B * S2N), 1e-4);
+  }
+
+  let noiseCache = null;
+  function noiseField(nx) {
+    const key = [S.over, S.phi, S.fluid, S.freq, S.noise, S.dt, nx].join('|');
+    if (noiseCache && noiseCache.key === key) return noiseCache.field;
+    let field = null;
+    if (S.noise > 0) {
+      const raw = SEIS.bandLimitedNoise(nx, ntOf(), dt(), wavelet(), 20260903, 0);
+      const amp = (S.noise / 100) * refAmp();
+      field = new Float32Array(raw.length);
+      for (let i = 0; i < raw.length; i++) field[i] = raw[i] * amp;
+    }
+    noiseCache = { key, field };
+    return field;
+  }
+
+  function trace(topT, thickS, noise, ix) {
+    const nt = ntOf();
+    const tr = SEIS.traceFromSpikes(spikes(topT, thickS), T0, dt(), nt, wavelet());
+    if (noise) for (let i = 0; i < nt; i++) tr[i] += noise[ix * nt + i];
+    return tr;
+  }
+
+  /* ------------------------------- the picker --------------------------
+     Zero crossings first. Of the two samples bracketing a crossing, keep
+     the one with the smaller magnitude; that sample is Q5. Then between
+     each consecutive pair of those, keep the single largest peak or
+     trough, so a doublet loses its smaller half.
+     --------------------------------------------------------------------- */
+
+  // an extremum in the strict sense: the sample-to-sample difference changes
+  // sign here, and the sample is above the amplitude floor
+  function isExtremum(tr, i, floor) {
+    if (i < 1 || i > tr.length - 2) return false;
+    if (Math.abs(tr[i]) <= floor) return false;
+    const a = tr[i] - tr[i - 1], b = tr[i + 1] - tr[i];
+    return (a > 0 && b <= 0) || (a < 0 && b >= 0);
+  }
+
+  function pick(tr, sandWin) {
+    const nt = tr.length;
+    let peak = 1e-12;
+    for (let i = 0; i < nt; i++) peak = Math.max(peak, Math.abs(tr[i]));
+    const floor = 0.01 * peak;
+
+    const cross = [];                      // { i, tTrue, err }
+    for (let i = 1; i < nt; i++) {
+      const a = tr[i - 1], b = tr[i];
+      if (a === 0 || b === 0) continue;
+      if ((a > 0) === (b > 0)) continue;
+      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
+      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
+      // where the crossing actually is, by linear interpolation
+      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
+      const tTrue = (i - 1 + frac) * dt();
+      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    }
+
+    /* Between each consecutive pair of crossings, keep the single largest
+       peak or trough. Where a thin bed has put two extrema in one interval,
+       the smaller is discarded; those are counted separately, and only inside
+       the sand, so that the count is about the sand and not about whatever
+       the beds above and below happen to be doing. */
+    const ext = [], dropped = [];
+    let doublets = 0, inSand = 0;
+    const inWin = (i) => !sandWin || (i >= sandWin[0] && i <= sandWin[1]);
+    for (let k = 0; k + 1 < cross.length; k++) {
+      const lo = cross[k].i, hi = cross[k + 1].i;
+      let best = -1, bv = 0;
+      const here = [];
+      for (let i = lo + 1; i < hi; i++) {
+        if (isExtremum(tr, i, floor)) here.push(i);
+        if (Math.abs(tr[i]) > bv) { bv = Math.abs(tr[i]); best = i; }
+      }
+      if (best < 0 || bv <= floor) continue;
+      ext.push({ i: best, sign: tr[best] > 0 ? 1 : -1, amp: tr[best] });
+      if (inWin(best)) inSand++;
+      here.forEach((i) => {
+        if (i === best) return;
+        dropped.push(i);
+        if (inWin(i)) doublets++;
+      });
+    }
+    return { cross, ext, dropped, doublets, inSand, peak, floor };
+  }
+
+  // the samples spanned by the sand, used to keep the doublet count local
+  function sandWindow(topT, thickS) {
+    const D = dt();
+    return [Math.max(0, Math.floor(topT / D)),
+            Math.min(ntOf() - 1, Math.ceil((topT + thickS / 1000) / D))];
+  }
+
+  /* =====================================================================
+     THE GRADED SAND
+
+     The sand is cut into sublayers so a porosity profile can be imposed
+     through it. A reflection coefficient is computed at every sublayer
+     boundary from the two rocks either side, exactly as at any other
+     interface, so a gradational contact is simply a lot of small ones.
+     ===================================================================== */
+
+  const NSUB = 40;                      // sublayers through the sand
+  const GRAD = 0.45;                    // fraction of the sand taken by the gradational end
+  const STREAK_AT = 0.80, STREAK_FRAC = 0.09;
+  const PROFILES = {
+    blocky:  'blocky',
+    coarsen: 'coarsening up',
+    fining:  'fining up',
+    streak:  'tight streak',
+  };
+
+  function phiAt(profile, u, phi0) {
+    const lean = phi0 * 0.45;                       // the shale-like end of a ramp
+    if (profile === 'coarsen') {                    // cleanest at the top
+      if (u < 1 - GRAD) return phi0;
+      const s = (u - (1 - GRAD)) / GRAD;
+      return phi0 + (lean - phi0) * Math.max(0, Math.min(1, s));
+    }
+    if (profile === 'fining') {                     // cleanest at the base
+      if (u > GRAD) return phi0;
+      const s = 1 - u / GRAD;
+      return phi0 + (lean - phi0) * Math.max(0, Math.min(1, s));
+    }
+    return phi0;
+  }
+
+  function profileSpikes(profile, topT, thickS) {
+    const over = LITHS[S.over];
+    const n = (q) => q.A + q.B * S2N;
+    const baseT = topT + thickS / 1000;
+    const out = [];
+
+    /* Deliberately just the sand. Step 3 measures the sand's own loop, and a
+       neighbouring bed close enough to fill the display would also be close
+       enough to shift its zero crossing, which is the measurement. The window
+       is sized to the sand's response instead. */
+    let prev = over;
+    for (let k = 0; k <= NSUB; k++) {
+      const u = k / NSUB;
+      const t = topT + (baseT - topT) * u;
+      let rock;
+      if (k === NSUB) rock = over;
+      else if (profile === 'streak' && u >= STREAK_AT && u < STREAK_AT + STREAK_FRAC) rock = LITHS.tight;
+      else rock = sandRock(phiAt(profile, u, S.phi) / 100, S.fluid);
+      const r = n(shuey(prev, rock));
+      if (Math.abs(r) > 1e-7) out.push({ t, r });
+      prev = rock;
+    }
+    return out;
+  }
+
+  function profileTrace(profile, ix) {
+    const nt = ntOf();
+    const noise = noiseField(1);
+    const tr = SEIS.traceFromSpikes(profileSpikes(profile, TTOP, S.thick), T0, dt(), nt, wavelet());
+    if (noise) for (let i = 0; i < nt; i++) tr[i] += noise[i];
+    return tr;
+  }
+
+  /* --------------------------- isochron zones ---------------------------
+     Consecutive picks, in time order, give the half isochron zones. An
+     extremum-to-extremum pair spans an isochron; the crossing between them
+     cuts it in two. Positive runs from a trough down to a peak.
+     --------------------------------------------------------------------- */
+
+  function zones(tr) {
+    const pk = pick(tr, null);
+    const all = [];
+    pk.cross.forEach((c) => all.push({ i: c.i, k: 'x' }));
+    pk.ext.forEach((e) => all.push({ i: e.i, k: e.sign > 0 ? 'p' : 't' }));
+    all.sort((a, b) => a.i - b.i);
+
+    const D = dt() * 1000;
+    const halves = [], isos = [];
+    for (let k = 0; k + 1 < all.length; k++) {
+      const a = all[k], b = all[k + 1];
+      if (a.k === 'x' && b.k === 'x') continue;      // no extremum, so no zone
+      let sgn = 0;
+      if (b.k === 'p' || a.k === 't') sgn = 1;
+      if (b.k === 't' || a.k === 'p') sgn = -1;
+      if (!sgn) continue;
+      halves.push({ a: a.i, b: b.i, v: sgn * (b.i - a.i) * D, from: a.k, to: b.k });
+    }
+    // an isochron is two halves sharing a crossing, extremum to extremum
+    for (let k = 0; k + 1 < halves.length; k++) {
+      const p = halves[k], q = halves[k + 1];
+      if (p.to !== 'x' || q.from !== 'x' || p.b !== q.a) continue;
+      isos.push({ a: p.a, b: q.b, x: p.b, v: p.v + q.v, up: p.v, dn: q.v });
+    }
+    return { pk, all, halves, isos };
+  }
+
+  function build(profile) {
+    const tr = profileTrace(profile || S.prof);
+    return { tr, z: zones(tr) };
+  }
+
+  /* The sand's own isochron: the rising limb whose centre lies closest to the
+     middle of the sand. Selecting the loop and then taking its two halves is
+     more robust than filtering halves by position, which miscounts whenever a
+     side lobe puts a third rising zone near the sand. */
+  function sandIsochron(b) {
+    const win = sandWindow(TTOP, S.thick);
+    const centre = (win[0] + win[1]) / 2;
+    const maxSpan = 2.5 * Math.sqrt(1.5) / (Math.PI * S.freq) / dt();
+    let best = null, bestD = Infinity;
+    b.z.isos.forEach((z) => {
+      if (z.v <= 0) return;
+      if (z.b - z.a > maxSpan) return;
+      const d = Math.abs((z.a + z.b) / 2 - centre);
+      if (d < bestD) { bestD = d; best = z; }
+    });
+    return best;
+  }
+
+  // the two halves of that isochron, upper then lower
+  function sandHalves(b) {
+    const z = sandIsochron(b);
+    return z ? [{ v: z.up }, { v: z.dn }] : null;
+  }
+
+  /* ------------------------------- drawing ----------------------------- */
+
+  const SOFT = 'rgba(22,25,28,0.45)';
+  const CRIM = '#841617';
+  const POSC = '#C2306B', NEGC = '#1D6FA3';
+
+  function width(el, fallback) {
+    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    return Math.max(280, w || fallback);
+  }
+
+  function traceCurve(ctx, tr, rect, peak, color, lw) {
+    const nt = tr.length, x0 = rect.x + rect.w / 2;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x - 2, rect.y, rect.w + 4, rect.h); ctx.clip();
+    ctx.beginPath();
+    for (let i = 0; i < nt; i++) {
+      const y = rect.y + (i / (nt - 1)) * rect.h;
+      const x = x0 + (tr[i] / peak) * (rect.w / 2) * 0.9;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = color; ctx.lineWidth = lw || 1.6; ctx.stroke();
+    ctx.restore();
+  }
+
+  // shade a zone column: one filled block per zone, labelled with its value
+  function zoneColumn(ctx, rect, list, nt, opts) {
+    const yOf = (i) => rect.y + (i / (nt - 1)) * rect.h;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    list.forEach((z) => {
+      const y0 = yOf(z.a), y1 = yOf(z.b);
+      const mag = Math.min(1, Math.abs(z.v) / (opts && opts.scale ? opts.scale : 25));
+      ctx.fillStyle = z.v > 0
+        ? 'rgba(194,48,107,' + (0.22 + 0.62 * mag).toFixed(2) + ')'
+        : 'rgba(29,111,163,' + (0.22 + 0.62 * mag).toFixed(2) + ')';
+      ctx.fillRect(rect.x, y0, rect.w, y1 - y0);
+      ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(rect.x, y0); ctx.lineTo(rect.x + rect.w, y0); ctx.stroke();
+      if (y1 - y0 > 13 && rect.w > 26) {
+        ctx.font = '600 10px "IBM Plex Mono", monospace';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        const label = (z.v > 0 ? '+' : '\u2212') + Math.abs(z.v).toFixed(0);
+        const tw = ctx.measureText(label).width + 8;
+        ctx.fillStyle = 'rgba(255,255,255,0.92)';
+        ctx.fillRect(rect.x + rect.w / 2 - tw / 2, (y0 + y1) / 2 - 7, tw, 14);
+        ctx.fillStyle = '#16191C';
+        ctx.fillText(label, rect.x + rect.w / 2, (y0 + y1) / 2);
+      }
+    });
+    ctx.restore();
+    SEIS.frame(ctx, rect);
+  }
+
+  // the slope polarity on its own, as a triangle wave
+  function slopeColumn(ctx, rect, halves, nt) {
+    const yOf = (i) => rect.y + (i / (nt - 1)) * rect.h;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    ctx.beginPath();
+    let started = false;
+    halves.forEach((z) => {
+      const x0 = z.v > 0 ? rect.x + rect.w * 0.12 : rect.x + rect.w * 0.88;
+      const x1 = z.v > 0 ? rect.x + rect.w * 0.88 : rect.x + rect.w * 0.12;
+      if (!started) { ctx.moveTo(x0, yOf(z.a)); started = true; }
+      ctx.lineTo(x1, yOf(z.b));
+    });
+    ctx.strokeStyle = '#2E7D32'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.restore();
+    SEIS.frame(ctx, rect);
+  }
+
+
+  /* The rock model itself, as bands in two-way time. The sand is shaded by its
+     porosity profile so a graded sand looks graded. */
+  const LITHFILL = {
+    soft: 'rgba(150,160,170,0.55)', hard: 'rgba(110,125,140,0.65)',
+    tight: 'rgba(214,171,74,0.55)',
+  };
+  function drawModelPanel(ctx, W, H) {
+    const top = 26, bot = H - 30;
+    const lw = Math.min(96, (W - 74) * 0.30);
+    const rL = { x: 50, y: top, w: lw, h: bot - top };
+    const seal = S.over;
+    const baseT = TTOP + S.thick / 1000;
+    SEIS.axisLeft(ctx, rL, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 6 });
+    // this module's window holds the sand and its seal, and nothing else
+    SEIS.lithColumn(ctx, rL, [
+      { t0: T0, t1: TWIN, name: '', fill: LITHFILL[seal] },
+    ], T0, TWIN);
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(22,25,28,0.7)';
+    ctx.fillText(LITHS[seal].name, rL.x + rL.w / 2, rL.y + 16);
+    // the sand, shaded by its own porosity so grading is visible
+    const Y = (t) => rL.y + ((t - T0) / (TWIN - T0)) * rL.h;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rL.x, rL.y, rL.w, rL.h); ctx.clip();
+    const N = 40;
+    for (let k = 0; k < N; k++) {
+      const u0 = k / N, u1 = (k + 1) / N;
+      const phi = phiAt(S.prof, (u0 + u1) / 2, S.phi);
+      const a = 0.15 + 0.5 * Math.max(0, Math.min(1, phi / 40));
+      ctx.fillStyle = 'rgba(194,48,107,' + a.toFixed(2) + ')';
+      const y0 = Y(TTOP + (baseT - TTOP) * u0), y1 = Y(TTOP + (baseT - TTOP) * u1);
+      ctx.fillRect(rL.x, y0, rL.w, Math.max(1, y1 - y0));
+    }
+    ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(rL.x, Y(TTOP)); ctx.lineTo(rL.x + rL.w, Y(TTOP)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(rL.x, Y(baseT)); ctx.lineTo(rL.x + rL.w, Y(baseT)); ctx.stroke();
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(22,25,28,0.8)';
+    ctx.fillText('sand', rL.x + rL.w / 2, (Y(TTOP) + Y(baseT)) / 2);
+    ctx.restore();
+    SEIS.frame(ctx, rL);
+
+    const b = build();
+    const nt = b.tr.length;
+    let pk = 1e-12;
+    for (let i = 0; i < nt; i++) pk = Math.max(pk, Math.abs(b.tr[i]));
+    const rT = { x: rL.x + rL.w + 18, y: top, w: W - (rL.x + rL.w + 18) - 8, h: bot - top };
+    SEIS.frame(ctx, rT);
+    SEIS.dashedLine(ctx, rT.x + rT.w / 2, rT.y, rT.x + rT.w / 2, rT.y + rT.h,
+      'rgba(22,25,28,0.45)', [4, 4], 1);
+    traceCurve(ctx, b.tr, rT, pk, 'rgba(22,25,28,0.65)', 1.7);
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(22,25,28,0.55)';
+    ctx.fillText('THE ROCKS', rL.x + rL.w / 2, rL.y - 6);
+    ctx.fillText('NEAR STACK', rT.x + rT.w / 2, rT.y - 6);
+  }
+
+  function drawMain() {
+    const c = $('cMain'); if (!c) return;
+    const W = width(c, 520), H = 330;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    drawModelPanel(ctx, W, H);
+  }
+
+  /* ------------------------------- step 1 ------------------------------ */
+
+  function drawStep1() {
+    const b = build();
+    const nt = b.tr.length;
+    const c = $('c1a'); if (!c) return;
+    const W = width(c, 640), H = 440;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+
+    let peak = 1e-12;
+    for (let i = 0; i < nt; i++) peak = Math.max(peak, Math.abs(b.tr[i]));
+
+    const top = 34, bot = H - 34;
+    const usable = W - 74;
+    const wT = usable * 0.34, wC = (usable - wT - 36) / 3;
+    const rT = { x: 58, y: top, w: wT, h: bot - top };
+    const rI = { x: rT.x + wT + 18, y: top, w: wC, h: bot - top };
+    const rH = { x: rI.x + wC + 9, y: top, w: wC, h: bot - top };
+    const rS = { x: rH.x + wC + 9, y: top, w: wC, h: bot - top };
+
+    SEIS.axisLeft(ctx, rT, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 9 });
+    SEIS.frame(ctx, rT);
+    SEIS.dashedLine(ctx, rT.x + rT.w / 2, rT.y, rT.x + rT.w / 2, rT.y + rT.h, SOFT, [4, 4], 1);
+    traceCurve(ctx, b.tr, rT, peak, 'rgba(22,25,28,0.6)', 1.7);
+
+    // the picks the zones are measured between
+    const yOf = (i) => rT.y + (i / (nt - 1)) * rT.h;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rT.x, rT.y, rT.w, rT.h); ctx.clip();
+    b.z.all.forEach((a) => {
+      const x = rT.x + rT.w / 2 + (b.tr[a.i] / peak) * (rT.w / 2) * 0.9;
+      ctx.beginPath(); ctx.arc(x, yOf(a.i), a.k === 'x' ? 3.4 : 4.4, 0, 2 * Math.PI);
+      ctx.fillStyle = a.k === 'p' ? POSC : a.k === 't' ? NEGC : '#fff';
+      ctx.fill();
+      ctx.strokeStyle = a.k === 'x' ? 'rgba(22,25,28,0.7)' : '#fff';
+      ctx.lineWidth = 1.4; ctx.stroke();
+    });
+    ctx.restore();
+
+    zoneColumn(ctx, rI, b.z.isos, nt, { scale: 30 });
+    zoneColumn(ctx, rH, b.z.halves, nt, { scale: 18 });
+    slopeColumn(ctx, rS, b.z.halves, nt);
+
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(22,25,28,0.55)';
+    ctx.fillText('AMPLITUDE', rT.x + rT.w / 2, rT.y - 8);
+    ctx.fillStyle = CRIM;
+    ctx.fillText('SIGNED', rI.x + rI.w / 2, rI.y - 19);
+    ctx.fillText('ISOCHRON', rI.x + rI.w / 2, rI.y - 8);
+    ctx.fillText('SIGNED HALF', rH.x + rH.w / 2, rH.y - 19);
+    ctx.fillText('ISOCHRON', rH.x + rH.w / 2, rH.y - 8);
+    ctx.fillText('SIGNED', rS.x + rS.w / 2, rS.y - 19);
+    ctx.fillText('SLOPE', rS.x + rS.w / 2, rS.y - 8);
+
+    let hi = 0, lo = 0;
+    b.z.isos.forEach((z) => { hi = Math.max(hi, z.v); lo = Math.min(lo, z.v); });
+    // the trough-to-peak time of a Ricker wavelet, which is what an isolated
+    // reflection returns: its side lobes sit at sqrt(3/2)/(pi f) either side
+    const tp = 1000 * Math.sqrt(1.5) / (Math.PI * S.freq);
+    $('s1a').textContent = b.z.isos.length + '';
+    $('s1b').textContent = hi ? '+' + hi.toFixed(0) + ' ms' : 'none';
+    $('s1c').textContent = lo ? '\u2212' + Math.abs(lo).toFixed(0) + ' ms' : 'none';
+    $('s1d').textContent = tp.toFixed(1) + ' ms';
+    $('s1e').textContent = 'At ' + S.freq + ' Hz the wavelet\u2019s own trough-to-peak time is '
+      + tp.toFixed(1) + ' ms. Isochron zones on this trace run from '
+      + Math.abs(lo).toFixed(0) + ' to ' + hi.toFixed(0)
+      + ' ms. An isolated boundary returns the wavelet figure; anything else is interference.';
+  }
+
+  /* ------------------------------- step 2 ------------------------------ */
+
+  function drawStep2() {
+    const b = build();
+    const nt = b.tr.length;
+    const c = $('c2a'); if (!c) return;
+    const W = width(c, 640), H = 380;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+
+    /* The sand's own isochron, magnified. Picking the largest on the trace
+       instead would let noise hand the panel to a different zone from one
+       drag to the next, which would make the noise comparison meaningless. */
+    let best = sandIsochron(b);
+    if (!best) {
+      // no rising loop near the sand, so fall back to the nearest loop of
+      // either sign rather than showing nothing
+      const win = sandWindow(TTOP, S.thick);
+      const centre = (win[0] + win[1]) / 2;
+      const maxSpan = 2.5 * Math.sqrt(1.5) / (Math.PI * S.freq) / dt();
+      let bestD = Infinity;
+      b.z.isos.forEach((z) => {
+        if (z.b - z.a > maxSpan) return;
+        const d = Math.abs((z.a + z.b) / 2 - centre);
+        if (d < bestD) { bestD = d; best = z; }
+      });
+    }
+    if (!best) {
+      $('s2a').textContent = 'none'; $('s2b').textContent = '\u2014';
+      $('s2c').textContent = '\u2014'; $('s2d').textContent = '\u2014';
+      $('s2e').textContent = 'This model has no complete isochron in the window. Try a thicker sand or a '
+        + 'lower frequency.';
+      return;
+    }
+    const pad = Math.max(3, Math.round((best.b - best.a) * 0.35));
+    const i0 = Math.max(0, best.a - pad), i1 = Math.min(nt - 1, best.b + pad);
+    const D = dt();
+
+    const rect = { x: 62, y: 28, w: (W - 96) * 0.62, h: H - 68 };
+    let peak = 1e-12;
+    for (let i = i0; i <= i1; i++) peak = Math.max(peak, Math.abs(b.tr[i]));
+    const yOf = (i) => rect.y + ((i - i0) / (i1 - i0)) * rect.h;
+    const xOf = (v) => rect.x + rect.w / 2 + (v / peak) * (rect.w / 2) * 0.86;
+
+    SEIS.axisLeft(ctx, rect, i0 * D * 1000, i1 * D * 1000, 'two-way time (ms)',
+      (v) => v.toFixed(0), { ticks: 6 });
+    SEIS.frame(ctx, rect);
+    SEIS.dashedLine(ctx, xOf(0), rect.y, xOf(0), rect.y + rect.h, SOFT, [4, 4], 1);
+
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    // shade the two halves behind the curve
+    [[best.a, best.x, 'rgba(194,48,107,0.13)'], [best.x, best.b, 'rgba(194,48,107,0.26)']]
+      .forEach((q) => {
+        ctx.fillStyle = best.v > 0 ? q[2] : q[2].replace('194,48,107', '29,111,163');
+        ctx.fillRect(rect.x, yOf(q[0]), rect.w, yOf(q[1]) - yOf(q[0]));
+      });
+    ctx.beginPath();
+    for (let i = i0; i <= i1; i++) {
+      const x = xOf(b.tr[i]), y = yOf(i);
+      i === i0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = 'rgba(22,25,28,0.65)'; ctx.lineWidth = 2; ctx.stroke();
+    [[best.a, 'extremum'], [best.x, 'zero crossing'], [best.b, 'extremum']].forEach((m) => {
+      ctx.beginPath(); ctx.arc(xOf(b.tr[m[0]]), yOf(m[0]), 5, 0, 2 * Math.PI);
+      ctx.fillStyle = m[1] === 'zero crossing' ? '#fff' : CRIM; ctx.fill();
+      ctx.strokeStyle = m[1] === 'zero crossing' ? CRIM : '#fff';
+      ctx.lineWidth = 1.6; ctx.stroke();
+    });
+    ctx.restore();
+    [[best.a, 'extremum'], [best.x, 'zero crossing'], [best.b, 'extremum']].forEach((m) => {
+      SEIS.tag(ctx, rect.x + 6, yOf(m[0]) - 13, m[1], CRIM);
+    });
+
+    // the two halves as a bar beside it
+    const rb = { x: rect.x + rect.w + 30, y: rect.y, w: W - (rect.x + rect.w + 30) - 10, h: rect.h };
+    zoneColumn(ctx, rb, [
+      { a: best.a, b: best.x, v: best.up },
+      { a: best.x, b: best.b, v: best.dn },
+    ].map((z) => ({ a: (z.a - i0) / (i1 - i0) * (nt - 1), b: (z.b - i0) / (i1 - i0) * (nt - 1), v: z.v })),
+      nt, { scale: 18 });
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = CRIM;
+    ctx.fillText('THE TWO HALVES', rb.x + rb.w / 2, rb.y - 6);
+
+    const share = Math.abs(best.up) / Math.max(1e-9, Math.abs(best.v));
+    const f = (v) => (v > 0 ? '+' : '\u2212') + Math.abs(v).toFixed(0) + ' ms';
+    $('s2a').textContent = f(best.v);
+    $('s2b').textContent = f(best.up);
+    $('s2c').textContent = f(best.dn);
+    $('s2d').textContent = (100 * share).toFixed(0) + '%';
+    $('s2e').textContent = Math.abs(share - 0.5) < 0.06
+      ? 'The crossing sits close to midway, so this loop is nearly symmetric and the two halves are '
+        + 'nearly equal. They sum to the isochron exactly, as they always do.'
+      : 'The crossing is off center, so one half is clearly longer than the other. They still sum to the '
+        + 'isochron exactly \u2014 the split moves, the total does not.';
+  }
+
+  /* ------------------------------- step 3 ------------------------------ */
+
+  function drawStep3() {
+    const c = $('c3a'); if (!c) return;
+    const W = width(c, 640), H = 430;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+
+    /* Three profiles, not four. The tight streak is still a model you can select
+       in the panel, but it is left out of this comparison: its measured direction
+       does not match the published figure, and a facies comparison is the wrong
+       place to put a result that is not settled. */
+    const keys = ['blocky', 'coarsen', 'fining'];
+    const top = 40, bot = H - 34;
+    const pad = 14;
+    const pw = (W - 56 - pad * 3) / 4;
+    const out = {};
+
+    keys.forEach((key, k) => {
+      const b = build(key);
+      const nt = b.tr.length;
+      let peak = 1e-12;
+      for (let i = 0; i < nt; i++) peak = Math.max(peak, Math.abs(b.tr[i]));
+      const x0 = 48 + k * (pw + pad);
+      const rT = { x: x0, y: top, w: pw * 0.36, h: bot - top };
+      const rH = { x: x0 + pw * 0.40, y: top, w: pw * 0.30, h: bot - top };
+      const rP = { x: x0 + pw * 0.74, y: top, w: pw * 0.26, h: bot - top };
+
+      if (k === 0) {
+        SEIS.axisLeft(ctx, rT, 0, TWIN * 1000, 'two-way time (ms)',
+          (v) => String(Math.round(v)), { ticks: 7 });
+      }
+      SEIS.frame(ctx, rT);
+      SEIS.dashedLine(ctx, rT.x + rT.w / 2, rT.y, rT.x + rT.w / 2, rT.y + rT.h, SOFT, [3, 3], 0.8);
+      traceCurve(ctx, b.tr, rT, peak, 'rgba(22,25,28,0.62)', 1.5);
+      zoneColumn(ctx, rH, b.z.halves, nt, { scale: 16 });
+
+      // the porosity profile through the sand
+      SEIS.frame(ctx, rP);
+      const win = sandWindow(TTOP, S.thick);
+      ctx.save();
+      ctx.beginPath(); ctx.rect(rP.x, rP.y, rP.w, rP.h); ctx.clip();
+      ctx.beginPath();
+      const yOfP = (i) => rP.y + (i / (nt - 1)) * rP.h;
+      ctx.moveTo(rP.x, yOfP(win[0]));
+      for (let i = win[0]; i <= win[1]; i++) {
+        const u = (i - win[0]) / Math.max(1, win[1] - win[0]);
+        const p = phiAt(key, u, S.phi);
+        const isStreak = (key === 'streak' && u >= STREAK_AT && u < STREAK_AT + STREAK_FRAC);
+        ctx.lineTo(rP.x + (isStreak ? 0.06 : 0.10 + 0.85 * (p / 40)) * rP.w, yOfP(i));
+      }
+      ctx.lineTo(rP.x, yOfP(win[1]));
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(214,171,74,0.55)'; ctx.fill();
+      ctx.strokeStyle = 'rgba(150,110,20,0.8)'; ctx.lineWidth = 1.2; ctx.stroke();
+      ctx.restore();
+
+      const sh = sandHalves(b);
+      out[key] = sh;
+
+      ctx.font = '600 9.5px "IBM Plex Mono", monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+      ctx.fillStyle = CRIM;
+      ctx.fillText(PROFILES[key].toUpperCase(), x0 + pw / 2, top - 20);
+      ctx.font = '9px "IBM Plex Mono", monospace';
+      ctx.fillStyle = 'rgba(22,25,28,0.5)';
+      ctx.fillText(sh ? 'split ' + sh[0].v.toFixed(0) + ' / ' + sh[1].v.toFixed(0) : 'no clean split',
+        x0 + pw / 2, top - 8);
+    });
+
+    const fmt = (sh) => sh ? '+' + sh[0].v.toFixed(0) + ' / +' + sh[1].v.toFixed(0) : 'no clean split';
+    $('s3a').textContent = fmt(out.blocky);
+    $('s3b').textContent = fmt(out.coarsen);
+    $('s3c').textContent = fmt(out.fining);
+    $('s3d').textContent = (1000 * Math.sqrt(1.5) / (Math.PI * S.freq)).toFixed(1) + ' ms';
+
+    let verdict;
+    if (!out.blocky || !out.coarsen || !out.fining) {
+      verdict = 'At this thickness and frequency at least one of the sands does not produce a clean pair '
+        + 'of positive halves. Try 24 ms at 25 Hz, which is roughly the geometry of the published figure.';
+    } else {
+      const even = Math.abs(out.blocky[0].v - out.blocky[1].v) < 1.5;
+      const cTop = out.coarsen[0].v < out.coarsen[1].v;
+      const fBase = out.fining[1].v < out.fining[0].v;
+      verdict = (even ? 'The blocky sand splits evenly. ' : 'The blocky sand splits close to evenly. ')
+        + (cTop ? 'The coarsening-upward sand is shorter at the top' : 'The coarsening-upward sand is shorter at the base')
+        + ' and the fining-upward sand is shorter at the '
+        + (fBase ? 'base' : 'top')
+        + (cTop && fBase ? ', which is the direction the published figure shows: the shorter half sits at '
+          + 'the cleaner end of the sand.' : '.');
+    }
+    $('s3e').textContent = verdict;
+  }
+
+  /* ------------------------------ the panel ---------------------------- */
+
+  function pushToInputs() {
+    $('phi').value = S.phi;
+    $('thick').value = S.thick;
+    $('freq').value = S.freq;
+    $('dt').value = S.dt;
+    $('noise').value = S.noise;
+    $('phiV').textContent = S.phi + '%';
+    $('thickV').textContent = S.thick + ' ms';
+    $('freqV').textContent = S.freq + ' Hz';
+    $('dtV').textContent = (DTS[S.dt | 0] * 1000).toFixed(0) + ' ms';
+    $('noiseV').textContent = S.noise + '%';
+    $('overV').textContent = LITHS[S.over].name;
+    $('fluidV').textContent = FLUIDS[S.fluid].name;
+    $('profV').textContent = PROFILES[S.prof] || S.prof;
+    document.querySelectorAll('[data-over]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.over === S.over);
+    });
+    document.querySelectorAll('[data-fluid]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.fluid === S.fluid);
+    });
+    document.querySelectorAll('[data-prof]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.prof === S.prof);
+    });
+  }
+
+  function drawAll() {
+    drawMain();
+    if (visible('p1')) drawStep1();
+    if (visible('p2')) drawStep2();
+    if (visible('p3')) drawStep3();
+  }
+  function onChange() { pushToInputs(); drawAll(); saveState(); }
+
+  ['phi', 'thick', 'freq', 'dt', 'noise'].forEach((id) => {
+    $(id).addEventListener('input', () => { S[id] = parseFloat($(id).value); onChange(); });
+  });
+  document.querySelectorAll('[data-over]').forEach((b) => {
+    b.addEventListener('click', () => { S.over = b.dataset.over; onChange(); });
+  });
+  document.querySelectorAll('[data-fluid]').forEach((b) => {
+    b.addEventListener('click', () => { S.fluid = b.dataset.fluid; onChange(); });
+  });
+  document.querySelectorAll('[data-prof]').forEach((b) => {
+    b.addEventListener('click', () => { S.prof = b.dataset.prof; onChange(); });
+  });
+  $('resetBtn').addEventListener('click', () => {
+    const tab = S.tab;
+    S = Object.assign({}, DEF, { tab });
+    onChange();
+  });
+
+  /* -------------------------------- tabs ------------------------------- */
+
+  const PANES = ['p1', 'p2', 'p3', 'pw', 'pe', 'pk', 'pm'];
+  const STEPNAMES = {
+    p1: 'The isochron', p2: 'Splitting it', p3: 'The asymmetry',
+    pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
+  };
+
+  function buildStepNav() {
+    PANES.forEach((id, i) => {
+      const pane = $(id); if (!pane) return;
+      const prev = PANES[i - 1], next = PANES[i + 1];
+      const nav = document.createElement('div');
+      nav.className = 'stepnav';
+      const mk = (target, text, ghost) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn' + (ghost ? ' ghost' : '') + ' small';
+        btn.textContent = text;
+        btn.addEventListener('click', () => {
+          showTab(target);
+          const t = document.querySelector('.tabhint');
+          if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return btn;
+      };
+      nav.appendChild(prev ? mk(prev, '\u2190 ' + STEPNAMES[prev], true)
+                           : document.createElement('span'));
+      const where = document.createElement('span');
+      where.className = 'where';
+      where.textContent = i < 3 ? 'step ' + (i + 1) + ' of 3' : STEPNAMES[id];
+      nav.appendChild(where);
+      nav.appendChild(next ? mk(next, STEPNAMES[next] + ' \u2192')
+                           : document.createElement('span'));
+      pane.appendChild(nav);
+    });
+  }
+
+  function showTab(id) {
+    PANES.forEach((q) => { const el = $(q); if (el) el.hidden = q !== id; });
+    document.querySelectorAll('#tabs button').forEach((b) => {
+      b.setAttribute('aria-selected', b.dataset.tab === id);
+    });
+    const lab = document.querySelector('.labhead');
+    if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3');
+
+    /* Step 3 draws all four profiles at once, so the profile switch has
+       nothing to change there. */
+    const three = (id === 'p3');
+    document.querySelectorAll('[data-prof]').forEach((b) => { b.disabled = three; });
+    const cp = $('colProfile');
+    if (cp) cp.style.opacity = three ? '0.65' : '1';
+
+    if ($('labCap')) {
+      $('labCap').innerHTML = 'The rock model <span>&mdash; the sand shaded by porosity, and the near stack</span>';
+    }
+
+    const last = (id === 'pk' || id === 'pm');
+    if ($('nextup')) $('nextup').hidden = !last;
+    if ($('pager')) $('pager').hidden = !last;
+    S.tab = id;
+    drawAll();
+    saveState();
+  }
+  document.querySelectorAll('#tabs button').forEach((b) => {
+    b.addEventListener('click', () => showTab(b.dataset.tab));
+  });
+  document.querySelectorAll('.masthead a[data-tab]').forEach((a) => {
+    a.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      showTab(a.dataset.tab);
+      const strip = $('tabs');
+      if (strip && strip.scrollIntoView) strip.scrollIntoView({ block: 'start' });
+    });
+  });
+
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawAll, 140); });
+
+  pushToInputs();
+  buildStepNav();
+  showTab(PANES.indexOf(S.tab) >= 0 ? S.tab : 'p1');
+  document.fonts && document.fonts.ready.then(drawAll);
+})();
+</script>
+</body>
+</html>

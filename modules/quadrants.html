@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quadrant numbers | How the DQ Trace Actually Works</title>
+<meta name="description" content="How every sample between the stick-o-gram picks is labelled Q1 to Q9, why loops usually repeat numbers rather than omit them, and which end of the loop gets to be Q1.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <a class="brand" href="../index.html"><span class="dot"></span>How the DQ trace <b>actually</b> works</a>
+    <nav>
+      <a href="../index.html">All modules</a>
+      <a href="#tabs" data-tab="pw">Why it matters</a>
+      <a href="#tabs" data-tab="pm">Method &amp; references</a>
+    </nav>
+  </header>
+
+  <div class="mod-head">
+    <p class="eyebrow">Module 04 &nbsp;·&nbsp; The DQ trace</p>
+    <h1>Quadrant numbers</h1>
+    <p class="sub">Module 03 left a skeleton of picks with nothing in between them. This module fills the
+      gaps. Every sample on the trace gets a number from one to nine describing where in the waveform cycle
+      it sits, the numbers are spread uniformly between the picks, and the loops that are too short or too
+      long for an exact fit are handled by dropping numbers or by using them twice.</p>
+  </div>
+
+  <div class="labhead">
+    <div class="labgrid">
+      <div>
+        <p class="cap" id="labCap">The rock model <span>&mdash; the layers, and the near stack they produce</span></p>
+        <canvas id="cMain" aria-label="The near-stack trace with each sample labelled by its quadrant number"></canvas>
+      </div>
+      <div>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <div class="controls" id="labControls">
+          <div class="ctl-col">
+            <h2>Build the rocks</h2>
+            <div class="ctl">
+              <label>Overburden <span class="val" id="overV">soft shale</span></label>
+              <div class="seg" role="group" aria-label="Overburden lithology">
+                <button type="button" data-over="soft" aria-pressed="true">soft</button>
+                <button type="button" data-over="hard" aria-pressed="false">hard</button>
+                <button type="button" data-over="tight" aria-pressed="false">tight</button>
+              </div>
+            </div>
+            <div class="ctl">
+              <label for="phi">Sand porosity <span class="val" id="phiV">28%</span></label>
+              <input type="range" id="phi" min="8" max="36" step="1" value="28">
+            </div>
+            <div class="ctl">
+              <label>Pore fluid <span class="val" id="fluidV">gas</span></label>
+              <div class="seg" role="group" aria-label="Fluid filling the sand pores">
+                <button type="button" data-fluid="brine" aria-pressed="false">brine</button>
+                <button type="button" data-fluid="oil" aria-pressed="false">oil</button>
+                <button type="button" data-fluid="gas" aria-pressed="true">gas</button>
+              </div>
+            </div>
+            <div class="stats" style="margin:6px 0 0;grid-column:1/-1">
+              <div class="stat"><span>AVO class</span><b id="mClass">&mdash;</b></div>
+              <div class="stat key"><span>Polarity flip</span><b id="mFlip">&mdash;</b></div>
+            </div>
+          </div>
+
+          <div class="ctl-col" id="colLayers">
+            <h2>The layers</h2>
+            <div class="ctl">
+              <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
+              <input type="range" id="thick" min="6" max="55" step="1" value="30">
+            </div>
+            <div class="ctl">
+              <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
+              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+            </div>
+            <p class="hint-line" style="margin:-8px 0 0">Frequency is the control that matters most here.
+              It sets how many samples there are between one pick and the next, and therefore whether the
+              interior numbers fit exactly, have to be repeated, or have to be dropped.</p>
+          </div>
+
+          <div class="ctl-col" id="colData">
+            <h2>What the data does to it</h2>
+            <div class="ctl">
+              <label for="dt">Sample rate <span class="val" id="dtV">1 ms</span></label>
+              <input type="range" id="dt" min="0" max="3" step="1" value="0">
+            </div>
+            <div class="ctl">
+              <label for="noise">Noise <span class="val" id="noiseV">0%</span></label>
+              <input type="range" id="noise" min="0" max="40" step="1" value="0">
+            </div>
+            <label class="check" style="grid-column:1/-1"><input type="checkbox" id="skipflip">
+              Skip the polarity flip on class 1</label>
+            <p class="hint-line" style="margin:-4px 0 12px">Step 3 is about what this costs. Leave it off
+              until you get there.</p>
+            <button class="btn ghost small" id="resetBtn" type="button">Reset everything</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
+    Method and references are there when you want them.</p>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
+    <button role="tab" data-tab="p1" aria-selected="false">1 · Filling in the gaps</button>
+    <button role="tab" data-tab="p2" aria-selected="false">2 · Loops that do not fit</button>
+    <button role="tab" data-tab="p3" aria-selected="false">3 · Which end is Q1?</button>
+    <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
+    <span class="gap"></span>
+    <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
+    <button role="tab" data-tab="pk" aria-selected="false">Key points</button>
+    <button role="tab" data-tab="pm" aria-selected="false">Method</button>
+  </nav>
+
+  <section class="tabpane" id="p1" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">1</span>Filling in the gaps</h3>
+      <span class="hint">From four picks a cycle to every sample numbered</span>
+    </div>
+
+    <p class="lede">
+      The picks from module 03 already carry three of the nine numbers. A trough is <b>Q1</b>, the zero
+      crossing sample is <b>Q5</b>, and a peak is <b>Q9</b>. Everything else on the trace lies between two
+      of those, and gets a number by counting.</p>
+
+    <p class="lede">
+      One warning about the word. A <b>quadrant number</b> is a position along a waveform, one of nine.
+      Later modules also refer to the four <b>sectors</b> of a crossplot, which are quarters of a plot and
+      have nothing to do with quadrant numbers. The two words are unrelated here, and keeping them apart
+      will save confusion in modules 09 and 13.</p>
+
+    <p class="lede">
+      Between Q1 and Q5 there are three numbers to place, Q2, Q3 and Q4, and the rule is to spread them
+      uniformly across however many samples happen to be there. The same goes for Q6, Q7 and Q8 between Q5
+      and Q9.</p>
+
+    <p class="lede">
+      <b>Then it starts again.</b> The Q9 that closes one loop is the Q1 that opens the next, which is why
+      the published filter table gives both of them 0&deg;. So the sequence down a trace reads 1, 2, 3, 4,
+      5, 6, 7, 8, 9=1, 2, 3, … and never counts backwards. The scheme is really modulo 8, and that is how
+      the method's authors describe it &mdash; eight quadrants for 1 ms data, and a coarse four-quadrant
+      version that was enough for 35 Hz data at 2 ms.</p>
+
+    <canvas id="c1a" aria-label="The near-stack trace with every sample labelled by its quadrant number"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">Each sample is drawn at its quadrant number, with the
+      picks marked. The three anchors are filled circles; everything between them was assigned by counting.
+      Drag the frequency in the panel and watch the interior numbering stretch and compress.</p>
+
+    <p class="sublabel"><b>2</b> The same trace as a quadrant track
+      <span class="note">what a DQ volume actually carries at this stage</span></p>
+    <canvas id="c1b" aria-label="The quadrant numbers drawn as a colored track against time"></canvas>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Samples numbered</span><b id="s1a">&mdash;</b></div>
+      <div class="stat"><span>Anchors from the picks</span><b id="s1b">&mdash;</b></div>
+      <div class="stat key"><span>Assigned by counting</span><b id="s1c">&mdash;</b></div>
+      <div class="stat"><span>Samples left unnumbered</span><b id="s1d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>This is the step where the method stops being a picking scheme and becomes something that
+        touches every sample. Module 01 counted two interpretable samples per cycle and module 03 kept
+        four. Here the count is every sample between the first pick and the last, and the quadrant number
+        is what module 06 uses to decide which phase-rotated version of the trace to read at each
+        one.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="p2" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">2</span>Loops that do not fit</h3>
+      <span class="hint">Omission, repetition, and which one is normal</span>
+    </div>
+
+    <p class="lede">
+      Three interior numbers need three samples. A quarter cycle almost never has exactly three, so the
+      rule has to say what happens otherwise. With more than three samples some numbers are used more than
+      once. With fewer, some are not used at all.</p>
+
+    <p class="lede">
+      Which case you are in is set by frequency and sample rate together, and the arithmetic is not
+      subtle. An exact fit needs a quarter cycle four samples long, which at 1 ms is a 16 ms period, which
+      is <b>62.5 Hz</b>. Almost all seismic is well below that, so <b>repetition is the normal case and
+      omission is the exception</b> &mdash; the opposite of what the phrase "too short a loop" suggests.</p>
+
+    <canvas id="c2a" aria-label="How the three interior numbers are distributed across quarter cycles of different lengths"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">Every quarter-cycle length from one sample to fifteen,
+      with the numbers each would be given. The row matching the current model is highlighted.</p>
+
+    <p class="sublabel"><b>2</b> How many samples carry each number
+      <span class="note">on the trace as it stands</span></p>
+    <canvas id="c2b" aria-label="A bar chart of how many samples carry each quadrant number"></canvas>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Quarter cycle</span><b id="s2a">&mdash;</b></div>
+      <div class="stat"><span>Interior samples per quarter</span><b id="s2b">&mdash;</b></div>
+      <div class="stat key"><span>Gaps that repeat a number</span><b id="s2c">&mdash;</b></div>
+      <div class="stat key"><span>Gaps that omit a number</span><b id="s2d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>Repetition costs nothing much: several neighbouring samples are told to use the same phase
+        filter, which is exactly what you would want in the middle of a long, smooth limb. Omission is
+        worse, because a number that never appears is a phase rotation that never gets applied, and the
+        enhanced trace at that loop is built from a smaller set of filters than everywhere else.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="p3" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">3</span>Which end is Q1?</h3>
+      <span class="hint">The convention, and why it is enforced upstream</span>
+    </div>
+
+    <p class="lede">
+      The numbering has an orientation. For AVO classes 4, 3 and 2 the trough is Q1 and the peak is Q9,
+      which puts Q1 at the top of a soft reservoir. That is the convention the whole method is written
+      around, and every later attribute assumes it.</p>
+
+    <p class="lede">
+      A class 1 sand breaks it. Its top is a peak rather than a trough, so applying the rule unchanged
+      would number the top of the reservoir Q9 and the base Q1. The same rock would carry opposite numbers
+      depending on what it happened to be sitting under, and nothing downstream could be compared between
+      the two.</p>
+
+    <p class="lede">
+      The fix is not a second numbering rule. <b>The polarity of the near and far stacks is reversed at the
+      partial-stack step</b>, before any picking happens, so that a class 1 sand arrives at the picker
+      looking like a class 3 one. The same applies to carbonate plays. The numbering rule then never has to
+      change. Tick the box in the panel to see what happens if the flip is skipped.</p>
+
+    <canvas id="c3a" aria-label="The same sand under a soft and a hard overburden, numbered with and without the polarity flip"></canvas>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Near-stack coefficient at the sand top</span><b id="s3a">&mdash;</b></div>
+      <div class="stat"><span>AVO class</span><b id="s3b">&mdash;</b></div>
+      <div class="stat"><span>Flip applied</span><b id="s3c">&mdash;</b></div>
+      <div class="stat key"><span>Top of the sand is a</span><b id="s3d">&mdash;</b></div>
+      <div class="stat key"><span>The sand's own loop</span><b id="s3e">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s3f">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>Doing it upstream rather than at the numbering step is the important part. By the time the
+        picks exist the near stack has already been used to define the layers, and flipping the numbers
+        afterwards would leave the picks in place while reversing everything hung on them. Reversing the
+        traces first means one set of rules runs on every dataset.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pw" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">?</span>What a number buys you</h3>
+      <span class="hint">Why the method bothers with an integer per sample</span>
+    </div>
+
+    <p class="lede">A quadrant number is a statement about position in a waveform cycle, and it is
+      deliberately not a statement about amplitude. Two samples with the same number are at the same place
+      in their respective loops, whatever the loops are worth in millivolts and however far apart they sit
+      in time. That is the property the rest of the method runs on.</p>
+
+    <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
+      What it is used for</h2>
+    <ul class="lede" style="padding-left:20px">
+      <li><b>Choosing a phase filter.</b> Module 06 keeps eight phase-rotated versions of the near and far
+        traces and reads one value from each sample. The quadrant number is the index into that set. Nine
+        numbers, seven filters, because Q1 and Q9 both take the unrotated trace.</li>
+      <li><b>Making the isochron measurable.</b> Module 05 measures the time between anchors. The numbers
+        are what tells you which anchors bound which zone, and the sign of the half isochron comes
+        straight from whether the numbers are counting up or down.</li>
+      <li><b>Comparing samples across a survey.</b> A Q3 sample in a 20 Hz zone and a Q3 sample in a 45 Hz
+        zone are at the same phase of their own cycles. That is the sense in which the DQ trace is
+        frequency independent, and it is the whole reason for numbering by proportion rather than by
+        milliseconds.</li>
+    </ul>
+
+    <p class="lede">The cost is that the number knows nothing about how long the loop was. A quarter cycle
+      three samples long and one thirty samples long both run Q2, Q3, Q4, and after this step the
+      difference between them has been thrown away. That is exactly the information the isochron of module
+      05 goes back and recovers, which is why the two attributes are computed side by side and why the DQ
+      distance and the isochron carry different things.</p>
+
+    <div class="legend prose">
+      <span>Worth being clear that nothing here is an approximation to a continuous phase. The numbering is
+        a discrete bucket per sample, and the buckets are coarse: nine of them across a half cycle. Module
+        06 rotates by twenty-two and a half degrees a step because that is what nine buckets over a half
+        cycle works out to, not because the phase was measured that precisely.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pe" role="tabpanel" hidden>
+    <div class="tryit" style="max-width:none">
+      <h3>Exercises</h3>
+      <ol>
+        <li><b>Find the frequency that fits exactly.</b> On step 2, with 1 ms sampling, drag the frequency
+          until the quarter cycle holds exactly three interior samples.
+          <details class="reveal"><summary>Hint</summary><span class="ans">It happens around 62 Hz, where
+            the period is 16 ms and the quarter cycle is 4 ms. That is the only setting at which Q2, Q3 and
+            Q4 each land on exactly one sample. Everything slower repeats numbers and everything faster
+            starts dropping them, so an exact fit is a coincidence rather than a design target. Nothing in
+            the method tries to achieve it.</span></details></li>
+        <li><b>Check that repetition is the normal case.</b> Set the frequency to 25 Hz and read the two
+          counters on step 2, then to 70 Hz and read them again.
+          <details class="reveal"><summary>Hint</summary><span class="ans">At 25 Hz every gap repeats
+            numbers and none omits any. At 70 Hz gaps start omitting. Since almost all seismic sits between
+            about 15 and 50 Hz, repetition is what happens on real data essentially all of the time. The
+            phrase "short isochron" in the method description &mdash; isochron here just means the time
+            between two picks, which module 05 takes up properly &mdash; is describing the rare case, not
+            the usual one. Worth knowing before you read the papers.</span></details></li>
+        <li><b>Coarsen the sampling instead.</b> Put the frequency back to 40 Hz and step the sample rate
+          from 1 ms to 4 ms.
+          <details class="reveal"><summary>Hint</summary><span class="ans">Omission arrives quickly,
+            because what matters is samples per quarter cycle rather than milliseconds. At 40 Hz the
+            quarter cycle is 6.3 ms, which is six samples at 1 ms and one or two at 4 ms. This is the same
+            argument module 03 made about zero crossings, arriving from a different direction: the papers
+            ask for 1 ms data because the method counts samples, and a coarse trace does not have enough of
+            them to count.</span></details></li>
+        <li><b>Watch a thin bed lose its interior numbers.</b> On step 1, drag the sand thickness down
+          while watching the quadrant track.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The sand's own loop shortens
+            until it holds only the anchors, and then until it is not a separate loop at all. The numbering
+            does not report a problem. It numbers whatever loops the waveform presented, and a merged thin
+            bed presents one loop where the geology has two boundaries. Everything downstream inherits
+            that, which is why module 12 has to treat tuning as a first-class subject rather than as an
+            error to be corrected.</span></details></li>
+        <li><b>Skip the polarity flip on a class 1 sand.</b> On step 3, set the overburden to soft shale
+          with oil at about 20% porosity so the sand is class 1, then tick the skip box.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The reservoir top changes from a
+            trough to a peak. The <em>numbers</em> do not change at all, and that is the point worth
+            taking away: because the numbering restarts at every extremum, it has no way of knowing a peak
+            from a trough, so Q1 marks whichever boundary happens to come first. With the flip, Q1 lands on
+            the top of the reservoir; without it, on the base. Nothing has gone wrong arithmetically
+            &mdash; the rule was applied correctly to a trace whose polarity happens to be reversed
+            &mdash; and that is what makes it dangerous. The volume looks fine. It is only when you compare
+            it against a class 3 area, or feed both to the same classifier, that the two halves turn out to
+            be describing the world in opposite terms.</span></details></li>
+        <li><b>Compare a tight sandstone overburden.</b> With the flip left on, switch the overburden between
+          soft shale and tight sandstone at a fixed porosity and fluid, and watch the flip indicator.
+          <details class="reveal"><summary>Hint</summary><span class="ans">A porous sand under tight sandstone
+            is a strong negative coefficient, so it is a trough and needs no flip. It is the class 1 case
+            &mdash; a sand slower than what sits above it &mdash; that gets reversed. The convention is
+            really about which way round the reservoir contrast points, and the AVO class label is a
+            convenient shorthand for it rather than the thing itself.</span></details></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pk" role="tabpanel" hidden>
+    <div class="takeaway" style="max-width:none">
+      <h3>The main points</h3>
+      <ul>
+        <li><b>Every sample between the first and last pick gets a number from one to nine.</b> Q1 is a
+          trough, Q5 a zero crossing, Q9 a peak, and the rest are assigned by counting.</li>
+        <li><b>The interior numbers are spread uniformly.</b> Q2, Q3 and Q4 across the samples between Q1
+          and Q5; Q6, Q7 and Q8 between Q5 and Q9; and the same in reverse coming back down.</li>
+        <li><b>An exact fit needs a quarter cycle four samples long</b>, which at 1 ms is 62.5 Hz.</li>
+        <li><b>Repetition is normal and omission is rare.</b> Almost all seismic is slow enough that every
+          gap has more than three samples in it.</li>
+        <li><b>Omission is the worse of the two</b>, because a number that never appears is a phase filter
+          that never gets applied to that loop.</li>
+        <li><b>The trough is Q1 by convention</b>, for classes 4, 3 and 2.</li>
+        <li><b>Class 1 sands and carbonate plays are handled by reversing the polarity of the two partial
+          stacks before picking</b>, not by changing the numbering. One rule then runs on everything.</li>
+        <li><b>The number says nothing about how long the loop was.</b> That is deliberate, and it is what
+          module 05 exists to recover.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pm" role="tabpanel" hidden>
+    <details class="notes" id="notes" open>
+      <summary>Method, assumptions, and where to read more</summary>
+      <p>The rocks, the layer stack, the near stack and the picker are all identical to module 03, so a
+        model built there carries over unchanged. The picks are made on the zero-phase near stack, and the
+        quadrant numbers are written to the same sample grid.</p>
+      <p>The anchors come straight from the picks: each zero-crossing sample is Q5, each trough is Q1 and
+        each peak is Q9. Between two consecutive anchors the three interior numbers are distributed by
+        proportion &mdash; interior sample <i>k</i> of <i>n</i> takes the number indexed by the integer part
+        of (<i>k</i>&nbsp;+&nbsp;&frac12;)&nbsp;&times;&nbsp;3&nbsp;/&nbsp;<i>n</i>. That reproduces the
+        uniform spacing the method calls for, gives an exact Q2 Q3 Q4 when <i>n</i> is three, repeats
+        numbers when <i>n</i> is larger, and drops numbers from the outside in when <i>n</i> is smaller: a
+        single interior sample becomes Q3, and two become Q2 and Q4.</p>
+      <p><b>The numbering restarts; it does not mirror.</b> Step 13 of the AASPI sequence states the rule
+        for a rising limb, Q1 through Q5 to Q9, and does not spell out the falling limb. It runs the same
+        way: 1 down to 9 again, starting over at each extremum. Three things say so. Dennis Neff describes
+        the scheme as <b>eight quadrants</b>, with a coarse four-quadrant version that sufficed for 35 Hz
+        data at 2 ms &mdash; eight per loop means Q9 and Q1 are the same position. The four-quadrant slide
+        tabulates consecutive samples as 1, 2, 3, 4, 1, 2, 3, 4, 1, plainly restarting. And step 17 gives
+        Q1 and Q9 the same 0&deg; filter, which is what you would expect of one position with two
+        names.</p>
+      <p><b>What that costs the polarity convention.</b> If the numbering restarts at every extremum then
+        it cannot tell a peak from a trough &mdash; Q1 lands on whichever comes first. So step 13's "the
+        trough will be assigned Q1" describes a rising limb, and the polarity flip does not change any
+        number. What it changes is which boundary the numbers land on, and that is why it is done at the stacking step.</p>
+      <p><b>Short loops are still an assumption.</b> The sources say a short loop omits some or all of the
+        interior numbers without saying which go first. The proportional rule above drops the outer numbers
+        before the middle one, so a single interior sample becomes Q3 and two become Q2 and Q4. That should
+        be checked against the AASPI implementation before anything is read too closely into a specific
+        number.</p>
+      <p>The polarity decision is made on the sign of the near-stack reflection coefficient at the top of
+        the sand: positive means the reservoir top is a peak, so the traces are reversed. That reproduces
+        the published grouping exactly &mdash; classes 4, 3 and 2 are left alone and class 1 is flipped
+        &mdash; while being stated in terms of the contrast itself rather than of the class label. In the
+        real workflow the reversal is applied to both partial stacks at the stacking step, before any
+        picking, and this page does the same.</p>
+      <p>What this module leaves out is what the numbers are then used for. Module 06 attaches a phase
+        filter to each: Q1 and Q9 take 0&deg;, Q2 through Q4 take +22.5&deg;, +45&deg; and +67.5&deg;, Q5
+        takes &minus;90&deg;, and Q6 through Q8 take &minus;67.5&deg;, &minus;45&deg; and
+        &minus;22.5&deg;. Seven filters across nine numbers.</p>
+      <ul>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+          quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+        <li>Chaudhry, N., H. Bedle, D. B. Neff, and W. Neff, 2026, Isochron-based seismic attributes for
+          stratigraphic and facies interpretation: field examples, IMAGE expanded abstract.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="nextup" id="nextup" hidden>
+    <p class="eyebrow">Next up</p>
+    <h3><a href="isochron.html">05 · Isochron and half isochron</a></h3>
+    <p>The numbers say where in a loop a sample sits but not how long the loop was. The isochron measures
+      exactly that, the half isochron splits it at the zero crossing, and the asymmetry between the two
+      halves turns out to track the vertical grading of the sand.</p>
+    <a class="btn" href="isochron.html">Open module 05 →</a>
+    <a class="btn ghost" href="../index.html">All modules</a>
+  </section>
+
+  <div class="pager" id="pager" hidden>
+    <a class="btn ghost" href="stickogram.html">← The stick-o-gram</a>
+    <a class="btn" href="isochron.html">Next: isochron and half isochron →</a>
+  </div>
+
+  <footer>
+    <div class="foot-grid">
+      <p>Built for teaching by Heather Bedle, School of Geosciences, University of Oklahoma, with the
+        <a href="https://www.ou.edu/mcee/labs/aaspi">AASPI</a> consortium.</p>
+      <p class="lic">Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+        Free to use, share and adapt for any purpose, including training in industry, provided the source is
+        credited and adapted versions carry the same license.</p>
+      <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
+        Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
+      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
+        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        nothing about you.</p>
+    </div>
+  </footer>
+</div>
+
+<script src="../assets/count.js"></script>
+<script src="../assets/seismic.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  if (typeof SEIS === 'undefined') {
+    const el = document.createElement('div');
+    el.setAttribute('style', 'background:#841617;color:#fff;padding:14px 18px;margin:16px 0;' +
+      'font:13px/1.6 ui-monospace,Menlo,monospace');
+    el.textContent = 'This module could not load assets/seismic.js. It expects it one directory up, ' +
+      'at ../assets/, and file names are case-sensitive on GitHub Pages.';
+    const w = document.querySelector('.wrap');
+    (w || document.body).insertBefore(el, w ? w.firstChild : null);
+    return;
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const visible = (id) => { const el = $(id); return el && !el.hidden; };
+
+  /* =====================================================================
+     THE ROCKS
+     Identical to modules 01 and 02.
+     ===================================================================== */
+
+  const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };
+
+  const FLUIDS = {
+    brine: { K: 2.60,  rho: 1.03, v: 1500, name: 'brine' },
+    oil:   { K: 0.80,  rho: 0.78, v: 1300, name: 'oil' },
+    gas:   { K: 0.055, rho: 0.20, v: 550,  name: 'gas' },
+  };
+
+  const LITHS = {
+    soft: { vp: 2700, vs: 1175, rho: 2.33, name: 'soft shale' },
+    hard: { vp: 3350, vs: 1675, rho: 2.48, name: 'hard shale' },
+    tight: { vp: 4800, vs: 2800, rho: 2.56, name: 'tight sandstone' },
+  };
+
+  const PH0 = 8, PH1 = 36;
+  const DTS = [0.001, 0.002, 0.003, 0.004];
+  const NEAR_A = [0, 10];
+  const T0 = 0, TWIN = 0.150, TTOP = 0.050;
+  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
+  const BEDC = [0.118, 0.130];                   // a tight bed below it
+
+  const DEF = {
+    over: 'soft', phi: 28, fluid: 'gas',
+    thick: 30, freq: 40, dt: 0, noise: 0, skipflip: false, tab: 'p1',
+  };
+  let S = SEIS.readState(DEF);
+  if (!LITHS[S.over]) S.over = DEF.over;
+  if (!FLUIDS[S.fluid]) S.fluid = DEF.fluid;
+  S.phi = Math.min(PH1, Math.max(PH0, Math.round(S.phi) || DEF.phi));
+
+  const CAN_LINK = location.protocol !== 'file:';
+  const saveState = () => {
+    if (!CAN_LINK) return;
+    try { SEIS.writeState(S, DEF); } catch (e) { /* nothing shareable */ }
+  };
+
+  /* ------------------------------- the physics ------------------------- */
+
+  function shuey(l1, l2) {
+    const vp = (l1.vp + l2.vp) / 2, dvp = l2.vp - l1.vp;
+    const vs = (l1.vs + l2.vs) / 2, dvs = l2.vs - l1.vs;
+    const rho = (l1.rho + l2.rho) / 2, drho = l2.rho - l1.rho;
+    const k = (vs / vp) * (vs / vp);
+    return {
+      A: 0.5 * (dvp / vp + drho / rho),
+      B: 0.5 * (dvp / vp) - 2 * k * (drho / rho + 2 * (dvs / vs)),
+    };
+  }
+  function meanSin2(a, b) {
+    const n = 256, lo = a * Math.PI / 180, hi = b * Math.PI / 180;
+    let sum = 0;
+    for (let i = 0; i < n; i++) {
+      const th = lo + (hi - lo) * (i + 0.5) / n;
+      sum += Math.sin(th) * Math.sin(th);
+    }
+    return sum / n;
+  }
+  const S2N = meanSin2(NEAR_A[0], NEAR_A[1]);
+
+  function brineSand(phi) {
+    const vp = 1 / (phi / FLUIDS.brine.v + (1 - phi) / MATRIX.vp);
+    const rho = (1 - phi) * MATRIX.rho + phi * FLUIDS.brine.rho;
+    const vpvs = -0.75 * phi * phi + 1.35 * phi + 1.63;
+    return { vp, vs: vp / vpvs, rho };
+  }
+  function ksatFromDry(kdry, phi, kfl) {
+    const num = Math.pow(1 - kdry / MATRIX.K, 2);
+    const den = phi / kfl + (1 - phi) / MATRIX.K - kdry / (MATRIX.K * MATRIX.K);
+    return kdry + num / den;
+  }
+  function kdryFromSat(ksat, phi, kfl) {
+    const a = phi * MATRIX.K / kfl;
+    return (ksat * (a + 1 - phi) - MATRIX.K) / (a + ksat / MATRIX.K - 1 - phi);
+  }
+  function sandRock(phi, fluidKey) {
+    const b = brineSand(phi);
+    if (fluidKey === 'brine') return b;
+    const mu = b.rho * b.vs * b.vs * 1e-6;
+    const ksat = b.rho * b.vp * b.vp * 1e-6 - (4 / 3) * mu;
+    const kdry = kdryFromSat(ksat, phi, FLUIDS.brine.K);
+    const f = FLUIDS[fluidKey];
+    const k2 = ksatFromDry(kdry, phi, f.K);
+    const rho = (1 - phi) * MATRIX.rho + phi * f.rho;
+    return {
+      vp: Math.sqrt((k2 + (4 / 3) * mu) * 1e6 / rho),
+      vs: Math.sqrt(mu * 1e6 / rho),
+      rho,
+    };
+  }
+
+  const dt = () => DTS[S.dt | 0];
+  const ntOf = () => Math.floor(TWIN / dt()) + 1;
+
+  /* --------------------------- the layer stack ------------------------- */
+
+  /* The near-stack reflectivity of one trace. A layered earth rather than a
+     lone sand, so that the trace looks like something worth picking: a
+     contrasting bed above, the sand with an optional tight streak inside it,
+     and a tight bed below. Every spike is computed from the two rocks it sits
+     between. */
+  function spikes(topT, thickS) {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const tight = LITHS.tight;
+    const other = (S.over === 'soft') ? LITHS.hard : LITHS.soft;
+    const n = (q) => q.A + q.B * S2N;
+    const shift = topT - TTOP;                   // structure moves everything together
+    const out = [];
+
+    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
+    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
+
+    const baseT = topT + thickS / 1000;
+    out.push({ t: topT, r: n(shuey(over, sand)) });
+    out.push({ t: baseT, r: n(shuey(sand, over)) });
+
+    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
+    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
+    return out;
+  }
+
+  const wavelet = () => SEIS.makeWavelet({ type: 'ricker', f: S.freq });
+
+  function refAmp() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const q = shuey(over, sand);
+    return Math.max(Math.abs(q.A + q.B * S2N), 1e-4);
+  }
+
+  let noiseCache = null;
+  function noiseField(nx) {
+    const key = [S.over, S.phi, S.fluid, S.freq, S.noise, S.dt, nx].join('|');
+    if (noiseCache && noiseCache.key === key) return noiseCache.field;
+    let field = null;
+    if (S.noise > 0) {
+      const raw = SEIS.bandLimitedNoise(nx, ntOf(), dt(), wavelet(), 20260903, 0);
+      const amp = (S.noise / 100) * refAmp();
+      field = new Float32Array(raw.length);
+      for (let i = 0; i < raw.length; i++) field[i] = raw[i] * amp;
+    }
+    noiseCache = { key, field };
+    return field;
+  }
+
+  function trace(topT, thickS, noise, ix) {
+    const nt = ntOf();
+    const tr = SEIS.traceFromSpikes(spikes(topT, thickS), T0, dt(), nt, wavelet());
+    if (noise) for (let i = 0; i < nt; i++) tr[i] += noise[ix * nt + i];
+    return tr;
+  }
+
+  /* ------------------------------- the picker --------------------------
+     Zero crossings first. Of the two samples bracketing a crossing, keep
+     the one with the smaller magnitude; that sample is Q5. Then between
+     each consecutive pair of those, keep the single largest peak or
+     trough, so a doublet loses its smaller half.
+     --------------------------------------------------------------------- */
+
+  // an extremum in the strict sense: the sample-to-sample difference changes
+  // sign here, and the sample is above the amplitude floor
+  function isExtremum(tr, i, floor) {
+    if (i < 1 || i > tr.length - 2) return false;
+    if (Math.abs(tr[i]) <= floor) return false;
+    const a = tr[i] - tr[i - 1], b = tr[i + 1] - tr[i];
+    return (a > 0 && b <= 0) || (a < 0 && b >= 0);
+  }
+
+  function pick(tr, sandWin) {
+    const nt = tr.length;
+    let peak = 1e-12;
+    for (let i = 0; i < nt; i++) peak = Math.max(peak, Math.abs(tr[i]));
+    const floor = 0.01 * peak;
+
+    const cross = [];                      // { i, tTrue, err }
+    for (let i = 1; i < nt; i++) {
+      const a = tr[i - 1], b = tr[i];
+      if (a === 0 || b === 0) continue;
+      if ((a > 0) === (b > 0)) continue;
+      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
+      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
+      // where the crossing actually is, by linear interpolation
+      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
+      const tTrue = (i - 1 + frac) * dt();
+      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    }
+
+    /* Between each consecutive pair of crossings, keep the single largest
+       peak or trough. Where a thin bed has put two extrema in one interval,
+       the smaller is discarded; those are counted separately, and only inside
+       the sand, so that the count is about the sand and not about whatever
+       the beds above and below happen to be doing. */
+    const ext = [], dropped = [];
+    let doublets = 0, inSand = 0;
+    const inWin = (i) => !sandWin || (i >= sandWin[0] && i <= sandWin[1]);
+    for (let k = 0; k + 1 < cross.length; k++) {
+      const lo = cross[k].i, hi = cross[k + 1].i;
+      let best = -1, bv = 0;
+      const here = [];
+      for (let i = lo + 1; i < hi; i++) {
+        if (isExtremum(tr, i, floor)) here.push(i);
+        if (Math.abs(tr[i]) > bv) { bv = Math.abs(tr[i]); best = i; }
+      }
+      if (best < 0 || bv <= floor) continue;
+      ext.push({ i: best, sign: tr[best] > 0 ? 1 : -1, amp: tr[best] });
+      if (inWin(best)) inSand++;
+      here.forEach((i) => {
+        if (i === best) return;
+        dropped.push(i);
+        if (inWin(i)) doublets++;
+      });
+    }
+    return { cross, ext, dropped, doublets, inSand, peak, floor };
+  }
+
+  // the samples spanned by the sand, used to keep the doublet count local
+  function sandWindow(topT, thickS) {
+    const D = dt();
+    return [Math.max(0, Math.floor(topT / D)),
+            Math.min(ntOf() - 1, Math.ceil((topT + thickS / 1000) / D))];
+  }
+
+  /* =====================================================================
+     QUADRANT NUMBERING
+
+     Anchors come from the picks: Q5 at every zero-crossing sample, Q1 at
+     every trough, Q9 at every peak. Between two anchors the three interior
+     numbers are spread by proportion, which repeats them when the gap is
+     long and drops them when it is short.
+     ===================================================================== */
+
+  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
+     and then starts again. It does not run up to 9 and mirror back down. The
+     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
+     opens the next, which is why the published table gives both the 0 degree
+     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
+     coarse version as "4 quadrants". */
+
+  function quadrants(tr, pk) {
+    const nt = tr.length;
+    const q = new Int8Array(nt);                 // 0 means unnumbered
+    const ends = new Set();                      // samples that close a loop
+    const cross = pk.cross.slice().sort((a, b) => a.i - b.i);
+    const ext = pk.ext.slice().sort((a, b) => a.i - b.i);
+
+    // one loop is extremum, crossing, extremum
+    const loops = [];
+    for (let k = 0; k + 1 < ext.length; k++) {
+      const a = ext[k], b = ext[k + 1];
+      const x = cross.find((c) => c.i > a.i && c.i < b.i);
+      if (x) loops.push({ a: a.i, x: x.i, b: b.i });
+    }
+
+    let repeated = 0, omitted = 0, gaps = 0, interior = 0;
+    const fill = (i0, i1, trip) => {
+      const n = i1 - i0 - 1;
+      gaps++;
+      interior += n;
+      if (n <= 0) { omitted++; return; }
+      const used = new Set(), count = {};
+      for (let m = 0; m < n; m++) {
+        const v = trip[Math.min(2, Math.floor((m + 0.5) * 3 / n))];
+        q[i0 + 1 + m] = v;
+        used.add(v);
+        count[v] = (count[v] || 0) + 1;
+      }
+      if (used.size < 3) omitted++;
+      if (Object.keys(count).some((v) => count[v] > 1)) repeated++;
+    };
+
+    loops.forEach((L) => {
+      q[L.a] = 1;                                // opens this loop
+      q[L.x] = 5;
+      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
+      ends.add(L.b);                             // loop has already claimed it
+      fill(L.a, L.x, [2, 3, 4]);
+      fill(L.x, L.b, [6, 7, 8]);
+    });
+    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
+    // same position and take the same filter, so either label is correct
+    loops.forEach((L) => { q[L.a] = 1; });
+
+    const anchors = [];
+    loops.forEach((L) => {
+      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+    });
+    if (loops.length) {
+      const last = loops[loops.length - 1];
+      anchors.push({ i: last.b, q: q[last.b] || 9 });
+    }
+    anchors.sort((a, b) => a.i - b.i);
+    return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
+  }
+
+  // how the three interior numbers land for a gap of n samples
+  function fillPattern(n) {
+    const out = [];
+    for (let m = 0; m < n; m++) out.push(2 + Math.min(2, Math.floor((m + 0.5) * 3 / n)));
+    return out;
+  }
+
+  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
+     or a carbonate play — both partial stacks are reversed at the stacking
+     step, before any picking, so that the numbering rule never changes. */
+  function needsFlip() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const t = shuey(over, sand);
+    return (t.A + t.B * S2N) > 0;
+  }
+  const flipApplied = () => needsFlip() && !S.skipflip;
+
+  function avoClass() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const t = shuey(over, sand);
+    const s2f = meanSin2(20, 30);
+    const far = t.A + t.B * s2f;
+    if (t.A > 0.03) return (t.A * far < 0) ? 'class 2p' : 'class 1';
+    if (t.A > -0.03) return (t.A * far < 0) ? 'class 2p' : 'class 2';
+    return t.B < 0 ? 'class 3' : 'class 4';
+  }
+
+  // the near stack, with the polarity convention applied
+  function nearTrace() {
+    const noise = noiseField(1);
+    const tr = trace(TTOP, S.thick, noise, 0);
+    if (flipApplied()) for (let i = 0; i < tr.length; i++) tr[i] = -tr[i];
+    return tr;
+  }
+
+  function build() {
+    const tr = nearTrace();
+    const pk = pick(tr, sandWindow(TTOP, S.thick));
+    return { tr, pk, qd: quadrants(tr, pk) };
+  }
+
+  /* ------------------------------- drawing ----------------------------- */
+
+  const SOFT = 'rgba(22,25,28,0.45)';
+  const CRIM = '#841617';
+  const PEAKC = '#C2306B', TROUGHC = '#1D6FA3';
+
+  // one color per quadrant number, symmetric about Q5
+  const QCOL = {
+    1: '#1D6FA3', 2: '#3E86B4', 3: '#6BA0C4', 4: '#9CBBD4',
+    5: '#8A8F95',
+    6: '#DCA8BF', 7: '#D07FA2', 8: '#C9578A', 9: '#C2306B',
+  };
+
+  function width(el, fallback) {
+    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    return Math.max(280, w || fallback);
+  }
+
+  function traceCurve(ctx, tr, rect, peak, color, lw) {
+    const nt = tr.length, x0 = rect.x + rect.w / 2;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x - 2, rect.y, rect.w + 4, rect.h); ctx.clip();
+    ctx.beginPath();
+    for (let i = 0; i < nt; i++) {
+      const y = rect.y + (i / (nt - 1)) * rect.h;
+      const x = x0 + (tr[i] / peak) * (rect.w / 2) * 0.92;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = color; ctx.lineWidth = lw || 1.6; ctx.stroke();
+    ctx.restore();
+  }
+
+  // the quadrant number of every sample, plotted against time
+  function drawQTrack(ctx, rect, b, opts) {
+    const nt = b.tr.length;
+    const yOf = (i) => rect.y + (i / (nt - 1)) * rect.h;
+    const xOf = (v) => rect.x + ((v - 0.5) / 9) * rect.w;
+    SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: (opts && opts.ticks) || 7 });
+    SEIS.axisBottom(ctx, rect, 0.5, 9.5, 'quadrant number',
+      (v) => (Math.abs(v - Math.round(v)) < 0.01 && v >= 1 && v <= 9 ? 'Q' + Math.round(v) : ''),
+      { ticks: 9 });
+    SEIS.frame(ctx, rect);
+    for (let n = 1; n <= 9; n++) {
+      SEIS.dashedLine(ctx, xOf(n), rect.y, xOf(n), rect.y + rect.h,
+        n === 5 ? 'rgba(22,25,28,0.30)' : 'rgba(22,25,28,0.10)', [3, 4], 1);
+    }
+    const anchorSet = new Set(b.qd.anchors.map((a) => a.i));
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    for (let i = 0; i < nt; i++) {
+      const v = b.qd.q[i];
+      if (!v) continue;
+      const isAnchor = anchorSet.has(i);
+      ctx.beginPath();
+      ctx.arc(xOf(v), yOf(i), isAnchor ? 4.2 : 2.4, 0, 2 * Math.PI);
+      if (isAnchor) {
+        ctx.fillStyle = QCOL[v]; ctx.fill();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.3; ctx.stroke();
+      } else {
+        ctx.fillStyle = QCOL[v]; ctx.globalAlpha = 0.75; ctx.fill(); ctx.globalAlpha = 1;
+      }
+    }
+    ctx.restore();
+  }
+
+
+  /* The rock model itself, as bands in two-way time, so the layers are always
+     visible beside the wiggles rather than implied by them. */
+  const LITHFILL = {
+    soft: 'rgba(150,160,170,0.55)', hard: 'rgba(110,125,140,0.65)',
+    tight: 'rgba(214,171,74,0.55)', sand: 'rgba(194,48,107,0.30)',
+  };
+  function layerBands() {
+    const seal = S.over, other = (S.over === 'soft') ? 'hard' : 'soft';
+    const baseT = TTOP + S.thick / 1000;
+    const b = [
+      { t0: T0, t1: TWIN, name: '', fill: LITHFILL[seal] },
+      { t0: BEDA[0], t1: BEDA[1], name: LITHS[other].name, fill: LITHFILL[other] },
+      { t0: TTOP, t1: baseT, name: 'sand ' + S.phi + '%', fill: LITHFILL.sand },
+      { t0: BEDC[0], t1: BEDC[1], name: 'tight sandstone', fill: LITHFILL.tight },
+    ];
+    return b;
+  }
+
+  function drawModelPanel(ctx, W, H) {
+    const top = 26, bot = H - 30;
+    const lw = Math.min(96, (W - 74) * 0.30);
+    const rL = { x: 50, y: top, w: lw, h: bot - top };
+    SEIS.axisLeft(ctx, rL, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 6 });
+    SEIS.lithColumn(ctx, rL, layerBands(), T0, TWIN);
+
+    const noise = noiseField(1);
+    let tr = trace(TTOP, S.thick, noise, 0);
+    if (typeof flipApplied === 'function' && flipApplied()) {
+      const f = new Float64Array(tr.length);
+      for (let i = 0; i < tr.length; i++) f[i] = -tr[i];
+      tr = f;
+    }
+    const nt = tr.length;
+    let pk = 1e-12;
+    for (let i = 0; i < nt; i++) pk = Math.max(pk, Math.abs(tr[i]));
+    const rT = { x: rL.x + rL.w + 18, y: top, w: W - (rL.x + rL.w + 18) - 8, h: bot - top };
+    SEIS.frame(ctx, rT);
+    SEIS.dashedLine(ctx, rT.x + rT.w / 2, rT.y, rT.x + rT.w / 2, rT.y + rT.h,
+      'rgba(22,25,28,0.45)', [4, 4], 1);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rT.x, rT.y, rT.w, rT.h); ctx.clip();
+    ctx.beginPath();
+    for (let i = 0; i < nt; i++) {
+      const y = rT.y + (i / (nt - 1)) * rT.h;
+      const x = rT.x + rT.w / 2 + (tr[i] / pk) * (rT.w / 2) * 0.9;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = 'rgba(22,25,28,0.65)'; ctx.lineWidth = 1.7; ctx.stroke();
+    ctx.restore();
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(22,25,28,0.55)';
+    ctx.fillText('THE ROCKS', rL.x + rL.w / 2, rL.y - 6);
+    ctx.fillText('NEAR STACK', rT.x + rT.w / 2, rT.y - 6);
+  }
+
+  function drawMain() {
+    const c = $('cMain'); if (!c) return;
+    const W = width(c, 520), H = 330;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    drawModelPanel(ctx, W, H);
+  }
+
+  /* ------------------------------- step 1 ------------------------------ */
+
+  function drawStep1() {
+    const b = build();
+    const nt = b.tr.length;
+
+    const ca = $('c1a');
+    if (ca) {
+      const W = width(ca, 640), H = 430;
+      const ctx = SEIS.fitCanvas(ca, W, H);
+      ctx.clearRect(0, 0, W, H);
+      const rect = { x: 66, y: 20, w: Math.min(W - 96, 470), h: H - 58 };
+      drawQTrack(ctx, rect, b, { ticks: 9 });
+    }
+
+    const cb = $('c1b');
+    if (cb) {
+      // time runs down, as on every other display in the course
+      const W = width(cb, 640), H = 400;
+      const ctx = SEIS.fitCanvas(cb, W, H);
+      ctx.clearRect(0, 0, W, H);
+      const rect = { x: 66, y: 20, w: Math.min(110, W * 0.22), h: H - 44 };
+      SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+        (v) => String(Math.round(v)), { ticks: 9 });
+      SEIS.frame(ctx, rect);
+      const rh = rect.h / nt;
+      ctx.save();
+      ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+      for (let i = 0; i < nt; i++) {
+        const v = b.qd.q[i];
+        if (!v) continue;
+        ctx.fillStyle = QCOL[v];
+        ctx.fillRect(rect.x, rect.y + i * rh, rect.w, rh + 0.6);
+      }
+      ctx.restore();
+
+      // a key, beside the strip rather than under it
+      const kx = rect.x + rect.w + 34;
+      ctx.font = '10px "IBM Plex Mono", monospace';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      const keys = [
+        [1, 'Q1  trough'], [2, 'Q2'], [3, 'Q3'], [4, 'Q4'],
+        [5, 'Q5  zero crossing'], [6, 'Q6'], [7, 'Q7'], [8, 'Q8'], [9, 'Q9  peak'],
+      ];
+      keys.forEach((q, k) => {
+        const y = rect.y + 16 + k * 22;
+        ctx.fillStyle = QCOL[q[0]];
+        ctx.fillRect(kx, y - 7, 26, 14);
+        ctx.fillStyle = 'rgba(22,25,28,0.7)';
+        ctx.fillText(q[1], kx + 34, y);
+      });
+      ctx.font = '10px "IBM Plex Sans", sans-serif';
+      ctx.fillStyle = 'rgba(22,25,28,0.5)';
+      ctx.textBaseline = 'top';
+      ctx.fillText('Blue counts toward the trough, pink toward the peak.',
+        kx, rect.y + 16 + keys.length * 22 + 6);
+      ctx.fillText('White is outside the first and last pick, where there',
+        kx, rect.y + 16 + keys.length * 22 + 22);
+      ctx.fillText('is no loop to belong to.', kx, rect.y + 16 + keys.length * 22 + 38);
+    }
+
+    let numbered = 0;
+    for (let i = 0; i < nt; i++) if (b.qd.q[i]) numbered++;
+    const anchors = b.qd.anchors.length;
+    $('s1a').textContent = numbered + ' of ' + nt;
+    $('s1b').textContent = anchors + '';
+    $('s1c').textContent = (numbered - anchors) + '';
+    $('s1d').textContent = (nt - numbered) + '';
+    $('s1e').textContent = 'Module 03 kept ' + anchors + ' picks on this trace. Numbering brings '
+      + numbered + ' samples into the scheme, ' + (numbered - anchors)
+      + ' of them by counting between picks. The rest lie outside the first and last pick, where there '
+      + 'is no loop to be part of.';
+  }
+
+  /* ------------------------------- step 2 ------------------------------ */
+
+  function drawStep2() {
+    const b = build();
+    const nt = b.tr.length;
+    const D = dt();
+    const quarter = 1000 / S.freq / 4;                  // ms
+    const perQuarter = quarter / (D * 1000);            // samples
+
+    const ca = $('c2a');
+    if (ca) {
+      const NMAX = 15;
+      const W = width(ca, 640), H = 360;
+      const ctx = SEIS.fitCanvas(ca, W, H);
+      ctx.clearRect(0, 0, W, H);
+      const rect = { x: 78, y: 26, w: W - 108, h: H - 62 };
+      SEIS.frame(ctx, rect);
+      const rh = rect.h / NMAX;
+      const here = Math.max(1, Math.min(NMAX, Math.round(perQuarter) - 1));
+      ctx.font = '9.5px "IBM Plex Mono", monospace';
+      for (let n = 1; n <= NMAX; n++) {
+        const y = rect.y + (n - 1) * rh;
+        if (n === here) {
+          ctx.fillStyle = 'rgba(132,22,23,0.09)';
+          ctx.fillRect(rect.x, y, rect.w, rh);
+        }
+        ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+        ctx.fillStyle = n === here ? CRIM : 'rgba(22,25,28,0.55)';
+        ctx.fillText(n + (n === 1 ? ' sample' : ''), rect.x - 8, y + rh / 2);
+        const pat = fillPattern(n);
+        const cw = Math.min(rect.w / NMAX, rect.w / pat.length);
+        pat.forEach((v, m) => {
+          const x = rect.x + 6 + m * cw;
+          ctx.fillStyle = QCOL[v];
+          ctx.fillRect(x, y + rh * 0.22, cw - 2, rh * 0.56);
+          ctx.fillStyle = '#fff';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          if (cw > 15) ctx.fillText(String(v), x + (cw - 2) / 2, y + rh / 2);
+        });
+        const uniq = new Set(pat);
+        ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+        ctx.fillStyle = uniq.size < 3 ? CRIM : 'rgba(22,25,28,0.45)';
+        const note = uniq.size < 3 ? 'omits ' + [2, 3, 4].filter((v) => !uniq.has(v)).map((v) => 'Q' + v).join(', ')
+          : (n > 3 ? 'repeats' : 'exact fit');
+        ctx.fillText(note, rect.x + 6 + Math.min(NMAX, pat.length) * cw + 10, y + rh / 2);
+      }
+      ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      ctx.fillStyle = 'rgba(22,25,28,0.55)';
+      ctx.fillText('samples between one anchor and the next', rect.x + rect.w / 2, rect.y + rect.h + 12);
+    }
+
+    const cb = $('c2b');
+    if (cb) {
+      const W = width(cb, 640), H = 220;
+      const ctx = SEIS.fitCanvas(cb, W, H);
+      ctx.clearRect(0, 0, W, H);
+      const rect = { x: 62, y: 18, w: W - 92, h: H - 56 };
+      const tally = new Array(10).fill(0);
+      for (let i = 0; i < nt; i++) if (b.qd.q[i]) tally[b.qd.q[i]]++;
+      const top = Math.max(1, ...tally);
+      SEIS.axisLeft(ctx, rect, 0, top, 'samples', (v) => String(Math.round(v)),
+        { ticks: 4, flip: true });
+      SEIS.axisBottom(ctx, rect, 0.5, 9.5, 'quadrant number',
+        (v) => (Math.abs(v - Math.round(v)) < 0.01 && v >= 1 && v <= 9 ? 'Q' + Math.round(v) : ''),
+        { ticks: 9 });
+      SEIS.frame(ctx, rect);
+      const bw = rect.w / 9;
+      for (let n = 1; n <= 9; n++) {
+        const h = (tally[n] / top) * rect.h;
+        ctx.fillStyle = QCOL[n];
+        ctx.fillRect(rect.x + (n - 1) * bw + bw * 0.18, rect.y + rect.h - h,
+          bw * 0.64, h);
+        if (tally[n] === 0) {
+          ctx.font = '9px "IBM Plex Mono", monospace';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+          ctx.fillStyle = CRIM;
+          ctx.fillText('none', rect.x + (n - 1) * bw + bw / 2, rect.y + rect.h - 4);
+        }
+      }
+    }
+
+    $('s2a').textContent = quarter.toFixed(1) + ' ms';
+    $('s2b').textContent = (perQuarter - 1).toFixed(1);
+    $('s2c').textContent = b.qd.repeated + ' of ' + b.qd.gaps;
+    $('s2d').textContent = b.qd.omitted + ' of ' + b.qd.gaps;
+    $('s2e').textContent = b.qd.omitted === 0
+      ? 'Every gap holds more than three samples, so numbers get repeated and none is lost. This is the '
+        + 'ordinary case for seismic frequencies at 1 ms.'
+      : b.qd.omitted + ' gap' + (b.qd.omitted > 1 ? 's are' : ' is')
+        + ' too short to carry all three interior numbers, so some are dropped. Those loops go through '
+        + 'module 06 with a smaller set of phase filters than the rest of the trace.';
+  }
+
+  /* ------------------------------- step 3 ------------------------------ */
+
+  function drawStep3() {
+    const c = $('c3a'); if (!c) return;
+    const W = width(c, 640), H = 400;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+
+    const b = build();
+    const nt = b.tr.length;
+    const gap = 44;
+    const half = (W - 100 - gap) / 2;
+    const rT = { x: 62, y: 26, w: half, h: H - 78 };
+    const rQ = { x: 62 + half + gap, y: 26, w: half, h: H - 78 };
+
+    let peak = 1e-12;
+    for (let i = 0; i < nt; i++) peak = Math.max(peak, Math.abs(b.tr[i]));
+    SEIS.axisLeft(ctx, rT, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 7 });
+    SEIS.frame(ctx, rT);
+    SEIS.dashedLine(ctx, rT.x + rT.w / 2, rT.y, rT.x + rT.w / 2, rT.y + rT.h, SOFT, [4, 4], 1);
+    traceCurve(ctx, b.tr, rT, peak, 'rgba(22,25,28,0.55)', 1.6);
+    drawQTrack(ctx, rQ, b, { ticks: 7 });
+
+    // mark the top and base of the sand on both panels
+    const win = sandWindow(TTOP, S.thick);
+    [['top of sand', win[0]], ['base of sand', win[1]]].forEach((m) => {
+      const y = rT.y + (m[1] / (nt - 1)) * rT.h;
+      SEIS.dashedLine(ctx, rT.x, y, rQ.x + rQ.w, y, 'rgba(132,22,23,0.5)', [5, 4], 1.2);
+      SEIS.tag(ctx, rT.x + 6, y - 13, m[0], CRIM);
+    });
+
+    ctx.font = '9.5px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(22,25,28,0.55)';
+    ctx.fillText(flipApplied() ? 'NEAR STACK, POLARITY REVERSED' : 'NEAR STACK AS RECORDED',
+      rT.x + rT.w / 2, rT.y - 6);
+    ctx.fillStyle = CRIM;
+    ctx.fillText('QUADRANT NUMBER', rQ.x + rQ.w / 2, rQ.y - 6);
+
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const t = shuey(over, sand);
+    const rc = t.A + t.B * S2N;
+    // which kind of extremum the reservoir top is, and which way its loop runs
+    let topKind = 'neither', loopDir = 'not a single loop';
+    const near = b.pk.ext.slice().sort((x, y) => Math.abs(x.i - win[0]) - Math.abs(y.i - win[0]))[0];
+    if (near && Math.abs(near.i - win[0]) <= 3) topKind = near.sign > 0 ? 'peak' : 'trough';
+    // the loop that opens at the top of the sand, whether or not it also
+    // reaches the base — a thick sand spans several loops
+    let L = null, best = 1e9;
+    b.qd.loops.forEach((z) => {
+      const d = Math.abs(z.a - win[0]);
+      if (d < best) { best = d; L = z; }
+    });
+    if (L && best <= 4) {
+      loopDir = (b.tr[L.b] > b.tr[L.a]) ? 'rises, Q1 to Q9' : 'falls, Q1 to Q9';
+    }
+
+    $('s3a').textContent = (rc >= 0 ? '+' : '\u2212') + Math.abs(rc).toFixed(3);
+    $('s3b').textContent = avoClass();
+    $('s3c').textContent = flipApplied() ? 'yes'
+      : (needsFlip() ? 'skipped' : 'not needed');
+    $('s3d').textContent = topKind;
+    $('s3e').textContent = loopDir;
+
+    let verdict;
+    if (!needsFlip()) {
+      verdict = 'The sand top is already a trough, so nothing is reversed. Its loop runs down to the peak '
+        + 'at the base, and the numbering runs Q1 at the top to Q9 at the base. This is the ordinary case '
+        + 'for classes 4, 3 and 2.';
+    } else if (flipApplied()) {
+      verdict = 'A class 1 sand. Both partial stacks were reversed before picking, so the reservoir top '
+        + 'arrives at the picker as a trough and its loop behaves exactly as a class 3 sand\u2019s does.';
+    } else {
+      verdict = 'The flip has been skipped. The numbers are the same \u2014 they always are, because the '
+        + 'numbering restarts at every extremum and does not know a peak from a trough \u2014 but they are '
+        + 'now attached to the wrong boundaries. Q1 marks the base of this reservoir instead of its top. '
+        + 'Nothing reports an error, which is what makes it worth being careful about.';
+    }
+    $('s3f').textContent = verdict;
+  }
+
+  /* ------------------------------ the panel ---------------------------- */
+
+  function pushToInputs() {
+    $('phi').value = S.phi;
+    $('thick').value = S.thick;
+    $('freq').value = S.freq;
+    $('dt').value = S.dt;
+    $('noise').value = S.noise;
+    $('skipflip').checked = !!S.skipflip;
+    $('phiV').textContent = S.phi + '%';
+    $('thickV').textContent = S.thick + ' ms';
+    $('freqV').textContent = S.freq + ' Hz';
+    $('dtV').textContent = (DTS[S.dt | 0] * 1000).toFixed(0) + ' ms';
+    $('noiseV').textContent = S.noise + '%';
+    $('overV').textContent = LITHS[S.over].name;
+    $('fluidV').textContent = FLUIDS[S.fluid].name;
+    document.querySelectorAll('[data-over]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.over === S.over);
+    });
+    document.querySelectorAll('[data-fluid]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.fluid === S.fluid);
+    });
+    $('mClass').textContent = avoClass();
+    $('mFlip').textContent = flipApplied() ? 'applied'
+      : (needsFlip() ? 'skipped' : 'not needed');
+  }
+
+  function drawAll() {
+    drawMain();
+    if (visible('p1')) drawStep1();
+    if (visible('p2')) drawStep2();
+    if (visible('p3')) drawStep3();
+  }
+  function onChange() { pushToInputs(); drawAll(); saveState(); }
+
+  ['phi', 'thick', 'freq', 'dt', 'noise'].forEach((id) => {
+    $(id).addEventListener('input', () => { S[id] = parseFloat($(id).value); onChange(); });
+  });
+  $('skipflip').addEventListener('change', () => { S.skipflip = $('skipflip').checked; onChange(); });
+  document.querySelectorAll('[data-over]').forEach((b) => {
+    b.addEventListener('click', () => { S.over = b.dataset.over; onChange(); });
+  });
+  document.querySelectorAll('[data-fluid]').forEach((b) => {
+    b.addEventListener('click', () => { S.fluid = b.dataset.fluid; onChange(); });
+  });
+  $('resetBtn').addEventListener('click', () => {
+    const tab = S.tab;
+    S = Object.assign({}, DEF, { tab });
+    onChange();
+  });
+
+  /* -------------------------------- tabs ------------------------------- */
+
+  const PANES = ['p1', 'p2', 'p3', 'pw', 'pe', 'pk', 'pm'];
+  const STEPNAMES = {
+    p1: 'Filling gaps', p2: 'Loops that fit', p3: 'Which end is Q1',
+    pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
+  };
+
+  function buildStepNav() {
+    PANES.forEach((id, i) => {
+      const pane = $(id); if (!pane) return;
+      const prev = PANES[i - 1], next = PANES[i + 1];
+      const nav = document.createElement('div');
+      nav.className = 'stepnav';
+      const mk = (target, text, ghost) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn' + (ghost ? ' ghost' : '') + ' small';
+        btn.textContent = text;
+        btn.addEventListener('click', () => {
+          showTab(target);
+          const t = document.querySelector('.tabhint');
+          if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return btn;
+      };
+      nav.appendChild(prev ? mk(prev, '\u2190 ' + STEPNAMES[prev], true)
+                           : document.createElement('span'));
+      const where = document.createElement('span');
+      where.className = 'where';
+      where.textContent = i < 3 ? 'step ' + (i + 1) + ' of 3' : STEPNAMES[id];
+      nav.appendChild(where);
+      nav.appendChild(next ? mk(next, STEPNAMES[next] + ' \u2192')
+                           : document.createElement('span'));
+      pane.appendChild(nav);
+    });
+  }
+
+  function showTab(id) {
+    PANES.forEach((q) => { const el = $(q); if (el) el.hidden = q !== id; });
+    document.querySelectorAll('#tabs button').forEach((b) => {
+      b.setAttribute('aria-selected', b.dataset.tab === id);
+    });
+    const lab = document.querySelector('.labhead');
+    if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3');
+
+    // the polarity switch only means anything on step 3
+    const three = (id === 'p3');
+    const sf = $('skipflip'); if (sf) sf.disabled = !three;
+
+    if ($('labCap')) {
+      $('labCap').innerHTML = 'The rock model <span>&mdash; the layers, and the near stack they produce</span>';
+    }
+
+    const last = (id === 'pk' || id === 'pm');
+    if ($('nextup')) $('nextup').hidden = !last;
+    if ($('pager')) $('pager').hidden = !last;
+    S.tab = id;
+    drawAll();
+    saveState();
+  }
+  document.querySelectorAll('#tabs button').forEach((b) => {
+    b.addEventListener('click', () => showTab(b.dataset.tab));
+  });
+  document.querySelectorAll('.masthead a[data-tab]').forEach((a) => {
+    a.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      showTab(a.dataset.tab);
+      const strip = $('tabs');
+      if (strip && strip.scrollIntoView) strip.scrollIntoView({ block: 'start' });
+    });
+  });
+
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawAll, 140); });
+
+  pushToInputs();
+  buildStepNav();
+  showTab(PANES.indexOf(S.tab) >= 0 ? S.tab : 'p1');
+  document.fonts && document.fonts.ready.then(drawAll);
+})();
+</script>
+</body>
+</html>

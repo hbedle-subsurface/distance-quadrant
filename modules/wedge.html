@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wedge models and tuning | How the DQ Trace Actually Works</title>
+<meta name="description" content="Bed thickness moves the DQ distance by a third and leaves Theta PX untouched. Why the two attributes separate thickness from rock, and where that separation stops working.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <a class="brand" href="../index.html"><span class="dot"></span>How the DQ trace <b>actually</b> works</a>
+    <nav>
+      <a href="../index.html">All modules</a>
+      <a href="#tabs" data-tab="pw">Why it matters</a>
+      <a href="#tabs" data-tab="pm">Method &amp; references</a>
+    </nav>
+  </header>
+
+  <div class="mod-head">
+    <p class="eyebrow">Module 12 &nbsp;·&nbsp; The DQ trace</p>
+    <h1>Wedge models and tuning</h1>
+    <p class="sub">Module 11 ended by admitting that closely spaced sands contaminate each other. This
+      module takes that seriously. A wedge is the standard way to ask what thickness does to an amplitude,
+      and running one through the DQ chain turns up a clean division of labour: the distance moves with
+      thickness and the angle does not.</p>
+  </div>
+
+  <div class="labhead">
+    <div class="labgrid">
+      <div>
+        <p class="cap" id="labCap">The wedge <span>&mdash; the sand thinning, and the trace it produces</span></p>
+        <canvas id="cMain" aria-label="A wedge model with the sand thinning to the right, beside the near stack"></canvas>
+      </div>
+      <div>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <div class="controls" id="labControls">
+          <div class="ctl-col">
+            <h2>Build the rocks</h2>
+            <div class="ctl">
+              <label>Overburden <span class="val" id="overV">tight sandstone</span></label>
+              <div class="seg" role="group" aria-label="Overburden lithology">
+                <button type="button" data-over="soft" aria-pressed="false">soft</button>
+                <button type="button" data-over="hard" aria-pressed="false">hard</button>
+                <button type="button" data-over="tight" aria-pressed="true">tight</button>
+              </div>
+            </div>
+            <div class="ctl">
+              <label for="phi">Sand porosity <span class="val" id="phiV">24%</span></label>
+              <input type="range" id="phi" min="8" max="36" step="1" value="24">
+            </div>
+            <div class="ctl">
+              <label>Pore fluid <span class="val" id="fluidV">gas</span></label>
+              <div class="seg" role="group" aria-label="Fluid filling the sand pores">
+                <button type="button" data-fluid="brine" aria-pressed="false">brine</button>
+                <button type="button" data-fluid="oil" aria-pressed="false">oil</button>
+                <button type="button" data-fluid="gas" aria-pressed="true">gas</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="ctl-col" id="colLayers">
+            <h2>The wedge</h2>
+            <div class="ctl">
+              <label for="thick">Thickness marked <span class="val" id="thickV">20 ms</span></label>
+              <input type="range" id="thick" min="6" max="55" step="1" value="20">
+            </div>
+            <div class="ctl">
+              <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
+              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+            </div>
+            <label class="check" style="grid-column:1/-1"><input type="checkbox" id="showall" checked>
+              Show all three fluids on step 3</label>
+            <p class="hint-line" style="margin:-4px 0 0">The thickness slider marks one column of the
+              wedge; the curves span the whole range.</p>
+          </div>
+
+          <div class="ctl-col" id="colData">
+            <h2>What the data does to it</h2>
+            <div class="ctl">
+              <label for="dt">Sample rate <span class="val" id="dtV">1 ms</span></label>
+              <input type="range" id="dt" min="0" max="3" step="1" value="0">
+            </div>
+            <div class="ctl">
+              <label for="noise">Noise <span class="val" id="noiseV">0%</span></label>
+              <input type="range" id="noise" min="0" max="40" step="1" value="0">
+            </div>
+            <button class="btn ghost small" id="resetBtn" type="button">Reset everything</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
+    Method and references are there when you want them.</p>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
+    <button role="tab" data-tab="p1" aria-selected="false">1 · The tuning curve</button>
+    <button role="tab" data-tab="p2" aria-selected="false">2 · What the angle does</button>
+    <button role="tab" data-tab="p3" aria-selected="false">3 · Two numbers, two questions</button>
+    <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
+    <span class="gap"></span>
+    <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
+    <button role="tab" data-tab="pk" aria-selected="false">Key points</button>
+    <button role="tab" data-tab="pm" aria-selected="false">Method</button>
+  </nav>
+
+  <section class="tabpane" id="p1" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">1</span>The tuning curve</h3>
+      <span class="hint">The oldest problem in amplitude interpretation</span>
+    </div>
+
+    <p class="lede">
+      Thin a bed and its top and base reflections move together until they overlap. Where they overlap
+      constructively the amplitude is larger than either reflection alone; thin further and they begin to
+      cancel. The peak sits near a quarter of the wavelet period, and everything below it is the tuning
+      regime, where amplitude reports thickness as much as it reports rock.</p>
+
+    <p class="lede">
+      The DQ distance is an amplitude attribute and inherits the problem. Across a wedge from 6 to 55 ms
+      it varies by about <b>a third of its maximum</b>, peaking near 8 ms at 40 Hz and settling to a
+      constant once the bed is thick enough for the two reflections to separate.</p>
+
+    <canvas id="c1a" aria-label="The DQ distance at the sand top plotted against bed thickness"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The distance read at the top of the sand as the bed
+      thins. The marker is the thickness set in the panel; the dashed line is a quarter of the wavelet
+      period.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Distance at the marked thickness</span><b id="s1a">&mdash;</b></div>
+      <div class="stat key"><span>Peak of the curve</span><b id="s1b">&mdash;</b></div>
+      <div class="stat"><span>Value once resolved</span><b id="s1c">&mdash;</b></div>
+      <div class="stat key"><span>Variation across the wedge</span><b id="s1d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>Drag the wavelet frequency and the whole curve slides: the tuning peak moves with the period,
+        not with the rock. That is the diagnostic for a tuning effect, and it is why a bright spot that
+        follows the bandwidth rather than the geology is not a bright spot.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="p2" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">2</span>What the angle does</h3>
+      <span class="hint">Which is nothing at all</span>
+    </div>
+
+    <p class="lede">
+      Now put &thetas;<sub>px</sub> on the same wedge. It is flat. Across the whole thickness range the
+      angle at the sand top does not move &mdash; under a tight seal it holds to within a degree, while
+      the distance beside it swings by a third.</p>
+
+    <p class="lede">
+      The reason is geometric rather than mysterious. Tuning scales a reflection up and down: the vector in
+      the crossplot gets longer or shorter, and both components scale together. A length changes when you
+      scale a vector; a direction does not. So the distance carries the thickness effect and the angle is
+      blind to it.</p>
+
+    <canvas id="c2a" aria-label="The DQ distance and Theta PX both plotted against bed thickness"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The same wedge, read both ways. Each panel is on its own
+      scale; the angle panel spans the full range the attribute can take.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat key"><span>Distance varies by</span><b id="s2a">&mdash;</b></div>
+      <div class="stat key"><span>&thetas;<sub>px</sub> varies by</span><b id="s2b">&mdash;</b></div>
+      <div class="stat"><span>&thetas;<sub>px</sub> at the marker</span><b id="s2c">&mdash;</b></div>
+      <div class="stat"><span>Thickness range swept</span><b id="s2d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>This is the cleanest division of labour in the method. Two attributes computed from the same
+        pair of numbers, one of which responds to how thick the bed is and one of which does not. Neither
+        was designed for this; it falls out of the fact that a vector has a length and a direction and they
+        answer different questions.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="p3" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">3</span>Two numbers, two questions</h3>
+      <span class="hint">And where the division breaks down</span>
+    </div>
+
+    <p class="lede">
+      Put the two facts together. Module 11 showed the distance tracking porosity. This module shows it
+      tracking thickness as well &mdash; and an interpreter looking at a single bright DQ sample cannot
+      tell which of the two caused it. The angle can, because it moved with fluid in module 10 and does not
+      move with thickness here.</p>
+
+    <p class="lede">
+      So the pair separates two questions that a single amplitude cannot: <b>how much rock is there</b>,
+      which the distance answers but confounds with quality, and <b>what kind of rock is it</b>, which the
+      angle answers and thickness cannot disturb.</p>
+
+    <p class="lede">
+      How much the angle has to say about fluid depends on the seal, and module 10 measured that. Under
+      this tight sandstone the three fluids sit only about three degrees apart &mdash; a real separation,
+      and a small one. Under a soft shale they spread much further, but there the reflection is weak and
+      the angle is unstable, which the panel below will show if you switch. The thickness immunity holds generally; how much the angle says about fluid depends on where you are.</p>
+
+    <canvas id="c3a" aria-label="Distance and Theta PX against thickness for the three fluids"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The wedge run for all three fluids. In the angle panel
+      each fluid's curve is flat with thickness; in the distance panel all three swing by about a
+      third.</p>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Angle: brine / oil / gas</span><b id="s3a">&mdash;</b></div>
+      <div class="stat key"><span>Fluid separation in angle</span><b id="s3b">&mdash;</b></div>
+      <div class="stat key"><span>Thickness effect on angle</span><b id="s3c">&mdash;</b></div>
+      <div class="stat"><span>Thickness effect on distance</span><b id="s3d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>Switch the overburden to soft shale and watch the division collapse. There the sand and the
+        seal are close in impedance, the distance falls to a few hundredths, and the angle starts swinging
+        wildly because a short vector has no reliable direction. The separation of thickness from rock is
+        real, and it holds only where there is a reflection worth measuring.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pw" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">?</span>Why this is the useful pair</h3>
+      <span class="hint">What an interpreter actually has to decide</span>
+    </div>
+
+    <p class="lede">The question in front of an interpreter looking at a bright amplitude is almost never
+      "how bright is it". It is "is this bright because there is more rock, better rock, or hydrocarbon in
+      the rock". A single amplitude attribute cannot answer that, and no amount of scaling or normalising
+      makes it able to, because the three effects all move it in the same direction.</p>
+
+    <p class="lede">The DQ pair does not solve the problem either &mdash; nothing computed from two partial
+      stacks can fully separate three unknowns &mdash; but it splits it usefully. The angle is immune to
+      thickness, so an angle anomaly is about the rock or the fluid. The distance carries thickness, so a
+      distance anomaly with no angle anomaly is probably geometry. That is a genuine narrowing, and it is
+      available without a well.</p>
+
+    <div class="legend prose">
+      <span>Worth being clear about the limit. The angle separates fluid from thickness; it does not
+        separate fluid from lithology, and module 11 showed it barely separating anything at all under some
+        seals. Read it with the distance, and read both with the module 08 baseline in mind.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pe" role="tabpanel" hidden>
+    <div class="tryit" style="max-width:none">
+      <h3>Exercises</h3>
+      <ol>
+        <li><b>Find the tuning peak.</b> On step 1 with a tight seal and gas at 24%, read where the curve
+          peaks, then change the wavelet frequency.
+          <details class="reveal"><summary>Hint</summary><span class="ans">It peaks at 8 ms at 40 Hz, and
+            at 14, 11 and 7 ms for 25, 30 and 55 Hz, because tuning is a property of the wavelet rather than
+            of the rock. The classical figure is a quarter of the period, 6.3 ms at 40 Hz; the measured
+            peak sits a little thicker than that because the attribute is read at a picked sample rather
+            than at the true maximum of a continuous curve. What matters is not the exact number but the fact that the peak follows the bandwidth.</span></details></li>
+        <li><b>Measure how much thickness moves the distance.</b> Read the variation figure on step 1.
+          <details class="reveal"><summary>Hint</summary><span class="ans">About a third of the maximum
+            across a wedge from 6 to 55 ms. That is the same order as the change module 11 got from
+            varying porosity across its whole range, which is the problem in one sentence: a bright DQ
+            sample could be a thick ordinary sand or a thin excellent one, and the distance alone cannot
+            say. The habit worth forming is to treat a bright sample as having at least three candidate
+            causes &mdash; more rock, better rock, or hydrocarbon in the rock &mdash; and to ask which
+            attribute could separate them.</span></details></li>
+        <li><b>Now read the angle.</b> On step 2, compare the two variation figures.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The distance moves by about a
+            third and the angle by about a degree. The angle is not merely less sensitive to thickness, it
+            is essentially blind to it, and for a reason worth understanding: tuning scales the whole
+            vector, and scaling changes a length but not a direction. Any attribute defined as a ratio or
+            an angle of the same pair would behave the same way.</span></details></li>
+        <li><b>Check that the angle still sees fluid.</b> On step 3, read the fluid separation.
+          <details class="reveal"><summary>Hint</summary><span class="ans">About three degrees from
+            brine to gas under this seal, against half a degree of movement across the whole wedge. So the
+            fluid signal is six times the thickness signal &mdash; but both are small here, because module
+            10 found this seal to be the one where the angle says least about fluid. The claim worth taking
+            away is the ratio rather than the magnitude: whatever fluid response the angle has in a given
+            setting, thickness will not counterfeit it.</span></details></li>
+        <li><b>Break it with a soft shale.</b> Switch the overburden on step 3 and look again.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The angle stops being flat and
+            starts swinging, and the distance collapses to a few hundredths. Under a soft shale at this
+            porosity the sand is close to the seal in impedance, so there is barely a reflection, and a
+            short vector has no reliable direction. The separation of thickness from rock is a real
+            property of the pair, but it is only available where there is something to measure. This is the
+            same limit module 10 met at the class 2 crossover.</span></details></li>
+        <li><b>Thin the bed past the point of no return.</b> Drag the thickness marker down to 6 ms on
+          step 1 and look at the model panel.
+          <details class="reveal"><summary>Hint</summary><span class="ans">The top and base reflections
+            have merged into one event, and module 03 measured what that does to the picks: below about
+            8 ms the sand interval contains no pick at all. Everything downstream inherits it. The
+            attribute is still defined and still returns a number; what it no longer has is a sample that
+            belongs to the top of the sand rather than to the merged event.</span></details></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pk" role="tabpanel" hidden>
+    <div class="takeaway" style="max-width:none">
+      <h3>The main points</h3>
+      <ul>
+        <li><b>The DQ distance is an amplitude attribute and tunes like one.</b> Across a 6 to 55 ms wedge
+          it varies by about a third of its maximum.</li>
+        <li><b>The tuning peak follows the wavelet, not the rock</b>, near 10 ms at 40 Hz and moving with
+          frequency.</li>
+        <li><b>&thetas;<sub>px</sub> does not respond to thickness at all</b> &mdash; about a degree across
+          the same wedge, under a seal that gives a healthy contrast.</li>
+        <li><b>The reason is geometric.</b> Tuning scales the vector; scaling changes a length and leaves a
+          direction alone.</li>
+        <li><b>The pair separates two questions:</b> how much rock is there, and what kind of rock is
+          it. How much the angle can say about the second depends on the seal, as module 10 showed.</li>
+        <li><b>It is a narrowing, not a solution.</b> Two numbers from two partial stacks cannot fully
+          separate thickness, porosity and fluid.</li>
+        <li><b>The division fails where the reflection is weak.</b> Under a soft shale at moderate porosity
+          the distance collapses and the angle swings, exactly as at module 10's class 2 crossover.</li>
+        <li><b>Below about 8 ms the sand holds no pick of its own</b>, which module 03 measured, and every
+          attribute downstream inherits that.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pm" role="tabpanel" hidden>
+    <details class="notes" id="notes" open>
+      <summary>Method, assumptions, and where to read more</summary>
+      <p>Everything upstream is as in modules 03 through 11: the same rocks, picks, quadrant numbers, phase
+        filters, enhancement, distance, baseline rotation, sector split and angle fold. The wedge is
+        modelled by rebuilding the whole chain at each thickness from 6 to 55 ms in steps of one and
+        reading both attributes at the sample nearest the top of the sand.</p>
+      <p>This is a two-interface wedge in a fixed seal, not a true wedge section with lateral continuity.
+        The published wedge displays vary thickness across traces and show the section; this page varies it
+        along an axis and plots the attribute, which is the same experiment presented as a curve rather
+        than as a picture. Nothing else in the model changes as the thickness moves.</p>
+      <p>The tuning peak quoted in the prose is the maximum of the sampled curve, not an analytic quarter
+        period. The two differ by a few milliseconds because the attribute is read at a picked sample and
+        the picking is quantised to the sample rate, so the curve is a stepped approximation to a smooth
+        one. Raising the sample rate control moves the peak around by a millisecond or two for that reason
+        and not because the physics changed.</p>
+      <p>The claim that the angle is blind to thickness holds where the reflection is strong. It is stated
+        for a tight sandstone seal and shown to fail under a soft shale at moderate porosity, which is the
+        near-crossover case module 10 uses as its example of an unreliable angle. Both statements are
+        measured on this page rather than assumed.</p>
+      <ul>
+        <li>Widess, M. B., 1973, How thin is a thin bed?: <em>Geophysics</em>, 38, 1176&ndash;1180.</li>
+        <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025, Distance and quadrant trace method for
+          quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="nextup" id="nextup" hidden>
+    <p class="eyebrow">Next up</p>
+    <h3><a href="rdq-crossplot.html">13 · The 3D RDQ crossplot</a></h3>
+    <p>Distance, &thetas;<sub>px</sub> and the signed half isochron on three axes &mdash; the plot the whole
+      workflow has been building toward.</p>
+    <a class="btn" href="rdq-crossplot.html">Open module 13 →</a>
+    <a class="btn ghost" href="../index.html">All modules</a>
+  </section>
+
+  <div class="pager" id="pager" hidden>
+    <a class="btn ghost" href="porosity.html">← DQ and porosity</a>
+    <a class="btn" href="rdq-crossplot.html">Next: the 3D RDQ crossplot →</a>
+  </div>
+
+  <footer>
+    <div class="foot-grid">
+      <p>Built for teaching by Heather Bedle, School of Geosciences, University of Oklahoma, with the
+        <a href="https://www.ou.edu/mcee/labs/aaspi">AASPI</a> consortium.</p>
+      <p class="lic">Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+        Free to use, share and adapt for any purpose, including training in industry, provided the source is
+        credited and adapted versions carry the same license.</p>
+      <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
+        Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
+      <p class="lic">Nothing you do inside this module leaves your browser: no slider, no click and no
+        trace you generate is transmitted anywhere. The one request the page itself makes is a page-view
+        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        nothing about you.</p>
+    </div>
+  </footer>
+</div>
+
+<script src="../assets/count.js"></script>
+<script src="../assets/seismic.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  if (typeof SEIS === 'undefined') {
+    const el = document.createElement('div');
+    el.setAttribute('style', 'background:#841617;color:#fff;padding:14px 18px;margin:16px 0;' +
+      'font:13px/1.6 ui-monospace,Menlo,monospace');
+    el.textContent = 'This module could not load assets/seismic.js. It expects it one directory up, ' +
+      'at ../assets/, and file names are case-sensitive on GitHub Pages.';
+    const w = document.querySelector('.wrap');
+    (w || document.body).insertBefore(el, w ? w.firstChild : null);
+    return;
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const visible = (id) => { const el = $(id); return el && !el.hidden; };
+
+  /* =====================================================================
+     THE ROCKS
+     Identical to modules 01 and 02.
+     ===================================================================== */
+
+  const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };
+
+  const FLUIDS = {
+    brine: { K: 2.60,  rho: 1.03, v: 1500, name: 'brine' },
+    oil:   { K: 0.80,  rho: 0.78, v: 1300, name: 'oil' },
+    gas:   { K: 0.055, rho: 0.20, v: 550,  name: 'gas' },
+  };
+
+  const LITHS = {
+    soft: { vp: 2700, vs: 1175, rho: 2.33, name: 'soft shale' },
+    hard: { vp: 3350, vs: 1675, rho: 2.48, name: 'hard shale' },
+    tight: { vp: 4800, vs: 2800, rho: 2.56, name: 'tight sandstone' },
+  };
+
+  const PH0 = 8, PH1 = 36;
+  const DTS = [0.001, 0.002, 0.003, 0.004];
+  const NEAR_A = [0, 10];
+  const T0 = 0, TWIN = 0.150, TTOP = 0.050;
+  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
+  const BEDC = [0.118, 0.130];                   // a tight bed below it
+
+  const DEF = {
+    over: 'soft', phi: 28, fluid: 'gas',
+    thick: 20, freq: 40, dt: 0, noise: 0, showall: true, tab: 'p1',
+  };
+  let S = SEIS.readState(DEF);
+  if (!LITHS[S.over]) S.over = DEF.over;
+  if (!FLUIDS[S.fluid]) S.fluid = DEF.fluid;
+  S.phi = Math.min(PH1, Math.max(PH0, Math.round(S.phi) || DEF.phi));
+
+  const CAN_LINK = location.protocol !== 'file:';
+  const saveState = () => {
+    if (!CAN_LINK) return;
+    try { SEIS.writeState(S, DEF); } catch (e) { /* nothing shareable */ }
+  };
+
+  /* ------------------------------- the physics ------------------------- */
+
+  function shuey(l1, l2) {
+    const vp = (l1.vp + l2.vp) / 2, dvp = l2.vp - l1.vp;
+    const vs = (l1.vs + l2.vs) / 2, dvs = l2.vs - l1.vs;
+    const rho = (l1.rho + l2.rho) / 2, drho = l2.rho - l1.rho;
+    const k = (vs / vp) * (vs / vp);
+    return {
+      A: 0.5 * (dvp / vp + drho / rho),
+      B: 0.5 * (dvp / vp) - 2 * k * (drho / rho + 2 * (dvs / vs)),
+    };
+  }
+  function meanSin2(a, b) {
+    const n = 256, lo = a * Math.PI / 180, hi = b * Math.PI / 180;
+    let sum = 0;
+    for (let i = 0; i < n; i++) {
+      const th = lo + (hi - lo) * (i + 0.5) / n;
+      sum += Math.sin(th) * Math.sin(th);
+    }
+    return sum / n;
+  }
+  const S2N = meanSin2(NEAR_A[0], NEAR_A[1]);
+
+  function brineSand(phi) {
+    const vp = 1 / (phi / FLUIDS.brine.v + (1 - phi) / MATRIX.vp);
+    const rho = (1 - phi) * MATRIX.rho + phi * FLUIDS.brine.rho;
+    const vpvs = -0.75 * phi * phi + 1.35 * phi + 1.63;
+    return { vp, vs: vp / vpvs, rho };
+  }
+  function ksatFromDry(kdry, phi, kfl) {
+    const num = Math.pow(1 - kdry / MATRIX.K, 2);
+    const den = phi / kfl + (1 - phi) / MATRIX.K - kdry / (MATRIX.K * MATRIX.K);
+    return kdry + num / den;
+  }
+  function kdryFromSat(ksat, phi, kfl) {
+    const a = phi * MATRIX.K / kfl;
+    return (ksat * (a + 1 - phi) - MATRIX.K) / (a + ksat / MATRIX.K - 1 - phi);
+  }
+  function sandRock(phi, fluidKey) {
+    const b = brineSand(phi);
+    if (fluidKey === 'brine') return b;
+    const mu = b.rho * b.vs * b.vs * 1e-6;
+    const ksat = b.rho * b.vp * b.vp * 1e-6 - (4 / 3) * mu;
+    const kdry = kdryFromSat(ksat, phi, FLUIDS.brine.K);
+    const f = FLUIDS[fluidKey];
+    const k2 = ksatFromDry(kdry, phi, f.K);
+    const rho = (1 - phi) * MATRIX.rho + phi * f.rho;
+    return {
+      vp: Math.sqrt((k2 + (4 / 3) * mu) * 1e6 / rho),
+      vs: Math.sqrt(mu * 1e6 / rho),
+      rho,
+    };
+  }
+
+  const dt = () => DTS[S.dt | 0];
+  const ntOf = () => Math.floor(TWIN / dt()) + 1;
+
+  /* --------------------------- the layer stack ------------------------- */
+
+  /* The near-stack reflectivity of one trace. A layered earth rather than a
+     lone sand, so that the trace looks like something worth picking: a
+     contrasting bed above, the sand with an optional tight streak inside it,
+     and a tight bed below. Every spike is computed from the two rocks it sits
+     between. */
+  function spikes(topT, thickS) {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const tight = LITHS.tight;
+    const other = (S.over === 'soft') ? LITHS.hard : LITHS.soft;
+    const n = (q) => q.A + q.B * S2N;
+    const shift = topT - TTOP;                   // structure moves everything together
+    const out = [];
+
+    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
+    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
+
+    const baseT = topT + thickS / 1000;
+    out.push({ t: topT, r: n(shuey(over, sand)) });
+    out.push({ t: baseT, r: n(shuey(sand, over)) });
+
+    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
+    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
+    return out;
+  }
+
+  const wavelet = () => SEIS.makeWavelet({ type: 'ricker', f: S.freq });
+
+  function refAmp() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const q = shuey(over, sand);
+    return Math.max(Math.abs(q.A + q.B * S2N), 1e-4);
+  }
+
+  let noiseCache = null;
+  function noiseField(nx) {
+    const key = [S.over, S.phi, S.fluid, S.freq, S.noise, S.dt, nx].join('|');
+    if (noiseCache && noiseCache.key === key) return noiseCache.field;
+    let field = null;
+    if (S.noise > 0) {
+      const raw = SEIS.bandLimitedNoise(nx, ntOf(), dt(), wavelet(), 20260903, 0);
+      const amp = (S.noise / 100) * refAmp();
+      field = new Float32Array(raw.length);
+      for (let i = 0; i < raw.length; i++) field[i] = raw[i] * amp;
+    }
+    noiseCache = { key, field };
+    return field;
+  }
+
+  function trace(topT, thickS, noise, ix) {
+    const nt = ntOf();
+    const tr = SEIS.traceFromSpikes(spikes(topT, thickS), T0, dt(), nt, wavelet());
+    if (noise) for (let i = 0; i < nt; i++) tr[i] += noise[ix * nt + i];
+    return tr;
+  }
+
+  /* ------------------------------- the picker --------------------------
+     Zero crossings first. Of the two samples bracketing a crossing, keep
+     the one with the smaller magnitude; that sample is Q5. Then between
+     each consecutive pair of those, keep the single largest peak or
+     trough, so a doublet loses its smaller half.
+     --------------------------------------------------------------------- */
+
+  // an extremum in the strict sense: the sample-to-sample difference changes
+  // sign here, and the sample is above the amplitude floor
+  function isExtremum(tr, i, floor) {
+    if (i < 1 || i > tr.length - 2) return false;
+    if (Math.abs(tr[i]) <= floor) return false;
+    const a = tr[i] - tr[i - 1], b = tr[i + 1] - tr[i];
+    return (a > 0 && b <= 0) || (a < 0 && b >= 0);
+  }
+
+  function pick(tr, sandWin) {
+    const nt = tr.length;
+    let peak = 1e-12;
+    for (let i = 0; i < nt; i++) peak = Math.max(peak, Math.abs(tr[i]));
+    const floor = 0.01 * peak;
+
+    const cross = [];                      // { i, tTrue, err }
+    for (let i = 1; i < nt; i++) {
+      const a = tr[i - 1], b = tr[i];
+      if (a === 0 || b === 0) continue;
+      if ((a > 0) === (b > 0)) continue;
+      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
+      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
+      // where the crossing actually is, by linear interpolation
+      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
+      const tTrue = (i - 1 + frac) * dt();
+      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    }
+
+    /* Between each consecutive pair of crossings, keep the single largest
+       peak or trough. Where a thin bed has put two extrema in one interval,
+       the smaller is discarded; those are counted separately, and only inside
+       the sand, so that the count is about the sand and not about whatever
+       the beds above and below happen to be doing. */
+    const ext = [], dropped = [];
+    let doublets = 0, inSand = 0;
+    const inWin = (i) => !sandWin || (i >= sandWin[0] && i <= sandWin[1]);
+    for (let k = 0; k + 1 < cross.length; k++) {
+      const lo = cross[k].i, hi = cross[k + 1].i;
+      let best = -1, bv = 0;
+      const here = [];
+      for (let i = lo + 1; i < hi; i++) {
+        if (isExtremum(tr, i, floor)) here.push(i);
+        if (Math.abs(tr[i]) > bv) { bv = Math.abs(tr[i]); best = i; }
+      }
+      if (best < 0 || bv <= floor) continue;
+      ext.push({ i: best, sign: tr[best] > 0 ? 1 : -1, amp: tr[best] });
+      if (inWin(best)) inSand++;
+      here.forEach((i) => {
+        if (i === best) return;
+        dropped.push(i);
+        if (inWin(i)) doublets++;
+      });
+    }
+    return { cross, ext, dropped, doublets, inSand, peak, floor };
+  }
+
+  // the samples spanned by the sand, used to keep the doublet count local
+  function sandWindow(topT, thickS) {
+    const D = dt();
+    return [Math.max(0, Math.floor(topT / D)),
+            Math.min(ntOf() - 1, Math.ceil((topT + thickS / 1000) / D))];
+  }
+
+  /* =====================================================================
+     QUADRANT NUMBERING
+
+     Anchors come from the picks: Q5 at every zero-crossing sample, Q1 at
+     every trough, Q9 at every peak. Between two anchors the three interior
+     numbers are spread by proportion, which repeats them when the gap is
+     long and drops them when it is short.
+     ===================================================================== */
+
+  /* The numbering runs 1 to 9 down every loop, from one extremum to the next,
+     and then starts again. It does not run up to 9 and mirror back down. The
+     scheme is really modulo 8 — the Q9 that closes one loop is the Q1 that
+     opens the next, which is why the published table gives both the 0 degree
+     filter, and why Dennis Neff describes the scheme as "8 quadrants" and its
+     coarse version as "4 quadrants". */
+
+  function quadrants(tr, pk) {
+    const nt = tr.length;
+    const q = new Int8Array(nt);                 // 0 means unnumbered
+    const ends = new Set();                      // samples that close a loop
+    const cross = pk.cross.slice().sort((a, b) => a.i - b.i);
+    const ext = pk.ext.slice().sort((a, b) => a.i - b.i);
+
+    // one loop is extremum, crossing, extremum
+    const loops = [];
+    for (let k = 0; k + 1 < ext.length; k++) {
+      const a = ext[k], b = ext[k + 1];
+      const x = cross.find((c) => c.i > a.i && c.i < b.i);
+      if (x) loops.push({ a: a.i, x: x.i, b: b.i });
+    }
+
+    let repeated = 0, omitted = 0, gaps = 0, interior = 0;
+    const fill = (i0, i1, trip) => {
+      const n = i1 - i0 - 1;
+      gaps++;
+      interior += n;
+      if (n <= 0) { omitted++; return; }
+      const used = new Set(), count = {};
+      for (let m = 0; m < n; m++) {
+        const v = trip[Math.min(2, Math.floor((m + 0.5) * 3 / n))];
+        q[i0 + 1 + m] = v;
+        used.add(v);
+        count[v] = (count[v] || 0) + 1;
+      }
+      if (used.size < 3) omitted++;
+      if (Object.keys(count).some((v) => count[v] > 1)) repeated++;
+    };
+
+    loops.forEach((L) => {
+      q[L.a] = 1;                                // opens this loop
+      q[L.x] = 5;
+      if (!q[L.b]) q[L.b] = 9;                   // closes it, unless a later
+      ends.add(L.b);                             // loop has already claimed it
+      fill(L.a, L.x, [2, 3, 4]);
+      fill(L.x, L.b, [6, 7, 8]);
+    });
+    // an extremum shared by two loops opens the second one; Q9 and Q1 are the
+    // same position and take the same filter, so either label is correct
+    loops.forEach((L) => { q[L.a] = 1; });
+
+    const anchors = [];
+    loops.forEach((L) => {
+      anchors.push({ i: L.a, q: 1 }, { i: L.x, q: 5 });
+    });
+    if (loops.length) {
+      const last = loops[loops.length - 1];
+      anchors.push({ i: last.b, q: q[last.b] || 9 });
+    }
+    anchors.sort((a, b) => a.i - b.i);
+    return { q, anchors, loops, ends, repeated, omitted, gaps, interior };
+  }
+
+  // how the three interior numbers land for a gap of n samples
+  function fillPattern(n) {
+    const out = [];
+    for (let m = 0; m < n; m++) out.push(2 + Math.min(2, Math.floor((m + 0.5) * 3 / n)));
+    return out;
+  }
+
+  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
+     or a carbonate play — both partial stacks are reversed at the stacking
+     step, before any picking, so that the numbering rule never changes. */
+  function needsFlip() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const t = shuey(over, sand);
+    return (t.A + t.B * S2N) > 0;
+  }
+  const flipApplied = () => needsFlip() && !S.skipflip;
+
+  function avoClass() {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const t = shuey(over, sand);
+    const s2f = meanSin2(20, 30);
+    const far = t.A + t.B * s2f;
+    if (t.A > 0.03) return (t.A * far < 0) ? 'class 2p' : 'class 1';
+    if (t.A > -0.03) return (t.A * far < 0) ? 'class 2p' : 'class 2';
+    return t.B < 0 ? 'class 3' : 'class 4';
+  }
+
+
+  /* =====================================================================
+     THE PHASE FILTERS
+
+     A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
+     trace rather than to the wavelet so that it also works with noise on.
+     The tabulated filter is written for a rising limb; on a falling limb
+     the phase that centres a sample runs the other way, so the filter is
+     negated. Step 3 measures what happens if it is not.
+     ===================================================================== */
+
+  // the published table, one filter per quadrant number
+  const FILTERS = [0, 22.5, 45, 67.5, -90, -67.5, -45, -22.5];
+  const PHASE_OF = { 1: 0, 2: 22.5, 3: 45, 4: 67.5, 5: -90, 6: -67.5, 7: -45, 8: -22.5, 9: 0 };
+
+  function rotate(x, deg) {
+    if (Math.abs(deg) < 1e-9) return Float64Array.from(x);
+    const h = SEIS.hilbert(x);
+    const c = Math.cos(deg * Math.PI / 180), s = Math.sin(deg * Math.PI / 180);
+    const o = new Float64Array(x.length);
+    for (let i = 0; i < x.length; i++) o[i] = x[i] * c + h[i] * s;
+    return o;
+  }
+  function envelope(x) {
+    const h = SEIS.hilbert(x);
+    const o = new Float64Array(x.length);
+    for (let i = 0; i < x.length; i++) o[i] = Math.hypot(x[i], h[i]);
+    return o;
+  }
+
+  /* Which way each limb runs, so the filter sign can follow it. A limb is a
+     stretch from one extremum to the next, and the crossing sits inside it. */
+  function limbSigns(tr, pk, nt) {
+    const sign = new Int8Array(nt);                 // +1 rising, -1 falling
+    const ext = pk.ext.slice().sort((a, b) => a.i - b.i);
+    for (let k = 0; k + 1 < ext.length; k++) {
+      const a = ext[k], b = ext[k + 1];
+      const s = (tr[b.i] > tr[a.i]) ? 1 : -1;
+      for (let i = a.i; i <= b.i; i++) sign[i] = s;
+    }
+    return sign;
+  }
+
+  function enhance(tr, qd, pk) {
+    const nt = tr.length;
+    const sign = limbSigns(tr, pk, nt);
+    const cache = {};
+    const out = new Float64Array(nt);
+    const used = new Set();
+    for (let i = 0; i < nt; i++) {
+      const q = qd.q[i];
+      if (!q) continue;
+      let deg = PHASE_OF[q];
+      if (sign[i] < 0) deg = -deg;                   // falling limb runs the other way
+      if (!(deg in cache)) cache[deg] = rotate(tr, deg);
+      out[i] = cache[deg][i];
+      used.add(deg);
+    }
+    return { out, used, sign };
+  }
+
+
+  // the peak amplitude a rotated wavelet reaches, relative to the unrotated one
+  function filterPeaks() {
+    const wav = wavelet();
+    const out = {};
+    [0, 22.5, 45, 67.5, 90].forEach((p) => {
+      const w = SEIS.phaseRotate(wav, p);
+      let mx = 0;
+      for (let t = -0.08; t <= 0.08; t += 0.0002) mx = Math.max(mx, Math.abs(w.fn(t)));
+      out[p] = mx;
+    });
+    return out;
+  }
+
+  /* =====================================================================
+     THE DISTANCE
+
+     A is the quadrant-enhanced near stack and B is the enhanced far stack
+     minus it, so the two mean what they meant in module 02. The distance is
+     the length of that vector, and the sign is put on afterwards from the
+     slope of the near stack.
+     ===================================================================== */
+
+  const S2F = meanSin2(20, 30);
+
+  // the far stack of the same layer stack, formed exactly as the near one is
+  function farTrace(noise) {
+    const over = LITHS[S.over];
+    const sand = sandRock(S.phi / 100, S.fluid);
+    const baseT = TTOP + S.thick / 1000;
+    const f = (q) => q.A + q.B * S2F;
+    const sp = [
+      { t: BEDA[0], r: f(shuey(over, (S.over === 'soft') ? LITHS.hard : LITHS.soft)) },
+      { t: BEDA[1], r: f(shuey((S.over === 'soft') ? LITHS.hard : LITHS.soft, over)) },
+      { t: TTOP, r: f(shuey(over, sand)) },
+      { t: baseT, r: f(shuey(sand, over)) },
+      { t: BEDC[0], r: f(shuey(over, LITHS.tight)) },
+      { t: BEDC[1], r: f(shuey(LITHS.tight, over)) },
+    ];
+    const nt = ntOf();
+    const tr = SEIS.traceFromSpikes(sp, T0, dt(), nt, wavelet());
+    if (noise) for (let i = 0; i < nt; i++) tr[i] += noise[i];
+    return tr;
+  }
+
+  function slopeSign(tr, qd) {
+    const nt = tr.length;
+    const s = new Int8Array(nt);
+    for (let i = 0; i < nt; i++) {
+      if (!qd.q[i]) continue;
+      if (qd.q[i] === 1 || qd.q[i] === 9) { s[i] = 1; continue; }   // extrema are positive
+      const a = tr[Math.max(0, i - 1)], b = tr[Math.min(nt - 1, i + 1)];
+      s[i] = (b > a) ? 1 : -1;
+    }
+    return s;
+  }
+
+  function build() {
+    const noise = noiseField(1);
+    let near = trace(TTOP, S.thick, noise, 0);
+    let far = farTrace(noise);
+    if (flipApplied()) {
+      for (let i = 0; i < near.length; i++) { near[i] = -near[i]; far[i] = -far[i]; }
+    }
+    const pk = pick(near, sandWindow(TTOP, S.thick));
+    const qd = quadrants(near, pk);
+    const QN = enhance(near, qd, pk).out;
+    const QF = enhance(far, qd, pk).out;
+
+    const nt = near.length;
+    const A = new Float64Array(nt), B = new Float64Array(nt);
+    const D = new Float64Array(nt), Dpub = new Float64Array(nt), Dsig = new Float64Array(nt);
+    const sgn = slopeSign(near, qd);
+    let worst = 0;
+    for (let i = 0; i < nt; i++) {
+      if (!qd.q[i]) continue;
+      A[i] = QN[i];
+      B[i] = QF[i] - QN[i];
+      D[i] = Math.hypot(A[i], B[i]);
+      // the form the papers print, evaluated independently
+      Dpub[i] = Math.sqrt(Math.max(0, 2 * QN[i] * QN[i] + QF[i] * QF[i] - 2 * QN[i] * QF[i]));
+      worst = Math.max(worst, Math.abs(D[i] - Dpub[i]));
+      Dsig[i] = S.signed ? sgn[i] * D[i] : D[i];
+    }
+    return { near, far, qd, pk, QN, QF, A, B, D, Dpub, Dsig, sgn, worst,
+             env: envelope(near) };
+  }
+
+  /* variation within each loop, as a fraction of that loop's mean magnitude.
+     A blocked trace scores near zero; an oscillating one scores badly. */
+  function blockiness(mag, b) {
+    const ext = b.pk.ext.slice().sort((x, y) => x.i - y.i);
+    const cv = [];
+    for (let k = 0; k + 1 < ext.length; k++) {
+      const lo = ext[k].i, hi = ext[k + 1].i;
+      if (hi - lo < 5) continue;
+      let s = 0, n = 0;
+      for (let i = lo; i <= hi; i++) { s += Math.abs(mag[i]); n++; }
+      const m = s / n;
+      if (m < 1e-9) continue;
+      let v = 0;
+      for (let i = lo; i <= hi; i++) v += (Math.abs(mag[i]) - m) * (Math.abs(mag[i]) - m);
+      cv.push(Math.sqrt(v / n) / m);
+    }
+    return { cv: cv.length ? cv.reduce((a, c) => a + c, 0) / cv.length : 0, n: cv.length };
+  }
+
+  /* =====================================================================
+     SECTOR SPLITTING
+
+     Paper 2: if the quadrant number is Q3, Q4, Q5, Q6 or Q7 then the data
+     are replotted with the gradient multiplied by -1. Applied after the
+     baseline rotation of module 08, never before it.
+     ===================================================================== */
+
+  const BASE_BEARING = 344;                        // this model's baseline, module 08
+  const TURN = 360 - BASE_BEARING;                 // spec [25] and [30]
+  const isSplit = (q) => q >= 3 && q <= 7;
+
+  function rotXY(x, y, deg) {
+    const t = deg * Math.PI / 180, c = Math.cos(t), s = Math.sin(t);
+    return [x * c - y * s, x * s + y * c];
+  }
+
+  function points() {
+    const b = build();
+    const nt = b.near.length;
+    const out = [];
+    for (let i = 0; i < nt; i++) {
+      const q = b.qd.q[i];
+      if (!q) continue;
+      const [x, y] = rotXY(b.A[i], b.B[i], TURN);
+      const flip = isSplit(q);
+      out.push({ i, q, x, y: flip ? -y : y, y0: y, moved: flip });
+    }
+    return { b, pts: out };
+  }
+
+  const bearing = (x, y) => (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+
+  /* mean, across the nine numbers, of the angular spread within a number.
+     Angles are unwrapped about each group's own mean first, so a group that
+     straddles zero is not credited with a huge spread for that reason. */
+  /* How consistently the samples carrying one quadrant number fall on the same
+     side of the background trend, averaged over the nine numbers. Reflecting a
+     whole group cannot change the spread within it, so spread is the wrong
+     measure here; agreement between loops is the right one. */
+  function sideAgreement(pts, useSplit) {
+    const by = {};
+    pts.forEach((p) => {
+      const y = useSplit ? p.y : p.y0;
+      (by[p.q] = by[p.q] || []).push(y >= 0 ? 1 : 0);
+    });
+    const fr = [];
+    Object.keys(by).forEach((k) => {
+      const a = by[k];
+      if (a.length < 3) return;
+      const up = a.reduce((s, v) => s + v, 0);
+      fr.push(Math.max(up, a.length - up) / a.length);
+    });
+    return fr.length ? 100 * fr.reduce((s, x) => s + x, 0) / fr.length : 0;
+  }
+
+  function angleSpread(pts, useSplit) {
+    const by = {};
+    pts.forEach((p) => {
+      const y = useSplit ? p.y : p.y0;
+      (by[p.q] = by[p.q] || []).push(bearing(p.x, y));
+    });
+    const sds = [];
+    Object.keys(by).forEach((k) => {
+      const a = by[k];
+      if (a.length < 3) return;
+      const rad = a.map((d) => d * Math.PI / 180);
+      const mx = rad.reduce((s, r) => s + Math.cos(r), 0) / rad.length;
+      const my = rad.reduce((s, r) => s + Math.sin(r), 0) / rad.length;
+      const mean = Math.atan2(my, mx);
+      let v = 0;
+      rad.forEach((r) => {
+        let d = r - mean;
+        while (d > Math.PI) d -= 2 * Math.PI;
+        while (d < -Math.PI) d += 2 * Math.PI;
+        v += d * d;
+      });
+      sds.push(Math.sqrt(v / rad.length) * 180 / Math.PI);
+    });
+    return sds.length ? sds.reduce((s, x) => s + x, 0) / sds.length : 0;
+  }
+
+  /* =====================================================================
+     THETA PX
+
+     The polar angle of the split coordinates, folded into 0-90 by sector and
+     multiplied by the sign of the DQ trace. Quoted from the AASPI column
+     sequence; Paper 2 gives the same four rules labelled by sector.
+     ===================================================================== */
+
+  function fold(deg) {
+    if (deg < 90) return deg;
+    if (deg < 180) return 180 - deg;
+    if (deg < 270) return deg - 180;
+    return 360 - deg;
+  }
+  function sectorName(deg) {
+    if (deg < 90) return 'I, upper right';
+    if (deg < 180) return 'IV, upper left';
+    if (deg < 270) return 'III, lower left';
+    return 'II, lower right';
+  }
+
+  // the sand-top sample, with everything the module reports about it
+  function atTop(over, fluid, phi) {
+    const keep = [S.over, S.fluid, S.phi];
+    if (over) { S.over = over; S.fluid = fluid; S.phi = phi; }
+    const { b, pts } = points();
+    const win = sandWindow(TTOP, S.thick);
+    let best = null, bd = 1e9;
+    pts.forEach((p) => { const d = Math.abs(p.i - win[0]); if (d < bd) { bd = d; best = p; } });
+    let out = null;
+    if (best) {
+      const ang = bearing(best.x, best.y);
+      const sgn = b.sgn[best.i] >= 0 ? 1 : -1;
+      out = { ang, sector: sectorName(ang), folded: fold(ang),
+              px: fold(ang) * (S.signed ? sgn : 1), sgn,
+              d: Math.hypot(best.x, best.y), q: best.q, i: best.i };
+    }
+    if (over) { S.over = keep[0]; S.fluid = keep[1]; S.phi = keep[2]; }
+    return out;
+  }
+
+  /* =====================================================================
+     THE WEDGE
+
+     The whole chain rebuilt at each bed thickness, with both attributes read
+     at the top of the sand. Tuning scales the vector, so it moves the length
+     and leaves the direction alone.
+     ===================================================================== */
+
+  const TH_LO = 6, TH_HI = 55;
+  const THS = [];
+  for (let t = TH_LO; t <= TH_HI; t += 1) THS.push(t);
+
+  function fold(d) {
+    if (d < 90) return d;
+    if (d < 180) return 180 - d;
+    if (d < 270) return d - 180;
+    return 360 - d;
+  }
+
+  const wedgeCache = {};
+  function wedge(fluid) {
+    const key = [S.over, fluid, S.phi, S.freq, S.dt, S.noise].join('|');
+    if (wedgeCache[key]) return wedgeCache[key];
+    const keepT = S.thick, keepF = S.fluid;
+    S.fluid = fluid;
+    const out = THS.map((t) => {
+      S.thick = t;
+      const r = points();
+      const win = sandWindow(TTOP, S.thick);
+      let best = null, bd = 1e9;
+      r.pts.forEach((q) => { const d = Math.abs(q.i - win[0]); if (d < bd) { bd = d; best = q; } });
+      if (!best) return { t, d: 0, px: 0 };
+      const ang = bearing(best.x, best.y);
+      const sgn = r.b.sgn[best.i] >= 0 ? 1 : -1;
+      return { t, d: Math.hypot(best.x, best.y), px: fold(ang) * sgn };
+    });
+    S.thick = keepT; S.fluid = keepF;
+    wedgeCache[key] = out;
+    return out;
+  }
+
+  const SOFT = 'rgba(22,25,28,0.45)';
+  const CRIM = '#841617';
+  const FLCOL = { brine: '#1D6FA3', oil: '#4E7A2C', gas: '#C2306B' };
+
+  function width(el, fallback) {
+    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    return Math.max(280, w || fallback);
+  }
+  const spanOf = (vals) => {
+    let lo = Infinity, hi = -Infinity;
+    vals.forEach((v) => { lo = Math.min(lo, v); hi = Math.max(hi, v); });
+    const pad = (hi - lo) * 0.14 || 0.01;
+    return [lo - pad, hi + pad];
+  };
+
+  function plotVsThickness(ctx, rect, series, lo, hi, ylab, fmt, mark) {
+    SEIS.axisLeft(ctx, rect, lo, hi, ylab, fmt, { ticks: 5, flip: true, grid: true });
+    SEIS.axisBottom(ctx, rect, TH_LO, TH_HI, 'bed thickness (ms)',
+      (v) => String(Math.round(v)), { ticks: 5 });
+    SEIS.frame(ctx, rect);
+    const X = (t) => rect.x + ((t - TH_LO) / (TH_HI - TH_LO)) * rect.w;
+    const Y = (v) => rect.y + rect.h - ((v - lo) / (hi - lo || 1)) * rect.h;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    series.forEach((s) => {
+      ctx.beginPath();
+      s.vals.forEach((q, k) => { k === 0 ? ctx.moveTo(X(q.t), Y(q.v)) : ctx.lineTo(X(q.t), Y(q.v)); });
+      ctx.strokeStyle = s.col; ctx.lineWidth = s.lw || 2.1; ctx.stroke();
+      if (mark != null) {
+        const n = s.vals.reduce((a, q) => Math.abs(q.t - mark) < Math.abs(a.t - mark) ? q : a, s.vals[0]);
+        ctx.beginPath(); ctx.arc(X(n.t), Y(n.v), 5, 0, 2 * Math.PI);
+        ctx.fillStyle = s.col; ctx.fill();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.8; ctx.stroke();
+      }
+    });
+    ctx.restore();
+    return { X, Y };
+  }
+
+  function drawMain() {
+    const c = $('cMain'); if (!c) return;
+    const W = width(c, 520), H = 330;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const top = 26, bot = H - 30;
+    const lw = Math.min(120, (W - 74) * 0.40);
+    const rL = { x: 50, y: top, w: lw, h: bot - top };
+    SEIS.axisLeft(ctx, rL, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 6 });
+    // the wedge itself: the sand thinning across the panel
+    const sealFill = { soft: 'rgba(150,160,170,0.55)', hard: 'rgba(110,125,140,0.65)',
+                       tight: 'rgba(214,171,74,0.55)' }[S.over];
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rL.x, rL.y, rL.w, rL.h); ctx.clip();
+    ctx.fillStyle = sealFill; ctx.fillRect(rL.x, rL.y, rL.w, rL.h);
+    const Yt = (t) => rL.y + ((t - T0) / (TWIN - T0)) * rL.h;
+    ctx.beginPath();
+    ctx.moveTo(rL.x, Yt(TTOP));
+    ctx.lineTo(rL.x + rL.w, Yt(TTOP));
+    ctx.lineTo(rL.x + rL.w, Yt(TTOP + TH_LO / 1000));
+    ctx.lineTo(rL.x, Yt(TTOP + TH_HI / 1000));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(194,48,107,0.34)'; ctx.fill();
+    ctx.strokeStyle = 'rgba(150,20,70,0.7)'; ctx.lineWidth = 1.3; ctx.stroke();
+    // where the marked thickness sits on the wedge
+    const u = (S.thick - TH_HI) / (TH_LO - TH_HI);
+    const mx = rL.x + u * rL.w;
+    SEIS.dashedLine(ctx, mx, rL.y, mx, rL.y + rL.h, CRIM, [5, 4], 1.6);
+    ctx.restore();
+    SEIS.frame(ctx, rL);
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(22,25,28,0.8)';
+    ctx.fillText('sand', rL.x + rL.w * 0.34, Yt(TTOP + 0.014));
+
+    const noise = noiseField(1);
+    let tr = trace(TTOP, S.thick, noise, 0);
+    if (flipApplied()) {
+      const f = new Float64Array(tr.length);
+      for (let i = 0; i < tr.length; i++) f[i] = -tr[i];
+      tr = f;
+    }
+    const nt = tr.length;
+    let pk = 1e-12;
+    for (let i = 0; i < nt; i++) pk = Math.max(pk, Math.abs(tr[i]));
+    const rT = { x: rL.x + rL.w + 20, y: top, w: W - (rL.x + rL.w + 20) - 8, h: bot - top };
+    SEIS.frame(ctx, rT);
+    SEIS.dashedLine(ctx, rT.x + rT.w / 2, rT.y, rT.x + rT.w / 2, rT.y + rT.h, SOFT, [4, 4], 1);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rT.x, rT.y, rT.w, rT.h); ctx.clip();
+    ctx.beginPath();
+    for (let i = 0; i < nt; i++) {
+      const y = rT.y + (i / (nt - 1)) * rT.h;
+      const x = rT.x + rT.w / 2 + (tr[i] / pk) * (rT.w / 2) * 0.9;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = 'rgba(22,25,28,0.65)'; ctx.lineWidth = 1.7; ctx.stroke();
+    ctx.restore();
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(22,25,28,0.55)';
+    ctx.fillText('THE WEDGE', rL.x + rL.w / 2, rL.y - 6);
+    ctx.fillText('NEAR STACK', rT.x + rT.w / 2, rT.y - 6);
+  }
+
+  /* ------------------------------- step 1 ------------------------------ */
+
+  function drawStep1() {
+    const c = $('c1a'); if (!c) return;
+    const W = width(c, 640), H = 400;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const w = wedge(S.fluid);
+    const ds = w.map((q) => q.d);
+    const [lo, hi] = spanOf(ds);
+    const rect = { x: 68, y: 28, w: W - 98, h: H - 72 };
+    const A = plotVsThickness(ctx, rect, [{ vals: w.map((q) => ({ t: q.t, v: q.d })), col: CRIM }],
+      lo, hi, 'DQ distance', (v) => v.toFixed(2), S.thick);
+    // a quarter of the wavelet period, the classical tuning thickness
+    const qt = 250 / S.freq;
+    if (qt >= TH_LO && qt <= TH_HI) {
+      SEIS.dashedLine(ctx, A.X(qt), rect.y, A.X(qt), rect.y + rect.h,
+        'rgba(22,25,28,0.4)', [5, 4], 1.2);
+      SEIS.tag(ctx, A.X(qt) + 6, rect.y + 10, 'quarter period', 'rgba(22,25,28,0.55)');
+    }
+
+    let peak = w[0], resolved = w[w.length - 1];
+    w.forEach((q) => { if (q.d > peak.d) peak = q; });
+    const at = w.reduce((a, q) => Math.abs(q.t - S.thick) < Math.abs(a.t - S.thick) ? q : a, w[0]);
+    const rel = (Math.max(...ds) - Math.min(...ds)) / Math.max(...ds);
+    $('s1a').textContent = at.d.toFixed(4) + ' at ' + at.t + ' ms';
+    $('s1b').textContent = peak.d.toFixed(4) + ' at ' + peak.t + ' ms';
+    $('s1c').textContent = resolved.d.toFixed(4);
+    $('s1d').textContent = (100 * rel).toFixed(0) + '% of the maximum';
+    $('s1e').textContent = 'The curve peaks at ' + peak.t + ' ms and settles to '
+      + resolved.d.toFixed(3) + ' once the bed is thick enough to resolve. A quarter of the wavelet '
+      + 'period is ' + qt.toFixed(1) + ' ms; change the frequency and the peak follows it.';
+  }
+
+  /* ------------------------------- step 2 ------------------------------ */
+
+  function drawStep2() {
+    const c = $('c2a'); if (!c) return;
+    const W = width(c, 640), H = 400;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const w = wedge(S.fluid);
+    const gap = 40;
+    const pw = (W - 110 - gap) / 2;
+    const rA = { x: 68, y: 28, w: pw, h: H - 72 };
+    const rB = { x: 68 + pw + gap + 38, y: 28, w: pw, h: H - 72 };
+    const ds = w.map((q) => q.d);
+    const [lo, hi] = spanOf(ds);
+    plotVsThickness(ctx, rA, [{ vals: w.map((q) => ({ t: q.t, v: q.d })), col: CRIM }],
+      lo, hi, 'DQ distance', (v) => v.toFixed(2), S.thick);
+    plotVsThickness(ctx, rB, [{ vals: w.map((q) => ({ t: q.t, v: q.px })), col: '#1D6FA3' }],
+      -90, 90, 'theta px (degrees)', (v) => String(Math.round(v)), S.thick);
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = CRIM; ctx.fillText('DISTANCE', rA.x + rA.w / 2, rA.y - 8);
+    ctx.fillStyle = '#1D6FA3'; ctx.fillText('THETA PX', rB.x + rB.w / 2, rB.y - 8);
+
+    const pxs = w.map((q) => q.px);
+    const relD = 100 * (Math.max(...ds) - Math.min(...ds)) / Math.max(...ds);
+    const rngP = Math.max(...pxs) - Math.min(...pxs);
+    const at = w.reduce((a, q) => Math.abs(q.t - S.thick) < Math.abs(a.t - S.thick) ? q : a, w[0]);
+    $('s2a').textContent = relD.toFixed(0) + '% of its maximum';
+    $('s2b').textContent = rngP.toFixed(1) + '\u00B0';
+    $('s2c').textContent = (at.px >= 0 ? '+' : '\u2212') + Math.abs(at.px).toFixed(1) + '\u00B0';
+    $('s2d').textContent = TH_LO + ' to ' + TH_HI + ' ms';
+    $('s2e').textContent = rngP < 5
+      ? 'Across the whole wedge the distance moves by ' + relD.toFixed(0)
+        + '% and the angle by ' + rngP.toFixed(1)
+        + ' degrees. Tuning scales the vector, and scaling changes a length but not a direction.'
+      : 'Here the angle moves by ' + rngP.toFixed(0) + ' degrees as well, which happens when the '
+        + 'distance is small enough that the vector\u2019s direction is poorly determined. Try a seal '
+        + 'that gives a stronger contrast.';
+  }
+
+  /* ------------------------------- step 3 ------------------------------ */
+
+  function drawStep3() {
+    const c = $('c3a'); if (!c) return;
+    const W = width(c, 640), H = 400;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const fluids = S.showall ? ['brine', 'oil', 'gas'] : [S.fluid];
+    const data = {};
+    fluids.forEach((f) => { data[f] = wedge(f); });
+    const gap = 40;
+    const pw = (W - 110 - gap) / 2;
+    const rA = { x: 68, y: 28, w: pw, h: H - 72 };
+    const rB = { x: 68 + pw + gap + 38, y: 28, w: pw, h: H - 72 };
+    let all = [];
+    fluids.forEach((f) => { all = all.concat(data[f].map((q) => q.d)); });
+    const [lo, hi] = spanOf(all);
+    plotVsThickness(ctx, rA, fluids.map((f) => ({
+      vals: data[f].map((q) => ({ t: q.t, v: q.d })), col: FLCOL[f] })),
+      lo, hi, 'DQ distance', (v) => v.toFixed(2), S.thick);
+    plotVsThickness(ctx, rB, fluids.map((f) => ({
+      vals: data[f].map((q) => ({ t: q.t, v: q.px })), col: FLCOL[f] })),
+      -90, 90, 'theta px (degrees)', (v) => String(Math.round(v)), S.thick);
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = CRIM; ctx.fillText('DISTANCE', rA.x + rA.w / 2, rA.y - 8);
+    ctx.fillStyle = '#1D6FA3'; ctx.fillText('THETA PX', rB.x + rB.w / 2, rB.y - 8);
+    fluids.forEach((f, k) => SEIS.tag(ctx, rB.x + 8, rB.y + 10 + k * 18, f, FLCOL[f]));
+
+    const at = (f) => {
+      const w = data[f] || wedge(f);
+      return w.reduce((a, q) => Math.abs(q.t - S.thick) < Math.abs(a.t - S.thick) ? q : a, w[0]);
+    };
+    const three = ['brine', 'oil', 'gas'].map((f) => at(f));
+    const sep = Math.abs(three[2].px - three[0].px);
+    const gasW = wedge('gas');
+    const gpx = gasW.map((q) => q.px), gd = gasW.map((q) => q.d);
+    const thickAng = Math.max(...gpx) - Math.min(...gpx);
+    const thickDist = 100 * (Math.max(...gd) - Math.min(...gd)) / Math.max(...gd);
+    $('s3a').textContent = three.map((q) => (q.px >= 0 ? '+' : '\u2212')
+      + Math.abs(q.px).toFixed(0) + '\u00B0').join(' / ');
+    $('s3b').textContent = sep.toFixed(0) + '\u00B0 brine to gas';
+    $('s3c').textContent = thickAng.toFixed(1) + '\u00B0 across the wedge';
+    $('s3d').textContent = thickDist.toFixed(0) + '% across the wedge';
+    $('s3e').textContent = sep > thickAng
+      ? 'The angle separates brine from gas by ' + sep.toFixed(0)
+        + ' degrees while thickness moves it by ' + thickAng.toFixed(1)
+        + '. It answers what kind of rock; the distance, moving ' + thickDist.toFixed(0)
+        + '% with thickness alone, answers how much.'
+      : 'Here thickness moves the angle as much as fluid does, which is the sign that the reflection is '
+        + 'too weak for either attribute to be trusted.';
+  }
+  /* ------------------------------ the panel ---------------------------- */
+
+  function pushToInputs() {
+    $('phi').value = S.phi;
+    $('thick').value = S.thick;
+    $('freq').value = S.freq;
+    $('dt').value = S.dt;
+    $('noise').value = S.noise;
+    $('showall').checked = !!S.showall;
+    $('phiV').textContent = S.phi + '%';
+    $('thickV').textContent = S.thick + ' ms';
+    $('freqV').textContent = S.freq + ' Hz';
+    $('dtV').textContent = (DTS[S.dt | 0] * 1000).toFixed(0) + ' ms';
+    $('noiseV').textContent = S.noise + '%';
+    $('overV').textContent = LITHS[S.over].name;
+    $('fluidV').textContent = FLUIDS[S.fluid].name;
+    document.querySelectorAll('[data-over]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.over === S.over);
+    });
+    document.querySelectorAll('[data-fluid]').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.fluid === S.fluid);
+    });
+  }
+
+  function drawAll() {
+    drawMain();
+    if (visible('p1')) drawStep1();
+    if (visible('p2')) drawStep2();
+    if (visible('p3')) drawStep3();
+  }
+  function onChange() { pushToInputs(); drawAll(); saveState(); }
+
+  ['phi', 'thick', 'freq', 'dt', 'noise'].forEach((id) => {
+    $(id).addEventListener('input', () => { S[id] = parseFloat($(id).value); onChange(); });
+  });
+  $('showall').addEventListener('change', () => { S.showall = $('showall').checked; onChange(); });
+  document.querySelectorAll('[data-over]').forEach((b) => {
+    b.addEventListener('click', () => { S.over = b.dataset.over; onChange(); });
+  });
+  document.querySelectorAll('[data-fluid]').forEach((b) => {
+    b.addEventListener('click', () => { S.fluid = b.dataset.fluid; onChange(); });
+  });
+  $('resetBtn').addEventListener('click', () => {
+    const tab = S.tab;
+    S = Object.assign({}, DEF, { tab });
+    onChange();
+  });
+
+  /* -------------------------------- tabs ------------------------------- */
+
+  const PANES = ['p1', 'p2', 'p3', 'pw', 'pe', 'pk', 'pm'];
+  const STEPNAMES = {
+    p1: 'Tuning', p2: 'The angle', p3: 'Two questions',
+    pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
+  };
+
+  function buildStepNav() {
+    PANES.forEach((id, i) => {
+      const pane = $(id); if (!pane) return;
+      const prev = PANES[i - 1], next = PANES[i + 1];
+      const nav = document.createElement('div');
+      nav.className = 'stepnav';
+      const mk = (target, text, ghost) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn' + (ghost ? ' ghost' : '') + ' small';
+        btn.textContent = text;
+        btn.addEventListener('click', () => {
+          showTab(target);
+          const t = document.querySelector('.tabhint');
+          if (t && t.scrollIntoView) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return btn;
+      };
+      nav.appendChild(prev ? mk(prev, '\u2190 ' + STEPNAMES[prev], true)
+                           : document.createElement('span'));
+      const where = document.createElement('span');
+      where.className = 'where';
+      where.textContent = i < 3 ? 'step ' + (i + 1) + ' of 3' : STEPNAMES[id];
+      nav.appendChild(where);
+      nav.appendChild(next ? mk(next, STEPNAMES[next] + ' \u2192')
+                           : document.createElement('span'));
+      pane.appendChild(nav);
+    });
+  }
+
+  function showTab(id) {
+    PANES.forEach((q) => { const el = $(q); if (el) el.hidden = q !== id; });
+    document.querySelectorAll('#tabs button').forEach((b) => {
+      b.setAttribute('aria-selected', b.dataset.tab === id);
+    });
+    const lab = document.querySelector('.labhead');
+    if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3');
+
+    // the polarity switch only means anything on step 3
+    const three = (id === 'p3');
+    const sf = $('skipflip'); if (sf) sf.disabled = !three;
+
+    if ($('labCap')) {
+      $('labCap').innerHTML = 'The rock model <span>&mdash; the layers, and the near stack they produce</span>';
+    }
+
+    const last = (id === 'pk' || id === 'pm');
+    if ($('nextup')) $('nextup').hidden = !last;
+    if ($('pager')) $('pager').hidden = !last;
+    S.tab = id;
+    drawAll();
+    saveState();
+  }
+  document.querySelectorAll('#tabs button').forEach((b) => {
+    b.addEventListener('click', () => showTab(b.dataset.tab));
+  });
+  document.querySelectorAll('.masthead a[data-tab]').forEach((a) => {
+    a.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      showTab(a.dataset.tab);
+      const strip = $('tabs');
+      if (strip && strip.scrollIntoView) strip.scrollIntoView({ block: 'start' });
+    });
+  });
+
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawAll, 140); });
+
+  pushToInputs();
+  buildStepNav();
+  showTab(PANES.indexOf(S.tab) >= 0 ? S.tab : 'p1');
+  document.fonts && document.fonts.ready.then(drawAll);
+})();
+</script>
+</body>
+</html>
