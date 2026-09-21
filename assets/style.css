@@ -912,3 +912,14 @@ body.view-exercises #pe { display: block !important; border-top: 1px solid var(-
 .stepctl .ctl { margin: 0; }
 .stepctl .say { font-size: 13px; color: var(--ink-soft); margin: 0; }
 @media (max-width: 700px) { .stepctl { grid-template-columns: 1fr; } }
+
+/* --- landing page: the four parts ------------------------------------------ */
+.card-grid .part-head {
+  grid-column: 1 / -1; margin: 18px 0 -4px; padding-bottom: 6px;
+  border-bottom: 2px solid var(--crimson);
+  font-family: var(--display); font-weight: 700; font-size: 1.05rem; color: var(--crimson-dp);
+}
+.card-grid .part-head:first-child { margin-top: 0; }
+.card { position: relative; }
+.flag.old, .card .flag { background: var(--slate); }
+.old-note { font-size: 13.5px; color: var(--slate); margin: 18px 0 0; max-width: 90ch; }
