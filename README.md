@@ -9,7 +9,7 @@ Published at [hbedle-subsurface.github.io/distance-quadrant](https://hbedle-subs
 The DQ workflow was developed by Dennis B. Neff and Warren Neff at Phillips
 Petroleum and published with the AASPI consortium at the University of Oklahoma.
 The site follows Bedle et al. (2025a, 2025b, 2025c) in *Interpretation* and
-Chaudhry et al. (2026); full references are on the landing page.
+Choudhry et al. (2026); full references are on the landing page.
 
 ## Who it is for
 
@@ -25,9 +25,9 @@ short glossary entry.
 
 ## The pages
 
-The site is being reorganized from seventeen pages into twelve, grouped into four
-parts. Each module covers one idea in at most three steps. Pages marked *old* are
-the September 2026 versions and are replaced one at a time.
+The site is being reorganized into fifteen pages, grouped into four parts. Each
+module covers one idea in at most three steps. Pages marked *old* are the
+September 2026 versions and are replaced one at a time.
 
 | # | Module | Built from | Status |
 |---|---|---|---|
@@ -35,21 +35,24 @@ the September 2026 versions and are replaced one at a time.
 | 00 | The rocks, and two pictures of them | `orientation.html` | **rebuilt** |
 | 01 | Two stacks, and what AVO reads from them | `two-stacks.html` | **rebuilt** |
 | **Part 2** | **Building the DQ trace** | | |
-| 02 | Marking the waveform | `stickogram.html` + `quadrants.html` | old |
-| 03 | Turning every sample into a peak | `phase-filters.html` | old |
-| 04 | The distance | `dq-distance.html` | old |
+| 02 | Marking the waveform | `stickogram.html` | old |
+| 03 | Quadrant numbers | `quadrants.html` | old |
+| 04 | Turning every sample into a peak | `phase-filters.html` | old |
+| 05 | The distance | `dq-distance.html` | old |
 | **Part 3** | **The crossplot view** | | |
-| 05 | Rotating and splitting the crossplot | `baseline.html` + `sectors.html` | old |
-| 06 | Theta PX, the angle of the same point | `theta-px.html` | old |
-| 07 | Time thickness | `isochron.html` + third axis of `rdq-crossplot.html` | old |
+| 06 | Rotating and splitting the crossplot | `baseline.html` + `sectors.html` | old |
+| 07 | Theta PX, the angle of the same point | `theta-px.html` | old |
+| 08 | Time thickness | `isochron.html` | old |
+| 09 | The RDQ crossplot in three axes | `rdq-crossplot.html` | old |
 | **Part 4** | **What the attributes say about rocks** | | |
-| 08 | Porosity | `porosity.html` | old |
-| 09 | Thickness and tuning | `wedge.html` | old |
-| 10 | The four AVO classes | `avo-classes.html` + statistics of `rdq-crossplot.html` | old |
-| 11 | A synthetic line with every attribute | `attributes-line.html` + `reading-sections.html` | old |
+| 10 | Porosity | `porosity.html` | old |
+| 11 | Thickness and tuning | `wedge.html` | old |
+| 12 | The four AVO classes | `avo-classes.html` | old |
+| 13 | Reading a DQ section | `reading-sections.html` | old |
+| 14 | A synthetic line with every attribute | `attributes-line.html` | old |
 
-`avo-limits.html` and `near-far.html` are superseded by `two-stacks.html` and are
-removed once the index points at the new module.
+`avo-limits.html` and `near-far.html` are superseded by `two-stacks.html` and
+nothing links to them.
 
 ## Viewing it
 

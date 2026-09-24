@@ -82,7 +82,7 @@
   <section id="modules" class="modules">
     <div class="sec-head">
       <h2>The modules</h2>
-      <p>Twelve modules in four parts, in the order they build on each other. Part 1 sets up the
+      <p>Fifteen modules in four parts, in the order they build on each other. Part 1 sets up the
         problem and the inputs, part 2 builds the DQ trace one operation at a time, part 3 builds the RDQ
         crossplot and the angle and thickness attributes, and part 4 puts them to work on porosity, bed
         thickness, the four AVO classes and a synthetic line.</p>
@@ -106,7 +106,7 @@
         <div class="card-body">
           <div class="card-no">01</div>
           <h3>Two stacks, and what AVO reads from them</h3>
-          <p>The near and far stacks, the intercept and gradient they carry, and why a two-layer AVO reading is cleanest at peaks and troughs.</p>
+          <p>The near and far stacks, the intercept and gradient they carry, and why a two-layer reading is cleanest at peaks and troughs.</p>
         </div>
       </a>
 
@@ -117,25 +117,34 @@
         <div class="card-body">
           <div class="card-no">02</div>
           <h3>Marking the waveform</h3>
-          <p>The near stack reduced to peaks, troughs and zero crossings, and every sample between them given a quadrant number.</p>
+          <p>The near stack reduced to its peaks, troughs and zero crossings.</p>
+        </div><span class="flag">old version</span>
+      </a>
+
+      <a class="card" href="modules/quadrants.html">
+        <div class="card-thumb" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid meet"><rect width="160" height="84" fill="#F6F4EE"/><polyline class="tk" points="44.0,8.0 44.6,9.1 45.4,10.3 46.2,11.4 47.1,12.5 48.1,13.7 49.2,14.8 50.3,15.9 51.5,17.1 52.7,18.2 53.9,19.3 55.0,20.5 56.1,21.6 57.0,22.7 57.9,23.9 58.6,25.0 59.2,26.1 59.5,27.3 59.7,28.4 59.6,29.5 59.3,30.7 58.8,31.8 58.0,32.9 56.9,34.1 55.7,35.2 54.2,36.3 52.6,37.5 50.8,38.6 48.9,39.7 46.9,40.9 44.8,42.0 42.8,43.1 40.7,44.3 38.8,45.4 36.9,46.5 35.2,47.7 33.6,48.8 32.2,49.9 31.1,51.1 30.1,52.2 29.4,53.3 29.0,54.5 28.7,55.6 28.8,56.7 29.0,57.9 29.4,59.0 30.0,60.1 30.8,61.3 31.6,62.4 32.6,63.5 33.7,64.7 34.8,65.8 35.9,66.9 37.1,68.1 38.2,69.2 39.3,70.3 40.3,71.5 41.2,72.6 42.1,73.7 42.8,74.9 43.5,76.0"/><rect class="ts" x="80" y="10" width="14" height="7"/><rect class="tf" x="80" y="18" width="18" height="7"/><rect class="ts" x="80" y="26" width="22" height="7"/><rect class="tf" x="80" y="34" width="26" height="7"/><rect class="ts" x="80" y="42" width="30" height="7"/><rect class="tf" x="80" y="50" width="34" height="7"/><rect class="ts" x="80" y="58" width="38" height="7"/><rect class="tf" x="80" y="66" width="42" height="7"/><text x="98" y="16" font-size="7" fill="#16191C" font-family="monospace" opacity=".7">Q1</text><text x="102" y="24" font-size="7" fill="#16191C" font-family="monospace" opacity=".7">Q2</text><text x="106" y="32" font-size="7" fill="#16191C" font-family="monospace" opacity=".7">Q3</text><text x="110" y="40" font-size="7" fill="#16191C" font-family="monospace" opacity=".7">Q4</text><text x="114" y="48" font-size="7" fill="#16191C" font-family="monospace" opacity=".7">Q5</text><text x="118" y="56" font-size="7" fill="#16191C" font-family="monospace" opacity=".7">Q6</text><text x="122" y="64" font-size="7" fill="#16191C" font-family="monospace" opacity=".7">Q7</text><text x="126" y="72" font-size="7" fill="#16191C" font-family="monospace" opacity=".7">Q8</text></svg></div>
+        <div class="card-body">
+          <div class="card-no">03</div>
+          <h3>Quadrant numbers</h3>
+          <p>Every sample between the picks numbered by its position in the waveform.</p>
         </div><span class="flag">old version</span>
       </a>
 
       <a class="card" href="modules/phase-filters.html">
         <div class="card-thumb" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid meet"><rect width="160" height="84" fill="#F6F4EE"/><polyline class="tk" points="26.0,8.0 26.4,9.1 26.9,10.3 27.4,11.4 28.0,12.5 28.7,13.7 29.4,14.8 30.1,15.9 30.9,17.1 31.6,18.2 32.4,19.3 33.1,20.5 33.8,21.6 34.5,22.7 35.0,23.9 35.5,25.0 35.9,26.1 36.1,27.3 36.2,28.4 36.2,29.5 36.0,30.7 35.6,31.8 35.1,32.9 34.4,34.1 33.6,35.2 32.7,36.3 31.6,37.5 30.4,38.6 29.2,39.7 27.9,40.9 26.5,42.0 25.2,43.1 23.9,44.3 22.6,45.4 21.4,46.5 20.3,47.7 19.2,48.8 18.3,49.9 17.6,51.1 17.0,52.2 16.5,53.3 16.2,54.5 16.1,55.6 16.1,56.7 16.2,57.9 16.5,59.0 16.9,60.1 17.4,61.3 18.0,62.4 18.6,63.5 19.3,64.7 20.0,65.8 20.8,66.9 21.5,68.1 22.2,69.2 22.9,70.3 23.6,71.5 24.2,72.6 24.7,73.7 25.3,74.9 25.7,76.0"/><polyline class="tk" points="51.9,8.0 52.5,9.1 53.0,10.3 53.6,11.4 54.2,12.5 54.8,13.7 55.4,14.8 56.0,15.9 56.5,17.1 57.0,18.2 57.5,19.3 57.8,20.5 58.1,21.6 58.3,22.7 58.3,23.9 58.2,25.0 58.0,26.1 57.6,27.3 57.1,28.4 56.5,29.5 55.7,30.7 54.8,31.8 53.7,32.9 52.6,34.1 51.4,35.2 50.1,36.3 48.8,37.5 47.5,38.6 46.2,39.7 44.9,40.9 43.7,42.0 42.5,43.1 41.5,44.3 40.6,45.4 39.9,46.5 39.3,47.7 38.8,48.8 38.5,49.9 38.4,51.1 38.5,52.2 38.7,53.3 39.0,54.5 39.5,55.6 40.1,56.7 40.8,57.9 41.6,59.0 42.4,60.1 43.3,61.3 44.2,62.4 45.1,63.5 46.0,64.7 46.9,65.8 47.7,66.9 48.4,68.1 49.1,69.2 49.7,70.3 50.3,71.5 50.7,72.6 51.1,73.7 51.4,74.9 51.7,76.0"/><polyline class="tc" points="77.3,8.0 77.8,9.1 78.2,10.3 78.7,11.4 79.1,12.5 79.5,13.7 79.8,14.8 80.0,15.9 80.2,17.1 80.3,18.2 80.3,19.3 80.2,20.5 80.0,21.6 79.6,22.7 79.1,23.9 78.5,25.0 77.7,26.1 76.9,27.3 75.9,28.4 74.9,29.5 73.7,30.7 72.5,31.8 71.3,32.9 70.0,34.1 68.8,35.2 67.5,36.3 66.4,37.5 65.3,38.6 64.3,39.7 63.4,40.9 62.7,42.0 62.1,43.1 61.7,44.3 61.4,45.4 61.3,46.5 61.4,47.7 61.7,48.8 62.1,49.9 62.7,51.1 63.4,52.2 64.2,53.3 65.1,54.5 66.1,55.6 67.1,56.7 68.1,57.9 69.2,59.0 70.2,60.1 71.2,61.3 72.2,62.4 73.1,63.5 73.9,64.7 74.6,65.8 75.3,66.9 75.8,68.1 76.3,69.2 76.6,70.3 76.9,71.5 77.1,72.6 77.2,73.7 77.2,74.9 77.2,76.0"/><polyline class="tk" points="101.7,8.0 102.0,9.1 102.2,10.3 102.4,11.4 102.5,12.5 102.5,13.7 102.5,14.8 102.3,15.9 102.1,17.1 101.8,18.2 101.3,19.3 100.7,20.5 100.1,21.6 99.3,22.7 98.4,23.9 97.4,25.0 96.4,26.1 95.3,27.3 94.2,28.4 93.0,29.5 91.8,30.7 90.7,31.8 89.6,32.9 88.6,34.1 87.7,35.2 86.9,36.3 86.2,37.5 85.6,38.6 85.3,39.7 85.0,40.9 85.0,42.0 85.1,43.1 85.5,44.3 85.9,45.4 86.6,46.5 87.3,47.7 88.2,48.8 89.2,49.9 90.3,51.1 91.4,52.2 92.6,53.3 93.8,54.5 94.9,55.6 96.1,56.7 97.1,57.9 98.2,59.0 99.1,60.1 99.9,61.3 100.7,62.4 101.3,63.5 101.8,64.7 102.2,65.8 102.5,66.9 102.7,68.1 102.7,69.2 102.7,70.3 102.6,71.5 102.5,72.6 102.3,73.7 102.0,74.9 101.7,76.0"/><polyline class="tk" points="125.0,8.0 125.0,9.1 124.9,10.3 124.8,11.4 124.6,12.5 124.2,13.7 123.8,14.8 123.4,15.9 122.8,17.1 122.1,18.2 121.3,19.3 120.5,20.5 119.6,21.6 118.6,22.7 117.6,23.9 116.6,25.0 115.5,26.1 114.5,27.3 113.5,28.4 112.6,29.5 111.8,30.7 111.1,31.8 110.4,32.9 110.0,34.1 109.6,35.2 109.5,36.3 109.5,37.5 109.7,38.6 110.0,39.7 110.5,40.9 111.2,42.0 112.0,43.1 112.9,44.3 114.0,45.4 115.1,46.5 116.4,47.7 117.6,48.8 118.9,49.9 120.1,51.1 121.4,52.2 122.6,53.3 123.7,54.5 124.7,55.6 125.6,56.7 126.4,57.9 127.1,59.0 127.7,60.1 128.1,61.3 128.4,62.4 128.5,63.5 128.6,64.7 128.5,65.8 128.4,66.9 128.1,68.1 127.8,69.2 127.5,70.3 127.0,71.5 126.6,72.6 126.1,73.7 125.7,74.9 125.2,76.0"/></svg></div>
         <div class="card-body">
-          <div class="card-no">03</div>
+          <div class="card-no">04</div>
           <h3>Turning every sample into a peak</h3>
-          <p>Seven phase rotations, and each sample read from the rotated copy in which it sits at a peak or trough.</p>
+          <p>Seven phase rotations, and each sample read from the rotated copy its number names.</p>
         </div><span class="flag">old version</span>
       </a>
 
       <a class="card" href="modules/dq-distance.html">
         <div class="card-thumb" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid meet"><rect width="160" height="84" fill="#F6F4EE"/><line class="tg" x1="80" y1="42" x2="146" y2="42"/><line class="tg" x1="80" y1="8" x2="80" y2="76"/><line class="tg" x1="14" y1="42" x2="76" y2="42"/><circle class="tg" cx="80" cy="42" r="26"/><line class="tc" x1="80" y1="42" x2="102" y2="24"/><circle class="tp" cx="102" cy="24" r="3.6"/><path class="tc" d="M96 42 A16 16 0 0 0 92 32" stroke-width="1.2"/><text x="106" y="18" font-size="9" fill="#841617" font-family="monospace">D</text><polyline class="tk" points="38.0,8.0 38.5,9.1 39.1,10.3 39.8,11.4 40.5,12.5 41.3,13.7 42.2,14.8 43.1,15.9 44.0,17.1 45.0,18.2 45.9,19.3 46.8,20.5 47.6,21.6 48.4,22.7 49.1,23.9 49.7,25.0 50.1,26.1 50.4,27.3 50.6,28.4 50.5,29.5 50.2,30.7 49.8,31.8 49.2,32.9 48.4,34.1 47.4,35.2 46.2,36.3 44.9,37.5 43.4,38.6 41.9,39.7 40.3,40.9 38.7,42.0 37.0,43.1 35.4,44.3 33.8,45.4 32.3,46.5 30.9,47.7 29.7,48.8 28.6,49.9 27.7,51.1 26.9,52.2 26.3,53.3 26.0,54.5 25.8,55.6 25.8,56.7 26.0,57.9 26.3,59.0 26.8,60.1 27.4,61.3 28.1,62.4 28.9,63.5 29.8,64.7 30.6,65.8 31.6,66.9 32.5,68.1 33.4,69.2 34.2,70.3 35.0,71.5 35.8,72.6 36.5,73.7 37.1,74.9 37.6,76.0"/></svg></div>
         <div class="card-body">
-          <div class="card-no">04</div>
+          <div class="card-no">05</div>
           <h3>The distance</h3>
-          <p>The near and gradient traces combined into one distance, its sign, and the blocked shape that results.</p>
+          <p>The near and gradient traces combined into one signed distance, and the blocked shape that results.</p>
         </div><span class="flag">old version</span>
       </a>
 
@@ -144,27 +153,37 @@
       <a class="card" href="modules/baseline.html">
         <div class="card-thumb" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid meet"><rect width="160" height="84" fill="#F6F4EE"/><line class="tg" x1="16" y1="42" x2="146" y2="42"/><line class="tg" x1="81" y1="8" x2="81" y2="76"/><circle class="tp" cx="37" cy="58" r="2.6" opacity=".5"/><circle class="tp" cx="51" cy="53" r="2.6" opacity=".5"/><circle class="tp" cx="65" cy="48" r="2.6" opacity=".5"/><circle class="tp" cx="97" cy="36" r="2.6" opacity=".5"/><circle class="tp" cx="111" cy="31" r="2.6" opacity=".5"/><circle class="tp" cx="125" cy="26" r="2.6" opacity=".5"/><circle cx="57" cy="22" r="2.6" fill="#1D6FA3"/><circle cx="71" cy="28" r="2.6" fill="#1D6FA3"/><circle cx="91" cy="56" r="2.6" fill="#1D6FA3"/><circle cx="105" cy="62" r="2.6" fill="#1D6FA3"/><text x="92" y="70" font-size="8" fill="#841617" font-family="monospace">Q3-Q7 flipped</text></svg></div>
         <div class="card-body">
-          <div class="card-no">05</div>
+          <div class="card-no">06</div>
           <h3>Rotating and splitting the crossplot</h3>
-          <p>The shale trend rotated onto the x-axis, and the points split into four sectors by quadrant number.</p>
+          <p>The background shale trend rotated onto the x-axis, and the points divided into four sectors by quadrant number.</p>
         </div><span class="flag">old version</span>
       </a>
 
+      
       <a class="card" href="modules/theta-px.html">
         <div class="card-thumb" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid meet"><rect width="160" height="84" fill="#F6F4EE"/><line class="tg" x1="16" y1="60" x2="146" y2="60"/><line class="tg" x1="30" y1="8" x2="30" y2="72"/><line class="tc" x1="30" y1="60" x2="118" y2="20"/><path class="tc" d="M62 60 A32 32 0 0 0 58 44" stroke-width="1.2"/><text x="66" y="52" font-size="10" fill="#841617" font-family="monospace">&#952;px</text><circle class="tp" cx="118" cy="20" r="3.6"/></svg></div>
         <div class="card-body">
-          <div class="card-no">06</div>
+          <div class="card-no">07</div>
           <h3>Theta PX, the angle of the same point</h3>
-          <p>The polar angle of each point on the RDQ crossplot, and the fluid and lithology differences it separates.</p>
+          <p>The polar angle of each point, and the fluid and lithology differences it separates.</p>
         </div><span class="flag">old version</span>
       </a>
 
       <a class="card" href="modules/isochron.html">
         <div class="card-thumb" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid meet"><rect width="160" height="84" fill="#F6F4EE"/><polyline class="tk" points="40.0,8.0 40.6,9.1 41.4,10.3 42.2,11.4 43.1,12.5 44.1,13.7 45.2,14.8 46.3,15.9 47.5,17.1 48.7,18.2 49.9,19.3 51.0,20.5 52.1,21.6 53.0,22.7 53.9,23.9 54.6,25.0 55.2,26.1 55.5,27.3 55.7,28.4 55.6,29.5 55.3,30.7 54.8,31.8 54.0,32.9 52.9,34.1 51.7,35.2 50.2,36.3 48.6,37.5 46.8,38.6 44.9,39.7 42.9,40.9 40.8,42.0 38.8,43.1 36.7,44.3 34.8,45.4 32.9,46.5 31.2,47.7 29.6,48.8 28.2,49.9 27.1,51.1 26.1,52.2 25.4,53.3 25.0,54.5 24.7,55.6 24.8,56.7 25.0,57.9 25.4,59.0 26.0,60.1 26.8,61.3 27.6,62.4 28.6,63.5 29.7,64.7 30.8,65.8 31.9,66.9 33.1,68.1 34.2,69.2 35.3,70.3 36.3,71.5 37.2,72.6 38.1,73.7 38.8,74.9 39.5,76.0"/><rect class="ts" x="76" y="12" width="34" height="20"/><rect class="tf" x="76" y="32" width="34" height="22"/><rect class="ts" x="76" y="54" width="34" height="18"/><text x="84" y="26" font-size="9" fill="#16191C" font-family="monospace">-8</text><text x="84" y="47" font-size="9" fill="#16191C" font-family="monospace">+11</text><text x="84" y="67" font-size="9" fill="#16191C" font-family="monospace">-9</text></svg></div>
         <div class="card-body">
-          <div class="card-no">07</div>
+          <div class="card-no">08</div>
           <h3>Time thickness</h3>
-          <p>The signed isochron and signed half isochron, their response to facies, and the half isochron as a third crossplot axis.</p>
+          <p>The signed isochron and signed half isochron, and their response to facies.</p>
+        </div><span class="flag">old version</span>
+      </a>
+
+      <a class="card" href="modules/rdq-crossplot.html">
+        <div class="card-thumb" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid meet"><rect width="160" height="84" fill="#F6F4EE"/><line class="tg" x1="30" y1="66" x2="132" y2="66"/><line class="tg" x1="30" y1="66" x2="30" y2="14"/><line class="tg" x1="30" y1="66" x2="66" y2="40"/><circle class="tp" cx="62" cy="50" r="2.8" opacity=".7"/><circle class="tp" cx="78" cy="42" r="2.8" opacity=".7"/><circle class="tp" cx="94" cy="34" r="2.8" opacity=".7"/><circle class="tp" cx="70" cy="56" r="2.8" opacity=".7"/><circle class="tp" cx="86" cy="48" r="2.8" opacity=".7"/><circle class="tp" cx="102" cy="40" r="2.8" opacity=".7"/><circle class="tp" cx="54" cy="44" r="2.8" opacity=".7"/><circle class="tp" cx="110" cy="32" r="2.8" opacity=".7"/><text x="96" y="70" font-size="8" fill="#16191C" opacity=".55" font-family="monospace">3D</text></svg></div>
+        <div class="card-body">
+          <div class="card-no">09</div>
+          <h3>The RDQ crossplot in three axes</h3>
+          <p>Amplitude, gradient and half isochron on fixed axes, with the delimiters and the statistics read from them.</p>
         </div><span class="flag">old version</span>
       </a>
 
@@ -173,7 +192,7 @@
       <a class="card" href="modules/porosity.html">
         <div class="card-thumb" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid meet"><rect width="160" height="84" fill="#F6F4EE"/><line class="tg" x1="24" y1="70" x2="146" y2="70"/><line class="tg" x1="24" y1="8" x2="24" y2="70"/><polyline class="tc" points="32,62 52,52 72,42 92,32 112,22 132,14"/><circle class="tp" cx="32" cy="62" r="3"/><circle class="tp" cx="52" cy="52" r="3"/><circle class="tp" cx="72" cy="43" r="3"/><circle class="tp" cx="92" cy="33" r="3"/><circle class="tp" cx="112" cy="24" r="3"/><circle class="tp" cx="132" cy="14" r="3"/><text x="60" y="24" font-size="9" fill="#841617" font-family="monospace">r = 0.99</text><text x="88" y="80" font-size="8" fill="#16191C" opacity=".55" font-family="monospace">porosity</text></svg></div>
         <div class="card-body">
-          <div class="card-no">08</div>
+          <div class="card-no">10</div>
           <h3>Porosity</h3>
           <p>How the DQ distance follows porosity through impedance and V<sub>P</sub>/V<sub>S</sub>.</p>
         </div><span class="flag">old version</span>
@@ -182,7 +201,7 @@
       <a class="card" href="modules/wedge.html">
         <div class="card-thumb" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid meet"><rect width="160" height="84" fill="#F6F4EE"/><polygon class="tf" points="20,44 140,26 140,58 20,44"/><line class="tk" x1="20" y1="44" x2="140" y2="26"/><line class="tk" x1="20" y1="44" x2="140" y2="58"/><line class="tg" x1="34" y1="12" x2="34" y2="72"/><line class="tg" x1="52" y1="12" x2="52" y2="72"/><line class="tg" x1="70" y1="12" x2="70" y2="72"/><line class="tg" x1="88" y1="12" x2="88" y2="72"/><line class="tg" x1="106" y1="12" x2="106" y2="72"/><line class="tg" x1="124" y1="12" x2="124" y2="72"/></svg></div>
         <div class="card-body">
-          <div class="card-no">09</div>
+          <div class="card-no">11</div>
           <h3>Thickness and tuning</h3>
           <p>Wedge models, the tuning curve, and which attribute responds to thickness.</p>
         </div><span class="flag">old version</span>
@@ -191,28 +210,33 @@
       <a class="card" href="modules/avo-classes.html">
         <div class="card-thumb" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid meet"><rect width="160" height="84" fill="#F6F4EE"/><line class="tg" x1="16" y1="42" x2="146" y2="42"/><line class="tg" x1="81" y1="8" x2="81" y2="76"/><line class="tc" x1="30" y1="16" x2="120" y2="30" opacity=".9"/><line class="tc" x1="30" y1="26" x2="120" y2="44" opacity=".7"/><line class="tc" x1="34" y1="52" x2="124" y2="20" opacity=".55"/><line class="tc" x1="30" y1="60" x2="120" y2="66" opacity=".4"/><text x="96" y="72" font-size="8" fill="#841617" font-family="monospace">1 2p 3 4</text></svg></div>
         <div class="card-body">
-          <div class="card-no">10</div>
+          <div class="card-no">12</div>
           <h3>The four AVO classes</h3>
           <p>Classes 1 to 4 through the same workflow, as sections, crossplots and histograms.</p>
+        </div><span class="flag">old version</span>
+      </a>
+
+      <a class="card" href="modules/reading-sections.html">
+        <div class="card-thumb" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid meet"><rect width="160" height="84" fill="#F6F4EE"/><rect x="28" y="18" width="8" height="40" fill="#cfd6dc"/><rect x="37" y="18" width="8" height="40" fill="#e6e9ec"/><rect x="46" y="18" width="8" height="40" fill="#f2e6c8"/><rect x="55" y="18" width="8" height="40" fill="#f6d98e"/><rect x="64" y="18" width="8" height="40" fill="#f0a35a"/><rect x="73" y="18" width="8" height="40" fill="#e06848"/><rect x="82" y="18" width="8" height="40" fill="#c2306b"/><rect x="91" y="18" width="8" height="40" fill="#9c1f52"/><text x="28" y="70" font-size="8" fill="#16191C" opacity=".6" font-family="monospace">0</text><text x="88" y="70" font-size="8" fill="#16191C" opacity=".6" font-family="monospace">max</text></svg></div>
+        <div class="card-body">
+          <div class="card-no">13</div>
+          <h3>Reading a DQ section</h3>
+          <p>The display conventions, the color bars, and what each feature on a DQ section comes from.</p>
         </div><span class="flag">old version</span>
       </a>
 
       <a class="card" href="modules/attributes-line.html">
         <div class="card-thumb" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid meet"><rect width="160" height="84" fill="#F6F4EE"/><path d="M8 26 L74 34 L74 30 L152 40" class="tk"/><path d="M8 62 L74 70 L74 66 L152 76" class="tk"/><path d="M12 40 C40 30 60 28 74 30 L74 34 C60 36 40 40 12 48 Z" fill="rgba(194,48,107,.35)"/><path d="M76 32 C100 34 130 40 150 44 L150 52 C130 50 100 46 76 40 Z" fill="rgba(194,48,107,.5)"/><line x1="74" y1="14" x2="74" y2="76" stroke="#16191C" stroke-width="1.2" stroke-dasharray="4 3" opacity=".55"/><text x="96" y="22" font-size="8" fill="#841617" font-family="monospace">fault</text></svg></div>
         <div class="card-body">
-          <div class="card-no">11</div>
+          <div class="card-no">14</div>
           <h3>A synthetic line with every attribute</h3>
-          <p>A dipping, faulted line with every attribute on it, including DQ Average, DQ Sum and Median Theta PX.</p>
+          <p>A dipping, faulted line with the sample and layer attributes on it, including DQ Average, DQ Sum and Median Theta PX.</p>
         </div><span class="flag">old version</span>
       </a>
-
     </div>
-    <p class="old-note">Modules marked <i>old version</i> are the September 2026 pages and are being rebuilt in
-      this structure. Four older pages are merged into them and remain available until then:
-      <a href="modules/quadrants.html">quadrant numbers</a>,
-      <a href="modules/sectors.html">sector splitting</a>,
-      <a href="modules/rdq-crossplot.html">the RDQ crossplot in three axes</a> and
-      <a href="modules/reading-sections.html">reading DQ sections</a>.</p>
+    <p class="old-note">Modules marked <i>old version</i> are the September 2026 pages, and are being rebuilt
+      one at a time in the structure above. One older page, <a href="modules/sectors.html">sector
+      splitting</a>, is merged into module 06 and stays available until that module is rebuilt.</p>
   </section>
 
   <section id="about" class="about">
@@ -224,7 +248,7 @@
           the University of Oklahoma. These modules are a teaching companion to three papers in
           <em>Interpretation</em>: Bedle et al. (2025a) on the DQ trace, Bedle et al. (2025b) on the RDQ
           crossplot workflow, and Bedle et al. (2025c) on RDQ inversion. The signed isochron attributes
-          follow Chaudhry et al. (2026).</p>
+          follow Choudhry et al. (2026).</p>
         <ul class="refs">
           <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method
             for quantitative seismic interpretation: Theory and application to a synthetic amplitude
@@ -235,7 +259,7 @@
           <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025c, Prediction of reservoir properties
             using the DQ trace attribute and RDQ inversion workflow: <em>Interpretation</em>,
             doi: 10.1190/INT-2024-0113.1.</li>
-          <li>Chaudhry, N., H. Bedle, D. B. Neff, and W. Neff, 2026, Isochron-based seismic attributes for
+          <li>Choudhry, N., H. Bedle, D. B. Neff, and W. Neff, 2026, Isochron-based seismic attributes for
             stratigraphic and facies interpretation: Field examples: IMAGE expanded abstract.</li>
           <li>Neff, D. B., 2003, Method of predicting rock properties from seismic data: U.S. Patent
             6,654,692 B1.</li>

@@ -1127,14 +1127,18 @@
     return { X, Y };
   }
 
-  function ranges(pts) {
-    let ax = 1e-9, ay = 1e-9, ai = 1e-9;
-    pts.forEach((p) => {
-      ax = Math.max(ax, Math.abs(p.x));
-      ay = Math.max(ay, Math.abs(p.y));
-      ai = Math.max(ai, Math.abs(p.iso));
-    });
-    return [ax * 1.15, ay * 1.15, Math.max(6, ai * 1.15)];
+  /* Fixed axis limits, the same for every model. They were set by sweeping the
+     whole control space: amplitude reaches 0.84, gradient 0.23 and the half
+     isochron 83 ms in the most extreme combinations, and the limits below hold
+     the great majority of models with the default model well inside them.
+     Samples outside are clipped at the frame and counted in the readout. */
+  const AX = 0.60, AY = 0.20, AI = 40;
+
+  function ranges() { return [AX, AY, AI]; }
+
+  function outside(pts) {
+    return pts.filter((p) => Math.abs(p.x) > AX || Math.abs(p.y) > AY
+                          || Math.abs(p.iso) > AI).length;
   }
 
   function drawMain() {
@@ -1153,8 +1157,7 @@
     SEIS.frame(ctx, rect);
     SEIS.dashedLine(ctx, rect.x, Y(0), rect.x + rect.w, Y(0), SOFT, [4, 4], 1);
     SEIS.dashedLine(ctx, X(0), rect.y, X(0), rect.y + rect.h, SOFT, [4, 4], 1);
-    let mi = 1e-9;
-    S3.pts.forEach((p) => { mi = Math.max(mi, Math.abs(p.iso)); });
+    const mi = AI;                                 // fixed, so color means the same thing
     ctx.save();
     ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
     S3.pts.forEach((p) => {
@@ -1208,8 +1211,7 @@
       ctx.fillStyle = e.sign > 0 ? '#C2306B' : '#1D6FA3'; ctx.fill();
     });
 
-    let mi = 1e-9;
-    for (let i = 0; i < nt; i++) if (S3.H.has[i]) mi = Math.max(mi, Math.abs(S3.H.iso[i]));
+    const mi = AI;                                 // fixed half-isochron scale
     SEIS.dashedLine(ctx, rI.x + rI.w / 2, rI.y, rI.x + rI.w / 2, rI.y + rI.h, SOFT, [4, 4], 0.8);
     ctx.save();
     ctx.beginPath(); ctx.rect(rI.x, rI.y, rI.w, rI.h); ctx.clip();
@@ -1276,9 +1278,12 @@
     $('s2b').textContent = lox.toFixed(3) + ' to ' + hix.toFixed(3);
     $('s2c').textContent = loy.toFixed(3) + ' to ' + hiy.toFixed(3);
     $('s2d').textContent = loi.toFixed(0) + ' to +' + hii.toFixed(0) + ' ms';
+    const off = outside(S3.pts);
     $('s2e').textContent = 'The same ' + S3.pts.length
       + ' samples seen three ways. Color is the quadrant number, so a point can be followed from one '
-      + 'panel to the next.';
+      + 'panel to the next. The axes are fixed at \u00B1' + AX + ' in amplitude, \u00B1' + AY
+      + ' in gradient and \u00B1' + AI + ' ms in half isochron'
+      + (off ? ', and ' + off + ' sample' + (off === 1 ? '' : 's') + ' fall outside them.' : '.');
   }
 
   /* ------------------------------- step 3 ------------------------------ */
@@ -1436,6 +1441,8 @@
 
   let rt;
   window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawAll, 140); });
+
+  window.__DQRDQ = { get S() { return S; }, scene, ranges, pushToInputs, drawAll };
 
   pushToInputs();
   buildStepNav();
