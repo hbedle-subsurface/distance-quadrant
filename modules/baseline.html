@@ -23,7 +23,7 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 08 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 06 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Shale baseline rotation</h1>
     <p class="sub">The DQ distance measures how far a sample sits from the origin of AB space. That is only
       useful if the background rock sits at the origin, and it does not &mdash; it sits along a line
@@ -38,7 +38,8 @@
         <canvas id="cMain" aria-label="An intercept against gradient crossplot showing the background trend and the selected sand"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -143,7 +144,7 @@
 
     <p class="lede">
       <b>Which axes you use changes the answer.</b> The DQ workflow crossplots the near stack against far
-      minus near, and module 02 established that far minus near is the gradient multiplied by 0.17. That
+      minus near, and module 01 established that far minus near is the gradient multiplied by 0.17. That
       compresses the vertical axis, so the same physical trend reads much flatter than it does in true
       intercept-gradient space. On the workflow's own axes the background comes out at about
       <b>&minus;16&deg;</b>, a bearing of <b>344&deg;</b>. In true A and B it is
@@ -250,7 +251,7 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>This is also where module 07's distance becomes interpretable. An unrotated distance is
+      <span>This is also where module 05's distance becomes interpretable. An unrotated distance is
         measured from the origin, and the origin is not a meaningful place &mdash; it is where a rock
         identical to its overburden would sit, which is nothing in particular. After the rotation the
         distance from the horizontal is measured from the background, and that is a place with a
@@ -285,7 +286,7 @@
         which is a luxury. On real data it comes from a wet zone, a well tie, or the densest part of the
         cloud, and every one of those is an assumption about which samples are background.</li>
       <li><b>One angle for a whole volume is optimistic.</b> The background trend changes with depth, with
-        compaction and with lithology. Module 09's sector splitting is partly a response to that.</li>
+        compaction and with lithology. Module 06's sector splitting is partly a response to that.</li>
     </ul>
 
     <div class="legend prose">
@@ -297,7 +298,7 @@
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Measure the background angle under each overburden.</b> On step 1, switch between soft
           shale, hard shale and tight sandstone.
@@ -411,8 +412,8 @@
         percentage of the track's own extent, and the trend is refitted to the scattered points. It exists
         to show how the rotation degrades when the baseline is only approximately known; the noise is
         regenerated only when the model changes, so dragging a slider does not make it dance.</p>
-      <p>What this module leaves out is the sector splitting of module 09, which is the next thing the
-        workflow does to the rotated crossplot, and the polar angle of module 10, which is measured in the
+      <p>What this module leaves out is the sector splitting of module 06, which is the next thing the
+        workflow does to the rotated crossplot, and the polar angle of module 07, which is measured in the
         rotated frame and only makes sense once the background is flat.</p>
       <ul>
         <li>Castagna, J. P., and H. W. Swan, 1997, Principles of AVO cross plotting: <em>The Leading
@@ -431,16 +432,16 @@
 
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
-    <h3><a href="sectors.html">09 · Sector splitting</a></h3>
+    <h3><a href="sectors.html">06 · Splitting into sectors</a></h3>
     <p>Four sectors rather than two, assigned by quadrant number, so that the two halves of a loop are kept
       apart in the rotated crossplot rather than averaged together.</p>
-    <a class="btn" href="sectors.html">Open module 09 →</a>
+    <a class="btn" href="sectors.html">Open module 06 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
   <div class="pager" id="pager" hidden>
-    <a class="btn ghost" href="dq-distance.html">← The DQ distance</a>
-    <a class="btn" href="sectors.html">Next: sector splitting →</a>
+    <a class="btn ghost" href="dq-distance.html">← The distance</a>
+    <a class="btn" href="sectors.html">Next: the sector split →</a>
   </div>
 
   <footer>
@@ -461,6 +462,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -546,13 +549,13 @@
 
   const PH0 = 8, PH1 = 36;
   const S2N = meanSin2(0, 10), S2F = meanSin2(20, 30);
-  const GAIN = S2F - S2N;                 // F - N is B times this, from module 02
+  const GAIN = S2F - S2N;                 // F - N is B times this, from module 01
   const LIMS = { ab: 0.75, nf: 0.35 };    // fixed axes per domain, as in module 01
   const rlim = () => LIMS[S.axes];
 
   /* The DQ workflow crossplots the near stack against far-minus-near. That is
      not the same plot as intercept against gradient: the vertical axis carries
-     the 0.17 factor of module 02, so the background trend reads much flatter.
+     the 0.17 factor of module 01, so the background trend reads much flatter.
      Everything here can be seen in either domain. */
   function toAxes(q) {
     if (S.axes === 'ab') return { A: q.A, B: q.B, phi: q.phi };

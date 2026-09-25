@@ -103,5 +103,21 @@ console.log('--- step 3: the loop passes through the origin ---');
   expect('first sample sits at the origin', Math.abs(g.near.tr[0]) < 1e-3 && Math.abs(g.diff[0]) < 1e-3, true);
 }
 
+
+console.log('--- step 4: the input conditions ---');
+hit('#tabs button[data-tab="p4"]');
+expect('clean input: pick shift', $('s4a').textContent, '+0 ms');
+expect('clean input: gradient error', $('s4d').textContent, '+0%');
+set('fgain', 20);
+expect('far stack 20% high: gradient error', $('s4d').textContent, '+40%');
+set('fgain', 0);
+set('iphase', 45);
+expect('45 degrees of input phase moves the pick', $('s4a').textContent !== '+0 ms', true);
+set('iphase', 0);
+set('rmo', 6);
+expect('6 ms of residual moveout changes F-N', $('s4c').textContent !== $('s1d').textContent, true);
+set('rmo', 0);
+expect('back to a clean input', $('s4d').textContent, '+0%');
+
 console.log(fail.length ? '\n' + fail.length + ' MISMATCH(ES):\n  - ' + fail.join('\n  - ') : '\nevery quoted number checks out');
 process.exit(fail.length ? 1 : 0);

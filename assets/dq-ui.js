@@ -162,6 +162,68 @@
     }
   }
 
+
+  /* ------------------------------------------------------------------ */
+  /* 4. automatic glossary marking                                       */
+  /* ------------------------------------------------------------------ */
+
+  /* Pages written before the glossary existed carry no <span class="g">
+     markup. Rather than editing every paragraph, the first occurrence of each
+     glossary term in the teaching prose is wrapped here, once per page, so a
+     student meets each term as a link exactly where it first appears. Terms
+     already marked by hand are left alone and are not marked again. */
+
+  const AUTO_IN = 'p.lede, .legend span, .hint-line, .takeaway li, .tryit li p, .notes p';
+  const SKIP = 'a, button, h1, h2, h3, h4, code, .g, .val, .stat, canvas, label, summary';
+
+  // escape a term for use in a regular expression, without using a
+  // replacement pattern that String.replace would interpret
+  function escapeRe(t) {
+    let out = '';
+    for (const ch of t) out += '.*+?^${}()|[]\\'.indexOf(ch) >= 0 ? '\\' + ch : ch;
+    return out;
+  }
+
+  function autoGlossary() {
+    const G = window.DQ_GLOSSARY;
+    if (!G) return;
+    const done = new Set();
+    doc.querySelectorAll('.g[data-g]').forEach((el) => done.add(el.dataset.g));
+
+    // longest phrases first, so "near stack" wins over "stack"
+    const terms = [];
+    Object.keys(G).forEach((key) => {
+      (G[key].match || []).forEach((t) => terms.push({ key, t }));
+    });
+    terms.sort((a, b) => b.t.length - a.t.length);
+
+    const blocks = Array.from(doc.querySelectorAll(AUTO_IN));
+    terms.forEach(({ key, t }) => {
+      if (done.has(key)) return;
+      const re = new RegExp('(^|[^\\w-])(' + escapeRe(t) + ')(?![\\w-])', 'i');
+      for (const block of blocks) {
+        if (done.has(key)) break;
+        const walker = doc.createTreeWalker(block, window.NodeFilter.SHOW_TEXT, null);
+        let node;
+        while ((node = walker.nextNode())) {
+          if (node.parentElement && node.parentElement.closest(SKIP)) continue;
+          const m = re.exec(node.nodeValue);
+          if (!m) continue;
+          const start = m.index + m[1].length;
+          const mid = node.splitText(start);
+          mid.splitText(m[2].length);
+          const span = doc.createElement('span');
+          span.className = 'g';
+          span.dataset.g = key;
+          span.textContent = mid.nodeValue;
+          mid.parentNode.replaceChild(span, mid);
+          done.add(key);
+          break;
+        }
+      }
+    });
+  }
+
   /* ------------------------------------------------------------------ */
   /* 3. glossary popups                                                  */
   /* ------------------------------------------------------------------ */
@@ -236,6 +298,7 @@
   function init() {
     doc.querySelectorAll('.flow[data-at]').forEach(drawFlow);
     wirePopouts();
+    autoGlossary();
     wireGlossary();
     enterView();
   }

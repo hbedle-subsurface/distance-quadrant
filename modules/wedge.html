@@ -23,9 +23,9 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 12 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 11 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Wedge models and tuning</h1>
-    <p class="sub">Module 11 ended by admitting that closely spaced sands contaminate each other. This
+    <p class="sub">Module 10 ended by admitting that closely spaced sands contaminate each other. This
       module takes that seriously. A wedge is the standard way to ask what thickness does to an amplitude,
       and running one through the DQ workflow turns up a clean division of labour: the distance moves with
       thickness and the angle does not.</p>
@@ -38,7 +38,8 @@
         <canvas id="cMain" aria-label="A wedge model with the sand thinning to the right, beside the near stack"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -189,9 +190,9 @@
     </div>
 
     <p class="lede">
-      Put the two facts together. Module 11 showed the distance tracking porosity. This module shows it
+      Put the two facts together. Module 10 showed the distance tracking porosity. This module shows it
       tracking thickness as well &mdash; and an interpreter looking at a single bright DQ sample cannot
-      tell which of the two caused it. The angle helps, because in module 10 it moved with fluid, and in this wedge it changes
+      tell which of the two caused it. The angle helps, because in module 07 it moved with fluid, and in this wedge it changes
       little with thickness once the bed is thicker than about a quarter wavelength. Thinner beds shift
       the angle as well (Bedle et al., 2025b).</p>
 
@@ -201,7 +202,7 @@
       angle answers and which thickness affects much less, except in thin beds.</p>
 
     <p class="lede">
-      How much the angle has to say about fluid depends on the seal, and module 10 measured that. Under
+      How much the angle has to say about fluid depends on the seal, and module 07 measured that. Under
       this tight sandstone the three fluids sit only about three degrees apart &mdash; a real separation,
       and a small one. Under a soft shale they spread much further, but there the reflection is weak and
       the angle is unstable, which the panel below will show if you switch. The thickness immunity holds generally; how much the angle says about fluid depends on where you are.</p>
@@ -245,14 +246,14 @@
 
     <div class="legend prose">
       <span>Worth being clear about the limit. The angle separates fluid from thickness; it does not
-        separate fluid from lithology, and module 11 showed it barely separating anything at all under some
-        seals. Read it with the distance, and read both with the module 08 baseline in mind.</span>
+        separate fluid from lithology, and module 10 showed it barely separating anything at all under some
+        seals. Read it with the distance, and read both with the module 06 baseline in mind.</span>
     </div>
   </section>
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Find the tuning peak.</b> On step 1 with a tight seal and gas at 24%, read where the curve
           peaks, then change the wavelet frequency.
@@ -263,7 +264,7 @@
             than at the true maximum of a continuous curve. What matters is not the exact number but the fact that the peak follows the bandwidth.</span></details></li>
         <li><b>Measure how much thickness moves the distance.</b> Read the variation figure on step 1.
           <details class="reveal"><summary>Answer</summary><span class="ans">About a third of the maximum
-            across a wedge from 6 to 55 ms. That is the same order as the change module 11 got from
+            across a wedge from 6 to 55 ms. That is the same order as the change module 10 got from
             varying porosity across its whole range, which is the problem in one sentence: a bright DQ
             sample could be a thick ordinary sand or a thin excellent one, and the distance alone cannot
             say. The habit worth forming is to treat a bright sample as having at least three candidate
@@ -288,11 +289,11 @@
             porosity the sand is close to the seal in impedance, so there is barely a reflection, and a
             short vector has no reliable direction. The separation of thickness from rock is a real
             property of the pair, but it is only available where there is something to measure. This is the
-            same limit module 10 met at the class 2 crossover.</span></details></li>
+            same limit module 07 met at the class 2 crossover.</span></details></li>
         <li><b>Thin the bed past the point of no return.</b> Drag the thickness marker down to 6 ms on
           step 1 and look at the model panel.
           <details class="reveal"><summary>Answer</summary><span class="ans">The top and base reflections
-            have merged into one event, and module 03 measured what that does to the picks: below about
+            have merged into one event, and module 02 measured what that does to the picks: below about
             8 ms the sand interval contains no pick at all. Everything downstream inherits it. The
             attribute is still defined and still returns a number; what it no longer has is a sample that
             belongs to the top of the sand rather than to the merged event.</span></details></li>
@@ -313,12 +314,12 @@
         <li><b>The reason is geometric.</b> Tuning scales the vector; scaling changes a length and leaves a
           direction alone.</li>
         <li><b>The pair separates two questions:</b> how much rock is there, and what kind of rock is
-          it. How much the angle can say about the second depends on the seal, as module 10 showed.</li>
+          it. How much the angle can say about the second depends on the seal, as module 07 showed.</li>
         <li><b>It is a narrowing, not a solution.</b> Two numbers from two partial stacks cannot fully
           separate thickness, porosity and fluid.</li>
         <li><b>The division fails where the reflection is weak.</b> Under a soft shale at moderate porosity
-          the distance collapses and the angle swings, exactly as at module 10's class 2 crossover.</li>
-        <li><b>Below about 8 ms the sand holds no pick of its own</b>, which module 03 measured, and every
+          the distance collapses and the angle swings, exactly as at module 07's class 2 crossover.</li>
+        <li><b>Below about 8 ms the sand holds no pick of its own</b>, which module 02 measured, and every
           attribute downstream inherits that.</li>
       </ul>
     </div>
@@ -327,7 +328,7 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>Everything upstream is as in modules 03 through 11: the same rocks, picks, quadrant numbers, phase
+      <p>Everything upstream is as in modules 02 through 11: the same rocks, picks, quadrant numbers, phase
         filters, enhancement, distance, baseline rotation, sector split and angle fold. The wedge is
         modeled by rebuilding the whole workflow at each thickness from 6 to 55 ms in steps of one and
         reading both attributes at the sample nearest the top of the sand.</p>
@@ -342,7 +343,7 @@
         and not because the physics changed.</p>
       <p>The claim that the angle is blind to thickness holds where the reflection is strong. It is stated
         for a tight sandstone seal and shown to fail under a soft shale at moderate porosity, which is the
-        near-crossover case module 10 uses as its example of an unreliable angle. Both statements are
+        near-crossover case module 07 uses as its example of an unreliable angle. Both statements are
         measured on this page rather than assumed.</p>
       <ul>
         <li>Widess, M. B., 1973, How thin is a thin bed?: <em>Geophysics</em>, 38, 1176&ndash;1180.</li>
@@ -356,16 +357,16 @@
 
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
-    <h3><a href="rdq-crossplot.html">13 · The 3D RDQ crossplot</a></h3>
+    <h3><a href="avo-classes.html">12 · The four AVO classes</a></h3>
     <p>Distance, &theta;<sub>px</sub> and the signed half isochron on three axes &mdash; the plot the whole
       workflow has been building toward.</p>
-    <a class="btn" href="rdq-crossplot.html">Open module 13 →</a>
+    <a class="btn" href="avo-classes.html">Open module 12 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
   <div class="pager" id="pager" hidden>
-    <a class="btn ghost" href="porosity.html">← DQ and porosity</a>
-    <a class="btn" href="rdq-crossplot.html">Next: the 3D RDQ crossplot →</a>
+    <a class="btn ghost" href="porosity.html">← Porosity</a>
+    <a class="btn" href="avo-classes.html">Next: the four AVO classes →</a>
   </div>
 
   <footer>
@@ -386,6 +387,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -810,7 +813,7 @@
      THE DISTANCE
 
      A is the quadrant-enhanced near stack and B is the enhanced far stack
-     minus it, so the two mean what they meant in module 02. The distance is
+     minus it, so the two mean what they meant in module 01. The distance is
      the length of that vector, and the sign is put on afterwards from the
      slope of the near stack.
      ===================================================================== */
@@ -904,10 +907,10 @@
 
      Paper 2: if the quadrant number is Q3, Q4, Q5, Q6 or Q7 then the data
      are replotted with the gradient multiplied by -1. Applied after the
-     baseline rotation of module 08, never before it.
+     baseline rotation of module 06, never before it.
      ===================================================================== */
 
-  const BASE_BEARING = 344;                        // this model's baseline, module 08
+  const BASE_BEARING = 344;                        // this model's baseline, module 06
   const TURN = 360 - BASE_BEARING;                 // spec [25] and [30]
   const isSplit = (q) => q >= 3 && q <= 7;
 

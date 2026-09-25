@@ -26,7 +26,7 @@ short glossary entry.
 ## The pages
 
 The site is being reorganized into fifteen pages, grouped into four parts. Each
-module covers one idea in at most three steps. Pages marked *old* are the
+module covers one idea in a few short steps. Pages marked *old* are the
 September 2026 versions and are replaced one at a time.
 
 | # | Module | Built from | Status |
@@ -85,7 +85,7 @@ Follow these when adding or changing a module.
 - **Two-way time runs down the vertical axis.** Never on a horizontal axis.
   Where a lithology column appears, depth is labeled down one side and two-way
   time down the other.
-- **One idea per module, at most three steps, a control on every step.** Step
+- **One idea per module, three or four short steps, a control on every step.** Step
   text stays around 150 to 250 words; anything longer goes to the method tab or
   the glossary.
 - **Neutral, descriptive prose.** No second person, no imperatives in the

@@ -90,11 +90,12 @@
     </div>
   </div>
 
-  <p class="tabhint">Three steps in order, <b>then the exercises</b>.</p>
+  <p class="tabhint">Four steps in order, <b>then the exercises</b>.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · Two windows on a gather</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · Intercept and gradient</button>
     <button role="tab" data-tab="p3" aria-selected="false">3 · Where the reading holds</button>
+    <button role="tab" data-tab="p4" aria-selected="false">4 · What the input has to be</button>
     <span class="gap"></span>
     <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
     <button role="tab" data-tab="pk" aria-selected="false">Key points</button>
@@ -230,6 +231,61 @@
     </div>
   </section>
 
+  <!-- ================================ STEP 4 ================================ -->
+  <section class="tabpane" id="p4" role="tabpanel" hidden>
+    <div class="plot-head">
+      <h3><span class="stepno">4</span>What the input has to be</h3>
+    </div>
+
+    <p class="lede">The workflow assumes three things about the two stacks: that the data are
+      <span class="g" data-g="zero-phase">zero phase</span>, that
+      <span class="g" data-g="nmo">NMO correction</span> has flattened every reflection across the gather,
+      and that the amplitudes are <span class="g" data-g="relative-amplitude">relative amplitude</span>, so
+      the near and far stacks can be compared directly (Bedle et al., 2025a).</p>
+
+    <p class="lede">Each control below breaks one of those assumptions. The faint dashed curves are the
+      same model with all three at zero, so the difference between the two is the error the input carries
+      into everything that follows. On the crossplot the cross is the two-layer answer and the filled
+      circle is what the distorted input reports. The three controls stay set while the other steps are open,
+      so the panel&rsquo;s reset button, or returning all three to zero, restores the clean model.</p>
+
+    <div class="stepctl" style="grid-template-columns:1fr">
+      <div class="controls" style="margin:0">
+        <div class="ctl">
+          <label for="iphase">Input phase <span class="val" id="iphaseV">0&deg;</span></label>
+          <input type="range" id="iphase" min="-90" max="90" step="5" value="0">
+        </div>
+        <div class="ctl">
+          <label for="rmo">Residual moveout at 40&deg; <span class="val" id="rmoV">0 ms</span></label>
+          <input type="range" id="rmo" min="0" max="10" step="1" value="0">
+        </div>
+        <div class="ctl">
+          <label for="fgain">Far-stack gain error <span class="val" id="fgainV">0%</span></label>
+          <input type="range" id="fgain" min="-30" max="30" step="5" value="0">
+        </div>
+      </div>
+    </div>
+
+    <canvas id="c4" aria-label="The near stack, far stack and far-minus-near computed from distorted input, with the undistorted versions dashed, and the resulting crossplot point"></canvas>
+
+    <div class="stats" style="margin-top:14px">
+      <div class="stat"><span>Sand-top pick moved by</span><b id="s4a">&mdash;</b></div>
+      <div class="stat"><span>N at the sand top</span><b id="s4b">&mdash;</b></div>
+      <div class="stat key"><span>F &minus; N at the sand top</span><b id="s4c">&mdash;</b></div>
+      <div class="stat key"><span>Error in the gradient</span><b id="s4d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s4e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>Phase moves the peaks and troughs away from the boundaries, so every later operation picks
+        the wrong samples. Residual moveout leaves the far reflection late, so the subtraction compares
+        two different parts of the waveform and the difference is partly timing rather than amplitude
+        change. A gain error on the far stack scales the gradient directly, which moves a point vertically
+        on the crossplot and can change the AVO class the data appear to belong to. The DQ papers list
+        these as the preparation the workflow needs, along with a time-variant scalar on the far stack and
+        interpolation to 1&nbsp;ms.</span>
+    </div>
+  </section>
+
   <!-- ============================== EXERCISES ============================== -->
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
@@ -360,7 +416,7 @@
 
   <div class="pager" id="pager" hidden>
     <a class="btn ghost" href="orientation.html">← The rocks, and two pictures of them</a>
-    <a class="btn" href="stickogram.html">Next: marking the waveform →</a>
+    <a class="btn" href="stickogram.html">Next: the picks on the near stack →</a>
   </div>
 
   <footer>
@@ -430,7 +486,7 @@
 
   const LIM = 0.20;                               // fixed crossplot and R axes
 
-  const DEF = { over: 'soft', phi: 28, fluid: 'gas', thick: 30, freq: 40, far: 20, ang: 35, tpick: 45, tab: 'p1' };
+  const DEF = { iphase: 0, rmo: 0, fgain: 0, over: 'soft', phi: 28, fluid: 'gas', thick: 30, freq: 40, far: 20, ang: 35, tpick: 45, tab: 'p1' };
   let S = SEIS.readState(DEF);
   if (!LITHS[S.over]) S.over = DEF.over;
   if (!FLUIDS[S.fluid]) S.fluid = DEF.fluid;
@@ -441,6 +497,9 @@
   S.far = clampInt(S.far, 12, 30, DEF.far);
   S.ang = Math.min(40, Math.max(0, Math.round(S.ang) || 0));
   S.tpick = Math.min(140, Math.max(0, Math.round(S.tpick) || 0));
+  S.iphase = Math.min(90, Math.max(-90, Math.round(S.iphase) || 0));
+  S.rmo = Math.min(10, Math.max(0, Math.round(S.rmo) || 0));
+  S.fgain = Math.min(30, Math.max(-30, Math.round(S.fgain) || 0));
 
   const CAN_LINK = location.protocol !== 'file:';
   const saveState = () => {
@@ -523,15 +582,25 @@
   const NANG = SIN2.length;
   const inBand = (d, band) => (d >= band[0] && d <= band[1]);
 
-  function gather() {
+  /* The three input conditions. With all three at their defaults the gather is
+     zero phase, flat after NMO, and in relative amplitude, which is what the
+     workflow expects; step 4 breaks them one at a time. */
+  function gather(ideal) {
     const m = model();
-    const wav = SEIS.makeWavelet({ type: 'ricker', f: S.freq });
+    const phase = ideal ? 0 : S.iphase;
+    const rmo = ideal ? 0 : S.rmo;
+    const fgain = ideal ? 0 : S.fgain;
+    let wav = SEIS.makeWavelet({ type: 'ricker', f: S.freq });
+    if (phase) wav = SEIS.phaseRotate(wav, phase);
     const traces = [];
     for (let d = 0; d < NANG; d++) {
       const s2 = SIN2[d];
+      // under-corrected moveout: the reflection arrives late, by an amount
+      // that grows with sin squared of the incidence angle
+      const late = (rmo / 1000) * (s2 / SIN2[DEG_MAX]);
       traces.push(SEIS.traceFromSpikes([
-        { t: TTOP, r: m.top.A + m.top.B * s2 },
-        { t: m.tb, r: m.base.A + m.base.B * s2 },
+        { t: TTOP + late, r: m.top.A + m.top.B * s2 },
+        { t: m.tb + late, r: m.base.A + m.base.B * s2 },
       ], 0, DT, NT, wav));
     }
     const stack = (band) => {
@@ -546,6 +615,7 @@
       return { tr: out, n };
     };
     const near = stack(NEAR_A), far = stack(m.fb);
+    if (fgain) for (let i = 0; i < NT; i++) far.tr[i] *= (1 + fgain / 100);
     const diff = new Float32Array(NT);
     for (let i = 0; i < NT; i++) diff[i] = far.tr[i] - near.tr[i];
     return { m, traces, near, far, diff };
@@ -998,16 +1068,112 @@
     if ($('x4b')) $('x4b').textContent = Math.round(100 * d10) + '%';
   }
 
+  /* ------------------------------- step 4 ------------------------------ */
+
+  function drawStep4() {
+    const g = gather(), gi = gather(true), m = g.m;
+    const c = $('c4'); if (!c) return;
+    const W = width(c, 680);
+    const side = Math.max(200, Math.min(330, W * 0.42));
+    const H = side + 70;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+
+    const rX = { x: W - side - 14, y: 26, w: side, h: side };
+    const rT = { x: 58, y: 26, w: Math.max(150, rX.x - 58 - 50), h: side };
+
+    let peak = 1e-6;
+    for (let i = 0; i < NT; i++) {
+      peak = Math.max(peak, Math.abs(g.near.tr[i]), Math.abs(g.far.tr[i]), Math.abs(g.diff[i]),
+                      Math.abs(gi.near.tr[i]), Math.abs(gi.far.tr[i]), Math.abs(gi.diff[i]));
+    }
+    SEIS.axisLeft(ctx, rT, 0, TWIN * 1000, 'two-way time (ms)', (v) => String(Math.round(v)), { ticks: 7 });
+    const yT = rT.y + (TTOP / TWIN) * rT.h, yB = rT.y + (m.tb / TWIN) * rT.h;
+    ctx.fillStyle = 'rgba(132,22,23,0.05)';
+    ctx.fillRect(rT.x, yT, rT.w, yB - yT);
+    SEIS.frame(ctx, rT);
+    const third = rT.w / 3;
+    [[g.near.tr, gi.near.tr, NEARC, 'N'],
+     [g.far.tr, gi.far.tr, FARC, 'F'],
+     [g.diff, gi.diff, CRIM, 'F\u2212N']].forEach((q, k) => {
+      const r = { x: rT.x + k * third, y: rT.y, w: third, h: rT.h };
+      SEIS.dashedLine(ctx, r.x + third / 2, r.y, r.x + third / 2, r.y + r.h, SOFT, [3, 4], 0.8);
+      wiggle(ctx, q[1], r, peak, 'rgba(22,25,28,0.28)', null, 1);
+      wiggle(ctx, q[0], r, peak, q[2], null, 1.8);
+      label(ctx, q[3], r.x + third / 2, r.y - 5, q[2]);
+    });
+    guides(ctx, rT.x, rT.x + rT.w, yT, yB);
+
+    // the crossplot: the two-layer answer, and what this input reports
+    const xX = (v) => rX.x + (clamp(v) / LIM + 1) / 2 * rX.w;
+    const yX = (v) => rX.y + rX.h - (clamp(v) / LIM + 1) / 2 * rX.h;
+    SEIS.axisLeft(ctx, rX, -LIM, LIM, 'far minus near', null, { ticks: 6, flip: true, grid: true });
+    SEIS.axisBottom(ctx, rX, -LIM, LIM, 'near stack', null, { ticks: 6 });
+    SEIS.frame(ctx, rX);
+    SEIS.dashedLine(ctx, rX.x, yX(0), rX.x + rX.w, yX(0), SOFT, [4, 4], 1);
+    SEIS.dashedLine(ctx, xX(0), rX.y, xX(0), rX.y + rX.h, SOFT, [4, 4], 1);
+    const a = answers(m)[0];
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rX.x, rX.y, rX.w, rX.h); ctx.clip();
+    let x = xX(a.x), y = yX(a.y);
+    ctx.beginPath(); ctx.moveTo(x - 7, y); ctx.lineTo(x + 7, y); ctx.moveTo(x, y - 7); ctx.lineTo(x, y + 7);
+    ctx.strokeStyle = CRIM; ctx.lineWidth = 2; ctx.stroke();
+    const iTop = topPick(g), iIdeal = topPick(gi);
+    const px = g.near.tr[iTop], py = g.diff[iTop];
+    SEIS.dashedLine(ctx, x, y, xX(px), yX(py), 'rgba(22,25,28,0.45)', [4, 3], 1);
+    ctx.beginPath(); ctx.arc(xX(px), yX(py), 6, 0, 2 * Math.PI);
+    ctx.fillStyle = CRIM; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.4; ctx.stroke();
+    ctx.restore();
+    label(ctx, 'two-layer answer', Math.max(rX.x + 60, x - 9),
+          Math.min(rX.y + rX.h - 4, y + 16), CRIM, 'right');
+    label(ctx, 'what this input reports', rX.x + rX.w / 2, rX.y - 6, INK);
+
+    const f3 = (v) => (v >= 0 ? '+' : '\u2212') + Math.abs(v).toFixed(3);
+    const shift = (iTop - iIdeal) * DT * 1000;
+    // reported as a change in magnitude, so a gradient read too strongly is
+    // positive whichever sign the gradient itself has
+    const gradTrue = m.top.B;
+    const gradSeen = py / m.gain;
+    const err = 100 * (Math.abs(gradSeen) - Math.abs(gradTrue)) / (Math.abs(gradTrue) || 1e-9);
+    $('s4a').textContent = (shift >= 0 ? '+' : '\u2212') + Math.abs(shift).toFixed(0) + ' ms';
+    $('s4b').textContent = f3(px);
+    $('s4c').textContent = f3(py);
+    const errTxt = Math.abs(err) < 0.5 ? '+0%'
+      : (err > 0 ? '+' : '\u2212') + Math.abs(err).toFixed(0) + '%';
+    $('s4d').textContent = errTxt;
+    $('s4e').textContent = (S.iphase || S.rmo || S.fgain)
+      ? 'With this input the sand-top pick sits ' + Math.abs(shift).toFixed(0)
+        + ' ms from where it belongs and the gradient is read ' + Math.abs(err).toFixed(0)
+        + '% ' + (err >= 0 ? 'too large' : 'too small')
+        + '. Nothing in the workflow reports the error; the numbers '
+        + 'come out looking ordinary.'
+      : 'All three controls are at zero, so the input meets the conditions the workflow assumes and the '
+        + 'reported point sits on the two-layer answer.';
+  }
+
+  // the extremum nearest the top of the sand
+  function topPick(g) {
+    const ext = extrema(g.near.tr);
+    const target = Math.round(TTOP / DT);
+    let best = target, bd = Infinity;
+    ext.forEach((i) => { const d = Math.abs(i - target); if (d < bd) { bd = d; best = i; } });
+    return best;
+  }
+
   /* ------------------------------ the panel ---------------------------- */
 
   function pushToInputs() {
-    ['phi', 'thick', 'freq', 'far', 'ang', 'tpick'].forEach((k) => { $(k).value = S[k]; });
+    ['phi', 'thick', 'freq', 'far', 'ang', 'tpick', 'iphase', 'rmo', 'fgain'].forEach((k) => { $(k).value = S[k]; });
     $('phiV').textContent = S.phi + '%';
     $('thickV').textContent = S.thick + ' ms';
     $('freqV').textContent = S.freq + ' Hz';
     $('farV').textContent = S.far + '\u2013' + (S.far + FAR_W) + '\u00B0';
     $('angV').textContent = S.ang + '\u00B0';
     $('tpickV').textContent = S.tpick + ' ms';
+    $('iphaseV').textContent = (S.iphase > 0 ? '+' : '') + S.iphase + '\u00B0';
+    $('rmoV').textContent = S.rmo + ' ms';
+    $('fgainV').textContent = (S.fgain > 0 ? '+' : '') + S.fgain + '%';
     $('overV').textContent = LITHS[S.over].name;
     $('fluidV').textContent = FLUIDS[S.fluid].name;
     document.querySelectorAll('[data-over]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.over === S.over));
@@ -1026,11 +1192,12 @@
     if (visible('p1')) drawStep1();
     if (visible('p2')) drawStep2();
     if (visible('p3')) drawStep3();
+    if (visible('p4')) drawStep4();
   }
 
   function onChange() { pushToInputs(); drawAll(); saveState(); }
 
-  ['phi', 'thick', 'freq', 'far', 'ang', 'tpick'].forEach((id) => {
+  ['phi', 'thick', 'freq', 'far', 'ang', 'tpick', 'iphase', 'rmo', 'fgain'].forEach((id) => {
     $(id).addEventListener('input', () => { S[id] = parseFloat($(id).value); onChange(); });
   });
   document.querySelectorAll('[data-over]').forEach((b) => {
@@ -1047,9 +1214,10 @@
 
   /* -------------------------------- tabs ------------------------------- */
 
-  const PANES = ['p1', 'p2', 'p3', 'pe', 'pk', 'pm'];
+  const PANES = ['p1', 'p2', 'p3', 'p4', 'pe', 'pk', 'pm'];
   const STEPNAMES = {
     p1: 'Two windows', p2: 'Intercept and gradient', p3: 'Where the reading holds',
+    p4: 'What the input has to be',
     pe: 'Exercises', pk: 'Key points', pm: 'Method',
   };
 
@@ -1074,7 +1242,7 @@
       nav.appendChild(prev ? mk(prev, '\u2190 ' + STEPNAMES[prev], true) : document.createElement('span'));
       const where = document.createElement('span');
       where.className = 'where';
-      where.textContent = i < 3 ? 'step ' + (i + 1) + ' of 3' : STEPNAMES[id];
+      where.textContent = i < 4 ? 'step ' + (i + 1) + ' of 4' : STEPNAMES[id];
       nav.appendChild(where);
       nav.appendChild(next ? mk(next, STEPNAMES[next] + ' \u2192') : document.createElement('span'));
       pane.appendChild(nav);
@@ -1085,7 +1253,7 @@
     PANES.forEach((p) => { const el = $(p); if (el) el.hidden = p !== id; });
     document.querySelectorAll('#tabs button').forEach((b) => b.setAttribute('aria-selected', b.dataset.tab === id));
     const lab = document.querySelector('.labhead');
-    if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3');
+    if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3' || id === 'p4');
     const last = (id === 'pk' || id === 'pm');
     if ($('nextup')) $('nextup').hidden = !last;
     if ($('pager')) $('pager').hidden = !last;

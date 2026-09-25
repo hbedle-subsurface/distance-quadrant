@@ -23,7 +23,7 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 06 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 04 &nbsp;·&nbsp; The DQ trace</p>
     <h1>The phase filters</h1>
     <p class="sub">Every sample now carries a quadrant number. That number selects which of eight
       phase-rotated copies of the near stack the sample's value is read from, and the same selection is
@@ -38,7 +38,8 @@
         <canvas id="cMain" aria-label="The near stack at eight phase rotations, beside the quadrant-enhanced trace built from them"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -193,7 +194,7 @@
     </div>
 
     <p class="lede">
-      Now put the two halves together. Each sample carries a quadrant number from module 04, and each
+      Now put the two halves together. Each sample carries a quadrant number from module 03, and each
       number names a phase. Q1 and Q9 take 0&deg;, Q2 through Q4 take 22.5&deg;, 45&deg; and 67.5&deg;, Q5
       takes 90&deg;, and Q6 through Q8 take 67.5&deg;, 45&deg; and 22.5&deg; again on the way back. Read
       each sample from the filter its own number names, and write the result to a new trace. That trace is
@@ -241,7 +242,7 @@
     <p class="lede">
       That is not a coincidence. Both are asking the same question, and the enhancement is a coarse,
       nine-bucket way of answering it. The difference is what happens next: an envelope is a single trace
-      and the enhancement produces a matched pair, near and far, which is what lets module 07 form a
+      and the enhancement produces a matched pair, near and far, which is what lets module 05 form a
       vector out of them. Step 4 applies the one scaling the method specifies to that pair.</p>
 
     <canvas id="c3a" aria-label="The quadrant-enhanced trace drawn against the Hilbert envelope of the near stack"></canvas>
@@ -337,7 +338,7 @@
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Watch the two weights trade off.</b> On step 1, step the highlighted filter through all
           eight and read cos&thinsp;&theta;, sin&thinsp;&theta; and their squares.
@@ -347,7 +348,7 @@
             between they blend: at &plusmn;45&deg; both weights are 0.707. The squares always sum to
             exactly 1, which is the whole reason the energy readout does not move &mdash; the two
             components are orthogonal, so Pythagoras applies to them just as it does to the intercept and
-            gradient in module 07. And the sum always matches the rotation computed directly, to machine
+            gradient in module 05. And the sum always matches the rotation computed directly, to machine
             precision, because they are the same operation written two ways.</span></details></li>
         <li><b>Check that a rotation conserves energy.</b> On step 1, step the highlighted filter through
           all eight and watch the energy readout and the peak amplitude.
@@ -397,7 +398,7 @@
             Both curves are computed from the same noisy trace, so a loop invented by noise gets an
             envelope and a quadrant enhancement that agree with each other perfectly well. The enhancement
             has no way to tell an invented loop from a real one, because the quadrant numbers it follows
-            were picked from that same trace back in module 03. Agreement with the envelope is a test of
+            were picked from that same trace back in module 02. Agreement with the envelope is a test of
             whether the filters are being applied correctly, not of whether the answer means
             anything.</span></details></li>
       </ol>
@@ -435,7 +436,7 @@
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
       <p>The rocks, the layer stack, the near stack, the picker and the quadrant numbering are all
-        identical to modules 03 and 04, so a model built there carries over unchanged.</p>
+        identical to modules 02 and 04, so a model built there carries over unchanged.</p>
       <p>A phase rotation is applied in the trace domain as
         x&nbsp;cos&thinsp;&theta;&nbsp;+&nbsp;H(x)&nbsp;sin&thinsp;&theta;, with H the Hilbert transform
         computed through the analytic signal. Doing it on the trace rather than on the wavelet means the
@@ -465,18 +466,18 @@
 
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
-    <h3><a href="dq-distance.html">07 · The DQ distance</a></h3>
+    <h3><a href="dq-distance.html">05 · The distance</a></h3>
     <p>The two enhanced traces are combined into one number per sample by Pythagoras, and the same pair
       seen as a vector gives the crossplot the whole method is named after.</p>
     <p style="font-size:13px;color:var(--muted)">Amplitude balancing used to be planned as a module of
       its own. It is the normalization of step 6 rather than a separate pass, so it is step 4 above, and
       the course runs straight from the filters to the distance.</p>
-    <a class="btn" href="dq-distance.html">Open module 07 →</a>
+    <a class="btn" href="dq-distance.html">Open module 05 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
   <div class="pager" id="pager" hidden>
-    <a class="btn ghost" href="isochron.html">← Isochron and half isochron</a>
+    <a class="btn ghost" href="quadrants.html">← Quadrant numbers</a>
     <a class="btn" href="dq-distance.html">Next: the DQ distance →</a>
   </div>
 
@@ -498,6 +499,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -890,7 +893,7 @@
   }
 
   /* Each sample is read from the filter its own quadrant number names, with no
-     sign adjustment. That works because module 04's interior count restarts
+     sign adjustment. That works because module 03's interior count restarts
      after every extremum, so the phase keeps advancing down the trace and the tabulated
      filter is always the right one. The switch in the panel mirrors the
      numbering on falling limbs instead, which is what an earlier draft of this

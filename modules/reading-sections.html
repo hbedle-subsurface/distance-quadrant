@@ -23,7 +23,7 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 15 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 13 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Reading a DQ section</h1>
     <p class="sub">Every attribute so far has been shown as a curve. On a real project they arrive as
       sections, and a DQ section is not colored like a seismic section &mdash; deliberately. The display conventions are the subject here: what each color bar is doing, why it is built that way, and what you would misread if it were built the ordinary way.</p>
@@ -36,7 +36,8 @@
         <canvas id="cMain" aria-label="A seismic section with the sand thickening across it"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -101,6 +102,7 @@
     <button role="tab" data-tab="p1" aria-selected="false">1 · The seismic convention</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · The DQ convention</button>
     <button role="tab" data-tab="p3" aria-selected="false">3 · The angle convention</button>
+    <button role="tab" data-tab="pt" aria-selected="false">Self-test</button>
     <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
     <span class="gap"></span>
     <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
@@ -176,7 +178,7 @@
     </div>
     <div class="legend">
       <span>The sand now reads as a single colored body rather than as two bands with a gap. That is the
-        practical payoff of everything modules 03 to 07 did: the picking, the numbering and the phase
+        practical payoff of everything modules 02 to 07 did: the picking, the numbering and the phase
         filters exist to make each loop carry one value, and a one-sided color bar is how you display
         something that is one value per loop rather than an oscillation.</span>
     </div>
@@ -213,10 +215,42 @@
     </div>
     <div class="legend">
       <span>The line varies bed thickness from trace to trace, so its left-hand end runs through the
-        tuning regime module 12 measured and its weakest traces sit near a crossover, where module 10
+        tuning regime module 11 measured and its weakest traces sit near a crossover, where module 07
         showed the angle becomes unstable. That is why the sand top spans several bands across the line
-        rather than holding one. Read the banding as a display convention here; module 12 is where the
+        rather than holding one. Read the banding as a display convention here; module 11 is where the
         angle's response to thickness is measured properly, on a model built for the purpose.</span>
+    </div>
+  </section>
+
+  <section class="tabpane" id="pt" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3>Self-test: what produced this?</h3>
+      <span class="hint">The rocks are hidden until the answer is given</span>
+    </div>
+
+    <p class="lede">
+      Three rock models are listed below. One of them produced the two sections. The earth model panel
+      stays blank until a choice is made, and then it appears beside the sections with the answer. Where
+      two of the models give displays too close to tell apart, the reveal says so, which is as much the
+      point of the exercise as getting it right.</p>
+
+    <div class="quiz" id="quizOpts"></div>
+
+    <canvas id="ctq" aria-label="The DQ section and Theta PX section of a hidden rock model, with the earth model revealed after an answer is given"></canvas>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Answered</span><b id="sq1">&mdash;</b></div>
+      <div class="stat key"><span>Correct</span><b id="sq2">&mdash;</b></div>
+      <div class="stat wide"><span>Verdict</span><b id="sq3">&mdash;</b></div>
+    </div>
+    <div style="margin-top:12px">
+      <button class="btn small" id="quizNew" type="button">New question</button>
+    </div>
+    <div class="legend">
+      <span>The displays follow the conventions of the three steps: one-sided color for the DQ distance,
+        two-sided ten-degree bands for Theta PX. Porosity, pore fluid, bed thickness and the rock above
+        the sand all move both displays, so a body that looks the same can come from more than one set of
+        rocks.</span>
     </div>
   </section>
 
@@ -246,14 +280,14 @@
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Compare the two sections.</b> Look at step 1 and step 2 with the same model.
           <details class="reveal"><summary>Answer</summary><span class="ans">On the seismic section the sand
             is a pair of bands with a gap between them, and locating it means deciding which band is the
             top and which the base. On the DQ section it is one body. Nothing has been added &mdash; the
             DQ trace is computed from the same two partial stacks &mdash; but the display is showing one
-            value per loop instead of an oscillation, which is what the picking and numbering of modules 03
+            value per loop instead of an oscillation, which is what the picking and numbering of modules 02
             and 04 were for.</span></details></li>
         <li><b>Count the increments.</b> On step 2, read how the color bar is divided.
           <details class="reveal"><summary>Answer</summary><span class="ans">The full set above zero and
@@ -266,10 +300,10 @@
           <details class="reveal"><summary>Answer</summary><span class="ans">The colors inside the sand
             shift, and the range at the sand top changes with them. Be careful reading more into this line
             than it can carry: it varies bed thickness across the traces, so its thin end is in the tuning
-            regime and its weakest traces are near a crossover where module 10 showed the angle to be
+            regime and its weakest traces are near a crossover where module 07 showed the angle to be
             unstable. What the banding does is make a change of a few tens of degrees visible at a glance
             instead of hiding it in a smooth ramp. Whether the angle is responding to fluid rather than to
-            geometry is module 12's question, answered there on a model built for
+            geometry is module 11's question, answered there on a model built for
             it.</span></details></li>
         <li><b>Turn off the overlay wiggle.</b> Untick the box in the panel.
           <details class="reveal"><summary>Answer</summary><span class="ans">The color alone is easier to
@@ -288,7 +322,7 @@
         <li><b>Look along the line rather than at one trace.</b> The sand thickens from left to right,
           so the section is a wedge.
           <details class="reveal"><summary>Answer</summary><span class="ans">The DQ body brightens toward the
-            thin end, which is module 12's tuning seen as a picture rather than as a curve. A reader
+            thin end, which is module 11's tuning seen as a picture rather than as a curve. A reader
             looking only at the DQ section would call the thin part the better rock. That is the habit
             worth taking away: a section shows you where something is, and it will happily show you a
             tuning effect as though it were geology.</span></details></li>
@@ -323,7 +357,7 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>The section is built by running the whole workflow of modules 03 through 10 at each of twenty-one
+      <p>The section is built by running the whole workflow of modules 02 through 10 at each of twenty-one
         trace positions, with the sand thickening linearly across the line from about a third of the
         setting in the panel to about twice it. Everything else is held constant, so the only thing varying
         along the line is bed thickness.</p>
@@ -337,7 +371,7 @@
       <p>The remark that roughly four samples in five are shale comes from the same specification and
         describes a field clastic section, not this model, where the proportion depends on how thick you
         make the sand. It is quoted because it is the reason for the logarithmic histogram axis, which
-        module 14 uses.</p>
+        module 12 uses.</p>
       <p><b>What this module does not do.</b> It does not reproduce the published sections, which come from
         ray-traced synthetics over pseudo-well catalogs and from field data. It shows what the
         conventions are and what each one is protecting, on a model simple enough that you can see the
@@ -355,16 +389,16 @@
 
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
-    <h3><a href="attributes-line.html">16 · The attributes on a line</a></h3>
+    <h3><a href="attributes-line.html">14 · A synthetic line with every attribute</a></h3>
     <p>A 2D synthetic with dip, a fault, a sand that thickens and thins and a fluid contact, with every
       attribute the course has built shown on it &mdash; and two more that have not appeared yet.</p>
-    <a class="btn" href="attributes-line.html">Open module 16 →</a>
+    <a class="btn" href="attributes-line.html">Open module 14 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
   <div class="pager" id="pager" hidden>
     <a class="btn ghost" href="avo-classes.html">← The four AVO classes</a>
-    <a class="btn" href="attributes-line.html">Next: the attributes on a line →</a>
+    <a class="btn" href="attributes-line.html">Next: the synthetic line →</a>
   </div>
 
   <footer>
@@ -385,6 +419,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -809,7 +845,7 @@
      THE DISTANCE
 
      A is the quadrant-enhanced near stack and B is the enhanced far stack
-     minus it, so the two mean what they meant in module 02. The distance is
+     minus it, so the two mean what they meant in module 01. The distance is
      the length of that vector, and the sign is put on afterwards from the
      slope of the near stack.
      ===================================================================== */
@@ -903,10 +939,10 @@
 
      Paper 2: if the quadrant number is Q3, Q4, Q5, Q6 or Q7 then the data
      are replotted with the gradient multiplied by -1. Applied after the
-     baseline rotation of module 08, never before it.
+     baseline rotation of module 06, never before it.
      ===================================================================== */
 
-  const BASE_BEARING = 344;                        // this model's baseline, module 08
+  const BASE_BEARING = 344;                        // this model's baseline, module 06
   const TURN = 360 - BASE_BEARING;                 // spec [25] and [30]
   const isSplit = (q) => q >= 3 && q <= 7;
 
@@ -1078,7 +1114,7 @@
       const dq = new Float64Array(nt), px = new Float64Array(nt);
       const has = new Uint8Array(nt);
       r.pts.forEach((p) => {
-        // signed, as module 07 defines it: the one-sided color bar depends on
+        // signed, as module 05 defines it: the one-sided color bar depends on
         // the sign, and an unsigned distance would put every sample above zero
         const sgn = b.sgn[p.i] >= 0 ? 1 : -1;
         dq[p.i] = Math.hypot(p.x, p.y) * sgn;
@@ -1220,17 +1256,99 @@
     }
   }
 
+  /* ------------------------- the earth model panel ---------------------- */
+
+  /* The layers the traces were computed from, drawn on the same time axis as
+     the sections so the attribute displays can be compared with the model that
+     produced them. Each trace column carries its own sand thickness. */
+  const LITHFILL = { soft: '#A3ABB3', hard: '#7E8790', tight: '#D6C9A2' };
+  const SANDHUE = { brine: [205, 55], oil: [95, 35], gas: [335, 60] };
+
+  function sandFill() {
+    const h = SANDHUE[S.fluid];
+    const light = 82 - (S.phi - 12) * 1.3;
+    return 'hsl(' + h[0] + ',' + h[1] + '%,' + Math.max(45, Math.min(85, light)).toFixed(0) + '%)';
+  }
+
+  function drawEarth(ctx, rect, traces) {
+    const Y = (t) => rect.y + (t / TWIN) * rect.h;
+    const other = (S.over === 'soft') ? 'hard' : 'soft';
+    const tw = rect.w / NTR;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    ctx.fillStyle = LITHFILL[S.over];
+    ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+    ctx.fillStyle = LITHFILL[other];
+    ctx.fillRect(rect.x, Y(BEDA[0]), rect.w, Y(BEDA[1]) - Y(BEDA[0]));
+    if (S.over !== 'tight') {
+      ctx.fillStyle = LITHFILL.tight;
+      ctx.fillRect(rect.x, Y(BEDC[0]), rect.w, Y(BEDC[1]) - Y(BEDC[0]));
+    }
+    const fill = sandFill();
+    traces.forEach((t, k) => {
+      const top = TTOP, base = TTOP + t.thick / 1000;
+      ctx.fillStyle = fill;
+      ctx.fillRect(rect.x + k * tw, Y(top), tw + 0.6, Y(base) - Y(top));
+    });
+    ctx.restore();
+    SEIS.frame(ctx, rect);
+    ctx.save();
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(22,25,28,0.78)';
+    ctx.fillText(LITHS[S.over].name, rect.x + rect.w / 2, Y((BEDA[1] + TTOP) / 2));
+    ctx.fillText(LITHS[other].name + ' bed', rect.x + rect.w / 2, Y((BEDA[0] + BEDA[1]) / 2));
+    if (S.over !== 'tight') {
+      ctx.fillText('tight bed', rect.x + rect.w / 2, Y((BEDC[0] + BEDC[1]) / 2));
+    }
+    const last = traces[traces.length - 1];
+    ctx.fillStyle = '#5A0E0F';
+    ctx.fillText(FLUIDS[S.fluid].name + ' sand, ' + S.phi + '%',
+      rect.x + rect.w / 2, Y(TTOP + last.thick / 2000));
+    ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(22,25,28,0.7)';
+    ctx.fillText('EARTH MODEL', rect.x + rect.w / 2, rect.y - 8);
+    ctx.restore();
+  }
+
+  /* the sand of the earth model, outlined on a section so the two can be
+     compared trace by trace */
+  function outlineSand(ctx, rect, traces) {
+    const tw = rect.w / NTR;
+    const Y = (t) => rect.y + (t / TWIN) * rect.h;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    ctx.beginPath();
+    traces.forEach((t, k) => {
+      const x = rect.x + (k + 0.5) * tw;
+      k === 0 ? ctx.moveTo(x, Y(TTOP)) : ctx.lineTo(x, Y(TTOP));
+    });
+    for (let k = traces.length - 1; k >= 0; k--) {
+      ctx.lineTo(rect.x + (k + 0.5) * tw, Y(TTOP + traces[k].thick / 1000));
+    }
+    ctx.closePath();
+    ctx.setLineDash([5, 4]); ctx.lineWidth = 1.4;
+    ctx.strokeStyle = 'rgba(22,25,28,0.8)'; ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+
   function panel(canvasId, mode, title) {
     const c = $(canvasId); if (!c) return null;
     const W = width(c, 640), H = 380;
     const ctx = SEIS.fitCanvas(c, W, H);
     ctx.clearRect(0, 0, W, H);
     const traces = line();
-    const rect = { x: 62, y: 30, w: W - 62 - 74, h: H - 74 };
-    SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+    const ew = Math.round((W - 62 - 74 - 30) * 0.26);
+    const rE = { x: 62, y: 30, w: ew, h: H - 74 };
+    const rect = { x: 62 + ew + 30, y: 30, w: W - 62 - 74 - ew - 30, h: H - 74 };
+    SEIS.axisLeft(ctx, rE, 0, TWIN * 1000, 'two-way time (ms)',
       (v) => String(Math.round(v)), { ticks: 6 });
+    drawEarth(ctx, rE, traces);
     const lim = drawSection(ctx, rect, traces, mode);
+    outlineSand(ctx, rect, traces);
     SEIS.axisBottom(ctx, rect, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: 5 });
+    SEIS.axisBottom(ctx, rE, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: 3 });
     colorBar(ctx, rect.x + rect.w + 14, rect.y, 14, rect.h, mode, lim);
     ctx.font = '9px "IBM Plex Mono", monospace';
     ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
@@ -1245,10 +1363,14 @@
     const ctx = SEIS.fitCanvas(c, W, H);
     ctx.clearRect(0, 0, W, H);
     const traces = line();
-    const rect = { x: 52, y: 26, w: W - 52 - 62, h: H - 62 };
-    SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+    const ew = Math.round((W - 52 - 62 - 26) * 0.26);
+    const rE = { x: 52, y: 26, w: ew, h: H - 62 };
+    const rect = { x: 52 + ew + 26, y: 26, w: W - 52 - 62 - ew - 26, h: H - 62 };
+    SEIS.axisLeft(ctx, rE, 0, TWIN * 1000, 'two-way time (ms)',
       (v) => String(Math.round(v)), { ticks: 5 });
+    drawEarth(ctx, rE, traces);
     const lim = drawSection(ctx, rect, traces, 'dq');
+    outlineSand(ctx, rect, traces);
     colorBar(ctx, rect.x + rect.w + 12, rect.y, 12, rect.h, 'dq', lim);
     ctx.font = '9px "IBM Plex Mono", monospace';
     ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
@@ -1348,6 +1470,7 @@
     if (visible('p1')) drawStep1();
     if (visible('p2')) drawStep2();
     if (visible('p3')) drawStep3();
+    if (visible('pt')) drawStepQuiz();
   }
   function onChange() { pushToInputs(); drawAll(); saveState(); }
 
@@ -1369,11 +1492,175 @@
     onChange();
   });
 
+  /* ------------------------------ the self-test -------------------------
+     A hidden rock model is drawn as a DQ section and a Theta PX section, and
+     three candidate models are offered. The earth model is shown only after an
+     answer, together with a note on whether the three were distinguishable at
+     all from the displays. */
+
+  const QUIZ = {
+    seed: 1, truth: null, opts: [], picked: -1, asked: 0, right: 0,
+  };
+
+  const QFLUID = ['brine', 'gas'];
+  const QOVER = ['soft', 'hard', 'tight'];
+
+  function qRand() {
+    QUIZ.seed = (QUIZ.seed * 1664525 + 1013904223) % 4294967296;
+    return QUIZ.seed / 4294967296;
+  }
+
+  function qModel() {
+    return {
+      over: QOVER[Math.floor(qRand() * QOVER.length)],
+      fluid: QFLUID[Math.floor(qRand() * QFLUID.length)],
+      phi: 12 + Math.round(qRand() * 22),
+      thick: 10 + Math.round(qRand() * 28),
+    };
+  }
+
+  const qName = (m) => m.fluid + ' sand at ' + m.phi + '% porosity, ' + m.thick
+    + ' ms thick, under ' + LITHS[m.over].name;
+
+  // run the workflow for a model without disturbing the panel's own state
+  function withModel(m, fn) {
+    const keep = { over: S.over, fluid: S.fluid, phi: S.phi, thick: S.thick };
+    Object.assign(S, m);
+    let out;
+    try { out = fn(); } finally { Object.assign(S, keep); }
+    return out;
+  }
+
+  // the DQ and Theta PX values at the top of the sand, for comparing models
+  function qSignature(m) {
+    return withModel(m, () => {
+      const traces = line();
+      const t = traces[Math.floor(NTR / 2)];
+      const i = t.win[0];
+      return { dq: t.has[i] ? t.dq[i] : 0, px: t.has[i] ? t.px[i] : 0 };
+    });
+  }
+
+  function newQuestion() {
+    QUIZ.truth = qModel();
+    const opts = [QUIZ.truth];
+    let guard = 0;
+    while (opts.length < 3 && guard++ < 40) {
+      const c = qModel();
+      const near = opts.some((o) => o.over === c.over && o.fluid === c.fluid
+        && Math.abs(o.phi - c.phi) < 4 && Math.abs(o.thick - c.thick) < 4);
+      if (!near) opts.push(c);
+    }
+    for (let i = opts.length - 1; i > 0; i--) {         // shuffle
+      const j = Math.floor(qRand() * (i + 1));
+      const t = opts[i]; opts[i] = opts[j]; opts[j] = t;
+    }
+    QUIZ.opts = opts;
+    QUIZ.picked = -1;
+    buildOptions();
+    drawQuiz();
+  }
+
+  function buildOptions() {
+    const box = $('quizOpts'); if (!box) return;
+    box.innerHTML = '';
+    QUIZ.opts.forEach((m, k) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = qName(m);
+      b.addEventListener('click', () => {
+        if (QUIZ.picked >= 0) return;
+        QUIZ.picked = k;
+        QUIZ.asked++;
+        if (m === QUIZ.truth) QUIZ.right++;
+        markOptions();
+        drawQuiz();
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function markOptions() {
+    const box = $('quizOpts'); if (!box) return;
+    Array.from(box.children).forEach((b, k) => {
+      b.disabled = true;
+      const isTruth = QUIZ.opts[k] === QUIZ.truth;
+      b.className = isTruth ? 'right' : (k === QUIZ.picked ? 'wrong' : '');
+      if (isTruth) {
+        const tag = document.createElement('span');
+        tag.className = 'mark';
+        tag.textContent = k === QUIZ.picked ? 'your answer, correct' : 'the answer';
+        b.appendChild(tag);
+      }
+    });
+  }
+
+  function drawQuiz() {
+    const c = $('ctq'); if (!c || !QUIZ.truth) return;
+    const W = width(c, 680), H = 380;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const revealed = QUIZ.picked >= 0;
+    const traces = withModel(QUIZ.truth, () => line());
+    const gap = 26;
+    const pw = (W - 66 - 40 - 2 * gap) / (revealed ? 2.7 : 2);
+    const ew = revealed ? pw * 0.7 : 0;
+    const x0 = 66;
+    const rE = { x: x0, y: 30, w: ew, h: H - 76 };
+    const rD = { x: x0 + (revealed ? ew + gap : 0), y: 30, w: pw, h: H - 76 };
+    const rP = { x: rD.x + pw + gap, y: 30, w: pw, h: H - 76 };
+    SEIS.axisLeft(ctx, revealed ? rE : rD, 0, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 6 });
+    if (revealed) withModel(QUIZ.truth, () => drawEarth(ctx, rE, traces));
+    withModel(QUIZ.truth, () => {
+      const l1 = drawSection(ctx, rD, traces, 'dq');
+      colorBar(ctx, rD.x + rD.w + 6, rD.y, 10, rD.h, 'dq', l1);
+      const l2 = drawSection(ctx, rP, traces, 'px');
+      colorBar(ctx, rP.x + rP.w + 6, rP.y, 10, rP.h, 'px', l2);
+    });
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = CRIM;
+    ctx.fillText('DQ DISTANCE', rD.x + rD.w / 2, rD.y - 8);
+    ctx.fillText('THETA PX', rP.x + rP.w / 2, rP.y - 8);
+    [rD, rP].forEach((r) => SEIS.axisBottom(ctx, r, 1, NTR, 'trace',
+      (v) => String(Math.round(v)), { ticks: 4 }));
+
+    $('sq1').textContent = QUIZ.asked + (QUIZ.asked === 1 ? ' question' : ' questions');
+    $('sq2').textContent = QUIZ.right + ' of ' + Math.max(1, QUIZ.asked);
+    if (!revealed) {
+      $('sq3').textContent = 'Three candidate models are listed above. One of them produced these two '
+        + 'sections.';
+      return;
+    }
+    // how far apart the three models are on the two displays
+    const sigs = QUIZ.opts.map(qSignature);
+    const tru = sigs[QUIZ.opts.indexOf(QUIZ.truth)];
+    let closest = Infinity;
+    sigs.forEach((sg, k) => {
+      if (QUIZ.opts[k] === QUIZ.truth) return;
+      const dd = Math.abs(sg.dq - tru.dq) / (Math.abs(tru.dq) || 1e-9);
+      const dp = Math.abs(sg.px - tru.px);
+      closest = Math.min(closest, Math.max(dd * 100, dp));
+    });
+    const ok = QUIZ.opts[QUIZ.picked] === QUIZ.truth;
+    $('sq3').textContent = (ok ? 'Correct. ' : 'Not this time. ')
+      + 'The sections came from a ' + qName(QUIZ.truth) + '. '
+      + (closest < 8
+        ? 'The nearest of the other two models gives almost the same reading at the sand top, so the '
+          + 'displays alone could not separate them; a well or the local geology would have to.'
+        : 'The other models differ enough at the sand top to be ruled out from the displays.');
+  }
+
+  function drawStepQuiz() {
+    if (!QUIZ.truth) newQuestion(); else drawQuiz();
+  }
+
   /* -------------------------------- tabs ------------------------------- */
 
-  const PANES = ['p1', 'p2', 'p3', 'pw', 'pe', 'pk', 'pm'];
+  const PANES = ['p1', 'p2', 'p3', 'pt', 'pw', 'pe', 'pk', 'pm'];
   const STEPNAMES = {
-    p1: 'Seismic', p2: 'DQ', p3: 'Angle',
+    p1: 'Seismic', p2: 'DQ', p3: 'Angle', pt: 'Self-test',
     pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
   };
 
@@ -1430,6 +1717,7 @@
     drawAll();
     saveState();
   }
+  if ($('quizNew')) $('quizNew').addEventListener('click', newQuestion);
   document.querySelectorAll('#tabs button').forEach((b) => {
     b.addEventListener('click', () => showTab(b.dataset.tab));
   });

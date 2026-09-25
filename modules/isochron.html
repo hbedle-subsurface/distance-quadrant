@@ -38,7 +38,8 @@
         <canvas id="cMain" aria-label="The near-stack trace beside its signed isochron and half isochron zones"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -112,6 +113,7 @@
     <button role="tab" data-tab="p1" aria-selected="false">1 · The signed isochron</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · Splitting it in half</button>
     <button role="tab" data-tab="p3" aria-selected="false">3 · What the asymmetry says</button>
+    <button role="tab" data-tab="p4" aria-selected="false">4 · On a section</button>
     <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
     <span class="gap"></span>
     <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
@@ -126,8 +128,8 @@
     </div>
 
     <p class="lede">
-      What this step buys: a measure of how long each half loop lasts and which way it runs. It becomes
-      the third axis of the crossplot in module 13, and a way of selecting which part of a waveform to
+      The isochron measures how long each half loop lasts and which way it runs. It becomes
+      the third axis of the crossplot in module 09, and a way of selecting which part of a waveform to
       look at.</p>
 
     <p class="lede">
@@ -237,6 +239,53 @@
     </div>
   </section>
 
+  <section class="tabpane" id="p4" role="tabpanel" hidden>
+    <div class="plot-head" style="margin-bottom:14px">
+      <h3><span class="stepno">4</span>On a section</h3>
+      <span class="hint">The same two measurements, written to every sample of every trace</span>
+    </div>
+
+    <p class="lede">
+      Both measurements are numbers per sample, so both can be displayed as sections. Here the same sand
+      runs across twenty-one traces, thickening or thinning from left to right by the amount set below.
+      The earth model on the left is the answer; the two sections beside it are what the isochron and the
+      half isochron make of it.</p>
+
+    <p class="lede">
+      Pink is a rising limb and blue a falling one, on a fixed scale of &plusmn;30 ms, so a color means one
+      time thickness on every setting of the controls. The sand appears as a pink band that widens where the
+      bed is thicker. The half isochron cuts each of those bands in two at its zero crossing, and in a graded
+      sand the two halves are unequal.</p>
+
+    <div class="stepctl">
+      <div class="ctl">
+        <label for="spread">Thickness change along the line <span class="val" id="spreadV">40%</span></label>
+        <input type="range" id="spread" min="0" max="80" step="5" value="40">
+      </div>
+      <p class="say">The sand thins to the left and thickens to the right by this fraction of the
+        thickness set in the panel.</p>
+    </div>
+
+    <canvas id="c4a" aria-label="The earth model beside the signed isochron section and the signed half isochron section"></canvas>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><span>Sand thickness, left to right</span><b id="s4a">&mdash;</b></div>
+      <div class="stat key"><span>Sand isochron, left to right</span><b id="s4b">&mdash;</b></div>
+      <div class="stat"><span>Halves at the middle trace</span><b id="s4c">&mdash;</b></div>
+      <div class="stat"><span>Samples with no zone</span><b id="s4d">&mdash;</b></div>
+      <div class="stat wide"><span>Reading</span><b id="s4e">&mdash;</b></div>
+    </div>
+    <div class="legend">
+      <span>The isochron section holds bands rather than wiggles, because every sample between two
+        extrema carries the same number. Where the sand is thinner than the wavelet can resolve, its
+        isochron stops following the bed and settles near the wavelet&rsquo;s own trough-to-peak time,
+        which is the limit step 1 describes. Gray means no zone was defined there. That happens where the
+        waveform is flat and its crossing falls below the picking floor, so the extremum above it has
+        nothing to pair with; at a few thicknesses that removes the sand&rsquo;s loop from a whole
+        trace.</span>
+    </div>
+  </section>
+
   <section class="tabpane" id="pw" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
       <h3><span class="stepno">?</span>What the isochron is for</h3>
@@ -274,7 +323,7 @@
       layered ones.</p>
 
     <div class="legend prose">
-      <span>The isochron is also the third axis of the crossplot in module 13. The DQ distance and Theta PX
+      <span>The isochron is also the third axis of the crossplot in module 09. The DQ distance and Theta PX
         describe the amplitude behavior at a sample; the signed half isochron describes the geometry of
         the waveform it sits in. They are close to independent, which is what makes the three of them worth
         plotting together.</span>
@@ -283,7 +332,7 @@
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Check that the halves add up.</b> On step 2, read the isochron and its two halves for a few
           models.
@@ -303,7 +352,7 @@
             because a Ricker's side lobes sit closer in than a sinusoid's would. A layer thick enough that
             its top and base do not interfere gives you back the wavelet and no more. The isochron becomes
             a geological measurement only once two boundaries are close enough to interfere, which is the
-            tuning regime module 12 works in.</span></details></li>
+            tuning regime module 11 works in.</span></details></li>
         <li><b>Split a blocky sand.</b> On step 3, read the blocky panel's two halves.
           <details class="reveal"><summary>Answer</summary><span class="ans">They are equal. Both boundaries
             of the sand are equally sharp and equally strong, so the waveform between them is symmetric and
@@ -399,8 +448,8 @@
         construction, so a coarse sample rate limits it directly rather than through any modeling
         choice.</p>
       <p>What this module leaves out is the use the signed half isochron is put to as the third axis of the
-        RDQ crossplot, which is module 13, and the relationship between isochron and bed thickness in the
-        tuning regime, which is module 12.</p>
+        RDQ crossplot, which is module 09, and the relationship between isochron and bed thickness in the
+        tuning regime, which is module 11.</p>
       <ul>
         <li>Choudhry, N., H. Bedle, D. B. Neff, and W. Neff, 2026, Isochron-based seismic attributes for
           stratigraphic and facies interpretation: field examples, IMAGE expanded abstract.</li>
@@ -414,17 +463,17 @@
 
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
-    <h3><a href="phase-filters.html">06 · The phase filters</a></h3>
+    <h3><a href="rdq-crossplot.html">09 · The RDQ crossplot in three axes</a></h3>
     <p>Seven filters across nine quadrant numbers, applied by convolution rather than deconvolution. The
       quadrant number chooses which phase-rotated version of the trace each sample is read from, and the
       result is the quadrant-enhanced pair the DQ distance is built out of.</p>
-    <a class="btn" href="phase-filters.html">Open module 06 →</a>
+    <a class="btn" href="rdq-crossplot.html">Open module 09 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
   <div class="pager" id="pager" hidden>
-    <a class="btn ghost" href="quadrants.html">← Quadrant numbers</a>
-    <a class="btn" href="phase-filters.html">Next: the phase filters →</a>
+    <a class="btn ghost" href="theta-px.html">← Theta PX, the angle of the same point</a>
+    <a class="btn" href="rdq-crossplot.html">Next: the three-axis crossplot →</a>
   </div>
 
   <footer>
@@ -445,6 +494,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -487,7 +538,7 @@
   const NEAR_A = [0, 10];
   const T0 = 0, TWIN = 0.130, TTOP = 0.035;
 
-  const DEF = {
+  const DEF = { spread: 40,
     over: 'soft', phi: 28, fluid: 'gas', prof: 'blocky',
     thick: 24, freq: 25, dt: 0, noise: 0, tab: 'p1',
   };
@@ -496,6 +547,7 @@
   if (!FLUIDS[S.fluid]) S.fluid = DEF.fluid;
   S.phi = Math.min(PH1, Math.max(PH0, Math.round(S.phi) || DEF.phi));
   if (!['blocky', 'coarsen', 'fining', 'streak'].includes(S.prof)) S.prof = DEF.prof;
+  S.spread = Math.min(80, Math.max(0, Math.round(S.spread / 5) * 5 || 0));
 
   const CAN_LINK = location.protocol !== 'file:';
   const saveState = () => {
@@ -1210,6 +1262,8 @@
     $('freqV').textContent = S.freq + ' Hz';
     $('dtV').textContent = (DTS[S.dt | 0] * 1000).toFixed(0) + ' ms';
     $('noiseV').textContent = S.noise + '%';
+    $('spread').value = S.spread;
+    $('spreadV').textContent = S.spread + '%';
     $('overV').textContent = LITHS[S.over].name;
     $('fluidV').textContent = FLUIDS[S.fluid].name;
     $('profV').textContent = PROFILES[S.prof] || S.prof;
@@ -1229,10 +1283,11 @@
     if (visible('p1')) drawStep1();
     if (visible('p2')) drawStep2();
     if (visible('p3')) drawStep3();
+    if (visible('p4')) drawStep4();
   }
   function onChange() { pushToInputs(); drawAll(); saveState(); }
 
-  ['phi', 'thick', 'freq', 'dt', 'noise'].forEach((id) => {
+  ['phi', 'thick', 'freq', 'dt', 'noise', 'spread'].forEach((id) => {
     $(id).addEventListener('input', () => { S[id] = parseFloat($(id).value); onChange(); });
   });
   document.querySelectorAll('[data-over]').forEach((b) => {
@@ -1250,11 +1305,165 @@
     onChange();
   });
 
+  /* ---------------------- the line, for the section view ----------------
+     The same model repeated across traces, with the sand thinning to the left
+     and thickening to the right. Each trace is picked and zoned on its own,
+     and the isochron and half isochron are written to every sample between
+     the picks, which is what puts them on a section. */
+
+  const NTR = 21;
+  const ISO_SCALE = 30;                  // fixed color scale, milliseconds
+
+  function traceAt(thickMs) {
+    const nt = ntOf();
+    const tr = SEIS.traceFromSpikes(profileSpikes(S.prof, TTOP, thickMs), T0, dt(), nt, wavelet());
+    const noise = noiseField(1);
+    if (noise) for (let i = 0; i < nt; i++) tr[i] += noise[i];
+    return tr;
+  }
+
+  function lineTraces() {
+    const sp = S.spread / 100;
+    const out = [];
+    for (let k = 0; k < NTR; k++) {
+      const u = k / (NTR - 1);
+      const thick = Math.max(4, S.thick * (1 - sp + 2 * sp * u));
+      const tr = traceAt(thick);
+      const z = zones(tr);
+      const nt = tr.length;
+      const iso = new Float64Array(nt), half = new Float64Array(nt);
+      z.isos.forEach((q) => { for (let i = q.a; i <= q.b; i++) iso[i] = q.v; });
+      z.halves.forEach((q) => { for (let i = q.a; i <= q.b; i++) half[i] = q.v; });
+      // the sand's own loop, for the readouts
+      const win = sandWindow(TTOP, thick);
+      const center = (win[0] + win[1]) / 2;
+      let best = null, bestD = Infinity;
+      z.isos.forEach((q) => {
+        if (q.v <= 0) return;
+        const d = Math.abs((q.a + q.b) / 2 - center);
+        if (d < bestD) { bestD = d; best = q; }
+      });
+      out.push({ tr, iso, half, nt, thick, sand: best });
+    }
+    return out;
+  }
+
+  /* Opaque colors, mixed against the background rather than drawn with alpha,
+     so neighboring sample rectangles do not leave seams where they meet. */
+  function isoColor(v) {
+    if (!v) return '#EDEEEF';
+    const mag = 0.18 + 0.72 * Math.min(1, Math.abs(v) / ISO_SCALE);
+    const c = v > 0 ? [194, 48, 107] : [29, 111, 163];
+    const mix = (i) => Math.round(237 + (c[i] - 237) * mag);
+    return 'rgb(' + mix(0) + ',' + mix(1) + ',' + mix(2) + ')';
+  }
+
+  function isoSection(ctx, rect, traces, field, title) {
+    const nt = traces[0].nt;
+    const tw = rect.w / NTR, ch = rect.h / (nt - 1);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    traces.forEach((t, k) => {
+      const f = field(t);
+      for (let i = 0; i < nt; i++) {
+        ctx.fillStyle = isoColor(f[i]);
+        ctx.fillRect(rect.x + k * tw, rect.y + (i / (nt - 1)) * rect.h - ch / 2, tw + 0.6, ch + 0.6);
+      }
+    });
+    ctx.restore();
+    SEIS.frame(ctx, rect);
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = CRIM;
+    ctx.fillText(title, rect.x + rect.w / 2, rect.y - 8);
+  }
+
+  /* the layers themselves, on the same time axis as the two sections */
+  function earthSection(ctx, rect, traces) {
+    const Y = (t) => rect.y + ((t - T0) / (TWIN - T0)) * rect.h;
+    const tw = rect.w / NTR;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    // opaque fills, so neighboring columns do not leave seams
+    const SEAL = { soft: [178, 186, 194], hard: [140, 152, 164], tight: [222, 205, 160] };
+    const seal = SEAL[S.over] || SEAL.soft;
+    ctx.fillStyle = 'rgb(' + seal.join(',') + ')';
+    ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+    traces.forEach((t, k) => {
+      const baseT = TTOP + t.thick / 1000;
+      const N = 30;
+      for (let n = 0; n < N; n++) {
+        const u0 = n / N, u1 = (n + 1) / N;
+        const phi = phiAt(S.prof, (u0 + u1) / 2, S.phi);
+        const a = 0.15 + 0.5 * Math.max(0, Math.min(1, phi / 40));
+        const mix = (c) => Math.round(255 + (c - 255) * a);
+        ctx.fillStyle = 'rgb(' + mix(194) + ',' + mix(48) + ',' + mix(107) + ')';
+        const y0 = Y(TTOP + (baseT - TTOP) * u0), y1 = Y(TTOP + (baseT - TTOP) * u1);
+        ctx.fillRect(rect.x + k * tw, y0, tw + 0.8, Math.max(1, y1 - y0) + 0.5);
+      }
+    });
+    ctx.restore();
+    SEIS.frame(ctx, rect);
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(22,25,28,0.75)';
+    ctx.fillText(LITHS[S.over].name, rect.x + rect.w / 2, rect.y + 14);
+    const mid = traces[Math.floor(NTR / 2)];
+    ctx.fillStyle = '#5A0E0F';
+    ctx.fillText('sand', rect.x + rect.w / 2, Y(TTOP + mid.thick / 2000));
+    ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(22,25,28,0.7)';
+    ctx.fillText('EARTH MODEL', rect.x + rect.w / 2, rect.y - 8);
+  }
+
+  function drawStep4() {
+    const c = $('c4a'); if (!c) return;
+    const W = width(c, 680), H = 400;
+    const ctx = SEIS.fitCanvas(c, W, H);
+    ctx.clearRect(0, 0, W, H);
+    const traces = lineTraces();
+    const gap = 26;
+    const pw = (W - 66 - 14 - 2 * gap) / 2.7;
+    const ew = pw * 0.7;
+    const rE = { x: 66, y: 30, w: ew, h: H - 76 };
+    const rI = { x: 66 + ew + gap, y: 30, w: pw, h: H - 76 };
+    const rH = { x: 66 + ew + pw + 2 * gap, y: 30, w: pw, h: H - 76 };
+    SEIS.axisLeft(ctx, rE, T0 * 1000, TWIN * 1000, 'two-way time (ms)',
+      (v) => String(Math.round(v)), { ticks: 6 });
+    earthSection(ctx, rE, traces);
+    isoSection(ctx, rI, traces, (t) => t.iso, 'SIGNED ISOCHRON');
+    isoSection(ctx, rH, traces, (t) => t.half, 'SIGNED HALF ISOCHRON');
+    [rE, rI, rH].forEach((r, i) => {
+      SEIS.axisBottom(ctx, r, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: i ? 4 : 3 });
+    });
+
+    const first = traces[0], last = traces[NTR - 1], mid = traces[Math.floor(NTR / 2)];
+    const iso = (t) => (t.sand ? t.sand.v : 0);
+    $('s4a').textContent = first.thick.toFixed(0) + ' to ' + last.thick.toFixed(0) + ' ms';
+    $('s4b').textContent = iso(first).toFixed(0) + ' to ' + iso(last).toFixed(0) + ' ms';
+    $('s4c').textContent = mid.sand
+      ? '+' + mid.sand.up.toFixed(0) + ' / +' + mid.sand.dn.toFixed(0) + ' ms'
+      : '\u2014';
+    let blank = 0, total = 0;
+    traces.forEach((t) => {
+      for (let i = 0; i < t.nt; i++) { total++; if (!t.iso[i]) blank++; }
+    });
+    $('s4d').textContent = blank + ' of ' + total
+      + ' (' + (100 * blank / Math.max(1, total)).toFixed(0) + '%)';
+    const d = iso(last) - iso(first);
+    $('s4e').textContent = 'Across the line the sand thickens by '
+      + (last.thick - first.thick).toFixed(0) + ' ms and its isochron changes by '
+      + d.toFixed(0) + ' ms, so the isochron follows the bed without matching it, because the wavelet sets '
+      + 'a floor on how short a loop can be.';
+  }
+
+  window.__DQISO = { get S() { return S; }, lineTraces, zones, traceAt, pushToInputs, drawAll };
+
   /* -------------------------------- tabs ------------------------------- */
 
-  const PANES = ['p1', 'p2', 'p3', 'pw', 'pe', 'pk', 'pm'];
+  const PANES = ['p1', 'p2', 'p3', 'p4', 'pw', 'pe', 'pk', 'pm'];
   const STEPNAMES = {
-    p1: 'The isochron', p2: 'Splitting it', p3: 'The asymmetry',
+    p1: 'The isochron', p2: 'Splitting it', p3: 'The asymmetry', p4: 'On a section',
     pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
   };
 
@@ -1294,7 +1503,7 @@
       b.setAttribute('aria-selected', b.dataset.tab === id);
     });
     const lab = document.querySelector('.labhead');
-    if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3');
+    if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3' || id === 'p4');
 
     /* Step 3 draws all four profiles at once, so the profile switch has
        nothing to change there. */

@@ -23,10 +23,10 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 13 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 09 &nbsp;·&nbsp; The DQ trace</p>
     <h1>The 3D RDQ crossplot</h1>
     <p class="sub">Every module so far has produced one number per sample. This is where they are put on
-      one plot: amplitude across, gradient up, and the signed half isochron of module 05 as a third axis.
+      one plot: amplitude across, gradient up, and the signed half isochron of module 08 as a third axis.
       What follows is what each axis measures and how the plot is worked, rather than a claim about what
       it can predict.</p>
   </div>
@@ -38,7 +38,8 @@
         <canvas id="cMain" aria-label="The RDQ crossplot front wall with points colored by signed half isochron"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -119,8 +120,8 @@
     </div>
 
     <p class="lede">
-      Module 05 built the signed half isochron and then set it aside. Here is where it is used: the RDQ
-      crossplot carries it as the <b>z axis</b>, alongside the amplitude and gradient that modules 08
+      Module 08 built the signed half isochron and then set it aside. Here is where it is used: the RDQ
+      crossplot carries it as the <b>z axis</b>, alongside the amplitude and gradient that modules 06
       and 09 rotated and split.</p>
 
     <p class="lede">
@@ -227,7 +228,7 @@
     <div class="legend">
       <span>The statistics matter more than they look. They are what turns a cluster on a screen into a
         number that can be carried forward &mdash; into a polygon definition, into a comparison between
-        time windows, or into the look-up catalogs module 11 described. A crossplot you can only look at
+        time windows, or into the look-up catalogs module 10 described. A crossplot you can only look at
         is a figure; one you can measure is an instrument.</span>
     </div>
   </section>
@@ -239,12 +240,12 @@
     </div>
 
     <p class="lede">A seismic section shows you where things are and a crossplot shows you what they are.
-      Neither replaces the other, and the DQ workflow uses both: the sections of modules 07 and 10 to
+      Neither replaces the other, and the DQ workflow uses both: the sections of modules 05 and 10 to
       locate an anomaly, and this plot to characterise it.</p>
 
     <p class="lede">What makes this crossplot unusual is that it is built to be worked in polar
-      coordinates as well as Cartesian ones. The baseline rotation of module 08 is a polar operation, the
-      sector split of module 09 is defined by quadrant number, and Theta PX is an angle. So the natural way
+      coordinates as well as Cartesian ones. The baseline rotation of module 06 is a polar operation, the
+      sector split of module 06 is defined by quadrant number, and Theta PX is an angle. So the natural way
       to enclose a region here is with an angle range and a distance range rather than with a box.</p>
 
     <div class="legend prose">
@@ -256,7 +257,7 @@
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Check what the third axis responds to.</b> On step 1, drag the sand thickness across its
           range and watch the value at the sand top, then do the same with the wavelet frequency.
@@ -269,8 +270,8 @@
         <li><b>Find the sign change.</b> On step 1, follow the half isochron down through a peak.
           <details class="reveal"><summary>Answer</summary><span class="ans">It flips from positive to
             negative at the peak, because the sign is set by whether the waveform is rising or falling and
-            a peak is where that changes. That is the same convention module 07 gave the distance and
-            module 10 gave the angle, which is what lets all three be plotted against each other without
+            a peak is where that changes. That is the same convention module 05 gave the distance and
+            module 07 gave the angle, which is what lets all three be plotted against each other without
             one arriving upside down.</span></details></li>
         <li><b>Compare the three views.</b> On step 2, find a cluster on the front wall and then locate the
           same points in the top and side views.
@@ -281,7 +282,7 @@
           statistics.
           <details class="reveal"><summary>Answer</summary><span class="ans">The count falls and the median
             distance shifts, because you are progressively excluding the samples nearest the zero
-            crossings, which module 09 showed sit closest to the origin. Delimiting chooses which part of the waveform to look at rather than filtering out noise, and the statistics readout tells
+            crossings, which module 06 showed sit closest to the origin. Delimiting chooses which part of the waveform to look at rather than filtering out noise, and the statistics readout tells
             you what that choice cost you in sample count.</span></details></li>
         <li><b>Change the reservoir and watch the cluster move.</b> On step 3, switch the fluid from brine
           to gas.
@@ -291,7 +292,7 @@
             than a new interpretation.</span></details></li>
         <li><b>Coarsen the sample rate.</b> Take it to 4 ms and look at step 2.
           <details class="reveal"><summary>Answer</summary><span class="ans">The plot empties out, because
-            the quadrant numbering that admits a sample to the plot needs samples to number, and module 04
+            the quadrant numbering that admits a sample to the plot needs samples to number, and module 03
             measured how quickly those disappear. The half isochron suffers doubly: it is a count of
             samples between picks, so at 4 ms it can only take values that are multiples of four
             milliseconds and the axis becomes a set of stripes rather than a
@@ -305,7 +306,7 @@
       <h3>The main points</h3>
       <ul>
         <li><b>The RDQ crossplot has three axes:</b> amplitude, gradient and the signed half isochron,
-          after the rotation of module 08 and the split of module 09.</li>
+          after the rotation of module 06 and the split of module 06.</li>
         <li><b>The half isochron describes the waveform, not the bed.</b> It is the length and direction of
           the half loop a sample sits in, and once a bed is resolved that loop belongs to the
           wavelet.</li>
@@ -326,11 +327,11 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>Everything upstream is as in modules 03 through 12. The axes follow the RDQ calculation notes
+      <p>Everything upstream is as in modules 02 through 12. The axes follow the RDQ calculation notes
         (Neff and Neff, unpublished): for the RDQ crossplot, x is the rotated and split near-quadrant amplitude, y is the
         rotated and split far-minus-near quadrant gradient, and z is the signed half isochron in
         milliseconds. The notes give a starting shale baseline of 330&deg; for the RDQ crossplot
-        and 360&deg; for the plain AB crossplot; this page uses the baseline fitted in module 08.</p>
+        and 360&deg; for the plain AB crossplot; this page uses the baseline fitted in module 06.</p>
       <p>The delimiter, polygon and statistics behavior described on step 3 is taken from the same
         specification, which lists the columns that act as delimiters, the seven statistics to be reported,
         and the polar polygon definition by two corner clicks. The page implements the half isochron
@@ -364,16 +365,16 @@
 
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
-    <h3><a href="avo-classes.html">14 · The four AVO classes</a></h3>
+    <h3><a href="porosity.html">10 · Porosity</a></h3>
     <p>Sections and histograms across classes 1, 2p, 3 and 4, and what each one looks like once it has been
       through the whole workflow.</p>
-    <a class="btn" href="avo-classes.html">Open module 14 →</a>
+    <a class="btn" href="porosity.html">Open module 10 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
   <div class="pager" id="pager" hidden>
-    <a class="btn ghost" href="wedge.html">← Wedge models and tuning</a>
-    <a class="btn" href="avo-classes.html">Next: the four AVO classes →</a>
+    <a class="btn ghost" href="isochron.html">← Time thickness</a>
+    <a class="btn" href="porosity.html">Next: porosity →</a>
   </div>
 
   <footer>
@@ -394,6 +395,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -818,7 +821,7 @@
      THE DISTANCE
 
      A is the quadrant-enhanced near stack and B is the enhanced far stack
-     minus it, so the two mean what they meant in module 02. The distance is
+     minus it, so the two mean what they meant in module 01. The distance is
      the length of that vector, and the sign is put on afterwards from the
      slope of the near stack.
      ===================================================================== */
@@ -912,10 +915,10 @@
 
      Paper 2: if the quadrant number is Q3, Q4, Q5, Q6 or Q7 then the data
      are replotted with the gradient multiplied by -1. Applied after the
-     baseline rotation of module 08, never before it.
+     baseline rotation of module 06, never before it.
      ===================================================================== */
 
-  const BASE_BEARING = 344;                        // this model's baseline, module 08
+  const BASE_BEARING = 344;                        // this model's baseline, module 06
   const TURN = 360 - BASE_BEARING;                 // spec [25] and [30]
   const isSplit = (q) => q >= 3 && q <= 7;
 

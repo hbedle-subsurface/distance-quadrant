@@ -39,7 +39,8 @@
         <canvas id="cMain" aria-label="Near-stack and far-stack traces through a sand encased in shale"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -229,7 +230,7 @@
       stack leaves B multiplied by the difference in mean sin&sup2;&theta; between the two angle bands, and
       that factor is only 0.17. The streak is wide and flat for that reason and not because the sand is
       unusual: on square axes, a gradient always draws seventeen times smaller than an intercept of the
-      same size. Everything from module 08 onward has to cope with that, and the RDQ crossplot's rotation
+      same size. Everything from module 06 onward has to cope with that, and the RDQ crossplot's rotation
       is one of the ways it does.</p>
 
     <canvas id="c2a" aria-label="Every sample of the trace plotted on an intercept versus gradient crossplot"></canvas>
@@ -241,7 +242,7 @@
     <p class="hint-line" style="margin:0 0 16px"><b>Polar angle</b> below means the direction of a point
       from the origin of the crossplot, measured as a bearing. The spread is how much that direction varies
       across the samples: zero means every sample lies along one line through the origin. It becomes an
-      attribute in its own right in module 07.</p>
+      attribute in its own right in module 05.</p>
 
     <div class="stats">
       <div class="stat"><span>Samples plotted</span><b id="s2a">&mdash;</b></div>
@@ -280,7 +281,7 @@
     <p class="lede">
       So a defensible AVO crossplot keeps only the extrema. Here they are marked on the near stack, and
       here is the crossplot with everything else removed. Keep that count in mind: it is the number the
-      rest of the course is trying to raise, and module 07 is where you see whether it worked.</p>
+      rest of the course is trying to raise, and module 05 is where you see whether it worked.</p>
 
     <canvas id="c3a" aria-label="The near-stack trace drawn vertically in two-way time, with its peak maxima and trough minima marked"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Time runs down the page, as on a seismic section.
@@ -301,7 +302,7 @@
     <div class="legend">
       <span>Halve the sample rate and the trace holds twice as many numbers, while the number that can be
         interpreted stays at two per cycle. Recording the data more finely does not buy any more AVO. That
-        is the observation the DQ trace was built on, and module 02 starts building it.</span>
+        is the observation the DQ trace was built on, and module 01 starts building it.</span>
     </div>
   </section>
 
@@ -331,7 +332,7 @@
         equipped to see it.</li>
       <li><b>The shale.</b> The samples nearest a strong boundary carry the wavelet's sidelobes, and on a
         crossplot those boundary shales land right on top of the sand clusters. Filtering them out is
-        module 08; recognizing that they are there at all is this module.</li>
+        module 06; recognizing that they are there at all is this module.</li>
     </ul>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
@@ -356,7 +357,7 @@
   <!-- ============================== EXERCISES ============================== -->
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>One sand, three classes.</b> Set the porosity to 20% and the fluid to oil, and leave the
           underburden following the overburden. Now step through the three overburden lithologies on step
@@ -425,7 +426,7 @@
             rest are the sidelobes of the wavelet. Nothing on the trace distinguishes them, so an
             auto-tracker following a loop will happily pick a sidelobe and an AVO analysis will happily
             interpret it. Thinning the bed does not just reduce the number of usable samples &mdash; it
-            makes the surviving ones harder to trust. This is the boundary shale problem that module 08
+            makes the surviving ones harder to trust. This is the boundary shale problem that module 06
             has to solve.</span></details></li>
         <li><b>Check whether the background trend really sits at 45 degrees.</b> Set the fluid to brine and
           step the porosity across its whole range, watching the point against the dashed B = &minus;A line
@@ -434,7 +435,7 @@
             of their own, and under the soft shale it is a good deal steeper than B = &minus;A. That 315&deg;
             background trend comes from assuming V<sub>P</sub>/V<sub>S</sub> = 2 in both layers together
             with Gardner's density relation, and neither assumption holds in the model you just built.
-            Change the overburden and the brine line tilts again. Module 08 returns to this: the RDQ
+            Change the overburden and the brine line tilts again. Module 06 returns to this: the RDQ
             crossplot rotates the display so that whatever the local brine trend actually is lies along the
             x axis, rather than assuming in advance where it ought to be.</span></details></li>
       </ol>
@@ -515,7 +516,7 @@
         Anything past the edge is clipped and counted rather than drawn over the labels.</p>
       <p>The traces are the two reflection coefficients convolved with a zero-phase Ricker wavelet. Peak
         maxima and trough minima are found by scanning the near-stack trace for sign changes in the sample
-        to sample difference, which is the same test the DQ quadrant assignment uses in module 04. The
+        to sample difference, which is the same test the DQ quadrant assignment uses in module 03. The
         polar angle spread quoted in step 2 is the range of atan2(F &minus; N, N) across the samples whose
         amplitude exceeds a tenth of the largest, which keeps near-zero samples with meaningless angles out
         of the statistic.</p>
@@ -548,7 +549,7 @@
     <p>Where the two traces the DQ process works on actually come from, why the angle ranges are
       0&ndash;10&deg; and 20&ndash;30&deg; rather than everything available, and what the far-minus-near
       difference is standing in for.</p>
-    <a class="btn" href="near-far.html">Open module 02 →</a>
+    <a class="btn" href="near-far.html">Open module 01 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
@@ -575,6 +576,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';

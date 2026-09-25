@@ -926,3 +926,19 @@ body.view-exercises #pe { display: block !important; border-top: 1px solid var(-
 
 .about .refs { font-size: 13px; color: var(--slate); padding-left: 18px; margin: 10px 0 14px; }
 .about .refs li { margin-bottom: 6px; }
+
+/* --- self-test options ----------------------------------------------------- */
+.quiz { display: grid; gap: 8px; margin: 4px 0 16px; }
+.quiz button {
+  text-align: left; font: inherit; font-size: 14px; line-height: 1.5;
+  background: #fff; border: 1px solid var(--rule); border-left: 3px solid var(--rule);
+  padding: 9px 14px; cursor: pointer; color: var(--ink);
+}
+.quiz button:hover:not([disabled]) { background: var(--cream); border-left-color: var(--crimson); }
+.quiz button[disabled] { cursor: default; }
+.quiz button.right { border-left-color: var(--crimson); background: var(--cream); font-weight: 600; }
+.quiz button.wrong { border-left-color: var(--slate); color: var(--slate); text-decoration: line-through; }
+.quiz .mark {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--crimson); margin-left: 8px;
+}

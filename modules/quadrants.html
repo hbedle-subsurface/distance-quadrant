@@ -23,9 +23,9 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 04 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 03 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Quadrant numbers</h1>
-    <p class="sub">Module 03 left a skeleton of picks with nothing in between them. This module fills the
+    <p class="sub">Module 02 left a skeleton of picks with nothing in between them. This module fills the
       gaps. Every sample on the trace gets a number from one to nine describing where in the waveform cycle
       it sits, the numbers are spread uniformly between the picks, and the loops that are too short or too
       long for an exact fit are handled by dropping numbers or by using them twice.</p>
@@ -38,7 +38,8 @@
         <canvas id="cMain" aria-label="The near-stack trace with each sample labeled by its quadrant number"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -124,7 +125,7 @@
     </div>
 
     <p class="lede">
-      The picks from module 03 already carry three of the nine numbers. A trough is <b>Q1</b>, the zero
+      The picks from module 02 already carry three of the nine numbers. A trough is <b>Q1</b>, the zero
       crossing sample is <b>Q5</b>, and a peak is <b>Q9</b>. Everything else on the trace lies between two
       of those, and gets a number by counting.</p>
 
@@ -132,7 +133,7 @@
       One warning about the word. A <b>quadrant number</b> is a position along a waveform, one of nine.
       Later modules also refer to the four <b>sectors</b> of a crossplot, which are quarters of a plot and
       have nothing to do with quadrant numbers. The two words are unrelated here, and keeping them apart
-      will save confusion in modules 09 and 13.</p>
+      will save confusion in modules 06 and 13.</p>
 
     <p class="lede">
       Between Q1 and Q5 there are three numbers to place, Q2, Q3 and Q4, and the rule is to spread them
@@ -165,9 +166,9 @@
     </div>
     <div class="legend">
       <span>This is the step where the method stops being a picking scheme and becomes something that
-        touches every sample. Module 01 counted two interpretable samples per cycle and module 03 kept
+        touches every sample. Module 01 counted two interpretable samples per cycle and module 02 kept
         four. Here the count is every sample between the first pick and the last, and the quadrant number
-        is what module 06 uses to decide which phase-rotated version of the trace to read at each
+        is what module 04 uses to decide which phase-rotated version of the trace to read at each
         one.</span>
     </div>
   </section>
@@ -267,10 +268,10 @@
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       What it is used for</h2>
     <ul class="lede" style="padding-left:20px">
-      <li><b>Choosing a phase filter.</b> Module 06 keeps eight phase-rotated versions of the near and far
+      <li><b>Choosing a phase filter.</b> Module 04 keeps eight phase-rotated versions of the near and far
         traces and reads one value from each sample. The quadrant number is the index into that set. Nine
         numbers, seven filters, because Q1 and Q9 both take the unrotated trace.</li>
-      <li><b>Making the isochron measurable.</b> Module 05 measures the time between anchors. The numbers
+      <li><b>Making the isochron measurable.</b> Module 08 measures the time between anchors. The numbers
         are what tells you which anchors bound which zone, and the sign of the half isochron comes
         straight from whether the numbers are counting up or down.</li>
       <li><b>Comparing samples across a survey.</b> A Q3 sample in a 20 Hz zone and a Q3 sample in a 45 Hz
@@ -295,7 +296,7 @@
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Find the frequency that fits exactly.</b> On step 2, with 1 ms sampling, drag the frequency
           until the quarter cycle holds exactly three interior samples.
@@ -310,14 +311,14 @@
             numbers and none omits any. At 70 Hz gaps start omitting. Since almost all seismic sits between
             about 15 and 50 Hz, repetition is what happens on real data essentially all of the time. The
             phrase "short isochron" in the method description &mdash; isochron here just means the time
-            between two picks, which module 05 takes up properly &mdash; is describing the rare case, not
+            between two picks, which module 08 takes up properly &mdash; is describing the rare case, not
             the usual one. Worth knowing before you read the papers.</span></details></li>
         <li><b>Coarsen the sampling instead.</b> Put the frequency back to 40 Hz and step the sample rate
           from 1 ms to 4 ms.
           <details class="reveal"><summary>Answer</summary><span class="ans">Omission arrives quickly,
             because what matters is samples per quarter cycle rather than milliseconds. At 40 Hz the
             quarter cycle is 6.3 ms, which is six samples at 1 ms and one or two at 4 ms. This is the same
-            argument module 03 made about zero crossings, arriving from a different direction: the papers
+            argument module 02 made about zero crossings, arriving from a different direction: the papers
             ask for 1 ms data because the method counts samples, and a coarse trace does not have enough of
             them to count.</span></details></li>
         <li><b>Watch a thin bed lose its interior numbers.</b> On step 1, drag the sand thickness down
@@ -326,7 +327,7 @@
             until it holds only the anchors, and then until it is not a separate loop at all. The numbering
             does not report a problem. It numbers whatever loops the waveform presented, and a merged thin
             bed presents one loop where the geology has two boundaries. Everything downstream inherits
-            that, which is why module 12 has to treat tuning as a first-class subject rather than as an
+            that, which is why module 11 has to treat tuning as a first-class subject rather than as an
             error to be corrected.</span></details></li>
         <li><b>Skip the polarity flip on a class 1 sand.</b> On step 3, set the overburden to soft shale
           with oil at about 20% porosity so the sand is class 1, then tick the skip box.
@@ -364,7 +365,7 @@
         <li><b>Class 1 sands and carbonate plays are handled by reversing the polarity of the two partial
           stacks before picking</b>, not by changing the numbering. One rule then runs on everything.</li>
         <li><b>The number says nothing about how long the loop was.</b> That is deliberate, and it is what
-          module 05 exists to recover.</li>
+          module 08 exists to recover.</li>
       </ul>
     </div>
   </section>
@@ -372,7 +373,7 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>The rocks, the layer stack, the near stack and the picker are all identical to module 03, so a
+      <p>The rocks, the layer stack, the near stack and the picker are all identical to module 02, so a
         model built there carries over unchanged. The picks are made on the zero-phase near stack, and the
         quadrant numbers are written to the same sample grid.</p>
       <p>The anchors come straight from the picks: each zero-crossing sample is Q5, each trough is Q1 and
@@ -401,7 +402,7 @@
         &mdash; while being stated in terms of the contrast itself rather than of the class label. In the
         real workflow the reversal is applied to both partial stacks at the stacking step, before any
         picking, and this page does the same.</p>
-      <p>What this module leaves out is what the numbers are then used for. Module 06 attaches a phase
+      <p>What this module leaves out is what the numbers are then used for. Module 04 attaches a phase
         filter to each: Q1 and Q9 take 0&deg;, Q2 through Q4 take +22.5&deg;, +45&deg; and +67.5&deg;, Q5
         takes &minus;90&deg;, and Q6 through Q8 take &minus;67.5&deg;, &minus;45&deg; and
         &minus;22.5&deg;. Seven filters across nine numbers.</p>
@@ -417,17 +418,17 @@
 
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
-    <h3><a href="isochron.html">05 · Isochron and half isochron</a></h3>
+    <h3><a href="phase-filters.html">04 · Turning every sample into a peak</a></h3>
     <p>The numbers say where in a loop a sample sits but not how long the loop was. The isochron measures
       exactly that, the half isochron splits it at the zero crossing, and the asymmetry between the two
       halves turns out to track the vertical grading of the sand.</p>
-    <a class="btn" href="isochron.html">Open module 05 →</a>
+    <a class="btn" href="phase-filters.html">Open module 04 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
   <div class="pager" id="pager" hidden>
-    <a class="btn ghost" href="stickogram.html">← The StickOgram</a>
-    <a class="btn" href="isochron.html">Next: isochron and half isochron →</a>
+    <a class="btn ghost" href="stickogram.html">← Marking the waveform</a>
+    <a class="btn" href="phase-filters.html">Next: the phase rotations →</a>
   </div>
 
   <footer>
@@ -448,6 +449,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -1010,7 +1013,7 @@
     $('s1b').textContent = anchors + '';
     $('s1c').textContent = (numbered - anchors) + '';
     $('s1d').textContent = (nt - numbered) + '';
-    $('s1e').textContent = 'Module 03 kept ' + anchors + ' picks on this trace. Numbering brings '
+    $('s1e').textContent = 'Module 02 kept ' + anchors + ' picks on this trace. Numbering brings '
       + numbered + ' samples into the scheme, ' + (numbered - anchors)
       + ' of them by counting between picks. The rest lie outside the first and last pick, where there '
       + 'is no loop to be part of.';
@@ -1106,7 +1109,7 @@
         + 'ordinary case for seismic frequencies at 1 ms.'
       : b.qd.omitted + ' gap' + (b.qd.omitted > 1 ? 's are' : ' is')
         + ' too short to carry all three interior numbers, so some are dropped. Those loops go through '
-        + 'module 06 with a smaller set of phase filters than the rest of the trace.';
+        + 'module 04 with a smaller set of phase filters than the rest of the trace.';
   }
 
   /* ------------------------------- step 3 ------------------------------ */

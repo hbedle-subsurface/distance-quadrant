@@ -23,7 +23,7 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 14 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 12 &nbsp;·&nbsp; The DQ trace</p>
     <h1>The four AVO classes</h1>
     <p class="sub">Module 01 introduced the classes as a way of naming where a sand sits on an AB
       crossplot. Every module since has quietly assumed one. Here all four are built from the same rock
@@ -38,7 +38,8 @@
         <canvas id="cMain" aria-label="The four AVO class exemplars plotted on an intercept versus gradient crossplot"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>The comparison</h2>
@@ -119,7 +120,7 @@
 
     <canvas id="c1a" aria-label="The intercept-gradient plane with the four class regions and the four exemplars marked"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The four exemplars this module uses, on the plane
-      module 01 introduced. The dashed line is the background trend of module 08.</p>
+      module 01 introduced. The dashed line is the background trend of module 06.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Class 1</span><b id="s1a">&mdash;</b></div>
@@ -143,8 +144,8 @@
 
     <p class="lede">
       Each exemplar is now put through everything: partial stacks, picks, quadrant numbers, phase filters,
-      the distance of module 07 and the angle of module 10. Nothing is tuned per class. The one thing that
-      changes is the polarity flip &mdash; module 04 established that class 1 sands have both partial
+      the distance of module 05 and the angle of module 07. Nothing is tuned per class. The one thing that
+      changes is the polarity flip &mdash; module 03 established that class 1 sands have both partial
       stacks reversed before picking, so that the top of the reservoir arrives at the picker as a trough
       like every other class.</p>
 
@@ -162,7 +163,7 @@
     <div class="legend">
       <span>The class 2 column is the instructive one. Its intercept is close to zero, so the near stack
         barely registers the sand at all, and the distance is correspondingly small &mdash; this is the
-        case module 10 used as its example of an unreliable angle, and it is the case every amplitude
+        case module 07 used as its example of an unreliable angle, and it is the case every amplitude
         method finds hardest. Nothing here fixes it; what the workflow does is make the weakness visible
         rather than hiding it inside a single bright number.</span>
     </div>
@@ -203,7 +204,7 @@
         intercept contrast is largest and smallest for class 2, which is the same ordering the sections
         show and the same one an interpreter would expect. The histogram is not adding information; it is
         making the population structure legible, which is what lets a delimiter or a polygon be placed
-        sensibly on module 13's crossplot.</span>
+        sensibly on module 09's crossplot.</span>
     </div>
   </section>
 
@@ -234,7 +235,7 @@
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Read the four positions.</b> On step 1, note the intercept and gradient of each exemplar.
           <details class="reveal"><summary>Answer</summary><span class="ans">Class 1 has a positive
@@ -251,7 +252,7 @@
           for each class.
           <details class="reveal"><summary>Answer</summary><span class="ans">Class 2 is much the smallest,
             because its intercept is close to zero by definition and the near stack is essentially the
-            intercept. This is the same weakness module 10 met at its class 2 crossover and module 12 met
+            intercept. This is the same weakness module 07 met at its class 2 crossover and module 11 met
             under a soft shale: near a crossover the vector is short, the distance is small and the angle
             is unstable. It is a property of the rocks rather than of the method, and no processing
             removes it.</span></details></li>
@@ -264,10 +265,10 @@
             looking for.</span></details></li>
         <li><b>Thin the sand.</b> Take the thickness to 10 ms and look at steps 2 and 3 together.
           <details class="reveal"><summary>Answer</summary><span class="ans">Every class loses separation at
-            once, because module 12's tuning applies to all of them equally: the top and base reflections
+            once, because module 11's tuning applies to all of them equally: the top and base reflections
             merge and the sand no longer has a sample of its own. The classes differ in how bright they
             are, not in how they respond to thinning, so a thin class 3 sand can read like a thick class 2
-            one. That ambiguity is exactly what module 12's pairing of distance with angle is
+            one. That ambiguity is exactly what module 11's pairing of distance with angle is
             for.</span></details></li>
         <li><b>Add noise and watch which class fails first.</b> Take the noise to 30% on step 3.
           <details class="reveal"><summary>Answer</summary><span class="ans">Class 2 degrades first and
@@ -313,8 +314,8 @@
         soft shale over a 28% gas sand; <b>class 4</b> a tight sandstone over a 26% gas sand. The class
         label shown on step 1 is computed from the signs of the modeled intercept and gradient rather than
         asserted, so if the rock model is ever retuned the labels follow it.</p>
-      <p>Everything downstream is as in modules 03 through 13, applied identically to all four. The one
-        difference is the polarity flip of module 04, applied where the intercept is positive.</p>
+      <p>Everything downstream is as in modules 02 through 13, applied identically to all four. The one
+        difference is the polarity flip of module 03, applied where the intercept is positive.</p>
       <p>The histograms are of DQ distance over the whole analysis window, binned uniformly, with the
         samples falling inside the modeled sand marked separately. The logarithmic count axis follows the
         published displays; the note that roughly four samples in five are shale in a clastic section is
@@ -340,15 +341,15 @@
 
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
-    <h3><a href="reading-sections.html">15 · Reading a DQ section</a></h3>
+    <h3><a href="reading-sections.html">13 · Reading a DQ section</a></h3>
     <p>The display conventions the papers use, and what each color bar is protecting &mdash; the last
       module in the course.</p>
-    <a class="btn" href="reading-sections.html">Open module 15 →</a>
+    <a class="btn" href="reading-sections.html">Open module 13 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
   <div class="pager" id="pager" hidden>
-    <a class="btn ghost" href="rdq-crossplot.html">← The 3D RDQ crossplot</a>
+    <a class="btn ghost" href="wedge.html">← Thickness and tuning</a>
     <a class="btn" href="reading-sections.html">Next: reading a DQ section →</a>
   </div>
 
@@ -370,6 +371,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -794,7 +797,7 @@
      THE DISTANCE
 
      A is the quadrant-enhanced near stack and B is the enhanced far stack
-     minus it, so the two mean what they meant in module 02. The distance is
+     minus it, so the two mean what they meant in module 01. The distance is
      the length of that vector, and the sign is put on afterwards from the
      slope of the near stack.
      ===================================================================== */
@@ -888,10 +891,10 @@
 
      Paper 2: if the quadrant number is Q3, Q4, Q5, Q6 or Q7 then the data
      are replotted with the gradient multiplied by -1. Applied after the
-     baseline rotation of module 08, never before it.
+     baseline rotation of module 06, never before it.
      ===================================================================== */
 
-  const BASE_BEARING = 344;                        // this model's baseline, module 08
+  const BASE_BEARING = 344;                        // this model's baseline, module 06
   const TURN = 360 - BASE_BEARING;                 // spec [25] and [30]
   const isSplit = (q) => q >= 3 && q <= 7;
 
@@ -1179,6 +1182,37 @@
       + labels.join(', ') + '. Each is the same sand model with a different seal, fluid or porosity.';
   }
 
+  /* The rocks behind each class, as a column on the same time axis as its
+     traces: the seal, the sand shaded by its porosity, and the seal below. */
+  const EARTHFILL = { soft: 'rgb(178,186,194)', hard: 'rgb(140,152,164)',
+                      tight: 'rgb(222,205,160)' };
+  function drawEarthColumn(ctx, rect, r) {
+    const Y = (i) => rect.y + (i / (r.nt - 1)) * rect.h;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    ctx.fillStyle = EARTHFILL[r.c.over] || EARTHFILL.soft;
+    ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+    const a = 0.2 + 0.55 * Math.max(0, Math.min(1, r.c.phi / 40));
+    const base = r.c.fluid === 'gas' ? [194, 48, 107]
+      : r.c.fluid === 'oil' ? [150, 165, 90] : [110, 150, 190];
+    const mix = (i) => Math.round(255 + (base[i] - 255) * a);
+    ctx.fillStyle = 'rgb(' + mix(0) + ',' + mix(1) + ',' + mix(2) + ')';
+    ctx.fillRect(rect.x, Y(r.win[0]), rect.w, Y(r.win[1]) - Y(r.win[0]));
+    ctx.restore();
+    SEIS.frame(ctx, rect);
+    ctx.save();
+    ctx.font = '8.5px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(22,25,28,0.8)';
+    if (Y(r.win[1]) - Y(r.win[0]) > 12) {
+      ctx.fillText(r.c.phi + '%', rect.x + rect.w / 2, (Y(r.win[0]) + Y(r.win[1])) / 2);
+    }
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = 'rgba(22,25,28,0.6)';
+    ctx.fillText(r.c.fluid, rect.x + rect.w / 2, Y(r.win[1]) + 4);
+    ctx.restore();
+  }
+
   function drawStep2() {
     const c = $('c2a'); if (!c) return;
     const W = width(c, 640), H = 420;
@@ -1192,6 +1226,9 @@
     const cw = rect.w / 4;
     runs.forEach((r, k) => {
       const cell = { x: rect.x + k * cw, y: rect.y, w: cw, h: rect.h };
+      drawEarthColumn(ctx, { x: cell.x + 2, y: cell.y, w: cell.w * 0.20, h: cell.h }, r);
+      cell.x += cell.w * 0.22;
+      cell.w *= 0.78;
       if (k) SEIS.dashedLine(ctx, cell.x, cell.y, cell.x, cell.y + cell.h,
         'rgba(22,25,28,0.14)', [3, 3], 1);
       const Y = (i) => cell.y + (i / (r.nt - 1)) * cell.h;

@@ -23,7 +23,7 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 02 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 01 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Near and far stacks</h1>
     <p class="sub">Everything after this module operates on two traces. They come from one CDP of
       NMO-corrected gathers by averaging a narrow window of angles twice, at 0&ndash;10&deg; and at
@@ -40,7 +40,8 @@
         <canvas id="cMain" aria-label="An NMO-corrected angle gather with the near and far windows shaded, and the two stacked traces beside it"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -267,7 +268,7 @@
     </div>
 
     <p class="lede">The strongest reason the DQ process takes partial stacks only becomes visible once you
-      know what happens next. Everything from module 03 onward reads structure off the near stack: where it
+      know what happens next. Everything from module 02 onward reads structure off the near stack: where it
       crosses zero, where its peaks are, where its troughs are. Those picks define the acoustic layers, and
       every quadrant number and phase filter in the method hangs off them. So the question that matters is
       not which estimator has the smaller error bar. It is which one gives you a near-angle trace you can
@@ -307,7 +308,7 @@
   <!-- ============================== EXERCISES ============================== -->
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Check that the near stack really is the intercept.</b> On step 2, read the largest gap
           between N and A, then compare it with the intercept itself for a few models.
@@ -351,8 +352,8 @@
             The fitted intercept is out by about half. The near stack averages ten degrees of angle, over
             which the moveout is a fraction of a millisecond, and it never has to extrapolate anywhere. The
             fit reaches back to zero angle along a forty degree lever arm, and every millisecond of
-            curvature along that arm tilts the answer. This is the one that decides the argument: module 03
-            picks zero crossings, peaks and troughs off the near stack, and module 04 writes quadrant
+            curvature along that arm tilts the answer. This is the one that decides the argument: module 02
+            picks zero crossings, peaks and troughs off the near stack, and module 03 writes quadrant
             numbers into the gaps between them. Those picks have to be in the right place, and precision on
             the gradient is no consolation if they are not.</span></details></li>
         <li><b>Find a model where the far stack is the only thing that sees the sand.</b> Try the soft
@@ -390,7 +391,7 @@
         <li><b>The near stack's intercept is immune to moveout and the fitted one is not.</b> At 8 ms the
           near stack is still exact while the fit is out by half, because the fit has to extrapolate to
           zero angle along a forty degree lever arm.</li>
-        <li><b>That is what decides it.</b> Module 03 picks zero crossings, peaks and troughs off the near
+        <li><b>That is what decides it.</b> Module 02 picks zero crossings, peaks and troughs off the near
           stack, and every quadrant number afterwards depends on those picks landing in the right
           place.</li>
       </ul>
@@ -451,7 +452,7 @@
     <p>The near stack stops being a waveform and becomes a set of picks: every zero crossing, every peak
       and every trough. Those picks are the acoustic layers, and they are what the quadrant numbers get
       written into.</p>
-    <a class="btn" href="stickogram.html">Open module 03 →</a>
+    <a class="btn" href="stickogram.html">Open module 02 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
@@ -478,6 +479,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -1087,7 +1090,7 @@
       verdict = 'Moveout only. Both gradients are now wrong, but the fit is wrong by about '
         + (bs > 1e-9 ? (bf / bs).toFixed(1) : '\u2014') + ' times as much, because it compares the same '
         + 'sample index at 0 and ' + DEG_MAX + ' degrees, ' + ms(span(0, DEG_MAX))
-        + ' apart on the waveform. The near stack is barely touched, and that is the trace module 03 '
+        + ' apart on the waveform. The near stack is barely touched, and that is the trace module 02 '
         + 'has to pick.';
     } else {
       verdict = 'Both effects at once, which is the realistic case. The fit is the more precise '

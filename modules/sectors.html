@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sector splitting | How the DQ Trace Actually Works</title>
-<meta name="description" content="After the baseline rotation, the samples numbered Q3 to Q7 have their gradient sign flipped. What that does to the crossplot, and why the polar angle of module 10 needs it done first.">
+<meta name="description" content="After the baseline rotation, the samples numbered Q3 to Q7 have their gradient sign flipped. What that does to the crossplot, and why the polar angle of module 07 needs it done first.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 09 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 06 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Sector splitting</h1>
     <p class="sub">One line of arithmetic: after the baseline has been rotated flat, every sample numbered
       Q3 through Q7 has the sign of its gradient flipped. It is the shortest step in the whole method and
@@ -38,7 +38,8 @@
         <canvas id="cMain" aria-label="The rotated crossplot before and after the sector split"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -117,7 +118,7 @@
     </div>
 
     <p class="lede">
-      Start from the crossplot of module 07 with the baseline rotation of module 08 already applied, so the
+      Start from the crossplot of module 05 with the baseline rotation of module 06 already applied, so the
       background trend lies along the horizontal. Now color every point by its quadrant number rather than
       by its sign.</p>
 
@@ -140,7 +141,7 @@
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>The samples nearest the origin are the ones nearest a zero crossing, which is what module 03
+      <span>The samples nearest the origin are the ones nearest a zero crossing, which is what module 02
         warned about: a crossing is a low-amplitude sample and the least stable pick on the trace. They are
         also, on this plot, the ones whose polar angle is least well determined, because a short vector's
         direction moves easily. Both facts are about the same samples.</span>
@@ -177,8 +178,8 @@
     </div>
     <div class="legend">
       <span>Notice what does not change: the distance from the origin. Reflecting a point in a line through
-        the origin cannot alter how far from the origin it is, so the DQ distance of module 07 survives the
-        split untouched. What changes is the direction, and direction is the whole subject of module 10.</span>
+        the origin cannot alter how far from the origin it is, so the DQ distance of module 05 survives the
+        split untouched. What changes is the direction, and direction is the whole subject of module 07.</span>
     </div>
   </section>
 
@@ -199,7 +200,7 @@
       number it carries. Five of the nine columns move and four do not, and the ones that move do so by a
       large amount. Whether that rearrangement is the right one for a given dataset is a question for the
       papers; what this page can show is that it is a change of direction only, and that the distance of
-      module 07 comes through it untouched.</p>
+      module 05 comes through it untouched.</p>
 
     <canvas id="c3a" aria-label="Polar angle against quadrant number, with and without the sector split"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Each column is one quadrant number. The vertical spread
@@ -238,14 +239,14 @@
     <div class="legend prose">
       <span>Which is a good reason to be careful about the sample rate here as everywhere: at 2 ms there
         are not enough samples in a quarter cycle for nine numbers to be distinct, and the splitting
-        inherits whatever coarseness the numbering has. Module 04 measured that directly &mdash; at 40 Hz
+        inherits whatever coarseness the numbering has. Module 03 measured that directly &mdash; at 40 Hz
         and 2 ms, sixteen of eighteen gaps lose numbers entirely.</span>
     </div>
   </section>
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Check that the distance survives.</b> On step 3, compare the two distance readouts, then
           change the rocks and compare them again.
@@ -253,14 +254,14 @@
             and they have to be. The split reflects a point in a line through the origin, and a reflection
             is a rigid motion about that origin, so it cannot change how far away the point is. That is
             worth checking rather than assuming, because it tells you the step is doing nothing at all to
-            module 07's attribute and everything to the angle. If you ever see the distance change, the
+            module 05's attribute and everything to the angle. If you ever see the distance change, the
             split has been applied before the rotation instead of after it.</span></details></li>
         <li><b>Count what moves.</b> On step 2, read how many samples are moved and how many are left
           alone.
           <details class="reveal"><summary>Answer</summary><span class="ans">Roughly two thirds move. Q3
             through Q7 is five of the nine numbers, but they cover more than five ninths of the samples
             because the interior numbers get repeated in long loops while Q1 and Q9 land on single
-            samples. Module 04 measured that repetition directly: at ordinary seismic frequencies every
+            samples. Module 03 measured that repetition directly: at ordinary seismic frequencies every
             gap repeats numbers and none omits any.</span></details></li>
         <li><b>Check that only the direction moves.</b> On step 3, read how many samples changed angle,
           by how much, and what happened to the distance.
@@ -275,7 +276,7 @@
             because those are the samples nearest a zero crossing and a crossing is a low-amplitude sample.
             Two consequences follow, and they are the same consequence twice: a short vector has a poorly
             determined direction, so the angle of a Q5 sample is the least trustworthy on the plot; and a
-            low-amplitude sample is the one most easily moved by noise, which module 03 established when
+            low-amplitude sample is the one most easily moved by noise, which module 02 established when
             it picked the crossings in the first place.</span></details></li>
         <li><b>Turn the step off.</b> Untick the box in the panel and look at steps 2 and 3 together.
           <details class="reveal"><summary>Answer</summary><span class="ans">The crossplot looks tidier
@@ -302,7 +303,7 @@
         <li><b>The DQ distance is unchanged.</b> A reflection about the origin cannot alter a length, and
           the module checks it rather than asserting it.</li>
         <li><b>The polar angle is what changes</b>, and that is the point: the step exists to prepare the
-          coordinates module 10 measures its angle from.</li>
+          coordinates module 07 measures its angle from.</li>
         <li><b>Nothing measured within one quadrant number changes</b>, because those samples are all
           reflected together. The step acts between numbers, not inside them.</li>
         <li><b>Roughly two thirds of samples move</b>, more than five ninths, because interior numbers
@@ -320,9 +321,9 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>Everything upstream is as in modules 03, 04, 06 and 07: the same rocks, the same picks, the same
+      <p>Everything upstream is as in modules 02, 04, 06 and 07: the same rocks, the same picks, the same
         quadrant numbers, the same phase filters, and A and B taken as the quadrant-enhanced near stack and
-        the enhanced far minus near. The baseline rotation is module 08's, applied as a rotation of the
+        the enhanced far minus near. The baseline rotation is module 06's, applied as a rotation of the
         polar angle (Bedle et al., 2025b, eq. 3) using this model's fitted baseline.</p>
       <p>The split itself is quoted directly. Bedle et al. (2025b, eq. 4) give it as: if the quadrant
         number is Q3, Q4, Q5, Q6 or Q7 then the data are replotted using the amplitude unchanged and the
@@ -333,7 +334,7 @@
         counted as having enormous spread for that reason alone.</p>
       <p>What this module does not do is show the attribute that comes out. Sector splitting produces no
         output of its own: the split coordinates feed the polar angle, and the angle feeds
-        &theta;<sub>px</sub>, which is module 10. Read this one as plumbing.</p>
+        &theta;<sub>px</sub>, which is module 07. Read this one as plumbing.</p>
       <ul>
         <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
@@ -347,15 +348,15 @@
 
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
-    <h3><a href="theta-px.html">10 · Theta PX</a></h3>
+    <h3><a href="theta-px.html">07 · Theta PX, the angle of the same point</a></h3>
     <p>The polar angle of the split coordinates, folded into 0 to 90 degrees by sector and given the sign
       of the DQ trace. The attribute this module exists to make possible.</p>
-    <a class="btn" href="theta-px.html">Open module 10 →</a>
+    <a class="btn" href="theta-px.html">Open module 07 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
   <div class="pager" id="pager" hidden>
-    <a class="btn ghost" href="baseline.html">← Shale baseline rotation</a>
+    <a class="btn ghost" href="baseline.html">← Rotating the crossplot</a>
     <a class="btn" href="theta-px.html">Next: Theta PX →</a>
   </div>
 
@@ -377,6 +378,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -801,7 +804,7 @@
      THE DISTANCE
 
      A is the quadrant-enhanced near stack and B is the enhanced far stack
-     minus it, so the two mean what they meant in module 02. The distance is
+     minus it, so the two mean what they meant in module 01. The distance is
      the length of that vector, and the sign is put on afterwards from the
      slope of the near stack.
      ===================================================================== */
@@ -895,10 +898,10 @@
 
      Paper 2: if the quadrant number is Q3, Q4, Q5, Q6 or Q7 then the data
      are replotted with the gradient multiplied by -1. Applied after the
-     baseline rotation of module 08, never before it.
+     baseline rotation of module 06, never before it.
      ===================================================================== */
 
-  const BASE_BEARING = 344;                        // this model's baseline, module 08
+  const BASE_BEARING = 344;                        // this model's baseline, module 06
   const TURN = 360 - BASE_BEARING;                 // spec [25] and [30]
   const isSplit = (q) => q >= 3 && q <= 7;
 

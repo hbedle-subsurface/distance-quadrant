@@ -23,11 +23,11 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 03 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 02 &nbsp;·&nbsp; The DQ trace</p>
     <h1>The StickOgram</h1>
     <p class="sub">The near stack is now thrown away and replaced by a list of picks: every zero crossing,
       every peak center and every trough center. Those picks are the acoustic layers, and the quadrant
-      numbers of module 04 get written into the gaps between them. This module builds the picks, works
+      numbers of module 03 get written into the gaps between them. This module builds the picks, works
       through the rule that decides which sample a zero crossing lands on, and shows what a section made
       of nothing but picks looks like.</p>
   </div>
@@ -40,7 +40,8 @@
         <canvas id="cMain" aria-label="The near-stack trace with its zero crossings, peak centers and trough centers marked"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -189,7 +190,7 @@
     <p class="lede">
       The rule is: <b>of the two samples either side of a zero crossing, take the one with the smaller
       absolute amplitude</b>. That is the sample closer to zero, so it is the closer of the two to the
-      crossing itself. In the quadrant scheme of module 04 this sample is called Q5, and it is the anchor
+      crossing itself. In the quadrant scheme of module 03 this sample is called Q5, and it is the anchor
       the rest of the numbering counts away from.</p>
 
     <canvas id="c2a" aria-label="A zoomed view of one zero crossing showing the two candidate samples and which one is chosen"></canvas>
@@ -284,8 +285,8 @@
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       As the frame for everything after it</h2>
-    <p class="lede">Module 04 numbers the samples between the picks from one to nine. Module 05 measures the
-      time between them and calls it the isochron. Module 06 replaces the amplitude at each numbered sample
+    <p class="lede">Module 03 numbers the samples between the picks from one to nine. Module 08 measures the
+      time between them and calls it the isochron. Module 04 replaces the amplitude at each numbered sample
       with the output of a phase filter chosen by that number. Every one of those steps counts outward from
       a crossing or a peak, so a pick in the wrong place does not degrade the answer gracefully. It
       renumbers everything downstream of it.</p>
@@ -296,7 +297,7 @@
     <div class="legend prose">
       <span>The picks are made on the near stack and then applied unchanged to the far stack and to the
         difference between them. Nothing is picked twice. This is what keeps a quadrant number meaning the
-        same thing on all three traces, and it is the reason module 02 spent so long on whether the near
+        same thing on all three traces, and it is the reason module 01 spent so long on whether the near
         stack can be trusted.</span>
     </div>
   </section>
@@ -304,7 +305,7 @@
   <!-- ============================== EXERCISES ============================== -->
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Count what survives.</b> On step 1, with the default model, compare the number of samples on
           the trace with the number of picks.
@@ -314,7 +315,7 @@
             is no event there is nothing to pick, which is most of why the fraction is as high as it is.
             Module 01 counted two interpretable samples per cycle for conventional AVO, so the StickOgram
             is not yet an improvement in how much of the trace is usable. It is the same information,
-            reorganized into a frame. The gain comes in module 06, when every sample between the picks is
+            reorganized into a frame. The gain comes in module 04, when every sample between the picks is
             given a value.</span></details></li>
         <li><b>Coarsen the sampling and watch the crossings drift.</b> On step 2, step the sample rate from
           1 ms to 4 ms, reading the worst crossing error each time.
@@ -330,7 +331,7 @@
             the streak, two with it. The thin tight sandstone bed puts a second extremum inside a loop that
             previously held one, and the rule keeps only the larger. The smaller is a real reflection from
             a real bed, and the StickOgram does not record it. That is a deliberate trade: the numbering
-            scheme in module 04 needs exactly one extremum between each pair of crossings, and a rule that
+            scheme in module 03 needs exactly one extremum between each pair of crossings, and a rule that
             sometimes returned two would have nothing to number. Now try 45 ms of sand at 30 Hz with the
             streak switched off, and you will find three discarded extrema with no thin bed anywhere. A
             long wavelet over a thick sand overlaps the top and base loops enough to leave shoulders on
@@ -342,7 +343,7 @@
             zero. The top and base have merged into one event, and the center of that event does not sit
             between the top and the base &mdash; it sits above the sand entirely. So the picks record that
             something is there while saying nothing whatever about its interior, and no attribute computed
-            from them can do better. Module 12 comes back to this: the DQ distance responds to bed
+            from them can do better. Module 11 comes back to this: the DQ distance responds to bed
             thickness where Theta PX does not, and this is where the sensitivity starts.</span></details></li>
         <li><b>Add noise and watch picks disappear.</b> On step 1, raise the noise from zero to 40% a few
           percent at a time, watching the pick count.
@@ -352,7 +353,7 @@
             producing an extremum above the amplitude floor, and a crossing shifts by several samples or
             merges with its neighbor. Losing a pick is the worse outcome of the two, because a spurious
             layer can be recognized as noise later while a missing one cannot be recovered at all. This is
-            why module 02 cared so much about the near stack being clean, and why the papers say to bandpass
+            why module 01 cared so much about the near stack being clean, and why the papers say to bandpass
             filter for signal to noise rather than for bandwidth.</span></details></li>
         <li><b>Find the fault on the wrong display.</b> On step 3, set the noise to 25% and try to locate
           the fault on the amplitude section, then on the sticks.
@@ -374,7 +375,7 @@
         <li><b>The StickOgram is the center of every peak, the center of every trough, and every zero
           crossing</b>, found on the near stack and on nothing else.</li>
         <li><b>Of the two samples either side of a crossing, the method takes the one closer to zero.</b>
-          That sample becomes Q5 in module 04, and the numbering counts away from it.</li>
+          That sample becomes Q5 in module 03, and the numbering counts away from it.</li>
         <li><b>Between each pair of crossings, only the largest peak or trough is kept.</b> A doublet loses
           its smaller extremum entirely, whether it came from a thin bed or from a thick sand under a long
           wavelet.</li>
@@ -429,7 +430,7 @@
         slightly, since real decimation would alias as well.</p>
       <p>What this module leaves out is the polarity convention. For AVO classes 4, 3 and 2 the trough is
         Q1 and the peak is Q9. For class 1 sands and carbonate plays the polarity of both partial stacks is
-        reversed at the stacking step instead, so that the numbering scheme never has to change. Module 04
+        reversed at the stacking step instead, so that the numbering scheme never has to change. Module 03
         takes that up.</p>
       <ul>
         <li>Shuey, R. T., 1985, A simplification of the Zoeppritz equations: <em>Geophysics</em>, 50,
@@ -444,17 +445,17 @@
 
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
-    <h3><a href="quadrants.html">04 · Quadrant numbers</a></h3>
+    <h3><a href="quadrants.html">03 · Quadrant numbers</a></h3>
     <p>The gaps between the picks get numbered from one to nine, spaced uniformly, with rules for what to
       do when a loop is too short to hold all of them and when it is long enough to need some of them
       twice.</p>
-    <a class="btn" href="quadrants.html">Open module 04 →</a>
+    <a class="btn" href="quadrants.html">Open module 03 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
   <div class="pager" id="pager" hidden>
-    <a class="btn ghost" href="two-stacks.html">← Two stacks</a>
-    <a class="btn" href="quadrants.html">Next: quadrant numbers →</a>
+    <a class="btn ghost" href="two-stacks.html">← Two stacks, and what AVO reads from them</a>
+    <a class="btn" href="quadrants.html">Next: the quadrant numbers →</a>
   </div>
 
   <footer>
@@ -475,6 +476,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';

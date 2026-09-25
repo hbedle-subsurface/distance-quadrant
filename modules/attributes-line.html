@@ -23,7 +23,7 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 16 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 14 &nbsp;·&nbsp; The DQ trace</p>
     <h1>The attributes on a line</h1>
     <p class="sub">Every module so far has worked on one trace or one model at a time. This one puts a
       geological structure under the whole workflow: a dipping section cut by a normal fault, a sand that
@@ -39,7 +39,8 @@
         <canvas id="cMain" aria-label="A synthetic 2D line displayed as the selected attribute"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -146,7 +147,7 @@
     <div class="legend">
       <span>Watch the thin ends. Where the sand drops below about a quarter of a wavelength the two
         reflections merge, the outline no longer matches a distinct body on either display, and the
-        brightness there is tuning rather than rock. Module 12 measured that; here you can see what it does
+        brightness there is tuning rather than rock. Module 11 measured that; here you can see what it does
         to a section.</span>
     </div>
   </section>
@@ -221,7 +222,7 @@
     <div class="legend">
       <span>Both curves peak toward the right-hand end, where the sand is <em>thinnest</em> and its
         porosity is lowest. That is not a fault in the attributes and it is worth understanding: at 10 ms
-        those beds sit at the tuning maximum module 12 measured, so their reflections are amplified by
+        those beds sit at the tuning maximum module 11 measured, so their reflections are amplified by
         interference. An interpreter reading either section for rock quality would pick the worst part of
         the reservoir. The defence is the half isochron on step 2, which shows the loop shortening there
         and marks the zone as tuned.</span>
@@ -238,32 +239,32 @@
       with what each measures and where in the workflow it appears.</p>
 
     <div class="legend prose" style="margin-bottom:14px">
-      <span><b>StickOgram</b> (module 03) &mdash; the centers of peaks and troughs and the zero crossings
+      <span><b>StickOgram</b> (module 02) &mdash; the centers of peaks and troughs and the zero crossings
         of the near stack. A volume reduced to layer boundaries, used for mapping horizons and faults and
         as light input to machine learning.</span>
     </div>
     <div class="legend prose" style="margin-bottom:14px">
-      <span><b>Quadrant number</b> (module 04) &mdash; where a sample sits within its loop, one of nine.
+      <span><b>Quadrant number</b> (module 03) &mdash; where a sample sits within its loop, one of nine.
         Not usually displayed; it is what tells the enhancement which filter to read each sample
         from.</span>
     </div>
     <div class="legend prose" style="margin-bottom:14px">
-      <span><b>Isochron and half isochron</b> (module 05) &mdash; the time thickness of a loop and of a
+      <span><b>Isochron and half isochron</b> (module 08) &mdash; the time thickness of a loop and of a
         half loop, signed by slope. Maps thinning and pinch-out without horizon picking, separates uniform
         from internally variable layers, and flags tuned zones.</span>
     </div>
     <div class="legend prose" style="margin-bottom:14px">
-      <span><b>Near Optimized and Far-Near Optimized</b> (module 06) &mdash; the quadrant-enhanced near
+      <span><b>Near Optimized and Far-Near Optimized</b> (module 04) &mdash; the quadrant-enhanced near
         stack and gradient. These are the two traces everything downstream is built from, and they are
         displayed in their own right when clusters are being defined.</span>
     </div>
     <div class="legend prose" style="margin-bottom:14px">
-      <span><b>DQ distance</b> (module 07) &mdash; the distance from the crossplot origin to the sample.
+      <span><b>DQ distance</b> (module 05) &mdash; the distance from the crossplot origin to the sample.
         Before an inversion it is a relative porosity curve; after one, a quantitative prediction of
         porosity or hydrocarbon pore volume.</span>
     </div>
     <div class="legend prose" style="margin-bottom:14px">
-      <span><b>&theta;<sub>px</sub></b> (module 10) &mdash; the polar angle of the same point, folded and
+      <span><b>&theta;<sub>px</sub></b> (module 07) &mdash; the polar angle of the same point, folded and
         signed. A crossplot cluster mapping attribute: it says which kind of rock, where the distance says
         how much response.</span>
     </div>
@@ -276,7 +277,7 @@
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Find the fault on each display.</b> Step through the six displays in the panel and look for
           the offset.
@@ -301,7 +302,7 @@
         <li><b>Compare DQ average with DQ sum.</b> On step 3, read where each peaks.
           <details class="reveal"><summary>Answer</summary><span class="ans">Both peak near the thin
             right-hand end rather than in the thick, porous middle, because a 10 ms bed at 40 Hz is close
-            to the tuning maximum and its reflections are amplified. The lesson is the one module 12 makes
+            to the tuning maximum and its reflections are amplified. The lesson is the one module 11 makes
             numerically, seen here as a picture: a layer attribute inherits every problem the samples it
             is built from already had. Raise the wavelet frequency to 70 Hz, so the thin end is resolved,
             and the sum moves to trace 14 &mdash; next to the thickest part of the sand, which is where
@@ -312,7 +313,7 @@
         <li><b>Change the fluid.</b> Switch between brine, oil and gas and watch the DQ and angle sections.
           <details class="reveal"><summary>Answer</summary><span class="ans">The body changes value while its
             outline stays put, because the geometry has not changed. How much it changes depends on the
-            seal, which module 11 measured: under some seals the fluid effect is mostly a change of
+            seal, which module 10 measured: under some seals the fluid effect is mostly a change of
             distance, under others mostly a change of angle. Try all three overburdens and watch which of
             the two displays does the work.</span></details></li>
         <li><b>Add noise.</b> Take it to 30% and look at each display in turn.
@@ -353,7 +354,7 @@
         fault at trace 18 with a throw of 14 ms. The sand runs from 10 ms thick at both ends to 36 ms in
         the middle, and its porosity follows the same shape from 14% to 32%. Two thin background beds above
         and below give the section something other than the reservoir to look at. Everything upstream is as
-        in modules 03 through 13, applied independently to each trace.</p>
+        in modules 02 through 13, applied independently to each trace.</p>
       <p>The fluid contact, when switched on, is placed at a fixed 98 ms so that it cuts flat across the
         dip and the fault. The chosen fluid fills the sand above it and brine below. It is drawn only where
         it falls inside the sand, which is why it stops before the thin ends.</p>
@@ -410,6 +411,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -834,7 +837,7 @@
      THE DISTANCE
 
      A is the quadrant-enhanced near stack and B is the enhanced far stack
-     minus it, so the two mean what they meant in module 02. The distance is
+     minus it, so the two mean what they meant in module 01. The distance is
      the length of that vector, and the sign is put on afterwards from the
      slope of the near stack.
      ===================================================================== */
@@ -928,10 +931,10 @@
 
      Paper 2: if the quadrant number is Q3, Q4, Q5, Q6 or Q7 then the data
      are replotted with the gradient multiplied by -1. Applied after the
-     baseline rotation of module 08, never before it.
+     baseline rotation of module 06, never before it.
      ===================================================================== */
 
-  const BASE_BEARING = 344;                        // this model's baseline, module 08
+  const BASE_BEARING = 344;                        // this model's baseline, module 06
   const TURN = 360 - BASE_BEARING;                 // spec [25] and [30]
   const isSplit = (q) => q >= 3 && q <= 7;
 
@@ -1306,16 +1309,86 @@
     return lim;
   }
 
+  /* ------------------------- the earth model panel ---------------------- */
+
+  /* The layers the traces were built from, on the same time axis as the
+     sections, so an attribute display can be compared with the model that
+     produced it. Dip, fault throw, sand thickness, porosity and the fluid
+     contact are all drawn here as they were set. */
+  const LITHFILL = { soft: '#A3ABB3', hard: '#7E8790', tight: '#D6C9A2' };
+  const SANDHUE = { brine: [205, 55], oil: [95, 35], gas: [335, 60] };
+
+  function sandFill(phi, fluidKey) {
+    const h = SANDHUE[fluidKey];
+    const light = 82 - (phi - 12) * 1.3;
+    return 'hsl(' + h[0] + ',' + h[1] + '%,' + Math.max(45, Math.min(85, light)).toFixed(0) + '%)';
+  }
+
+  function drawEarth(ctx, rect, traces) {
+    const Y = (t) => rect.y + ((t - T0) / TWIN) * rect.h;
+    const other = (S.over === 'soft') ? 'hard' : 'soft';
+    const tw = rect.w / NTR;
+    const cT = S.owc ? 0.098 : null;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
+    ctx.fillStyle = LITHFILL[S.over];
+    ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+    for (let k = 0; k < NTR; k++) {
+      const m = model(k);
+      const x = rect.x + k * tw, w = tw + 0.6;
+      ctx.fillStyle = LITHFILL[other];
+      ctx.fillRect(x, Y(MARK_A + m.shift), w, Y(MARK_A + 0.006 + m.shift) - Y(MARK_A + m.shift));
+      ctx.fillRect(x, Y(MARK_B + m.shift), w, Y(MARK_B + 0.007 + m.shift) - Y(MARK_B + m.shift));
+      const top = m.top, base = m.top + m.thick / 1000;
+      const split = (cT !== null && cT > top + 0.003 && cT < base - 0.003) ? cT : null;
+      ctx.fillStyle = sandFill(m.phi, S.fluid);
+      ctx.fillRect(x, Y(top), w, Y(split === null ? base : split) - Y(top));
+      if (split !== null) {
+        ctx.fillStyle = sandFill(m.phi, 'brine');
+        ctx.fillRect(x, Y(split), w, Y(base) - Y(split));
+      }
+    }
+    if (S.owc) {
+      SEIS.dashedLine(ctx, rect.x, Y(0.098), rect.x + rect.w, Y(0.098),
+        'rgba(22,25,28,0.8)', [5, 4], 1.2);
+    }
+    ctx.restore();
+    SEIS.frame(ctx, rect);
+    ctx.save();
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const mid = model(Math.floor(NTR / 2));
+    ctx.fillStyle = '#5A0E0F';
+    ctx.fillText(FLUIDS[S.fluid].name + ' sand',
+      rect.x + rect.w / 2, Y(mid.top + mid.thick / 2000));
+    if (S.owc) {
+      ctx.textBaseline = 'top';
+      ctx.fillText('contact', rect.x + rect.w / 2, Y(0.098) + 3);
+    }
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = 'rgba(22,25,28,0.78)';
+    ctx.fillText(LITHS[S.over].name, rect.x + rect.w * 0.5, rect.y + 5);   // above the sand, always
+    ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(22,25,28,0.7)';
+    ctx.fillText('EARTH MODEL', rect.x + rect.w / 2, rect.y - 8);
+    ctx.restore();
+  }
+
   function drawMain() {
     const c = $('cMain'); if (!c) return;
     const W = width(c, 520), H = 340;
     const ctx = SEIS.fitCanvas(c, W, H);
     ctx.clearRect(0, 0, W, H);
     const traces = line();
-    const rect = { x: 52, y: 28, w: W - 76, h: H - 66 };
-    SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
+    const gapM = 26;
+    const ew = Math.round((W - 76 - gapM) * 0.26);
+    const rE = { x: 52, y: 28, w: ew, h: H - 66 };
+    const rect = { x: 52 + ew + gapM, y: 28, w: W - 76 - ew - gapM, h: H - 66 };
+    SEIS.axisLeft(ctx, rE, 0, TWIN * 1000, 'two-way time (ms)',
       (v) => String(Math.round(v)), { ticks: 6 });
+    drawEarth(ctx, rE, traces);
     drawView(ctx, rect, traces, S.view, { title: VIEWS[S.view].name.toUpperCase() });
+    SEIS.axisBottom(ctx, rE, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: 3 });
     SEIS.axisBottom(ctx, rect, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: 5 });
   }
 
@@ -1325,14 +1398,18 @@
     const ctx = SEIS.fitCanvas(c, W, H);
     ctx.clearRect(0, 0, W, H);
     const traces = line();
-    const gap = 30;
-    const pw = (W - 96 - gap) / 2;
-    const rA = { x: 62, y: 30, w: pw, h: H - 74 };
-    const rB = { x: 62 + pw + gap, y: 30, w: pw, h: H - 74 };
-    SEIS.axisLeft(ctx, rA, 0, TWIN * 1000, 'two-way time (ms)',
+    const gap = 24;
+    const pw = (W - 96 - 2 * gap) / 2.7;
+    const ew = pw * 0.7;
+    const rE = { x: 62, y: 30, w: ew, h: H - 74 };
+    const rA = { x: 62 + ew + gap, y: 30, w: pw, h: H - 74 };
+    const rB = { x: 62 + ew + pw + 2 * gap, y: 30, w: pw, h: H - 74 };
+    SEIS.axisLeft(ctx, rE, 0, TWIN * 1000, 'two-way time (ms)',
       (v) => String(Math.round(v)), { ticks: 6 });
+    drawEarth(ctx, rE, traces);
     drawView(ctx, rA, traces, 'seis', { title: 'STACK SECTION' });
     drawView(ctx, rB, traces, 'dq', { title: 'DQ SECTION' });
+    SEIS.axisBottom(ctx, rE, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: 3 });
     SEIS.axisBottom(ctx, rA, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: 4 });
     SEIS.axisBottom(ctx, rB, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: 4 });
 
@@ -1356,14 +1433,18 @@
     const ctx = SEIS.fitCanvas(c, W, H);
     ctx.clearRect(0, 0, W, H);
     const traces = line();
-    const gap = 30;
-    const pw = (W - 96 - gap) / 2;
-    const rA = { x: 62, y: 30, w: pw, h: H - 74 };
-    const rB = { x: 62 + pw + gap, y: 30, w: pw, h: H - 74 };
-    SEIS.axisLeft(ctx, rA, 0, TWIN * 1000, 'two-way time (ms)',
+    const gap = 24;
+    const pw = (W - 96 - 2 * gap) / 2.7;
+    const ew = pw * 0.7;
+    const rE = { x: 62, y: 30, w: ew, h: H - 74 };
+    const rA = { x: 62 + ew + gap, y: 30, w: pw, h: H - 74 };
+    const rB = { x: 62 + ew + pw + 2 * gap, y: 30, w: pw, h: H - 74 };
+    SEIS.axisLeft(ctx, rE, 0, TWIN * 1000, 'two-way time (ms)',
       (v) => String(Math.round(v)), { ticks: 6 });
+    drawEarth(ctx, rE, traces);
     drawView(ctx, rA, traces, 'px', { title: 'THETA PX' });
     drawView(ctx, rB, traces, 'iso', { title: 'HALF ISOCHRON' });
+    SEIS.axisBottom(ctx, rE, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: 3 });
     SEIS.axisBottom(ctx, rA, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: 4 });
     SEIS.axisBottom(ctx, rB, 1, NTR, 'trace', (v) => String(Math.round(v)), { ticks: 4 });
 

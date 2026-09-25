@@ -23,7 +23,7 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 11 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 10 &nbsp;·&nbsp; The DQ trace</p>
     <h1>DQ and porosity</h1>
     <p class="sub">Ten modules of machinery have produced a number. This is where it earns its keep: the DQ
       distance tracks the porosity of a sand about as tightly as acoustic impedance does, without a well
@@ -38,7 +38,8 @@
         <canvas id="cMain" aria-label="The DQ distance and acoustic impedance plotted against porosity"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -271,7 +272,7 @@
       than a wavelength from the top of the next and each reflection stands on its own. Pack them to 24 ms
       and the correlation falls to about 0.8, because the value read at a sand top is then contaminated by
       its neighbors rather than describing its own rock. That is a limit on the seismic, not on the
-      attribute, and module 12 takes it up in earnest.</p>
+      attribute, and module 11 takes it up in earnest.</p>
 
     <canvas id="c4a" aria-label="A five-sand porosity log beside the near stack and the DQ trace computed from it"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The porosity log we put in, the near stack that a
@@ -333,7 +334,7 @@
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Read the correlation under tight sandstone.</b> On step 2, with a tight sandstone seal and brine fill,
           read the two correlation figures.
@@ -355,7 +356,7 @@
           <details class="reveal"><summary>Answer</summary><span class="ans">In the mid thirties, where the
             distance falls to under a hundredth &mdash; on the 2% sampling this page uses, the minimum
             lands at 34%. That is the class 2 crossover: the sand and the shale have matched impedances,
-            there is almost no reflection, and the attribute has nothing to measure. Module 10 used the
+            there is almost no reflection, and the attribute has nothing to measure. Module 07 used the
             same region as its example of an unreliable angle, for the same underlying reason. Near a
             crossover, every attribute in this course is weak at once.</span></details></li>
         <li><b>Try the hard shale.</b> Read its correlation on step 3.
@@ -366,10 +367,10 @@
             &mdash; the correlation is low here not because the physics is noisy but because it is
             two-sided.</span></details></li>
         <li><b>Change the fluid.</b> Switch between brine, oil and gas under tight sandstone.
-          <details class="reveal"><summary>Answer</summary><span class="ans">The curve shifts but keeps its shape and its sign. Which means a single DQ value is ambiguous: a brine sand at high porosity and a gas sand at lower porosity can give the same number. Porosity and fluid both move the distance the same way here, and only the angle of module 10 tells them apart. Hydrocarbon lowers the sand's impedance, which under a tight sandstone seal
+          <details class="reveal"><summary>Answer</summary><span class="ans">The curve shifts but keeps its shape and its sign. Which means a single DQ value is ambiguous: a brine sand at high porosity and a gas sand at lower porosity can give the same number. Porosity and fluid both move the distance the same way here, and only the angle of module 07 tells them apart. Hydrocarbon lowers the sand's impedance, which under a tight sandstone seal
             increases the contrast and lifts the whole curve. So fluid and porosity both move the distance
             in the same direction here, and the distance alone cannot separate them. That is exactly what
-            module 10's angle is for, and it is the clearest argument on the site for computing both
+            module 07's angle is for, and it is the clearest argument on the site for computing both
             attributes rather than one.</span></details></li>
         <li><b>Add noise.</b> Take the noise to 30% under tight sandstone and watch the correlation.
           <details class="reveal"><summary>Answer</summary><span class="ans">It barely moves, and then it
@@ -377,7 +378,7 @@
             then drops sharply &mdash; to a little over 0.5 by 40% on the brine case, and further under
             other fluids. That is a cliff rather than a slope, and the reason is the picking rather than the amplitudes: while the picks stay in the right places the
             trend survives almost intact, and once noise starts inventing and destroying picks &mdash;
-            which module 03 measured directly &mdash; the workflow downstream has nothing sound to work with.
+            which module 02 measured directly &mdash; the workflow downstream has nothing sound to work with.
             The practical reading is that this holds up in ordinary data and is worth no trust at all in bad data, with less warning in between than you would like. Treat the figure as an upper bound in
             any case: it is computed on one modeled sand at a time, not on a population of real
             samples.</span></details></li>
@@ -401,7 +402,7 @@
         <li><b>The sand is identical in all three.</b> The attribute reads the contrast, and the contrast
           belongs to the pair.</li>
         <li><b>Near a crossover every attribute is weak at once</b> &mdash; the distance collapses and the
-          angle of module 10 becomes meaningless together.</li>
+          angle of module 07 becomes meaningless together.</li>
         <li><b>Fluid and porosity move the distance the same way</b>, so the distance alone cannot separate
           them. The angle can.</li>
         <li><b>This is detection, not prediction.</b> Turning a distance into a porosity value needs a
@@ -413,7 +414,7 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>Everything upstream is as in modules 03 through 10, unchanged: the same rocks, picks, quadrant
+      <p>Everything upstream is as in modules 02 through 10, unchanged: the same rocks, picks, quadrant
         numbers, phase filters, enhancement, distance, baseline rotation and sector split. The distance is
         read at the sample nearest the top of the sand, and the curve is built by rebuilding the whole
         workflow at each porosity from 10% to 36% in steps of two.</p>
@@ -447,16 +448,16 @@
 
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
-    <h3><a href="wedge.html">12 · Wedge models and tuning</a></h3>
+    <h3><a href="wedge.html">11 · Thickness and tuning</a></h3>
     <p>The interference this module just ran into, taken seriously: bed thickness moves the distance by a
       third and leaves the angle alone.</p>
-    <a class="btn" href="wedge.html">Open module 12 →</a>
+    <a class="btn" href="wedge.html">Open module 11 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
   <div class="pager" id="pager" hidden>
-    <a class="btn ghost" href="theta-px.html">← Theta PX</a>
-    <a class="btn" href="wedge.html">Next: wedge models and tuning →</a>
+    <a class="btn ghost" href="rdq-crossplot.html">← The RDQ crossplot in three axes</a>
+    <a class="btn" href="wedge.html">Next: thickness and tuning →</a>
   </div>
 
   <footer>
@@ -477,6 +478,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -901,7 +904,7 @@
      THE DISTANCE
 
      A is the quadrant-enhanced near stack and B is the enhanced far stack
-     minus it, so the two mean what they meant in module 02. The distance is
+     minus it, so the two mean what they meant in module 01. The distance is
      the length of that vector, and the sign is put on afterwards from the
      slope of the near stack.
      ===================================================================== */
@@ -995,10 +998,10 @@
 
      Paper 2: if the quadrant number is Q3, Q4, Q5, Q6 or Q7 then the data
      are replotted with the gradient multiplied by -1. Applied after the
-     baseline rotation of module 08, never before it.
+     baseline rotation of module 06, never before it.
      ===================================================================== */
 
-  const BASE_BEARING = 344;                        // this model's baseline, module 08
+  const BASE_BEARING = 344;                        // this model's baseline, module 06
   const TURN = 360 - BASE_BEARING;                 // spec [25] and [30]
   const isSplit = (q) => q >= 3 && q <= 7;
 

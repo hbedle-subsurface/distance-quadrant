@@ -23,7 +23,7 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 10 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 07 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Theta PX</h1>
     <p class="sub">The DQ distance says how far a sample sits from the origin. This is the other half of
       the same vector: which direction it points, folded into a single range and given a sign. It is the
@@ -38,7 +38,8 @@
         <canvas id="cMain" aria-label="The split crossplot with the sand-top sample drawn as a vector and its angle marked"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span></p>
+        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+          <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -117,7 +118,7 @@
     </div>
 
     <p class="lede">
-      Take the coordinates module 09 produced and measure the bearing of each sample from the origin. That
+      Take the coordinates module 06 produced and measure the bearing of each sample from the origin. That
       bearing runs from 0 to 360&deg;, and the four sectors of the plot carry overlapping information: a
       direction and its opposite describe the same contrast seen from opposite ends. So the bearing is
       folded into <b>0 to 90&deg;</b>, by a rule that depends on which sector the sample is in.</p>
@@ -150,7 +151,7 @@
 
     <p class="lede">
       The folded angle is a magnitude between 0 and 90&deg; and cannot say which way the departure runs.
-      The sign of the DQ trace supplies that: whatever polarity module 07 gave the distance at a sample,
+      The sign of the DQ trace supplies that: whatever polarity module 05 gave the distance at a sample,
       &theta;<sub>px</sub> at that sample takes the same one. The result runs from &minus;90 to
       +90&deg;, and the two halves are read differently.</p>
 
@@ -174,7 +175,7 @@
     </div>
     <div class="legend">
       <span>Note that the sign is not measured from the angle. It comes from the slope of the near stack,
-        the same rule module 07 used for the distance and module 05 used for the half isochron. Three
+        the same rule module 05 used for the distance and module 08 used for the half isochron. Three
         attributes, one sign convention, so that any two of them can be crossplotted without one of them
         being upside down.</span>
     </div>
@@ -211,7 +212,7 @@
     </div>
     <div class="legend">
       <span>The failure mode is worth as much as the success. A short vector has a badly determined
-        direction &mdash; module 09 made the same point about the Q5 samples nearest the origin &mdash; so
+        direction &mdash; module 06 made the same point about the Q5 samples nearest the origin &mdash; so
         wherever the distance is small the angle is unstable. Near a class 2 crossover, where the intercept
         passes through zero, the distance can fall to a few thousandths and the angle swings wildly. Read
         the two together or not at all.</span>
@@ -230,7 +231,7 @@
       sits in space. That is a different question from how strong the response is, which is what the
       distance answers.</p>
 
-    <p class="lede">Module 07 made the point in the abstract: rolling a two-component vector into a length
+    <p class="lede">Module 05 made the point in the abstract: rolling a two-component vector into a length
       throws away the ratio of its components, and two very different pairs can share a distance. This
       module is that point made concrete. The distance answers "how big" and the angle answers "which
       way", and on this model each of them fails somewhere the other works.</p>
@@ -251,7 +252,7 @@
       appears on the angle section where the distance section shows nothing in particular.</p>
 
     <div class="legend prose">
-      <span>Module 11 adds the third axis. The signed half isochron of module 05 has been carried along
+      <span>Module 10 adds the third axis. The signed half isochron of module 08 has been carried along
         unused since then, and the three together &mdash; distance, angle and time thickness &mdash; are
         what the RDQ crossplot actually plots.</span>
     </div>
@@ -259,7 +260,7 @@
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
-      <h3>Exercises</h3>
+      <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Watch the fluids separate in angle.</b> On step 3, with soft shale at 20% porosity, read the
           three angles and the three distances.
@@ -275,13 +276,13 @@
             The angles crowd into a few degrees and barely separate the fluids at all, while the distance
             spreads them cleanly. So neither attribute is the useful one in general &mdash; which one
             works depends on what the reservoir is sitting under, and that is not something an interpreter
-            chooses. This is the concrete version of module 07's argument for computing both.</span></details></li>
+            chooses. This is the concrete version of module 05's argument for computing both.</span></details></li>
         <li><b>Find where the angle becomes unreliable.</b> Set soft shale with oil and drag the porosity
           up to about 28%, watching the distance and the angle together.
           <details class="reveal"><summary>Answer</summary><span class="ans">The distance collapses to a few
             thousandths and the angle swings to a large value that means nothing. That is a class 2
             crossover: the intercept passes through zero, the vector is almost at the origin, and the
-            direction of a point at the origin is undefined. Module 09 made the same observation about the
+            direction of a point at the origin is undefined. Module 06 made the same observation about the
             Q5 samples, which sit nearest the origin and have the least trustworthy angles. The practical
             rule is the same in both cases: an angle is only as good as the distance it belongs
             to.</span></details></li>
@@ -301,7 +302,7 @@
             is the unsigned form, and the published color bar runs the full &plusmn;90.</span></details></li>
         <li><b>Coarsen the sampling.</b> Step the sample rate to 4 ms.
           <details class="reveal"><summary>Answer</summary><span class="ans">Fewer samples carry an angle at
-            all, and the ones that remain inherit the coarser quadrant numbering that module 04 measured.
+            all, and the ones that remain inherit the coarser quadrant numbering that module 03 measured.
             Every attribute in this course degrades the same way for the same reason, which is why the
             papers ask for 1 ms data and sync interpolation up to it before anything else
             runs.</span></details></li>
@@ -314,7 +315,7 @@
       <h3>The main points</h3>
       <ul>
         <li><b>&theta;<sub>px</sub> is the direction of the same vector whose length is the DQ
-          distance</b>, measured after the rotation of module 08 and the split of module 09.</li>
+          distance</b>, measured after the rotation of module 06 and the split of module 06.</li>
         <li><b>The bearing is folded from 0&ndash;360&deg; into 0&ndash;90&deg;</b> by four sector rules,
           one per quarter of the crossplot.</li>
         <li><b>The sign comes from the DQ trace</b>, not from the angle, giving a range of &minus;90 to
@@ -337,9 +338,9 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>Everything upstream is as in modules 03 through 09: the same rocks and picks, the quadrant numbers
-        of module 04, the phase filters of module 06, A and B as the quadrant-enhanced near stack and
-        enhanced far minus near, the baseline rotation of module 08, and the sector split of module 09
+      <p>Everything upstream is as in modules 02 through 09: the same rocks and picks, the quadrant numbers
+        of module 03, the phase filters of module 04, A and B as the quadrant-enhanced near stack and
+        enhanced far minus near, the baseline rotation of module 06, and the sector split of module 06
         applied to the rotated coordinates.</p>
       <p>The fold is equation 5 of Bedle et al. (2025b). With &theta;<sub>p</sub> the polar
         angle of the split coordinates: for 0&deg; &le; &theta;<sub>p</sub> &lt; 90&deg;,
@@ -371,16 +372,16 @@
 
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
-    <h3><a href="porosity.html">11 · DQ and porosity</a></h3>
+    <h3><a href="isochron.html">08 · Time thickness</a></h3>
     <p>The distance tracks porosity about as tightly as acoustic impedance does, with no well and no
       inversion &mdash; and with a sign that belongs to the seal rather than to the method.</p>
-    <a class="btn" href="porosity.html">Open module 11 →</a>
+    <a class="btn" href="isochron.html">Open module 08 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
 
   <div class="pager" id="pager" hidden>
-    <a class="btn ghost" href="sectors.html">← Sector splitting</a>
-    <a class="btn" href="porosity.html">Next: DQ and porosity →</a>
+    <a class="btn ghost" href="sectors.html">← Splitting into sectors</a>
+    <a class="btn" href="isochron.html">Next: the isochron and half isochron →</a>
   </div>
 
   <footer>
@@ -401,6 +402,8 @@
 
 <script src="../assets/count.js"></script>
 <script src="../assets/seismic.js"></script>
+<script src="../assets/glossary.js"></script>
+<script src="../assets/dq-ui.js"></script>
 <script>
 (function () {
   'use strict';
@@ -825,7 +828,7 @@
      THE DISTANCE
 
      A is the quadrant-enhanced near stack and B is the enhanced far stack
-     minus it, so the two mean what they meant in module 02. The distance is
+     minus it, so the two mean what they meant in module 01. The distance is
      the length of that vector, and the sign is put on afterwards from the
      slope of the near stack.
      ===================================================================== */
@@ -919,10 +922,10 @@
 
      Paper 2: if the quadrant number is Q3, Q4, Q5, Q6 or Q7 then the data
      are replotted with the gradient multiplied by -1. Applied after the
-     baseline rotation of module 08, never before it.
+     baseline rotation of module 06, never before it.
      ===================================================================== */
 
-  const BASE_BEARING = 344;                        // this model's baseline, module 08
+  const BASE_BEARING = 344;                        // this model's baseline, module 06
   const TURN = 360 - BASE_BEARING;                 // spec [25] and [30]
   const isSplit = (q) => q >= 3 && q <= 7;
 
