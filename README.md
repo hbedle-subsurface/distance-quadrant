@@ -68,34 +68,27 @@ Fifteen pages in four parts. Part 1 sets up the problem and the input, part 2
 builds the DQ trace one operation at a time, part 3 builds the crossplot and the
 attributes read from it, and part 4 puts them to work on rocks.
 
-| # | Module | What it adds | File | Status |
-|---|---|---|---|---|
-| **Part 1** | **Why a new trace** | | | |
-| 00 | The rocks, and two pictures of them | The earth model beside a stack section and a DQ section | `orientation.html` | **rebuilt** |
-| 01 | Two stacks, and what AVO reads from them | Near and far stacks, intercept and gradient, and what the input has to be | `two-stacks.html` | **rebuilt** |
-| **Part 2** | **Building the DQ trace** | | | |
-| 02 | Marking the waveform | Peaks, troughs and zero crossings picked on the near stack | `stickogram.html` | old |
-| 03 | Quadrant numbers | Q1 to Q9 across each half cycle | `quadrants.html` | old |
-| 04 | Turning every sample into a peak | Seven phase rotations, one per quadrant number | `phase-filters.html` | old |
-| 05 | The distance | The signed DQ distance, and how it compares with familiar AVO attributes | `dq-distance.html` | old |
-| **Part 3** | **The crossplot view** | | | |
-| 06 | Rotating and splitting the crossplot | Shale trend onto the x-axis, then four sectors | `baseline.html` + `sectors.html` | old |
-| 07 | Theta PX, the angle of the same point | The angle, and the fluids and lithologies it separates | `theta-px.html` | old |
-| 08 | Time thickness | Signed isochron and half isochron, on traces and on a section | `isochron.html` | old |
-| 09 | The RDQ crossplot in three axes | Amplitude, gradient and half isochron together | `rdq-crossplot.html` | old |
-| **Part 4** | **What the attributes say about rocks** | | | |
-| 10 | Porosity | Why a DQ trace follows a porosity log, and when it stops | `porosity.html` | old |
-| 11 | Thickness and tuning | Which attribute carries thickness and which does not | `wedge.html` | old |
-| 12 | The four AVO classes | The same workflow on four rock models | `avo-classes.html` | old |
-| 13 | Reading a DQ section | Display conventions, and a self-test | `reading-sections.html` | old |
-| 14 | A synthetic line with every attribute | Structure, faulting and the layer attributes | `attributes-line.html` | old |
-
-The set is being rebuilt in this structure one module at a time. Pages marked
-*old* are the September 2026 versions. Their science is current. Their text is
-longer than the current standard and speaks to the reader in the second person,
-and it is rewritten when each module is rebuilt.
-`avo-limits.html` and `near-far.html` are superseded by `two-stacks.html` and
-nothing links to them.
+| # | Module | What it adds |
+|---|---|---|
+| **Part 1** | **Why a new trace** | |
+| 00 | The rocks, and two pictures of them | The earth model beside a stack section and a DQ section |
+| 01 | Two stacks, and what AVO reads from them | Near and far stacks, intercept and gradient, and what the input has to be |
+| **Part 2** | **Building the DQ trace** | |
+| 02 | Marking the waveform | Peaks, troughs and zero crossings picked on the near stack |
+| 03 | Quadrant numbers | Q1 to Q9 across each half cycle |
+| 04 | Turning every sample into a peak | Seven phase rotations, one per quadrant number |
+| 05 | The distance | The signed DQ distance, and how it compares with familiar AVO attributes |
+| **Part 3** | **The crossplot view** | |
+| 06 | Rotating and splitting the crossplot | Shale trend onto the x-axis, then four sectors |
+| 07 | Theta PX, the angle of the same point | The angle, and the fluids and lithologies it separates |
+| 08 | Time thickness | Signed isochron and half isochron, on traces and on a section |
+| 09 | The RDQ crossplot in three axes | Amplitude, gradient and half isochron together |
+| **Part 4** | **What the attributes say about rocks** | |
+| 10 | Porosity | Why a DQ trace follows a porosity log, and when it stops |
+| 11 | Thickness and tuning | Which attribute carries thickness and which does not |
+| 12 | The four AVO classes | The same workflow on four rock models |
+| 13 | Reading a DQ section | Display conventions, and a self-test |
+| 14 | A synthetic line with every attribute | Structure, faulting and the layer attributes |
 
 ## Using it in a course
 
@@ -134,6 +127,15 @@ and [single-trace attributes](https://hbedle-subsurface.github.io/single-trace/)
 ---
 
 ## For anyone editing the site
+
+### Rebuild status
+
+Modules 00 and 01 are in the current form. The rest are the September 2026
+pages. Their science is current. Their text runs longer than the conventions
+in this section allow and speaks to the reader in the second person, and it is
+rewritten as each module is rebuilt. `avo-limits.html` and `near-far.html` are superseded by
+`two-stacks.html`, and nothing links to them. Module 06 is served by
+`baseline.html`, with `sectors.html` reached from it until the two are merged.
 
 ### Running it
 
@@ -212,8 +214,7 @@ drawn outside their frame, clipped labels, dead links and glossary terms with no
 definition. The checkers drive each module headlessly and assert the figures its
 prose quotes. `tools/README.md` has the detail.
 
-Run all of them before publishing. Both tools have caught real errors in every
-module built so far.
+Run all of them before publishing.
 
 ## Credit and license
 
