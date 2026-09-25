@@ -38,7 +38,7 @@
         <canvas id="cMain" aria-label="The near-stack trace with each sample labeled by its quadrant number"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -96,7 +96,7 @@
             </div>
             <label class="check" style="grid-column:1/-1"><input type="checkbox" id="skipflip">
               Skip the polarity flip on class 1</label>
-            <p class="hint-line" style="margin:-4px 0 12px">Step 3 is about what this costs. Leave it off
+            <p class="hint-line" style="margin:-4px 0 12px">Step 3 shows what this does. Leave it off
               until you get there.</p>
             <button class="btn ghost small" id="resetBtn" type="button">Reset everything</button>
           </div>
@@ -106,7 +106,7 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · Filling in the gaps</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · Loops that do not fit</button>
@@ -133,7 +133,7 @@
       One warning about the word. A <b>quadrant number</b> is a position along a waveform, one of nine.
       Later modules also refer to the four <b>sectors</b> of a crossplot, which are quarters of a plot and
       have nothing to do with quadrant numbers. The two words are unrelated here, and keeping them apart
-      will save confusion in modules 06 and 13.</p>
+      will save confusion in modules 06 and 09.</p>
 
     <p class="lede">
       Between Q1 and Q5 there are three numbers to place, Q2, Q3 and Q4, and the rule is to spread them
@@ -206,7 +206,7 @@
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>Repetition costs nothing much: several neighboring samples are told to use the same phase
+      <span>Repetition changes little: several neighboring samples are told to use the same phase
         filter, which is exactly what you would want in the middle of a long, smooth limb. Omission is
         worse, because a number that never appears is a phase rotation that never gets applied, and the
         enhanced trace at that loop is built from a smaller set of filters than everywhere else.</span>
@@ -256,7 +256,7 @@
 
   <section class="tabpane" id="pw" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
-      <h3><span class="stepno">?</span>What a number buys you</h3>
+      <h3><span class="stepno">?</span>What a quadrant number tells you</h3>
       <span class="hint">Why the method bothers with an integer per sample</span>
     </div>
 
@@ -280,7 +280,7 @@
         milliseconds.</li>
     </ul>
 
-    <p class="lede">The cost is that the number knows nothing about how long the loop was. A quarter cycle
+    <p class="lede">What the number cannot say is how long the loop was. A quarter cycle
       three samples long and one thirty samples long both run Q2, Q3, Q4, and after this step the
       difference between them has been thrown away. That is exactly the information the isochron of module
       05 goes back and recovers, which is why the two attributes are computed side by side and why the DQ
@@ -471,7 +471,7 @@
 
   /* =====================================================================
      THE ROCKS
-     Identical to modules 01 and 02.
+     Identical to module 01.
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };

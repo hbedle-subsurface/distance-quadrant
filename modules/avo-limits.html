@@ -39,7 +39,7 @@
         <canvas id="cMain" aria-label="Near-stack and far-stack traces through a sand encased in shale"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -122,7 +122,7 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · One boundary, no wavelet</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · What the wavelet does</button>
@@ -301,7 +301,7 @@
     </div>
     <div class="legend">
       <span>Halve the sample rate and the trace holds twice as many numbers, while the number that can be
-        interpreted stays at two per cycle. Recording the data more finely does not buy any more AVO. That
+        interpreted stays at two per cycle. Recording the data more finely adds no more AVO information. That
         is the observation the DQ trace was built on, and module 01 starts building it.</span>
     </div>
   </section>
@@ -310,7 +310,7 @@
   <section class="tabpane" id="pw" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
       <h3><span class="stepno">?</span>Why this is worth an entire course</h3>
-      <span class="hint">The cost of throwing away 95% of the trace</span>
+      <span class="hint">What is lost when 95% of the trace goes unused</span>
     </div>
 
     <p class="lede">A discarded sample is not a neutral thing. Each one is a place in the reservoir where
@@ -509,7 +509,7 @@
         workflow forms its gradient, rather than against a calibrated B. Because R is linear in
         sin&sup2;&theta;, F &minus; N is exactly B times the difference in mean sin&sup2;&theta; across the
         two bands, a factor of 0.170 for 0&ndash;10&deg; and 20&ndash;30&deg;. Dividing it out would make
-        the two axes commensurate and the plots easier to read, at the cost of showing something the
+        the two axes commensurate and the plots easier to read, while showing something the
         processing never computes, so the module leaves it alone. Every crossplot in the module shares the
         same fixed axes, &plusmn;0.5, and none of them rescale with the model: seeing how much the spread
         itself changes between one set of rocks and the next is worth more than filling the box each time.

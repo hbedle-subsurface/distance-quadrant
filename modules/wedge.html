@@ -38,7 +38,7 @@
         <canvas id="cMain" aria-label="A wedge model with the sand thinning to the right, beside the near stack"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -99,7 +99,7 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · The tuning curve</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · What the angle does</button>
@@ -328,7 +328,7 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>Everything upstream is as in modules 02 through 11: the same rocks, picks, quadrant numbers, phase
+      <p>Everything upstream is as in modules 02 through 10: the same rocks, picks, quadrant numbers, phase
         filters, enhancement, distance, baseline rotation, sector split and angle fold. The wedge is
         modeled by rebuilding the whole workflow at each thickness from 6 to 55 ms in steps of one and
         reading both attributes at the sample nearest the top of the sand.</p>
@@ -409,7 +409,7 @@
 
   /* =====================================================================
      THE ROCKS
-     Identical to modules 01 and 02.
+     Identical to module 01.
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };

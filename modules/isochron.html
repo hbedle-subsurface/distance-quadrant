@@ -23,7 +23,7 @@
   </header>
 
   <div class="mod-head">
-    <p class="eyebrow">Module 05 &nbsp;·&nbsp; The DQ trace</p>
+    <p class="eyebrow">Module 08 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Isochron and half isochron</h1>
     <p class="sub">A quadrant number says where in a loop a sample sits but nothing about how long the loop
       was. The isochron measures exactly that: the time from one extremum to the next, carrying a sign
@@ -38,7 +38,7 @@
         <canvas id="cMain" aria-label="The near-stack trace beside its signed isochron and half isochron zones"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -108,7 +108,7 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · The signed isochron</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · Splitting it in half</button>
@@ -198,7 +198,7 @@
     <div class="legend">
       <span>The half isochron depends on the position of a zero crossing, and a zero crossing is by
         definition a low-amplitude sample &mdash; the least stable pick on the trace, and the one a strong
-        reflection nearby will move first. Module 03 spent a step on choosing which sample a crossing lands
+        reflection nearby will move first. Module 02 spent a step on choosing which sample a crossing lands
         on; this is what that choice was for. Random noise at the signal's own frequency turns out to be a
         gentle test of that: on this model 40% noise moves the split by about three points. It is
         <em>interference</em> that moves it, which is what step 3 is about.</span>
@@ -233,7 +233,7 @@
       <span>The blocky sand splits evenly. The graded sands do not, and the shorter half sits at the
         cleaner end &mdash; at the top for a coarsening-upward sand and at the base for a fining-upward
         one. A sharper contrast makes a tighter, better-centered extremum, which pulls the crossing toward
-        it and shortens the half on that side. This is the observation Choudhry et al. (2026) build its facies
+        it and shortens the half on that side. This is the observation Choudhry et al. (2026) build their facies
         argument on: the sign separates sand from shale, and the asymmetry within the sand separates one
         kind of sand from another.</span>
     </div>
@@ -298,10 +298,10 @@
       first, which is the point.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
-      What the sign buys</h2>
+      What the sign adds</h2>
     <p class="lede">In the field examples of Choudhry et al. (2026), sand intervals carry a positive slope and
       the shales and silts around them carry a negative one. That is not a law of nature &mdash; it follows
-      from a soft reservoir under a harder overburden, which is the same convention module 04 enforces with
+      from a soft reservoir under a harder overburden, which is the same convention module 03 enforces with
       its polarity flip &mdash; but where it holds it means a single signed number separates the two
       lithologies before any amplitude is looked at. Moderate to high amplitude combined with a positive
       isochron slope is a sand prediction, and machine learning algorithms can use the distinction directly
@@ -366,7 +366,7 @@
             cleaner end has the sharper impedance contrast, which produces a tighter extremum sitting
             closer to the boundary, and that pulls the crossing toward it. So the asymmetry is a read on
             which end of the sand has the better rock &mdash; the same conclusion Choudhry et al. (2026) draw
-            from its Figure 2, and it comes out of the wavelet rather than out of any assumption about
+            from their Figure 2, and it comes out of the wavelet rather than out of any assumption about
             depositional environment.</span></details></li>
         <li><b>Try to move the crossing with noise.</b> On step 2, with a blocky 24 ms sand at 25 Hz,
           walk the noise from zero to 40% and watch the isochron and the split.
@@ -420,14 +420,14 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>The rocks and the near stack are built as in modules 01 through 04. The sand is divided into forty
+      <p>The rocks and the near stack are built as in modules 01 through 03. The sand is divided into forty
         sublayers so that a porosity profile can be imposed through it, and a reflection coefficient is
         computed at every sublayer boundary from the two rocks either side. The blocky profile holds
         porosity constant; the coarsening-upward and fining-upward profiles hold it constant over the
         cleaner half of the sand and then ramp it down toward a shale-like value across the other, which is
         a gradational contact. The tight streak is a tight sandstone bed near the base of an otherwise blocky
         sand.</p>
-      <p>The picks are made exactly as in module 03. The isochron is the time between consecutive extrema
+      <p>The picks are made exactly as in module 02. The isochron is the time between consecutive extrema
         and the half isochron is that interval cut at the zero-crossing sample between them, both written
         to every sample in their zone and both signed by the slope, positive from trough down to peak.
         This reproduces Figure 1 of Choudhry et al. (2026), including its property that the two halves sum
@@ -516,7 +516,7 @@
 
   /* =====================================================================
      THE ROCKS
-     Identical to modules 01 and 02.
+     Identical to module 01.
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };

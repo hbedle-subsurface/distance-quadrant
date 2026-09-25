@@ -38,7 +38,7 @@
         <canvas id="cMain" aria-label="The DQ distance and acoustic impedance plotted against porosity"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -99,7 +99,7 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · What porosity does to the rock</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · What it does to the DQ trace</button>
@@ -367,7 +367,7 @@
             &mdash; the correlation is low here not because the physics is noisy but because it is
             two-sided.</span></details></li>
         <li><b>Change the fluid.</b> Switch between brine, oil and gas under tight sandstone.
-          <details class="reveal"><summary>Answer</summary><span class="ans">The curve shifts but keeps its shape and its sign. Which means a single DQ value is ambiguous: a brine sand at high porosity and a gas sand at lower porosity can give the same number. Porosity and fluid both move the distance the same way here, and only the angle of module 07 tells them apart. Hydrocarbon lowers the sand's impedance, which under a tight sandstone seal
+          <details class="reveal"><summary>Answer</summary><span class="ans">The curve shifts but keeps its shape and its sign. Hydrocarbon lowers the sand's impedance, which under a tight sandstone seal
             increases the contrast and lifts the whole curve. So fluid and porosity both move the distance
             in the same direction here, and the distance alone cannot separate them. That is exactly what
             module 07's angle is for, and it is the clearest argument on the site for computing both
@@ -414,7 +414,7 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>Everything upstream is as in modules 02 through 10, unchanged: the same rocks, picks, quadrant
+      <p>Everything upstream is as in modules 02 through 07, unchanged: the same rocks, picks, quadrant
         numbers, phase filters, enhancement, distance, baseline rotation and sector split. The distance is
         read at the sample nearest the top of the sand, and the curve is built by rebuilding the whole
         workflow at each porosity from 10% to 36% in steps of two.</p>
@@ -500,7 +500,7 @@
 
   /* =====================================================================
      THE ROCKS
-     Identical to modules 01 and 02.
+     Identical to module 01.
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };

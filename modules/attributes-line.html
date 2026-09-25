@@ -39,7 +39,7 @@
         <canvas id="cMain" aria-label="A synthetic 2D line displayed as the selected attribute"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -103,7 +103,7 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · Structure on both displays</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · Angle and time thickness</button>
@@ -134,8 +134,7 @@
       the same reflections.</p>
 
     <canvas id="c1a" aria-label="The stack section and the DQ section for the same faulted, dipping line"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The dashed outline is the modeled sand, so you can
-      check what each display is doing against the geology that produced it.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The dashed outline is the modeled sand, so each display can be checked against the geology that produced it.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Traces on the line</span><b id="s1a">&mdash;</b></div>
@@ -147,8 +146,7 @@
     <div class="legend">
       <span>Watch the thin ends. Where the sand drops below about a quarter of a wavelength the two
         reflections merge, the outline no longer matches a distinct body on either display, and the
-        brightness there is tuning rather than rock. Module 11 measured that; here you can see what it does
-        to a section.</span>
+        brightness there is tuning rather than rock. Module 11 measured that; here the effect on a section is visible.</span>
     </div>
   </section>
 
@@ -289,7 +287,7 @@
         <li><b>Compare the thin ends with the middle.</b> On step 1, look at where the sand is thinnest.
           <details class="reveal"><summary>Answer</summary><span class="ans">The outline no longer matches a
             distinct body, and the DQ brightness there is tuning rather than rock quality. This is module
-            12's finding shown as a picture. A student who reads the thin end as poor rock and the middle
+            11's finding shown as a picture. A student who reads the thin end as poor rock and the middle
             as good rock happens to be right on this model, because porosity was built to rise with
             thickness &mdash; but they would have been right for the wrong reason, and on a model where the
             two were opposed they would have been wrong.</span></details></li>
@@ -354,7 +352,7 @@
         fault at trace 18 with a throw of 14 ms. The sand runs from 10 ms thick at both ends to 36 ms in
         the middle, and its porosity follows the same shape from 14% to 32%. Two thin background beds above
         and below give the section something other than the reservoir to look at. Everything upstream is as
-        in modules 02 through 13, applied independently to each trace.</p>
+        in modules 02 through 09, applied independently to each trace.</p>
       <p>The fluid contact, when switched on, is placed at a fixed 98 ms so that it cuts flat across the
         dip and the fault. The chosen fluid fills the sand above it and brine below. It is drawn only where
         it falls inside the sand, which is why it stops before the thin ends.</p>
@@ -433,7 +431,7 @@
 
   /* =====================================================================
      THE ROCKS
-     Identical to modules 01 and 02.
+     Identical to module 01.
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };

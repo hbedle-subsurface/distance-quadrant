@@ -38,7 +38,7 @@
         <canvas id="cMain" aria-label="The split crossplot with the sand-top sample drawn as a vector and its angle marked"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -99,7 +99,7 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · Folding the angle</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · Adding the sign</button>
@@ -315,7 +315,7 @@
       <h3>The main points</h3>
       <ul>
         <li><b>&theta;<sub>px</sub> is the direction of the same vector whose length is the DQ
-          distance</b>, measured after the rotation of module 06 and the split of module 06.</li>
+          distance</b>, measured after the rotation and sector split of module 06.</li>
         <li><b>The bearing is folded from 0&ndash;360&deg; into 0&ndash;90&deg;</b> by four sector rules,
           one per quarter of the crossplot.</li>
         <li><b>The sign comes from the DQ trace</b>, not from the angle, giving a range of &minus;90 to
@@ -338,7 +338,7 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>Everything upstream is as in modules 02 through 09: the same rocks and picks, the quadrant numbers
+      <p>Everything upstream is as in modules 02 through 06: the same rocks and picks, the quadrant numbers
         of module 03, the phase filters of module 04, A and B as the quadrant-enhanced near stack and
         enhanced far minus near, the baseline rotation of module 06, and the sector split of module 06
         applied to the rotated coordinates.</p>
@@ -424,7 +424,7 @@
 
   /* =====================================================================
      THE ROCKS
-     Identical to modules 01 and 02.
+     Identical to module 01.
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };

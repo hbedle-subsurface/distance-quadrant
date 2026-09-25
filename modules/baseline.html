@@ -38,7 +38,7 @@
         <canvas id="cMain" aria-label="An intercept against gradient crossplot showing the background trend and the selected sand"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -114,11 +114,11 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · Where the background sits</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · Two rotations</button>
-    <button role="tab" data-tab="p3" aria-selected="false">3 · What it buys</button>
+    <button role="tab" data-tab="p3" aria-selected="false">3 · What the rotation does</button>
     <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
     <span class="gap"></span>
     <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
@@ -143,7 +143,7 @@
       porosity range is the background: same rock, same fluid, varying only in how much of it there is.</p>
 
     <p class="lede">
-      <b>Which axes you use changes the answer.</b> The DQ workflow crossplots the near stack against far
+      <b>The choice of axes changes the answer.</b> The DQ workflow crossplots the near stack against far
       minus near, and module 01 established that far minus near is the gradient multiplied by 0.17. That
       compresses the vertical axis, so the same physical trend reads much flatter than it does in true
       intercept-gradient space. On the workflow's own axes the background comes out at about
@@ -223,7 +223,7 @@
 
   <section class="tabpane" id="p3" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
-      <h3><span class="stepno">3</span>What it buys</h3>
+      <h3><span class="stepno">3</span>What the rotation does</h3>
       <span class="hint">Departure from the background, not distance from nothing</span>
     </div>
 
@@ -286,7 +286,7 @@
         which is a luxury. On real data it comes from a wet zone, a well tie, or the densest part of the
         cloud, and every one of those is an assumption about which samples are background.</li>
       <li><b>One angle for a whole volume is optimistic.</b> The background trend changes with depth, with
-        compaction and with lithology. Module 06's sector splitting is partly a response to that.</li>
+        compaction and with lithology. The sector splitting in the second half of this module is partly a response to that.</li>
     </ul>
 
     <div class="legend prose">
@@ -392,7 +392,7 @@
       <p><b>Two sets of axes.</b> The DQ workflow crossplots the near stack against far minus near, which
         is what the published RDQ crossplots show. That is not intercept against gradient: far minus near
         is the gradient multiplied by 0.1701, so the vertical axis is compressed and the background trend
-        reads far flatter. This page computes both and lets you switch. The angles are &minus;15.7&deg;
+        reads far flatter. This page computes both, and the panel switches between them. The angles are &minus;15.7&deg;
         (a bearing of 344&deg;) on the workflow axes and &minus;58.4&deg; in true A and B, for the same
         rocks. The workflow figure is the one to rotate by, and it agrees with the field baselines the RDQ
         crossplots quote &mdash; 340&deg;, with rotation examples at 345&deg;, 333&deg; and 330&deg;.</p>
@@ -892,7 +892,7 @@
 
   const PANES = ['p1', 'p2', 'p3', 'pw', 'pe', 'pk', 'pm'];
   const STEPNAMES = {
-    p1: 'The background', p2: 'Two rotations', p3: 'What it buys',
+    p1: 'The background', p2: 'Two rotations', p3: 'What the rotation does',
     pw: 'Why it matters', pe: 'Exercises', pk: 'Key points', pm: 'Method',
   };
 

@@ -38,7 +38,7 @@
         <canvas id="cMain" aria-label="The four AVO class exemplars plotted on an intercept versus gradient crossplot"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -91,7 +91,7 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · Four corners of one plot</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · Through the workflow</button>
@@ -176,7 +176,7 @@
     </div>
 
     <p class="lede">
-      A section shows you where things are; a histogram tells you what the population looks like. The DQ
+      A section shows where things are; a histogram shows what the population looks like. The DQ
       papers pair the two, plotting the distribution of DQ values in an analysis window with the shale
       background, the wet sands and the gas sands marked as bands on the axis.</p>
 
@@ -299,7 +299,7 @@
           most samples are background.</li>
         <li><b>Separation ranks the same way in the histograms as in the sections</b>, largest where the
           intercept contrast is largest.</li>
-        <li><b>Thinning costs every class equally</b>, so a thin bright sand can read like a thick dull
+        <li><b>Thinning weakens every class alike</b>, so a thin bright sand can read like a thick dull
           one.</li>
       </ul>
     </div>
@@ -314,7 +314,7 @@
         soft shale over a 28% gas sand; <b>class 4</b> a tight sandstone over a 26% gas sand. The class
         label shown on step 1 is computed from the signs of the modeled intercept and gradient rather than
         asserted, so if the rock model is ever retuned the labels follow it.</p>
-      <p>Everything downstream is as in modules 02 through 13, applied identically to all four. The one
+      <p>Everything downstream is as in modules 02 through 09, applied identically to all four. The one
         difference is the polarity flip of module 03, applied where the intercept is positive.</p>
       <p>The histograms are of DQ distance over the whole analysis window, binned uniformly, with the
         samples falling inside the modeled sand marked separately. The logarithmic count axis follows the
@@ -393,7 +393,7 @@
 
   /* =====================================================================
      THE ROCKS
-     Identical to modules 01 and 02.
+     Identical to module 01.
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };

@@ -38,7 +38,7 @@
         <canvas id="cMain" aria-label="The rotated crossplot before and after the sector split"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -99,7 +99,7 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · Where each number sits</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · The flip</button>
@@ -321,7 +321,7 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>Everything upstream is as in modules 02, 04, 06 and 07: the same rocks, the same picks, the same
+      <p>Everything upstream is as in modules 02, 03, 04 and 05: the same rocks, the same picks, the same
         quadrant numbers, the same phase filters, and A and B taken as the quadrant-enhanced near stack and
         the enhanced far minus near. The baseline rotation is module 06's, applied as a rotation of the
         polar angle (Bedle et al., 2025b, eq. 3) using this model's fitted baseline.</p>
@@ -400,7 +400,7 @@
 
   /* =====================================================================
      THE ROCKS
-     Identical to modules 01 and 02.
+     Identical to module 01.
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };

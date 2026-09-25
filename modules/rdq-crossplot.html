@@ -38,7 +38,7 @@
         <canvas id="cMain" aria-label="The RDQ crossplot front wall with points colored by signed half isochron"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -101,7 +101,7 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · The third axis</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · Three views of one plot</button>
@@ -121,8 +121,8 @@
 
     <p class="lede">
       Module 08 built the signed half isochron and then set it aside. Here is where it is used: the RDQ
-      crossplot carries it as the <b>z axis</b>, alongside the amplitude and gradient that modules 06
-      and 09 rotated and split.</p>
+      crossplot carries it as the <b>z axis</b>, alongside the amplitude and gradient that module 06
+      rotated and split.</p>
 
     <p class="lede">
       It is worth being precise about what it measures. The half isochron is the time from a sample to
@@ -179,7 +179,7 @@
 
     <canvas id="c2a" aria-label="The crossplot unfolded into front, top and side views"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The same samples three ways. Color is the quadrant
-      number, so you can follow where each point sits in its loop across all three panels.</p>
+      number, so each point can be followed through its loop across all three panels.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Samples plotted</span><b id="s2a">&mdash;</b></div>
@@ -239,8 +239,8 @@
       <span class="hint">And why this one is built differently</span>
     </div>
 
-    <p class="lede">A seismic section shows you where things are and a crossplot shows you what they are.
-      Neither replaces the other, and the DQ workflow uses both: the sections of modules 05 and 10 to
+    <p class="lede">A seismic section shows where things are; a crossplot shows what they are.
+      Neither replaces the other, and the DQ workflow uses both: the sections of modules 05 and 07 to
       locate an anomaly, and this plot to characterise it.</p>
 
     <p class="lede">What makes this crossplot unusual is that it is built to be worked in polar
@@ -283,7 +283,7 @@
           <details class="reveal"><summary>Answer</summary><span class="ans">The count falls and the median
             distance shifts, because you are progressively excluding the samples nearest the zero
             crossings, which module 06 showed sit closest to the origin. Delimiting chooses which part of the waveform to look at rather than filtering out noise, and the statistics readout tells
-            you what that choice cost you in sample count.</span></details></li>
+            how many samples that choice removed.</span></details></li>
         <li><b>Change the reservoir and watch the cluster move.</b> On step 3, switch the fluid from brine
           to gas.
           <details class="reveal"><summary>Answer</summary><span class="ans">The sand samples move as a group
@@ -306,7 +306,7 @@
       <h3>The main points</h3>
       <ul>
         <li><b>The RDQ crossplot has three axes:</b> amplitude, gradient and the signed half isochron,
-          after the rotation of module 06 and the split of module 06.</li>
+          after the rotation and the sector split of module 06.</li>
         <li><b>The half isochron describes the waveform, not the bed.</b> It is the length and direction of
           the half loop a sample sits in, and once a bed is resolved that loop belongs to the
           wavelet.</li>
@@ -327,7 +327,7 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>Everything upstream is as in modules 02 through 12. The axes follow the RDQ calculation notes
+      <p>Everything upstream is as in modules 02 through 08. The axes follow the RDQ calculation notes
         (Neff and Neff, unpublished): for the RDQ crossplot, x is the rotated and split near-quadrant amplitude, y is the
         rotated and split far-minus-near quadrant gradient, and z is the signed half isochron in
         milliseconds. The notes give a starting shale baseline of 330&deg; for the RDQ crossplot
@@ -417,7 +417,7 @@
 
   /* =====================================================================
      THE ROCKS
-     Identical to modules 01 and 02.
+     Identical to module 01.
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };

@@ -36,7 +36,7 @@
         <canvas id="cMain" aria-label="A seismic section with the sand thickening across it"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -97,7 +97,7 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · The seismic convention</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · The DQ convention</button>
@@ -178,7 +178,7 @@
     </div>
     <div class="legend">
       <span>The sand now reads as a single colored body rather than as two bands with a gap. That is the
-        practical payoff of everything modules 02 to 07 did: the picking, the numbering and the phase
+        practical payoff of everything modules 02 to 05 did: the picking, the numbering and the phase
         filters exist to make each loop carry one value, and a one-sided color bar is how you display
         something that is one value per loop rather than an oscillation.</span>
     </div>
@@ -288,7 +288,7 @@
             top and which the base. On the DQ section it is one body. Nothing has been added &mdash; the
             DQ trace is computed from the same two partial stacks &mdash; but the display is showing one
             value per loop instead of an oscillation, which is what the picking and numbering of modules 02
-            and 04 were for.</span></details></li>
+            and 03 were for.</span></details></li>
         <li><b>Count the increments.</b> On step 2, read how the color bar is divided.
           <details class="reveal"><summary>Answer</summary><span class="ans">The full set above zero and
             only two below. That is the published specification, and the reasoning is that on a soft-sand
@@ -357,7 +357,7 @@
   <section class="tabpane" id="pm" role="tabpanel" hidden>
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
-      <p>The section is built by running the whole workflow of modules 02 through 10 at each of twenty-one
+      <p>The section is built by running the whole workflow of modules 02 through 07 at each of twenty-one
         trace positions, with the sand thickening linearly across the line from about a third of the
         setting in the panel to about twice it. Everything else is held constant, so the only thing varying
         along the line is bed thickness.</p>
@@ -441,7 +441,7 @@
 
   /* =====================================================================
      THE ROCKS
-     Identical to modules 01 and 02.
+     Identical to module 01.
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };

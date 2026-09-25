@@ -38,7 +38,7 @@
         <canvas id="cMain" aria-label="The quadrant-enhanced near and far traces beside the DQ distance built from them"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -103,7 +103,7 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · Pythagoras on two traces</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · Putting the sign back</button>
@@ -184,7 +184,7 @@
     <p class="lede">
       This is the same slope polarity the signed isochron of module 08 uses, and deliberately so. Two
       attributes that disagree about which way is up would be no use plotted against each other, and module
-      12 plots them against each other.</p>
+      09 plots them against each other.</p>
 
     <canvas id="c2a" aria-label="The unsigned distance beside the signed one, with the near stack for reference"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The near stack, the unsigned distance, and the signed
@@ -449,7 +449,7 @@
             why module 08 gives its isochron the same one.</span></details></li>
         <li><b>Measure how blocked the trace is.</b> On step 3, compare the three variation figures.
           <details class="reveal"><summary>Answer</summary><span class="ans">The near stack scores worst by
-            far &mdash; 0.63 &mdash; because within a loop it runs from an extremum through zero to the next extremum. Before reading a bright DQ body as good rock, note how many things could have produced it: a larger impedance contrast, a change of pore fluid, or simply a bed at tuning thickness. The distance alone cannot separate them, and modules 10 and 12 measure how much each contributes. The envelope scores 0.26 and the distance 0.24, so both are blocked and close to
+            far &mdash; 0.63 &mdash; because within a loop it runs from an extremum through zero to the next extremum. Before reading a bright DQ body as good rock, note how many things could have produced it: a larger impedance contrast, a change of pore fluid, or simply a bed at tuning thickness. The distance alone cannot separate them, and modules 07 and 11 measure how much each contributes. The envelope scores 0.26 and the distance 0.24, so both are blocked and close to
             each other. Worth being clear what that does and does not tell you: blockiness is a property of
             how each sample was read, not of what it was read from, and both were read at the phase that
             centers them. The difference between the two lives in the far stack and in the angle, not
@@ -496,7 +496,7 @@
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
       <p>The rocks, the layer stack, the picker, the quadrant numbering and the phase filters are all as in
-        modules 02, 04 and 06. The far stack is formed the same way as the near one, using the mean of
+        modules 02, 03 and 04. The far stack is formed the same way as the near one, using the mean of
         sin&sup2;&theta; over 20&ndash;30&deg; rather than 0&ndash;10&deg;, so that A and B here mean what
         they meant in module 01. Both stacks are enhanced with the quadrant numbers picked from the near
         stack, and neither is repicked.</p>
@@ -578,7 +578,7 @@
 
   /* =====================================================================
      THE ROCKS
-     Identical to modules 01 and 02.
+     Identical to module 01.
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };
@@ -1302,7 +1302,7 @@
      The RDQ crossplot: the enhanced pair as a point, the distance as its
      radius, and the polar angle as its bearing. Theta-px folds that bearing
      into 0-90 by quarter and takes the sign of DQ; the real sequence rotates
-     the baseline and splits sectors first, which is modules 06 and 10.
+     the baseline and splits sectors first, which is modules 06 and 07.
      --------------------------------------------------------------------- */
 
   const BASELINE_SLOPE = -0.28;            // the background of module 06, on these axes

@@ -38,7 +38,7 @@
         <canvas id="cMain" aria-label="The near stack at eight phase rotations, beside the quadrant-enhanced trace built from them"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as you drag</span>
+        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -79,8 +79,7 @@
               <label for="phase">Filter to highlight <span class="val" id="phaseV">0&deg;</span></label>
               <input type="range" id="phase" min="0" max="7" step="1" value="0">
             </div>
-            <p class="hint-line" style="margin:-8px 0 0">Step 1 draws all eight and picks out the one you
-              choose here.</p>
+            <p class="hint-line" style="margin:-8px 0 0">Step 1 draws all eight and picks out the one selected here.</p>
           </div>
 
           <div class="ctl-col" id="colData">
@@ -106,7 +105,7 @@
   </div>
 
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
-    Method and references are there when you want them.</p>
+    Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
     <button role="tab" data-tab="p1" aria-selected="false">1 · Eight copies of one trace</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · Reading one sample from each</button>
@@ -122,7 +121,7 @@
   <section class="tabpane" id="p1" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
       <h3><span class="stepno">1</span>Eight copies of one trace</h3>
-      <span class="hint">What a phase rotation is, and what it is not</span>
+      <span class="hint">What a phase rotation does to a trace</span>
     </div>
 
     <p class="lede">
@@ -139,7 +138,7 @@
       because Q1 and Q9 both take the unrotated trace.</p>
 
     <p class="lede">
-      What this step buys: a version of the trace in which every numbered sample has been shifted so that
+      What this step produces: a version of the trace in which every numbered sample has been shifted so that
       it sits where an extremum would, which is what lets the two-layer reading of module 01 be applied at
       samples that were not extrema to begin with.</p>
 
@@ -168,8 +167,7 @@
     <p class="sublabel"><b>2</b> The whole bank
       <span class="note">the same trace at all eight phases</span></p>
     <canvas id="c1a" aria-label="The near stack drawn eight times, once at each phase rotation"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The same trace at all eight phases, with the one you
-      selected in the panel drawn heavier. Watch a single event: the peak walks sideways and changes shape,
+    <p class="hint-line" style="margin:8px 0 18px">The same trace at all eight phases, with the one selected in the panel drawn heavier. Watch a single event: the peak walks sideways and changes shape,
       but the loop it belongs to stays where it is.</p>
 
     <div class="stats" style="margin-top:16px">
@@ -195,8 +193,8 @@
 
     <p class="lede">
       Now put the two halves together. Each sample carries a quadrant number from module 03, and each
-      number names a phase. Q1 and Q9 take 0&deg;, Q2 through Q4 take 22.5&deg;, 45&deg; and 67.5&deg;, Q5
-      takes 90&deg;, and Q6 through Q8 take 67.5&deg;, 45&deg; and 22.5&deg; again on the way back. Read
+      number names a phase. Q1 and Q9 take 0&deg;, Q2 through Q4 take +22.5&deg;, +45&deg; and +67.5&deg;, Q5
+      takes &minus;90&deg;, and Q6 through Q8 take &minus;67.5&deg;, &minus;45&deg; and &minus;22.5&deg; on the way back. Read
       each sample from the filter its own number names, and write the result to a new trace. That trace is
       <b>QN</b>. Do the same to the far stack, using the numbers picked from the near stack and not
       repicking, and you get <b>QF</b>.</p>
@@ -220,7 +218,7 @@
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>Notice that QN is no longer a seismic trace in the ordinary sense. Neighbouring samples come
+      <span>Notice that QN is no longer a seismic trace in the ordinary sense. Neighboring samples come
         from different filters, so it is not the convolution of anything with a single wavelet, and its
         wiggle no longer has a wavelet's shape. It is a trace of amplitudes read at consistent phase
         positions, which is a different kind of object and is exactly what the DQ distance needs.</span>
@@ -324,7 +322,7 @@
     <p class="lede">Deconvolution estimates a wavelet and tries to remove it, which means estimating
       something that was never recorded and can be wrong. Phase rotation estimates nothing. It is a fixed
       linear filter with a known, exact response, applied seven times. If the input is relative-amplitude
-      preserved then so is every output, and the whole step is reversible. The cost is that the wavelet is
+      preserved then so is every output, and the whole step is reversible. What changes is that the wavelet is
       still there afterwards &mdash; the method does not sharpen anything &mdash; and the benefit is that
       nothing can be introduced that was not in the data.</p>
 
@@ -436,7 +434,7 @@
     <details class="notes" id="notes" open>
       <summary>Method, assumptions, and where to read more</summary>
       <p>The rocks, the layer stack, the near stack, the picker and the quadrant numbering are all
-        identical to modules 02 and 04, so a model built there carries over unchanged.</p>
+        identical to modules 02 and 03, so a model built there carries over unchanged.</p>
       <p>A phase rotation is applied in the trace domain as
         x&nbsp;cos&thinsp;&theta;&nbsp;+&nbsp;H(x)&nbsp;sin&thinsp;&theta;, with H the Hilbert transform
         computed through the analytic signal. Doing it on the trace rather than on the wavelet means the
@@ -521,7 +519,7 @@
 
   /* =====================================================================
      THE ROCKS
-     Identical to modules 01 and 02.
+     Identical to module 01.
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };
@@ -897,7 +895,7 @@
      after every extremum, so the phase keeps advancing down the trace and the tabulated
      filter is always the right one. The switch in the panel mirrors the
      numbering on falling limbs instead, which is what an earlier draft of this
-     course did, so that step 3 can measure what it costs. */
+     course did, so that step 3 can measure the difference. */
   function enhance(tr, qd, pk, mirrored) {
     const nt = tr.length;
     const sign = limbSigns(tr, pk, nt);
