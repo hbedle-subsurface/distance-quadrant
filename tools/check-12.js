@@ -54,6 +54,12 @@ const softAng=num($('s3c').textContent);
 if(!(softAng>tAng)) fail.push('under soft shale the angle moves '+softAng+', expected more than '+tAng);
 hit('[data-over="tight"]');
 
+console.log('\n--- the module opens on the case that works ---');
+console.log('   default seal:', $('overV') ? $('overV').textContent : '(no readout)');
+if (!/tight/.test(($('overV')||{textContent:''}).textContent)) {
+  fail.push('module 11 no longer opens on the tight seal, where the angle is stable');
+}
+
 console.log('\n=======================================');
 if(fail.length){fail.forEach(f=>console.log('  -',f));process.exit(1);}
 console.log('every quoted number checks out');

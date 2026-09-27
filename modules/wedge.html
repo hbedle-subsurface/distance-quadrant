@@ -120,7 +120,7 @@
     <p class="lede">
       Thin a bed and its top and base reflections move together until they overlap. Where they overlap
       constructively the amplitude is larger than either reflection alone; thin further and they begin to
-      cancel. The peak sits near a quarter of the wavelet period, and everything below it is the tuning
+      cancel. The peak sits a little below the classical quarter-wavelength thickness, and everything below it is the tuning
       regime, where amplitude reports thickness as much as it reports rock.</p>
 
     <p class="lede">
@@ -203,9 +203,11 @@
 
     <p class="lede">
       How much the angle has to say about fluid depends on the seal, and module 07 measured that. Under
-      this tight sandstone the three fluids sit only about three degrees apart &mdash; a real separation,
-      and a small one. Under a soft shale they spread much further, but there the reflection is weak and
-      the angle is unstable, which the panel below will show if we switch. The thickness immunity holds generally; how much the angle says about fluid depends on where we are on the line.</p>
+      this tight sandstone the readout below puts brine and gas about two degrees apart, a real separation
+      and a small one, while thickness moves the angle by less than one degree across the whole wedge.
+      Under a soft shale the fluids spread much further, but there the reflection is weak and the angle is
+      unstable, which the panel shows if we switch. The thickness immunity holds generally, and how much
+      the angle says about fluid depends on the seal.</p>
 
     <canvas id="c3a" aria-label="Distance and Theta PX against thickness for the three fluids"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The wedge run for all three fluids. In the angle panel
@@ -220,7 +222,8 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>Switch the overburden to soft shale and watch the division collapse. There the sand and the
+      <span>The panel opens on the tight sandstone seal, where the division of labour works. Switch the
+        overburden to soft shale and it collapses. There the sand and the
         seal are close in impedance, the distance falls to a few hundredths, and the angle starts swinging
         wildly because a short vector has no reliable direction. The separation of thickness from rock is
         real, and it holds only where there is a reflection to measure.</span>
@@ -429,8 +432,12 @@
   const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
   const BEDC = [0.118, 0.130];                   // a tight bed below it
 
+  /* The tight seal is the default here: it is the case where the division of
+     labour the module teaches actually works. The soft shale, where a weak
+     reflection leaves the angle undetermined, comes later in step 2 as the
+     failure case. */
   const DEF = {
-    over: 'soft', phi: 28, fluid: 'gas',
+    over: 'tight', phi: 28, fluid: 'gas',
     thick: 20, freq: 40, dt: 0, noise: 0, showall: true, tab: 'p1',
   };
   let S = SEIS.readState(DEF);
@@ -725,7 +732,7 @@
     const t = shuey(over, sand);
     const s2f = meanSin2(20, 30);
     const far = t.A + t.B * s2f;
-    if (t.A > 0.03) return (t.A * far < 0) ? 'class 2p' : 'class 1';
+    if (t.A > 0.03) return 'class 1';
     if (t.A > -0.03) return (t.A * far < 0) ? 'class 2p' : 'class 2';
     return t.B < 0 ? 'class 3' : 'class 4';
   }
@@ -1179,12 +1186,16 @@
     const rect = { x: 68, y: 28, w: W - 98, h: H - 72 };
     const A = plotVsThickness(ctx, rect, [{ vals: w.map((q) => ({ t: q.t, v: q.d })), col: CRIM }],
       lo, hi, 'DQ', (v) => v.toFixed(2), S.thick);
-    // a quarter of the wavelet period, the classical tuning thickness
-    const qt = 250 / S.freq;
+    /* The classical tuning thickness is a quarter of a wavelength of bed. A bed
+       of thickness lambda/4 has a two-way time thickness of half the wavelet
+       period, whatever the velocity, so the marker goes at 500/f ms. For a
+       Ricker the composite peak comes in a little earlier than that, near
+       1/(2.6 f) (Kallweit and Wood, 1982). */
+    const qt = 500 / S.freq;
     if (qt >= TH_LO && qt <= TH_HI) {
       SEIS.dashedLine(ctx, A.X(qt), rect.y, A.X(qt), rect.y + rect.h,
         'rgba(22,25,28,0.4)', [5, 4], 1.2);
-      SEIS.tag(ctx, A.X(qt) + 6, rect.y + 10, 'quarter period', 'rgba(22,25,28,0.55)');
+      SEIS.tag(ctx, A.X(qt) + 6, rect.y + 10, 'quarter wavelength', 'rgba(22,25,28,0.55)');
     }
 
     let peak = w[0], resolved = w[w.length - 1];
@@ -1196,8 +1207,10 @@
     $('s1c').textContent = resolved.d.toFixed(4);
     $('s1d').textContent = (100 * rel).toFixed(0) + '% of the maximum';
     $('s1e').textContent = 'The curve peaks at ' + peak.t + ' ms and settles to '
-      + resolved.d.toFixed(3) + ' once the bed is thick enough to resolve. A quarter of the wavelet '
-      + 'period is ' + qt.toFixed(1) + ' ms; change the frequency and the peak follows it.';
+      + resolved.d.toFixed(3) + ' once the bed is thick enough to resolve. A quarter-'
+      + 'wavelength bed has a two-way time thickness of ' + qt.toFixed(1)
+      + ' ms at this frequency, and for a Ricker the composite peak comes in a little earlier. '
+      + 'Change the frequency and the peak follows it.';
   }
 
   /* ------------------------------- step 2 ------------------------------ */
@@ -1339,6 +1352,8 @@
     S = Object.assign({}, DEF, { tab });
     onChange();
   });
+
+  window.__DQW = { get S() { return S; }, build, sandWindow, TTOP };
 
   /* -------------------------------- tabs ------------------------------- */
 

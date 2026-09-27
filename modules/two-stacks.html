@@ -557,7 +557,7 @@
   function avoClass(A, B, s2f) {
     const far = A + B * s2f;
     const flips = (A * far < 0);
-    if (A > 0.03) return flips ? 'class 2p' : 'class 1';
+    if (A > 0.03) return 'class 1';
     if (A > -0.03) return flips ? 'class 2p' : 'class 2';
     return B < 0 ? 'class 3' : 'class 4';
   }

@@ -710,7 +710,7 @@
     const t = shuey(over, sand);
     const s2f = meanSin2(20, 30);
     const far = t.A + t.B * s2f;
-    if (t.A > 0.03) return (t.A * far < 0) ? 'class 2p' : 'class 1';
+    if (t.A > 0.03) return 'class 1';
     if (t.A > -0.03) return (t.A * far < 0) ? 'class 2p' : 'class 2';
     return t.B < 0 ? 'class 3' : 'class 4';
   }
@@ -1031,9 +1031,14 @@
     { key: 'c3', name: 'class 3', over: 'soft',  fluid: 'gas',   phi: 36, col: '#C2306B' },
     { key: 'c4', name: 'class 4', over: 'tight', fluid: 'gas',   phi: 26, col: '#4E7A2C' },
   ];
+  /* The same rule the panel uses: class 2p is the near-zero-intercept case
+     whose polarity reverses between the near and the far window (Ross and
+     Kinman, 1995), and a class 1 sand that reverses at far offsets is still
+     class 1. */
   const classOf = (A, B) => {
-    if (A > 0.02) return B < 0 ? 'class 1' : 'class 4 (hard)';
-    if (A > -0.02) return B < 0 ? 'class 2' : 'class 2p';
+    const far = A + B * meanSin2(20, 30);
+    if (A > 0.03) return 'class 1';
+    if (A > -0.03) return (A * far < 0) ? 'class 2p' : 'class 2';
     return B < 0 ? 'class 3' : 'class 4';
   };
 
