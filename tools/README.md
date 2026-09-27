@@ -52,6 +52,26 @@ wavelet constant in module 05.
 Run them after any change to a module's physics, its defaults, or its prose
 numbers. A clean run ends with `every quoted number checks out`.
 
+## The landing page
+
+```
+node tools/check-index.js
+```
+
+The harness reads only `modules/`, so the landing page has its own check. It
+loads `index.html` with the hero figure, checks the module numbering, the
+"fifteen modules in four parts" line and every internal link, moves the
+frequency slider, and recomputes what the figure and its caption claim: the
+cycle length in samples, that the DQ is colored at every sample from the first
+pick to the last and nowhere else, and that at each pick the DQ equals
+sqrt(N^2 + (F - N)^2) from the raw stacks. It also prints, without failing, any
+place where two picks of the same sign fall in a row (a zero crossing skipped
+because both samples beside it are under the 1% floor).
+
+The hero figure in `assets/index-hero.js` runs module 00's workflow, ported
+line for line. If module 00's picker, numbering, filters or sign rule change,
+change them there too.
+
 ## Adding a module
 
 Copy the nearest existing checker, point it at the new file, and assert the
