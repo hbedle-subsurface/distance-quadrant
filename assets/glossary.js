@@ -19,8 +19,8 @@ window.DQ_GLOSSARY = {
     more: 'Built in modules 02 to 05.',
   },
   'dq-distance': {
-    match: ['DQ distance', 'distance value'],
-    term: 'DQ distance',
+    match: ['DQ', 'distance value'],
+    term: 'DQ',
     def: 'The length of the vector whose components are the quadrant-enhanced near stack and the ' +
       'quadrant-enhanced gradient: \u221a(2QN\u00b2 + QF\u00b2 \u2212 2QN\u00b7QF). It is a length, ' +
       'so the sign of the local waveform slope is attached afterwards.',
@@ -48,6 +48,21 @@ window.DQ_GLOSSARY = {
     def: 'Mixing a trace with its Hilbert transform, x cos \u03b8 + H(x) sin \u03b8, which moves the ' +
       'waveform through phase without changing its amplitude spectrum. The DQ workflow uses seven of ' +
       'them, at \u00b122.5, \u00b145, \u00b167.5 and \u221290 degrees.',
+  },
+  'near-optimized': {
+    match: ['near optimized', 'Near Optimized'],
+    term: 'Near optimized',
+    def: 'The quadrant-enhanced near stack, QN: every sample of the near stack read from the phase ' +
+      'rotation its quadrant number names. Displayed in its own right when crossplot clusters are ' +
+      'being defined (Neff and Neff, unpublished).',
+    more: 'Module 04.',
+  },
+  'far-near-optimized': {
+    match: ['far-near optimized', 'Far-Near Optimized'],
+    term: 'Far-near optimized',
+    def: 'The quadrant-enhanced gradient, QF \u2212 QN. With the near optimized section and the half ' +
+      'isochron it makes the three axes of the published cluster crossplot.',
+    more: 'Modules 04 and 09.',
   },
   'rdq': {
     match: ['RDQ crossplot', 'RDQ'],
@@ -77,7 +92,7 @@ window.DQ_GLOSSARY = {
     match: ['Theta PX', 'polar angle'],
     term: 'Theta PX (\u03b8px)',
     def: 'The angle of a sample on the rotated crossplot, folded into 0 to 90 degrees by a ' +
-      'sector-specific rule and given the sign of the DQ distance. It responds mainly to the change in ' +
+      'sector-specific rule and given the sign of the DQ. It responds mainly to the change in ' +
       'V<sub>P</sub>/V<sub>S</sub> across a boundary, so it separates fluids and lithologies.',
     more: 'Module 07.',
   },

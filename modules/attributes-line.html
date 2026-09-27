@@ -69,7 +69,7 @@
           <div class="ctl-col" id="colLayers">
             <h2>The display</h2>
             <div class="ctl">
-              <label>Shown above <span class="val" id="thickV">DQ distance</span></label>
+              <label>Shown above <span class="val" id="thickV">DQ</span></label>
               <div class="seg seg-wrap" role="group" aria-label="Which attribute to display">
                 <button type="button" data-view="seis" aria-pressed="false">stack</button>
                 <button type="button" data-view="dq" aria-pressed="true">DQ</button>
@@ -77,6 +77,8 @@
                 <button type="button" data-view="iso" aria-pressed="false">½ iso</button>
                 <button type="button" data-view="avg" aria-pressed="false">DQ avg</button>
                 <button type="button" data-view="sum" aria-pressed="false">DQ sum</button>
+                <button type="button" data-view="nopt" aria-pressed="false">near opt</button>
+                <button type="button" data-view="fnopt" aria-pressed="false">far-near opt</button>
               </div>
             </div>
             <div class="ctl">
@@ -146,7 +148,7 @@
     <div class="legend">
       <span>Watch the thin ends. Where the sand drops below about a quarter of a wavelength the two
         reflections merge, the outline no longer matches a distinct body on either display, and the
-        brightness there is tuning rather than rock. Module 11 measured that; here the effect on a section is visible.</span>
+        brightness there is tuning and not rock. Module 11 measured that; here the effect on a section is visible.</span>
     </div>
   </section>
 
@@ -158,7 +160,7 @@
 
     <p class="lede">
       &theta;<sub>px</sub> maps where each cluster of rock sits on the crossplot, so on a section it
-      separates the sand from the background by kind rather than by strength. The half isochron measures
+      separates the sand from the background by kind and not by strength. The half isochron measures
       how long each half loop lasts, so it responds to bed thickness and to whether a layer is internally
       uniform.</p>
 
@@ -180,8 +182,8 @@
     </div>
     <div class="legend">
       <span>A boundary that stays flat while the beds around it dip is the classic argument for a fluid
-        contact rather than a lithology change, because rock boundaries follow structure and fluid
-        boundaries follow gravity. That reasoning is independent of which attribute you are looking at; the
+        contact and not a lithology change, because rock boundaries follow structure and fluid
+        boundaries follow gravity. That reasoning is independent of which attribute we are looking at; the
         attribute only decides how visible it is.</span>
     </div>
   </section>
@@ -202,7 +204,7 @@
       They answer different questions. <b>DQ Average</b> describes the quality of the rock in the layer,
       because averaging removes how many samples there happen to be. <b>DQ Sum</b> keeps that count, so it
       grows with both quality and thickness. Neither escapes tuning: both are built from DQ values, and
-      where a bed is thin enough to tune, those values are amplified before either is computed. In the AASPI DQ attributes pamphlet these become average and total
+      where a bed is thin enough to tune, those values are amplified before either is computed. In the DQ attributes pamphlet these become average and total
       relative porosity for a layer, and after a well tie, average and total hydrocarbon pore volume. The
       pamphlet suggests targeting horizontal wells at zones where both the average and the sum are high.</p>
 
@@ -219,7 +221,7 @@
     </div>
     <div class="legend">
       <span>Both curves peak toward the right-hand end, where the sand is <em>thinnest</em> and its
-        porosity is lowest. That is not a fault in the attributes and it is worth understanding: at 10 ms
+        porosity is lowest. That is not a fault in the attributes: at 10 ms
         those beds sit at the tuning maximum module 11 measured, so their reflections are amplified by
         interference. An interpreter reading either section for rock quality would pick the worst part of
         the reservoir. The defence is the half isochron on step 2, which shows the loop shortening there
@@ -233,7 +235,7 @@
       <span class="hint">A short catalog</span>
     </div>
 
-    <p class="lede">This is the point of the course, so it is worth setting the attributes out together
+    <p class="lede">This is the point of the course, so the attributes are set out together
       with what each measures and where in the workflow it appears.</p>
 
     <div class="legend prose" style="margin-bottom:14px">
@@ -252,12 +254,13 @@
         from internally variable layers, and flags tuned zones.</span>
     </div>
     <div class="legend prose" style="margin-bottom:14px">
-      <span><b>Near Optimized and Far-Near Optimized</b> (module 04) &mdash; the quadrant-enhanced near
-        stack and gradient. These are the two traces everything downstream is built from, and they are
-        displayed in their own right when clusters are being defined.</span>
+      <span><b>Near optimized and far-near optimized</b> (module 04) &mdash; the quadrant-enhanced near
+        stack, QN, and the quadrant-enhanced gradient, QF &minus; QN. Everything downstream is built from
+        these two, and with the half isochron as a third axis they are the three cubes the published
+        cluster crossplot uses (Neff and Neff, unpublished). Both can be displayed from the panel.</span>
     </div>
     <div class="legend prose" style="margin-bottom:14px">
-      <span><b>DQ distance</b> (module 05) &mdash; the distance from the crossplot origin to the sample.
+      <span><b>DQ</b> (module 05) &mdash; the distance from the crossplot origin to the sample.
         Before an inversion it is a relative porosity curve; after one, a quantitative prediction of
         porosity or hydrocarbon pore volume.</span>
     </div>
@@ -286,7 +289,7 @@
             adds structural information that was not already in the stack.</span></details></li>
         <li><b>Compare the thin ends with the middle.</b> On step 1, look at where the sand is thinnest.
           <details class="reveal"><summary>Answer</summary><span class="ans">The outline no longer matches a
-            distinct body, and the DQ brightness there is tuning rather than rock quality. This is module
+            distinct body, and the DQ brightness there is tuning and not rock quality. This is module
             11's finding shown as a picture. A student who reads the thin end as poor rock and the middle
             as good rock happens to be right on this model, because porosity was built to rise with
             thickness &mdash; but they would have been right for the wrong reason, and on a model where the
@@ -294,12 +297,12 @@
         <li><b>Turn on the fluid contact.</b> Then look at step 2.
           <details class="reveal"><summary>Answer</summary><span class="ans">A boundary appears that stays at
             one time while the beds around it dip and step across the fault. That flatness is the argument
-            for a fluid contact rather than a lithology change: rock boundaries follow structure, fluid
+            for a fluid contact and not a lithology change: rock boundaries follow structure, fluid
             boundaries follow gravity. Note also where it stops &mdash; it can only show where the sand is
             present and thick enough to contain it.</span></details></li>
         <li><b>Compare DQ average with DQ sum.</b> On step 3, read where each peaks.
           <details class="reveal"><summary>Answer</summary><span class="ans">Both peak near the thin
-            right-hand end rather than in the thick, porous middle, because a 10 ms bed at 40 Hz is close
+            right-hand end and not in the thick, porous middle, because a 10 ms bed at 40 Hz is close
             to the tuning maximum and its reflections are amplified. The lesson is the one module 11 makes
             numerically, seen here as a picture: a layer attribute inherits every problem the samples it
             is built from already had. Raise the wavelet frequency to 70 Hz, so the thin end is resolved,
@@ -318,7 +321,7 @@
           <details class="reveal"><summary>Answer</summary><span class="ans">The angle and half isochron
             sections degrade first, because both depend on the picks being in the right places and noise
             moves picks. The DQ section holds up longer because it is an amplitude. When displays that
-            should agree start disagreeing, suspect the picking rather than the rock.</span></details></li>
+            should agree start disagreeing, suspect the picking and not the rock.</span></details></li>
       </ol>
     </div>
   </section>
@@ -366,13 +369,13 @@
         for showing how the attributes behave when geology varies along a line, not a simulation of a
         seismic experiment.</p>
       <ul>
-        <li>Neff, D. B., and W. Neff, AASPI DQ attributes pamphlet, unpublished.</li>
+        <li>Neff, D. B., and W. Neff, DQ attributes pamphlet, unpublished.</li>
         <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
         <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025b, Prediction of reservoir properties
           using the RDQ crossplot workflow: <em>Interpretation</em>, doi: 10.1190/INT-2024-0096.1.</li>
         <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025c, Prediction of reservoir properties
-          using the DQ trace attribute and RDQ inversion workflow: <em>Interpretation</em>,
+          using the DQ trace and RDQ inversion workflow: <em>Interpretation</em>,
           doi: 10.1190/INT-2024-0113.1.</li>
       </ul>
     </details>
@@ -529,8 +532,8 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth rather than a
-     lone sand, so that the trace looks like something worth picking: a
+  /* The near-stack reflectivity of one trace. A layered earth and not a
+     lone sand, so that the trace looks like something a picker would find: a
      contrasting bed above, the sand with an optional tight streak inside it,
      and a tight bed below. Every spike is computed from the two rocks it sits
      between. */
@@ -624,7 +627,7 @@
     /* Between each consecutive pair of crossings, keep the single largest
        peak or trough. Where a thin bed has put two extrema in one interval,
        the smaller is discarded; those are counted separately, and only inside
-       the sand, so that the count is about the sand and not about whatever
+       the sand, so that the count is about the sand not about whatever
        the beds above and below happen to be doing. */
     const ext = [], dropped = [];
     let doublets = 0, inSand = 0;
@@ -761,7 +764,7 @@
      THE PHASE FILTERS
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
-     trace rather than to the wavelet so that it also works with noise on.
+     trace and not to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
      the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
@@ -1061,7 +1064,7 @@
 
      Four fixed recipes in the shared rock model, one per quadrant of the
      intercept-gradient plane, run through the identical workflow. The class
-     label is computed from the modeled signs rather than asserted.
+     label is computed from the modeled signs and not asserted.
      ===================================================================== */
 
   /* =====================================================================
@@ -1103,7 +1106,7 @@
     const other = (S.over === 'soft') ? 'hard' : 'soft';
     const base = m.top + m.thick / 1000;
     const sp = [];
-    // background reflectors, so the section reads as seismic rather than one event
+    // background reflectors, so the section reads as seismic and not one event
     let q = shuey(seal, LITHS[other]);
     sp.push({ t: MARK_A + m.shift, r: q.A + q.B * s2 });
     q = shuey(LITHS[other], seal);
@@ -1197,7 +1200,14 @@
       });
 
       const win = [Math.round(a.m.top / D), Math.round(a.base / D)];
-      traces.push({ near, far, dq, px, iso, avgT, sumT, has, nt, layers,
+      // the two sections the published three-axis crossplot is built from
+      const nopt = new Float64Array(nt), fnopt = new Float64Array(nt);
+      for (let i = 0; i < nt; i++) {
+        if (!qd.q[i]) continue;
+        nopt[i] = QN[i];
+        fnopt[i] = QF[i] - QN[i];
+      }
+      traces.push({ near, far, dq, px, iso, avgT, sumT, nopt, fnopt, has, nt, layers,
                     win, m: a.m, contact: a.contact });
     }
     lineCache[key] = traces;
@@ -1222,12 +1232,9 @@
     return 'rgb(' + Math.round(255 - 190 * t) + ',' + Math.round(255 - 130 * t) + ','
       + Math.round(255 - 30 * t) + ')';
   }
-  const DQ_UP = ['#EDEDEA', '#E8E86A', '#F2C64A', '#F09A45', '#E8683F',
-                 '#DE4046', '#CE2B60', '#C2306B', '#A82563'];
-  function dqCol(v, lim) {
-    if (v < 0) return (-v / lim > 0.5) ? '#AEB4BC' : '#C9CCD1';
-    return DQ_UP[Math.floor(Math.max(0, Math.min(0.999, v / lim)) * DQ_UP.length)];
-  }
+  /* the published DQ color bar, on a fixed band width, with the unfilled
+     wiggle drawn over it */
+  function dqCol(v) { return SEIS.dqBandColor(v, SEIS.DQ_BAND); }
   function pxCol(v) {
     const b = Math.max(-9, Math.min(8, Math.floor(v / 10)));
     const pos = ['#F4E8B0', '#F2D072', '#F0AE4E', '#EC8244', '#E25444',
@@ -1247,9 +1254,11 @@
 
   const VIEWS = {
     seis: { name: 'stack section', field: (t) => t.near, kind: 'sym' },
-    dq:   { name: 'DQ distance', field: (t) => t.dq, kind: 'dq' },
+    dq:   { name: 'DQ', field: (t) => t.dq, kind: 'dq' },
     px:   { name: 'theta px', field: (t) => t.px, kind: 'px' },
     iso:  { name: 'half isochron', field: (t) => t.iso, kind: 'iso' },
+    nopt: { name: 'near optimized', field: (t) => t.nopt, kind: 'dq' },
+    fnopt: { name: 'far-near optimized', field: (t) => t.fnopt, kind: 'dq' },
     avg:  { name: 'DQ average', field: (t) => t.avgT, kind: 'dq' },
     sum:  { name: 'DQ sum', field: (t) => t.sumT, kind: 'dq' },
   };
@@ -1275,7 +1284,7 @@
         if (V.kind === 'sym') col = seisCol(f[i], lim);
         else if (V.kind === 'px') col = t.has[i] ? pxCol(f[i]) : '#E9EAEC';
         else if (V.kind === 'iso') col = f[i] ? isoCol(f[i], lim) : '#EDEDEA';
-        else col = t.has[i] || f[i] ? dqCol(f[i], lim) : '#EDEDEA';
+        else col = t.has[i] || f[i] ? dqCol(f[i]) : '#EDEDEA';
         ctx.fillStyle = col;
         ctx.fillRect(x0, y - ch / 2, tw + 0.6, ch + 0.6);
       }
@@ -1487,7 +1496,7 @@
     // the two layer attributes read along the sand, as curves
     const rC = { x: 62, y: 30 + (H - 104) * 0.58 + 46, w: W - 96, h: (H - 104) * 0.32 };
     const avgs = [], sums = [];
-    /* Pick the layer that overlaps the modeled sand most, rather than the one
+    /* Pick the layer that overlaps the modeled sand most, and not the one
        whose center is nearest: at the thin ends the nearest-center test can
        land on a background loop instead of the reservoir. */
     traces.forEach((t) => {

@@ -73,7 +73,7 @@ for(const o of ['tight','soft','hard']){
    'in',$('s4b').textContent.padEnd(22),'out',$('s4c').textContent);
  console.log('        ',$('s4d').textContent);
  const found=parseInt($('s4a').textContent);
- if(found<4) fail.push(o+': only '+found+' sand tops were found, expected at least 4');
+ if(found<3) fail.push(o+': only '+found+' sand tops were found, expected all 3');
 }
 hit('[data-over="tight"]');
 const rl4=r($('s4d').textContent);

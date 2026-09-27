@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The phase filters | How the DQ Trace Actually Works</title>
-<meta name="description" content="Seven phase-rotated copies of the near and far stacks, and the rule that reads one value from each sample. Convolution rather than deconvolution, and why the unbalanced result is almost the Hilbert envelope.">
+<meta name="description" content="Seven phase-rotated copies of the near and far stacks, and the rule that reads one value from each sample. Convolution and not deconvolution, and why the unbalanced result is almost the Hilbert envelope.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -143,12 +143,12 @@
       samples that were not extrema to begin with.</p>
 
     <p class="lede">
-      The addition is worth seeing rather than taking on trust. <b>H(x) is the quadrature trace</b>: the
+      The addition can be seen here and does not have to be taken on trust. <b>H(x) is the quadrature trace</b>: the
       near stack with every frequency component shifted back by a quarter cycle, which turns each peak into
       a zero crossing and each zero crossing into a peak. A rotation is then nothing more than a weighted
       sum of the trace and its own quadrature, with the weights cos&thinsp;&theta; and
-      sin&thinsp;&theta;. At 0&deg; the quadrature contributes nothing and you get the trace back; at
-      90&deg; the trace contributes nothing and you get the quadrature; in between you get a blend, and
+      sin&thinsp;&theta;. At 0&deg; the quadrature contributes nothing and we get the trace back; at
+      90&deg; the trace contributes nothing and we get the quadrature; in between we get a blend, and
       because cos&sup2;&nbsp;+&nbsp;sin&sup2;&nbsp;=&nbsp;1 the blend keeps the energy constant.</p>
 
     <canvas id="c1b" aria-label="The near stack, its quadrature trace, and the two weighted and summed to give the rotated trace"></canvas>
@@ -196,8 +196,12 @@
       number names a phase. Q1 and Q9 take 0&deg;, Q2 through Q4 take +22.5&deg;, +45&deg; and +67.5&deg;, Q5
       takes &minus;90&deg;, and Q6 through Q8 take &minus;67.5&deg;, &minus;45&deg; and &minus;22.5&deg; on the way back. Read
       each sample from the filter its own number names, and write the result to a new trace. That trace is
-      <b>QN</b>. Do the same to the far stack, using the numbers picked from the near stack and not
-      repicking, and you get <b>QF</b>.</p>
+      <b>QN</b>. Doing the same to the far stack, using the numbers picked from the near stack and not
+      repicking, gives <b>QF</b>. In the published attribute list QN is the
+      <span class="g" data-g="near-optimized">near optimized</span> section and QF &minus; QN is the
+      <span class="g" data-g="far-near-optimized">far-near optimized</span> section, and both are
+      displayed in their own right when crossplot clusters are being defined (Neff and Neff,
+      unpublished).</p>
 
     <p class="lede">
       The interior count restarts after every extremum, so one table serves every half cycle: a limb
@@ -221,7 +225,7 @@
       <span>Notice that QN is no longer a seismic trace in the ordinary sense. Neighboring samples come
         from different filters, so it is not the convolution of anything with a single wavelet, and its
         wiggle no longer has a wavelet's shape. It is a trace of amplitudes read at consistent phase
-        positions, which is a different kind of object and is exactly what the DQ distance needs.</span>
+        positions, which is a different kind of object and is exactly what the DQ needs.</span>
     </div>
   </section>
 
@@ -264,7 +268,7 @@
   <section class="tabpane" id="p4" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
       <h3><span class="stepno">4</span>Normalizing the bank</h3>
-      <span class="hint">The one scaling step the method specifies, and what it is worth</span>
+      <span class="hint">The one scaling step the method specifies, and what it does</span>
     </div>
 
     <p class="lede">
@@ -291,7 +295,7 @@
     <div class="legend">
       <span>The gains are close to one: about 20% at 90&deg;, and under 4% for everything up to 45&deg;.
         Applied across the trace they change it by roughly 5% of its own amplitude, because the large
-        correction only reaches the zero-crossing samples. That is worth knowing because the step is sometimes described as the thing that stops the
+        correction only reaches the zero-crossing samples. That matters, because the step is sometimes described as the thing that stops the
         DQ trace collapsing toward a Hilbert envelope, and on this model it cannot be: across one loop the
         envelope varies by a factor of around twenty-five, and a 21% correction on one quadrant does not
         undo that. Either the description points at something else, or the reference block model is not the
@@ -329,7 +333,7 @@
     <div class="legend prose">
       <span>The seven filters are applied to N and to F, giving sixteen traces across eight phases, and
         carrying F&nbsp;&minus;&nbsp;N as well brings the total to twenty-four. That is the working set the
-        rest of the method draws from, and it is worth knowing how ordinary it is: a bandpass-safe filter
+        rest of the method draws from, and it helps to see how ordinary it is: a bandpass-safe filter
         bank, applied once, with an integer per sample deciding which output to keep.</span>
     </div>
   </section>
@@ -363,7 +367,7 @@
             balancing scalars of step 4, upside down: dividing each filter's output by its own peak is what
             makes the filters comparable. The spread is about 21%, which does not sound like much
             until you remember it is applied systematically by quadrant number and therefore correlates
-            with waveform position rather than averaging out.</span></details></li>
+            with waveform position and does not average out.</span></details></li>
         <li><b>Compare QN with the near stack.</b> On step 2, read the two peak amplitudes.
           <details class="reveal"><summary>Answer</summary><span class="ans">QN's peak is larger &mdash; on
             the default model about 1.12 times the near stack's. Every extremum comes through untouched,
@@ -377,7 +381,7 @@
           <details class="reveal"><summary>Answer</summary><span class="ans">On the default model, 1.5% of
             the peak envelope, at a correlation of 0.999. The residual is not error &mdash; it is the
             coarseness of the scheme. Nine numbers across a half cycle means each covers 22.5&deg;, and a
-            sample is assigned one by counting samples rather than by measuring its phase, so it is
+            sample is assigned one by counting samples and not by measuring its phase, so it is
             centered only to within about ten degrees. Switch the overburden to tight sandstone or
             hard shale and the gap widens to a little over 3%, because the sharper contrast makes shorter
             loops and the counting is coarser relative to them. Either way the unbalanced enhancement is an envelope with a rounding
@@ -437,7 +441,7 @@
         identical to modules 02 and 03, so a model built there carries over unchanged.</p>
       <p>A phase rotation is applied in the trace domain as
         x&nbsp;cos&thinsp;&theta;&nbsp;+&nbsp;H(x)&nbsp;sin&thinsp;&theta;, with H the Hilbert transform
-        computed through the analytic signal. Doing it on the trace rather than on the wavelet means the
+        computed through the analytic signal. Doing it on the trace and not on the wavelet means the
         same operation applies when noise is present, as it would for recorded data.
         Quadrant enhancement then reads sample <i>i</i> from the rotated trace named by its quadrant
         number.</p>
@@ -468,7 +472,7 @@
     <p>The two enhanced traces are combined into one number per sample by Pythagoras, and the same pair
       seen as a vector gives the crossplot the whole method is named after.</p>
     <p style="font-size:13px;color:var(--muted)">Amplitude balancing used to be planned as a module of
-      its own. It is the normalization of step 6 rather than a separate pass, so it is step 4 above, and
+      its own. It is the normalization of step 6 and not a separate pass, so it is step 4 above, and
       the course runs straight from the filters to the distance.</p>
     <a class="btn" href="dq-distance.html">Open module 05 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
@@ -476,7 +480,7 @@
 
   <div class="pager" id="pager" hidden>
     <a class="btn ghost" href="quadrants.html">← Quadrant numbers</a>
-    <a class="btn" href="dq-distance.html">Next: the DQ distance →</a>
+    <a class="btn" href="dq-distance.html">Next: the DQ →</a>
   </div>
 
   <footer>
@@ -617,8 +621,8 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth rather than a
-     lone sand, so that the trace looks like something worth picking: a
+  /* The near-stack reflectivity of one trace. A layered earth and not a
+     lone sand, so that the trace looks like something a picker would find: a
      contrasting bed above, the sand with an optional tight streak inside it,
      and a tight bed below. Every spike is computed from the two rocks it sits
      between. */
@@ -712,7 +716,7 @@
     /* Between each consecutive pair of crossings, keep the single largest
        peak or trough. Where a thin bed has put two extrema in one interval,
        the smaller is discarded; those are counted separately, and only inside
-       the sand, so that the count is about the sand and not about whatever
+       the sand, so that the count is about the sand not about whatever
        the beds above and below happen to be doing. */
     const ext = [], dropped = [];
     let doublets = 0, inSand = 0;
@@ -849,7 +853,7 @@
      THE PHASE FILTERS
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
-     trace rather than to the wavelet so that it also works with noise on.
+     trace and not to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
      the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
@@ -970,7 +974,7 @@
 
 
   /* The rock model itself, as bands in two-way time, so the layers are always
-     visible beside the wiggles rather than implied by them. */
+     visible beside the wiggles and not implied by them. */
   const LITHFILL = {
     soft: 'rgba(150,160,170,0.55)', hard: 'rgba(110,125,140,0.65)',
     tight: 'rgba(214,171,74,0.55)', sand: 'rgba(194,48,107,0.30)',
@@ -1038,7 +1042,7 @@
 
   /* The construction: a rotation is the trace and its quadrature, weighted by
      cos and sin and added. Drawing it makes the "convolution, not
-     deconvolution" claim of this step checkable rather than assertable. */
+     deconvolution" claim of this step checkable and not assertable. */
   function drawStep1Build() {
     const b = build();
     const nt = b.tr.length;
@@ -1300,7 +1304,7 @@
         + 'signature to look for if a DQ volume comes out wrong.'
       : 'The enhanced trace sits within ' + rms.toFixed(0) + '% of the envelope. The residual is the '
         + 'coarseness of a nine-bucket scheme, not error, and it is nowhere near enough to make the '
-        + 'unbalanced trace worth having. Step 4 applies the only correction the method specifies.';
+        + 'unbalanced trace usable. Step 4 applies the only correction the method specifies.';
   }
 
   /* ------------------------------- step 4 ------------------------------

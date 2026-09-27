@@ -37,7 +37,7 @@
     ['picks',   'Peaks, troughs, zero crossings'],
     ['quads',   'Quadrant numbers'],
     ['rotate',  'Phase rotations'],
-    ['dist',    'DQ distance'],
+    ['dist',    'DQ'],
     ['xplot',   'RDQ crossplot'],
   ];
 
@@ -137,13 +137,59 @@
     }, true);
   }
 
+  /* When the panel is popped out, the page behind it should give the space
+     back rather than keep a sticky copy of the same panel at the top. The
+     panel is hidden here and a slim bar takes its place until the second
+     window closes. */
+  let panelWin = null, panelTimer = null;
+
+  function panelBar() {
+    let bar = doc.getElementById('dq-panel-bar');
+    if (bar) return bar;
+    bar = doc.createElement('div');
+    bar.id = 'dq-panel-bar';
+    bar.className = 'panelbar';
+    const label = doc.createElement('span');
+    label.textContent = 'The panel is open in its own window.';
+    const back = doc.createElement('button');
+    back.type = 'button';
+    back.className = 'popbtn';
+    back.textContent = 'Bring it back';
+    back.addEventListener('click', closePanelPopout);
+    bar.appendChild(label);
+    bar.appendChild(back);
+    const lab = doc.querySelector('.labhead');
+    if (lab && lab.parentNode) lab.parentNode.insertBefore(bar, lab);
+    return bar;
+  }
+
+  function closePanelPopout() {
+    if (panelWin && !panelWin.closed) panelWin.close();
+    restorePanel();
+  }
+
+  function restorePanel() {
+    clearInterval(panelTimer);
+    panelTimer = null;
+    panelWin = null;
+    doc.body.classList.remove('panel-out');
+    window.dispatchEvent(new Event('resize'));       // the panel redraws at its own width
+  }
+
   function openPopout(kind) {
     const p = new URLSearchParams(location.search);
     p.set('view', kind);
     const url = location.pathname + '?' + p.toString();
-    const feat = kind === 'panel' ? 'width=1100,height=520' : 'width=620,height=820';
+    const feat = kind === 'panel' ? 'width=1100,height=560' : 'width=620,height=820';
     const w = window.open(url, 'dq-' + kind + '-' + location.pathname, feat);
     if (w && w.focus) w.focus();
+    if (kind !== 'panel' || !w) return;
+    panelWin = w;
+    panelBar().hidden = false;
+    doc.body.classList.add('panel-out');
+    clearInterval(panelTimer);
+    panelTimer = setInterval(() => { if (!panelWin || panelWin.closed) restorePanel(); }, 500);
+    window.addEventListener('pagehide', () => { if (panelWin && !panelWin.closed) panelWin.close(); });
   }
 
   function wirePopouts() {

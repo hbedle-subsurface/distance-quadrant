@@ -23,14 +23,12 @@ console.log('   traces',$('s1a').textContent,' limits',$('s1b').textContent,
 if(!/same either side/.test($('s1b').textContent)) fail.push('the seismic bar is not symmetric');
 if(parseInt($('s1a').textContent)<10) fail.push('too few traces on the line');
 
-console.log('\n--- exercise 2: the one-sided DQ bar ---');
+console.log('\n--- exercise 2: the published DQ bar ---');
 hit('#tabs button[data-tab="p2"]');
-console.log('   increments above zero',$('s2a').textContent,' below',$('s2b').textContent);
+console.log('   bands above zero',$('s2a').textContent,' band width',$('s2b').textContent);
 console.log('   positive samples',$('s2c').textContent,' max',$('s2d').textContent);
-const up=parseInt($('s2a').textContent), dn=parseInt($('s2b').textContent);
-if(dn!==2) fail.push('the DQ bar has '+dn+' increments below zero, the specification says two');
-if(!(up>=6)) fail.push('the DQ bar has only '+up+' increments above zero');
-if(!(up>dn*2)) fail.push('the DQ bar is not one-sided: '+up+' up vs '+dn+' down');
+if($('s2a').textContent !== '7 of 14') fail.push('the DQ bar reports '+$('s2a').textContent+' bands above zero, the published bar has 7 of 14');
+if($('s2b').textContent !== '0.08') fail.push('the DQ band width reads '+$('s2b').textContent+', expected 0.08');
 
 console.log('\n--- exercise 3: ten degree bands, and fluid moves them ---');
 hit('#tabs button[data-tab="p3"]');

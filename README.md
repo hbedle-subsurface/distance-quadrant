@@ -18,14 +18,14 @@ gradient and crossplots are introduced in module 01.
 **Geologists working with seismic data**, who read the sections other people
 produce and want to know what a DQ display is showing before trusting it.
 
-**Interpreters who already use AVO.** Module 05 puts the DQ distance beside the
+**Interpreters who already use AVO.** Module 05 puts the DQ beside the
 intercept, [A+B]/2 and the fluid factor on the same model, so the new attribute
 can be placed against familiar ones. Modules 06 to 09 do the same for the
 crossplot.
 
 ## What a student should be able to do afterward
 
-- Say what the DQ distance and Theta PX measure, and what in the rock changes
+- Say what the DQ and Theta PX measure, and what in the rock changes
   them.
 - Explain why the workflow picks, numbers and phase-rotates the near stack
   before combining it with the far stack.
@@ -77,7 +77,7 @@ attributes read from it, and part 4 puts them to work on rocks.
 | 02 | Marking the waveform | Peaks, troughs and zero crossings picked on the near stack |
 | 03 | Quadrant numbers | Q1 to Q9 across each half cycle |
 | 04 | Turning every sample into a peak | Seven phase rotations, one per quadrant number |
-| 05 | The distance | The signed DQ distance, and how it compares with familiar AVO attributes |
+| 05 | The distance | The signed DQ, and how it compares with familiar AVO attributes |
 | **Part 3** | **The crossplot view** | |
 | 06 | Rotating and splitting the crossplot | Shale trend onto the x-axis, then four sectors |
 | 07 | Theta PX, the angle of the same point | The angle, and the fluids and lithologies it separates |
@@ -107,7 +107,7 @@ The models are synthetic, noise-free by default, purely siliciclastic and built
 on a single-mineral sand. Carbonates, converted waves and anisotropy are absent.
 The set shows the arithmetic of the method and how it behaves on models. It does
 not validate the method, and it shows no field data. A correlation computed here
-is an upper limit for a clean model rather than a prediction about a survey.
+is an upper limit for a clean model and not a prediction about a survey.
 Where the published description leaves a rule incompletely specified, the module
 states the choice it made.
 
@@ -165,9 +165,16 @@ drawing code, so a module can be read and edited on its own.
 - **One idea per module, three or four short steps, a control on every step.**
   Step text stays around 150 to 250 words; anything longer goes to the method
   tab or the glossary.
-- **Neutral, descriptive prose.** No second person, no imperatives in the
-  teaching text, no commercial metaphors, American spelling. Exercise prompts
-  are written as questions. A sequence of processing steps is a workflow.
+- **Voice.** Teaching text is written in inclusive first person plural: *we*
+  for shared observation and reasoning and for anything the method does, *your*
+  for the reader's own data, software and project, *you* only in exercises for
+  what the reader does. No imperatives in the teaching text, no commercial
+  metaphors, American spelling. Exercise prompts are written as questions. A
+  sequence of processing steps is a workflow.
+- **Words that stay out:** *worth*, *rather than*, *instead*, and *sits* as a
+  general verb of position. *So*, *and so* and a sentence-initial *but* are part
+  of the voice and stay in. Em dashes run under one per two hundred words; a
+  comma, a period or a *but* does the same work.
 - **Plain sentences.** One idea per sentence, few clauses, no aphorisms and no
   closing flourishes. A sentence built around a dash in the middle is usually
   two sentences.
@@ -179,7 +186,7 @@ drawing code, so a module can be read and edited on its own.
   and offers the panel and the exercises as pop-out windows
   (`data-popout="panel"`, `data-popout="exercises"`).
 - **Crossplot and amplitude axes are fixed**, never autoscaled. Samples outside
-  the frame are counted in a readout rather than made to fit.
+  the frame are counted in a readout and not made to fit.
 - **No `localStorage`.** State lives in the URL so a view can be linked.
 - **Every module has a method tab** stating its modeling choices and what it
   does not claim.

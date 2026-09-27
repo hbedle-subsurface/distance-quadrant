@@ -25,10 +25,9 @@
   <div class="mod-head">
     <p class="eyebrow">Module 07 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Theta PX</h1>
-    <p class="sub">The DQ distance says how far a sample sits from the origin. This is the other half of
+    <p class="sub">The DQ says how far a sample sits from the origin. This is the other half of
       the same vector: which direction it points, folded into a single range and given a sign. It is the
-      attribute that separates fluids in places where the distance cannot, and it fails in a specific,
-      predictable way that is worth knowing before you trust it.</p>
+      attribute that separates fluids in places where the distance cannot, and it fails in a specific, predictable way, and this module measures it.</p>
   </div>
 
   <div class="labhead">
@@ -137,7 +136,7 @@
     </div>
     <div class="legend">
       <span>The fold is a measurement of how far the sample sits from the background trend in direction
-        rather than in distance. Zero means the sample lies along the rotated baseline &mdash; the
+        and not in distance. Zero means the sample lies along the rotated baseline &mdash; the
         background itself. Ninety means it sits at right angles to it, which is as far from ordinary as the
         angle can report.</span>
     </div>
@@ -188,7 +187,7 @@
     </div>
 
     <p class="lede">
-      An angle is only worth computing if it says something the distance does not. Here is the test: the
+      An angle earns a place only if it says something the distance does not. Here is the test: the
       sand top at a fixed porosity, filled with brine, oil and gas in turn, read both ways.</p>
 
     <p class="lede">
@@ -198,9 +197,9 @@
       the weaker anomaly. Under tight sandstone the position reverses: the angles crowd into a few degrees and
       say almost nothing, while the distance separates the fluids well.</p>
 
-    <canvas id="c3a" aria-label="Theta px and DQ distance for the three fluids across porosity"></canvas>
+    <canvas id="c3a" aria-label="Theta px and DQ for the three fluids across porosity"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Both attributes at the sand top, across the porosity
-      range, for the three fluids under the overburden you have selected. Switch the overburden and watch
+      range, for the three fluids under the overburden we have selected. Switch the overburden and watch
       which of the two panels does the separating.</p>
 
     <div class="stats" style="margin-top:16px">
@@ -211,7 +210,7 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>The failure mode is worth as much as the success. A short vector has a badly determined
+      <span>The failure mode carries as much information as the success. A short vector has a badly determined
         direction &mdash; module 06 made the same point about the Q5 samples nearest the origin &mdash; so
         wherever the distance is small the angle is unstable. Near a class 2 crossover, where the intercept
         passes through zero, the distance can fall to a few thousandths and the angle swings wildly. Read
@@ -225,7 +224,7 @@
       <span class="hint">Why the method does not settle for the distance</span>
     </div>
 
-    <p class="lede">The AASPI DQ attributes pamphlet calls &theta;<sub>px</sub> a <b>crossplot cluster
+    <p class="lede">The DQ attributes pamphlet calls &theta;<sub>px</sub> a <b>crossplot cluster
       mapping attribute</b>, which names its job precisely. Rock types that sit in different places on the
       crossplot take different angles, so a section or map colored by the angle shows where each cluster
       sits in space. That is a different question from how strong the response is, which is what the
@@ -236,16 +235,15 @@
       module is that point made concrete. The distance answers "how big" and the angle answers "which
       way", and on this model each of them fails somewhere the other works.</p>
 
-    <p class="lede">Which is the more useful depends on the overburden, which is not something you get to
+    <p class="lede">Which is the more useful depends on the overburden, which is not something we get to
       choose. Under a soft shale the fluid effect shows up mostly as a change of direction; under tight sandstone
       it shows up mostly as a change of length. A workflow that computed only one of them would work in
-      one setting and quietly under-perform in the other, and nothing in the output would say which
-      situation you were in.</p>
+      one setting and quietly under-perform in the other, and nothing in the output would say which situation produced it.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       Reading a &theta;<sub>px</sub> section</h2>
     <p class="lede">The published displays use a two-sided color bar from &minus;90 to +90 in ten degree
-      steps, with the boundaries kept sharp rather than smoothly graded, so that a feature confined to one
+      steps, with the boundaries kept sharp and not smoothly graded, so that a feature confined to one
       ten-degree band stays visible. The positive side is colored boldly and the negative side held back,
       for the same reason as on a DQ section: on a soft-sand play the sands are the positive samples. The
       two sections are meant to be read as a pair, and the papers describe a flat spot as something that
@@ -297,7 +295,7 @@
           step 1.
           <details class="reveal"><summary>Answer</summary><span class="ans">It never leaves 0 to 90&deg;
             before the sign is applied, and never leaves &minus;90 to +90&deg; after. That is guaranteed by
-            the fold rather than observed: each of the four sector rules maps its quarter onto the first
+            the fold and not observed: each of the four sector rules maps its quarter onto the first
             one. Bedle et al. (2025b) describe the sector angles as lying between 0 and 90&deg;, which
             is the unsigned form, and the published color bar runs the full &plusmn;90.</span></details></li>
         <li><b>Coarsen the sampling.</b> Step the sample rate to 4 ms.
@@ -314,8 +312,7 @@
     <div class="takeaway" style="max-width:none">
       <h3>The main points</h3>
       <ul>
-        <li><b>&theta;<sub>px</sub> is the direction of the same vector whose length is the DQ
-          distance</b>, measured after the rotation and sector split of module 06.</li>
+        <li><b>&theta;<sub>px</sub> is the direction of the same vector whose length is the DQ</b>, measured after the rotation and sector split of module 06.</li>
         <li><b>The bearing is folded from 0&ndash;360&deg; into 0&ndash;90&deg;</b> by four sector rules,
           one per quarter of the crossplot.</li>
         <li><b>The sign comes from the DQ trace</b>, not from the angle, giving a range of &minus;90 to
@@ -356,7 +353,7 @@
       <p>One thing this module does not attempt is a field-scale statement about what particular angle
         values mean. The published Class 3 example quotes a gas response near +25&deg; and a wet response
         near +60&deg;, which is the opposite ordering to the one this rock model produces, and the
-        difference is almost certainly the model rather than the method &mdash; a different overburden,
+        difference is almost certainly the model and not the method &mdash; a different overburden,
         compaction state and baseline would move both numbers. Treat the separation shown here as evidence
         that the angle carries fluid information, not as a calibration.</p>
       <ul>
@@ -374,7 +371,7 @@
     <p class="eyebrow">Next up</p>
     <h3><a href="isochron.html">08 · Time thickness</a></h3>
     <p>The distance tracks porosity about as tightly as acoustic impedance does, with no well and no
-      inversion &mdash; and with a sign that belongs to the seal rather than to the method.</p>
+      inversion &mdash; and with a sign that belongs to the seal and not to the method.</p>
     <a class="btn" href="isochron.html">Open module 08 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
@@ -522,8 +519,8 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth rather than a
-     lone sand, so that the trace looks like something worth picking: a
+  /* The near-stack reflectivity of one trace. A layered earth and not a
+     lone sand, so that the trace looks like something a picker would find: a
      contrasting bed above, the sand with an optional tight streak inside it,
      and a tight bed below. Every spike is computed from the two rocks it sits
      between. */
@@ -617,7 +614,7 @@
     /* Between each consecutive pair of crossings, keep the single largest
        peak or trough. Where a thin bed has put two extrema in one interval,
        the smaller is discarded; those are counted separately, and only inside
-       the sand, so that the count is about the sand and not about whatever
+       the sand, so that the count is about the sand not about whatever
        the beds above and below happen to be doing. */
     const ext = [], dropped = [];
     let doublets = 0, inSand = 0;
@@ -754,7 +751,7 @@
      THE PHASE FILTERS
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
-     trace rather than to the wavelet so that it also works with noise on.
+     trace and not to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
      the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
@@ -1055,7 +1052,7 @@
 
 
   /* The rock model itself, as bands in two-way time, so the layers are always
-     visible beside the wiggles rather than implied by them. */
+     visible beside the wiggles and not implied by them. */
   const LITHFILL = {
     soft: 'rgba(150,160,170,0.55)', hard: 'rgba(110,125,140,0.65)',
     tight: 'rgba(214,171,74,0.55)', sand: 'rgba(194,48,107,0.30)',
@@ -1149,7 +1146,7 @@
       ctx.closePath();
       ctx.fillStyle = q[4]; ctx.fill();
     });
-    // every sample, so the sectors are populated rather than abstract
+    // every sample, so the sectors are populated and not abstract
     const { pts } = points();
     let lim = 1e-9;
     pts.forEach((p) => { lim = Math.max(lim, Math.abs(p.x), Math.abs(p.y)); });
@@ -1307,7 +1304,7 @@
     let dmax = 1e-9;
     fluids.forEach((f) => data[f].forEach((r) => { dmax = Math.max(dmax, r.d); }));
     dmax *= 1.15;
-    SEIS.axisLeft(ctx, rB, 0, dmax, 'DQ distance', (v) => v.toFixed(2),
+    SEIS.axisLeft(ctx, rB, 0, dmax, 'DQ', (v) => v.toFixed(2),
       { ticks: 5, flip: true, grid: true });
     SEIS.axisBottom(ctx, rB, PH0, PH1, 'porosity (%)', (v) => String(Math.round(v)), { ticks: 5 });
     SEIS.frame(ctx, rB);
@@ -1337,7 +1334,7 @@
     ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
     ctx.fillStyle = CRIM;
     ctx.fillText('THETA PX', rA.x + rA.w / 2, rA.y - 8);
-    ctx.fillText('DQ DISTANCE', rB.x + rB.w / 2, rB.y - 8);
+    ctx.fillText('DQ', rB.x + rB.w / 2, rB.y - 8);
     fluids.forEach((f, k) => {
       SEIS.tag(ctx, rA.x + 8, rA.y + 10 + k * 18, f, FLCOL[f]);
     });

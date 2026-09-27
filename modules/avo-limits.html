@@ -170,7 +170,7 @@
 
     <p class="lede">
       That ordering is the point. The class comes out of the contrast between the sand and the rock above
-      it, so it belongs to the pair rather than to the reservoir. Everything you are setting by hand here
+      it, so it belongs to the pair and not to the reservoir. Everything you are setting by hand here
       &mdash; the shale properties, the porosity, the fluid &mdash; is something nobody knows at the start
       of a project, which is exactly where the DQ workflow is meant to be used.</p>
 
@@ -197,7 +197,7 @@
       <span>The faint curves on the crossplot are where this sand would land at every other porosity, one
         curve per fluid. Both plots keep the same axes whatever you build, so a weak sand stays near the
         origin instead of being blown up to fill the box, and the difference in reflection strength between
-        one model and the next is something you can see rather than read off a tick label. Two corners of
+        one model and the next is something we can see and not read off a tick label. Two corners of
         the model run past the edge &mdash; soft shale over a tight sand, and tight sandstone over a very porous
         gas sand &mdash; and there the point is pinned to the frame with an arrow while the exact numbers
         stay in the boxes below. Nothing here is wrong: every quantity is exact for the model it
@@ -214,7 +214,7 @@
     </div>
 
     <p class="lede">
-      Give the sand a base as well as a top and you have two reflection coefficients instead of one, equal
+      Give the sand a base as well as a top and we have two reflection coefficients instead of one, equal
       and opposite. Convolve them with a wavelet and you no longer have two numbers on the trace &mdash; you
       have a smooth waveform spread over tens of milliseconds, and every sample in it is a mixture of both
       boundaries. That is the trace shown above.</p>
@@ -281,7 +281,7 @@
     <p class="lede">
       So a defensible AVO crossplot keeps only the extrema. Here they are marked on the near stack, and
       here is the crossplot with everything else removed. Keep that count in mind: it is the number the
-      rest of the course is trying to raise, and module 05 is where you see whether it worked.</p>
+      rest of the course is trying to raise, and module 05 is where we see whether it worked.</p>
 
     <canvas id="c3a" aria-label="The near-stack trace drawn vertically in two-way time, with its peak maxima and trough minima marked"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Time runs down the page, as on a seismic section.
@@ -309,7 +309,7 @@
   <!-- ============================ WHY IT MATTERS ============================ -->
   <section class="tabpane" id="pw" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
-      <h3><span class="stepno">?</span>Why this is worth an entire course</h3>
+      <h3><span class="stepno">?</span>Why this takes an entire course</h3>
       <span class="hint">What is lost when 95% of the trace goes unused</span>
     </div>
 
@@ -379,8 +379,7 @@
             faintly positive while the far stack has already gone negative, which is what class 2p means
             &mdash; the reflection changes sign partway across the gather, and a full stack cancels much of
             it. Switch to gas and the same sequence happens about seven porosity units earlier. Neither
-            number means anything on its own; both move the moment the shale does. What is worth keeping is
-            that being invisible on the near stack is a coincidence between two rocks, and it happens to
+            number means anything on its own; both move the moment the shale does. What matters here is that being invisible on the near stack is a coincidence between two rocks, and it happens to
             perfectly good reservoirs.</span></details></li>
         <li><b>Substitute the fluid and watch three numbers move.</b> Soft shale, porosity 25%. Read the
           sand's V<sub>P</sub>, V<sub>S</sub> and density for brine, then oil, then gas.
@@ -417,7 +416,7 @@
             fraction discarded climbs from roughly 80% to roughly 97%. Finer sampling adds numbers, not
             information, as far as a two-layer method is concerned. The DQ process is the opposite: it
             converts the extra samples into usable ones, which is why the papers specify a 1 ms sample rate
-            and eight quadrants rather than the 2 ms and four quadrants used
+            and eight quadrants and not the 2 ms and four quadrants used
             earlier.</span></details></li>
         <li><b>Lose track of which extremum is the sand.</b> Set the wavelet to 20 Hz and the thickness to
           10 ms, then look at the marked trace on step 3 and count the filled circles.
@@ -437,7 +436,7 @@
             with Gardner's density relation, and neither assumption holds in the model you just built.
             Change the overburden and the brine line tilts again. Module 06 returns to this: the RDQ
             crossplot rotates the display so that whatever the local brine trend actually is lies along the
-            x axis, rather than assuming in advance where it ought to be.</span></details></li>
+            x axis, and does not assume in advance where it ought to be.</span></details></li>
       </ol>
     </div>
   </section>
@@ -451,7 +450,7 @@
           is exact for that model and says nothing about bed thickness or wavelets.</li>
         <li><b>AVO class is an outcome, not a property of the reservoir.</b> Change only the rock sitting
           on top and one sand becomes class 1, class 2 and class 4 in turn. That is why a method which
-          needs no prior petrophysics is worth having.</li>
+          needs no prior petrophysics is useful.</li>
         <li><b>Seismic data is many thin layers convolved with a wavelet.</b> Every sample is a blend of
           several boundaries, in proportions that depend on the wavelet and the bed thickness.</li>
         <li><b>The two-layer equation is cleanest at peak maxima and trough minima</b>, and degrades
@@ -474,7 +473,7 @@
       <p>The model is a sand between two half spaces. The enclosing rock is one of three fixed lithologies:
         soft shale (V<sub>P</sub> 2700 m/s, V<sub>S</sub> 1175 m/s, 2.33 g/cm&sup3;), hard shale (3350,
         1675, 2.48) and tight sandstone (4800, 2595, 2.58). The underburden follows the overburden unless the
-        checkbox is cleared. These three are illustrative rather than measured, chosen to span the range an
+        checkbox is cleared. These three are illustrative and not measured, chosen to span the range an
         interpreter meets in one basin.</p>
       <p>The sand is not a preset. The brine case is computed from porosity alone, using the two relations
         in Bedle et al. (2025a): Wyllie's time average for velocity, 1/V<sub>P</sub> = &phi;/V<sub>fl</sub>
@@ -482,7 +481,7 @@
         of 1500 m/s, and the trend V<sub>P</sub>/V<sub>S</sub> = &minus;0.75&phi;&sup2; + 1.35&phi; + 1.63
         for shear velocity. Density is the volumetric mixture of quartz at 2.65 g/cm&sup3; with the pore
         fluid. Porosity is the only control on the brine sand, and the resulting AVO class is read off the
-        computed intercept and gradient rather than declared.</p>
+        computed intercept and gradient and not declared.</p>
       <p>The oil and gas cases are made from the brine case by <b>Gassmann (1951)</b> fluid substitution:
         the dry-frame bulk modulus is recovered from the brine-saturated moduli, the new fluid is put in,
         and the velocities are rebuilt from the result. The shear modulus is left unchanged, which is why
@@ -493,7 +492,7 @@
         out. The <a href="https://hbedle-subsurface.github.io/avo-basics/">AVO basics</a> site works through
         Gassmann properly.</p>
       <p>Intercept and gradient come from the <b>Shuey (1985)</b> two-term approximation, computed from the
-        contrast across each interface rather than assumed. Writing &Delta; for the difference across the
+        contrast across each interface and not assumed. Writing &Delta; for the difference across the
         boundary and a bar for the average of the two sides, A = &frac12;(&Delta;V<sub>P</sub>/V<sub>P</sub>
         + &Delta;&rho;/&rho;) and B = &frac12;&Delta;V<sub>P</sub>/V<sub>P</sub> &minus;
         2(V<sub>S</sub>/V<sub>P</sub>)&sup2;(&Delta;&rho;/&rho; +
@@ -506,14 +505,14 @@
         loss and mode conversion are all left out. Their absence flatters the conventional method, so the
         loss demonstrated in step 3 is a lower bound.</p>
       <p>Steps 2 and 3 plot the near stack against the raw far-minus-near difference, which is how the DQ
-        workflow forms its gradient, rather than against a calibrated B. Because R is linear in
+        workflow forms its gradient, and not against a calibrated B. Because R is linear in
         sin&sup2;&theta;, F &minus; N is exactly B times the difference in mean sin&sup2;&theta; across the
         two bands, a factor of 0.170 for 0&ndash;10&deg; and 20&ndash;30&deg;. Dividing it out would make
         the two axes commensurate and the plots easier to read, while showing something the
         processing never computes, so the module leaves it alone. Every crossplot in the module shares the
         same fixed axes, &plusmn;0.5, and none of them rescale with the model: seeing how much the spread
-        itself changes between one set of rocks and the next is worth more than filling the box each time.
-        Anything past the edge is clipped and counted rather than drawn over the labels.</p>
+        itself changes between one set of rocks and the next matters more than filling the box each time.
+        Anything past the edge is clipped and counted and not drawn over the labels.</p>
       <p>The traces are the two reflection coefficients convolved with a zero-phase Ricker wavelet. Peak
         maxima and trough minima are found by scanning the near-stack trace for sign changes in the sample
         to sample difference, which is the same test the DQ quadrant assignment uses in module 03. The
@@ -547,7 +546,7 @@
     <p class="eyebrow">Next up</p>
     <h3><a href="near-far.html">02 · Near and far stacks</a></h3>
     <p>Where the two traces the DQ process works on actually come from, why the angle ranges are
-      0&ndash;10&deg; and 20&ndash;30&deg; rather than everything available, and what the far-minus-near
+      0&ndash;10&deg; and 20&ndash;30&deg; and not the whole range, and what the far-minus-near
       difference is standing in for.</p>
     <a class="btn" href="near-far.html">Open module 01 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
@@ -602,7 +601,7 @@
      There are no AVO-class presets here. Three choices go in: what the
      overburden is, how porous the sand is, and what fluid fills its pores.
      Everything downstream is computed from those, so the class label is a
-     result that can be checked rather than a button that was pressed.
+     result that can be checked and not a button that was pressed.
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };   // clean quartz sand grains
@@ -626,11 +625,11 @@
 
   /* Every crossplot in this module uses these same axes, and they do not
      rescale with the model. Autoscaling would redraw each case to fill the
-     box, which hides the one thing worth watching: how much the spread itself
+     box, which hides the one thing to watch: how much the spread itself
      changes between a tight sandstone-capped gas sand and a brine sand at matched
      impedance.
 
-     0.5 is chosen to make the ordinary cases readable rather than to contain
+     0.5 is chosen to make the ordinary cases readable and not to contain
      the extreme ones. Two corners of the model overrun it, always in the
      gradient and never in the intercept: soft shale over a tight sand below
      about 13% porosity, and tight sandstone over a very porous gas sand. Everything
@@ -693,7 +692,7 @@
   }
 
   // Mean of sin squared theta across an angle band, evaluated numerically so
-  // that the band is averaged rather than sampled at its middle.
+  // that the band is averaged and not sampled at its middle.
   function meanSin2(band) {
     const n = 64, a = band[0] * Math.PI / 180, b = band[1] * Math.PI / 180;
     let sum = 0;
@@ -1430,7 +1429,7 @@
     if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3');
 
     /* Step 1 is the two-layer picture: there is no bed thickness, no wavelet
-       and no sample rate in it. Rather than hide those controls and have them
+       and no sample rate in it. Hiding those controls and having them
        appear from nowhere at step 2, they stay put and go inactive. */
     const one = (id === 'p1');
     ['thick', 'freq', 'dt', 'showRC'].forEach((k) => {

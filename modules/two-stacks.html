@@ -278,7 +278,7 @@
     <div class="legend">
       <span>Phase moves the peaks and troughs away from the boundaries, so every later operation picks
         the wrong samples. Residual moveout leaves the far reflection late, so the subtraction compares
-        two different parts of the waveform and the difference is partly timing rather than amplitude
+        two different parts of the waveform and the difference is partly timing and not amplitude
         change. A gain error on the far stack scales the gradient directly, which moves a point vertically
         on the crossplot and can change the AVO class the data appear to belong to. The DQ papers list
         these as the preparation the workflow needs, along with a time-variant scalar on the far stack and
@@ -1050,7 +1050,7 @@
     $('s3e').textContent = Math.round(1000 / S.freq) + ' samples';
   }
 
-  /* exercise 4 quotes the trough at two thicknesses, computed rather than typed */
+  /* exercise 4 quotes the trough at two thicknesses, computed and not typed */
   function exerciseNumbers() {
     const keep = Object.assign({}, S);
     const trough = (thick) => {

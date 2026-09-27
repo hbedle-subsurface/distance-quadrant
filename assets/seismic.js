@@ -833,11 +833,61 @@ const SEIS = (function () {
     });
   }
 
+  /* ------------------------------------------------------------------ *
+   * The published DQ color bar                                          *
+   *                                                                     *
+   * Fourteen bands, seven each side of zero, sampled from the DQ         *
+   * displays in the DQ attribute pamphlet. On field data the bands are   *
+   * 40 amplitude units wide and run from -280 to +280; here the band     *
+   * width is given in the units of the model so the same colors mean     *
+   * the same DQ values on every page. The sections draw unfilled wiggle  *
+   * traces over the color.                                              *
+   * ------------------------------------------------------------------ */
+  const DQ_POS = ['#D4F300', '#E1F605', '#FDE308', '#FBB100',
+                  '#FD8608', '#FB0007', '#FA02BB'];
+  const DQ_NEG = ['#E4E2E5', '#CECED0', '#B3B3B3', '#A4B3EC',
+                  '#D9BCD0', '#E099D3', '#A9AAFA'];
+  const DQ_BAND = 0.08;                      // one band, in model units
+
+  function dqBandColor(v, band) {
+    const w = band || DQ_BAND;
+    if (v >= 0) return DQ_POS[Math.min(DQ_POS.length - 1, Math.floor(v / w))];
+    return DQ_NEG[Math.min(DQ_NEG.length - 1, Math.floor(-v / w))];
+  }
+
+  /* the bar itself, drawn as the same fourteen bands with the value at
+     every second boundary */
+  function dqBandBar(ctx, x, y, w, h, band) {
+    const bw = band || DQ_BAND;
+    const n = 14;
+    for (let k = 0; k < n; k++) {
+      const v = (6 - k) * bw + bw / 2;        // band centers, top to bottom
+      ctx.fillStyle = dqBandColor(v, bw);
+      ctx.fillRect(x, y + (k / n) * h, w, h / n + 1);
+    }
+    ctx.strokeStyle = 'rgba(22,25,28,0.3)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x, y, w, h);
+    ctx.font = '8px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(22,25,28,0.65)';
+    for (let k = 0; k <= n; k += 2) {
+      const v = (7 - k) * bw;
+      const yy = y + (k / n) * h;
+      ctx.fillText((v > 0 ? '+' : v < 0 ? '\u2212' : '') + Math.abs(v).toFixed(2), x + w + 4, yy);
+    }
+  }
+
   /* --------------------------------------------------------------------- */
 
   return {
     ricker, ormsby, makeWavelet, spectrum,
+
+
+
     traceValue, sampleTrace, traceFromSpikes, rc,
+    dqBandColor, dqBandBar, DQ_BAND,
     mulberry32, gaussRand, bandLimitedNoise, fft, fkSpectrum, phaseRotate, hilbert,
     lithColumn,
     COLORMAPS, SEQMAPS, fitCanvas, drawVarDensity, drawWiggle,

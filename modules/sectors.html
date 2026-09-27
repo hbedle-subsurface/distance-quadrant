@@ -119,7 +119,7 @@
 
     <p class="lede">
       Start from the crossplot of module 05 with the baseline rotation of module 06 already applied, so the
-      background trend lies along the horizontal. Now color every point by its quadrant number rather than
+      background trend lies along the horizontal. Now color every point by its quadrant number and not
       by its sign.</p>
 
     <p class="lede">
@@ -178,7 +178,7 @@
     </div>
     <div class="legend">
       <span>Notice what does not change: the distance from the origin. Reflecting a point in a line through
-        the origin cannot alter how far from the origin it is, so the DQ distance of module 05 survives the
+        the origin cannot alter how far from the origin it is, so the DQ of module 05 survives the
         split untouched. What changes is the direction, and direction is the whole subject of module 07.</span>
     </div>
   </section>
@@ -193,7 +193,7 @@
       Sector splitting is not an attribute. Nothing is displayed from it and nothing is written to a cube.
       It exists because of what comes next: the RDQ workflow (Bedle et al., 2025b) computes the split coordinates,
       then takes the polar angle of those coordinates, and only then folds that angle into
-      &theta;<sub>px</sub>. Change the split and you change the angle, which changes the attribute.</p>
+      &theta;<sub>px</sub>. Change the split and the angle changes with it, which changes the attribute.</p>
 
     <p class="lede">
       Below is the polar angle of every sample, with and without the step, plotted against the quadrant
@@ -209,12 +209,12 @@
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Samples whose angle changed</span><b id="s3a">&mdash;</b></div>
       <div class="stat key"><span>Mean change in angle</span><b id="s3b">&mdash;</b></div>
-      <div class="stat"><span>DQ distance, before</span><b id="s3c">&mdash;</b></div>
-      <div class="stat"><span>DQ distance, after</span><b id="s3d">&mdash;</b></div>
+      <div class="stat"><span>DQ, before</span><b id="s3c">&mdash;</b></div>
+      <div class="stat"><span>DQ, after</span><b id="s3d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>The two distance readouts are there as a check rather than a result: they should be identical,
+      <span>The two distance readouts are there as a check and not a result: they should be identical,
         because a reflection cannot change a length. If they ever differ, something has gone wrong with
         the order of operations &mdash; the split has to come after the rotation, not before.</span>
     </div>
@@ -231,8 +231,8 @@
       words are unrelated and the clash is unfortunate: a quadrant number is a position in a waveform,
       and a sector is a quarter of a crossplot.</p>
 
-    <p class="lede">The reason for four rather than two is a matter of record. The method's authors used a
-      coarser scheme in the original Phillips work &mdash; four quadrant numbers rather than nine, which
+    <p class="lede">The reason for four and not two is a matter of record. The method's authors used a
+      coarser scheme in the original Phillips work &mdash; four quadrant numbers and not nine, which
       was enough for 35 Hz data sampled at 2 ms &mdash; and it did not include sector splitting. The finer numbering and the splitting arrived together, and the stated reason for the
       finer numbering was the extra detail it gave the splitting to work with.</p>
 
@@ -253,7 +253,7 @@
           <details class="reveal"><summary>Answer</summary><span class="ans">They are identical every time,
             and they have to be. The split reflects a point in a line through the origin, and a reflection
             is a rigid motion about that origin, so it cannot change how far away the point is. That is
-            worth checking rather than assuming, because it tells you the step is doing nothing at all to
+            checked here and does not have to be assumed, because it tells you the step is doing nothing at all to
             module 05's attribute and everything to the angle. If you ever see the distance change, the
             split has been applied before the rotation instead of after it.</span></details></li>
         <li><b>Count what moves.</b> On step 2, read how many samples are moved and how many are left
@@ -300,8 +300,8 @@
           sign of their gradient flipped; Q1, Q2, Q8 and Q9 are untouched.</li>
         <li><b>It is a reflection in the rotated background trend</b>, applied to the middle of every loop
           and not to its ends.</li>
-        <li><b>The DQ distance is unchanged.</b> A reflection about the origin cannot alter a length, and
-          the module checks it rather than asserting it.</li>
+        <li><b>The DQ is unchanged.</b> A reflection about the origin cannot alter a length, and
+          the module checks it and does not assert it.</li>
         <li><b>The polar angle is what changes</b>, and that is the point: the step exists to prepare the
           coordinates module 07 measures its angle from.</li>
         <li><b>Nothing measured within one quadrant number changes</b>, because those samples are all
@@ -498,8 +498,8 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth rather than a
-     lone sand, so that the trace looks like something worth picking: a
+  /* The near-stack reflectivity of one trace. A layered earth and not a
+     lone sand, so that the trace looks like something a picker would find: a
      contrasting bed above, the sand with an optional tight streak inside it,
      and a tight bed below. Every spike is computed from the two rocks it sits
      between. */
@@ -593,7 +593,7 @@
     /* Between each consecutive pair of crossings, keep the single largest
        peak or trough. Where a thin bed has put two extrema in one interval,
        the smaller is discarded; those are counted separately, and only inside
-       the sand, so that the count is about the sand and not about whatever
+       the sand, so that the count is about the sand not about whatever
        the beds above and below happen to be doing. */
     const ext = [], dropped = [];
     let doublets = 0, inSand = 0;
@@ -730,7 +730,7 @@
      THE PHASE FILTERS
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
-     trace rather than to the wavelet so that it also works with noise on.
+     trace and not to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
      the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
@@ -1032,7 +1032,7 @@
 
 
   /* The rock model itself, as bands in two-way time, so the layers are always
-     visible beside the wiggles rather than implied by them. */
+     visible beside the wiggles and not implied by them. */
   const LITHFILL = {
     soft: 'rgba(150,160,170,0.55)', hard: 'rgba(110,125,140,0.65)',
     tight: 'rgba(214,171,74,0.55)', sand: 'rgba(194,48,107,0.30)',

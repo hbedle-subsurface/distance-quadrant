@@ -25,7 +25,7 @@
   <div class="mod-head">
     <p class="eyebrow">Module 06 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Shale baseline rotation</h1>
-    <p class="sub">The DQ distance measures how far a sample sits from the origin of AB space. That is only
+    <p class="sub">The DQ measures how far a sample sits from the origin of AB space. That is only
       useful if the background rock sits at the origin, and it does not &mdash; it sits along a line
       through it. Rotating that line flat is what converts a distance from the origin into a departure
       from the background, and the angle you rotate by is not the one the textbooks use.</p>
@@ -104,7 +104,7 @@
               <input type="range" id="scatter" min="0" max="40" step="1" value="0">
             </div>
             <p class="hint-line" style="margin:-8px 0 14px">Real shale trends are a cloud, not a line. This
-              adds spread so you can see what the rotation does when the baseline is only approximately
+              adds spread so we can see what the rotation does when the baseline is only approximately
               known.</p>
             <button class="btn ghost small" id="resetBtn" type="button">Reset everything</button>
           </div>
@@ -129,7 +129,7 @@
   <section class="tabpane" id="p1" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
       <h3><span class="stepno">1</span>Where the background sits</h3>
-      <span class="hint">Measured, rather than assumed</span>
+      <span class="hint">Measured, and not assumed</span>
     </div>
 
     <p class="lede">
@@ -187,7 +187,7 @@
 
     <p class="lede">
       Rotating a crossplot is just a change of coordinates: the points do not move relative to each other,
-      only the axes do. The question is what you rotate <em>to</em>.</p>
+      only the axes do. The question is what we rotate <em>to</em>.</p>
 
     <p class="lede">
       Classical AVO crossplotting rotates so that B&nbsp;=&nbsp;&minus;A lies along the horizontal. If the
@@ -235,7 +235,7 @@
     <p class="lede">
       The test is whether a hydrocarbon sand now stands clear of the brine trend. Unrotated it does not:
       the gas track runs right through the range the brine track already covers, so a large distance from
-      the origin means a porous rock rather than a charged one. After the rotation the brine track collapses
+      the origin means a porous rock and not a charged one. After the rotation the brine track collapses
       onto the horizontal and the gas track lifts off it.</p>
 
     <canvas id="c3a" aria-label="The brine, oil and gas tracks before and after rotating the background onto the x axis"></canvas>
@@ -290,7 +290,7 @@
     </ul>
 
     <div class="legend prose">
-      <span>Worth being clear that this rotation is a change of coordinates and nothing more. It adds no
+      <span>To be clear: this rotation is a change of coordinates and nothing more. It adds no
         information and removes none. What it does is put the axes somewhere that makes the two
         coordinates individually interpretable, and that is the whole of its contribution.</span>
     </div>
@@ -339,7 +339,7 @@
           <details class="reveal"><summary>Answer</summary><span class="ans">The fitted angle wanders and the
             rotated spread grows, because the rotation can only be as good as the estimate of where the
             background is. This is the limit of the technique on real data, where nobody hands you a clean brine track. It is also the argument for fitting the baseline on as much data as
-            possible and for checking it against a well rather than taking it from the densest part of a
+            possible and for checking it against a well and not for taking it from the densest part of a
             cloud.</span></details></li>
         <li><b>Try a low-porosity sand.</b> Set the porosity to 12% with gas and look at step 3.
           <details class="reveal"><summary>Answer</summary><span class="ans">The separation shrinks. A tight
@@ -396,17 +396,16 @@
         (a bearing of 344&deg;) on the workflow axes and &minus;58.4&deg; in true A and B, for the same
         rocks. The workflow figure is the one to rotate by, and it agrees with the field baselines the RDQ
         crossplots quote &mdash; 340&deg;, with rotation examples at 345&deg;, 333&deg; and 330&deg;.</p>
-      <p><b>The background is the brine sand track.</b> That is a modeling choice and worth being explicit
-        about. A real shale baseline is fitted to a population of wet samples covering a range of
+      <p><b>The background is the brine sand track.</b> That is a modeling choice, and this module states it. A real shale baseline is fitted to a population of wet samples covering a range of
         lithologies and compaction states; here it is one rock type varying only in porosity, which makes
         it cleaner and more curved than a real trend would be. The angle it produces, near
-        &minus;58.5&deg; under a shale, should be read as what this particular rock model implies rather than as a number
+        &minus;58.5&deg; under a shale, should be read as what this particular rock model implies and not as a number
         to carry into a field dataset. What survives the modeling choice is the direction of the argument:
-        the background is steeper than &minus;45&deg; and should be measured rather than assumed.</p>
+        the background is steeper than &minus;45&deg; and should be measured and not assumed.</p>
       <p>The trend is fitted by ordinary least squares of B on A across the porosity range, and the
         rotation angle is the arctangent of that slope. Rotating "to &minus;45&deg;" means rotating by
         whatever brings the B&nbsp;=&nbsp;&minus;A direction onto the horizontal, so that the classical
-        convention is applied properly rather than as a strawman. The background spread reported on steps 2
+        convention is applied properly and not as a strawman. The background spread reported on steps 2
         and 3 is the largest absolute vertical coordinate reached by the brine track after the rotation.</p>
       <p>The scatter control adds Gaussian noise to both coordinates of the background points, scaled as a
         percentage of the track's own extent, and the trend is refitted to the scattered points. It exists
@@ -433,8 +432,8 @@
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
     <h3><a href="sectors.html">06 · Splitting into sectors</a></h3>
-    <p>Four sectors rather than two, assigned by quadrant number, so that the two halves of a loop are kept
-      apart in the rotated crossplot rather than averaged together.</p>
+    <p>Four sectors and not two, assigned by quadrant number, so that the two halves of a loop are kept
+      apart in the rotated crossplot and not averaged together.</p>
     <a class="btn" href="sectors.html">Open module 06 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>

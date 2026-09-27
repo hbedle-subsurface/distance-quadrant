@@ -150,7 +150,7 @@
       like every other class.</p>
 
     <canvas id="c2a" aria-label="Near stack and DQ trace for each of the four AVO classes side by side"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Near stack above, DQ distance below, for each class in
+    <p class="hint-line" style="margin:8px 0 18px">Near stack above, DQ below, for each class in
       turn. The shaded band is the sand.</p>
 
     <div class="stats" style="margin-top:16px">
@@ -164,8 +164,7 @@
       <span>The class 2 column is the instructive one. Its intercept is close to zero, so the near stack
         barely registers the sand at all, and the distance is correspondingly small &mdash; this is the
         case module 07 used as its example of an unreliable angle, and it is the case every amplitude
-        method finds hardest. Nothing here fixes it; what the workflow does is make the weakness visible
-        rather than hiding it inside a single bright number.</span>
+        method finds hardest. Nothing here fixes it; what the workflow does is make the weakness visible and does not hide it inside a single bright number.</span>
     </div>
   </section>
 
@@ -186,8 +185,8 @@
       A logarithmic count axis makes the tail readable. Untick the box in the panel to see what the linear
       version hides.</p>
 
-    <canvas id="c3a" aria-label="Histograms of DQ distance for each of the four classes"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The distribution of DQ distance for each class, over
+    <canvas id="c3a" aria-label="Histograms of DQ for each of the four classes"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The distribution of DQ for each class, over
       the same analysis window. The shaded band marks the samples that come from inside the sand.</p>
 
     <div class="stats" style="margin-top:16px">
@@ -198,7 +197,7 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>Read the separation figure across the four classes rather than for one. It compares the
+      <span>Read the separation figure across the four classes and not for one. It compares the
         brighter sand samples, at the eightieth percentile, with the median of the whole window, because a
         median taken over the sand alone is dragged down by its quiet middle. It is largest where the
         intercept contrast is largest and smallest for class 2, which is the same ordering the sections
@@ -220,11 +219,10 @@
       becoming class 1, 2 and 4 by changing only the rock above it.</p>
 
     <p class="lede">They remain useful because they name the thing that decides how an amplitude method
-      will behave. Knowing you are in a class 2 setting tells you the intercept is near zero and that
-      anything depending on it will be fragile, which is worth knowing before you build a workflow on it.
+      will behave. Knowing the setting is class 2 tells us the intercept is near zero and that
+      anything depending on it will be fragile, and that matters before a workflow is built on it.
       The DQ workflow does not remove that fragility. What it does is carry a second number, the angle, whose
-      failure mode is different from the distance's, so that the two disagree in a detectable way rather
-      than failing silently together.</p>
+      failure mode is different from the distance's, so that the two disagree in a detectable way and do not fail silently together.</p>
 
     <div class="legend prose">
       <span>The practical version, and the reason the papers cross-plot sliding time windows: watch the
@@ -245,7 +243,7 @@
             crosses zero.</span></details></li>
         <li><b>Find the polarity flip.</b> On step 2, see which class has it applied.
           <details class="reveal"><summary>Answer</summary><span class="ans">Class 1, because its intercept
-            is positive and the reservoir top arrives as a peak rather than a trough. Troughs are Q1 and peaks Q9, so
+            is positive and the reservoir top arrives as a peak and not a trough. Troughs are Q1 and peaks Q9, so
             without the flip a class 1 top would be labeled Q9 while a class 3 top is Q1. Reversing both
             partial stacks before picking gives the same boundary the same label in every class.</span></details></li>
         <li><b>Compare the class 2 column with the others.</b> On step 2, read the distance at the sand top
@@ -254,14 +252,14 @@
             because its intercept is close to zero by definition and the near stack is essentially the
             intercept. This is the same weakness module 07 met at its class 2 crossover and module 11 met
             under a soft shale: near a crossover the vector is short, the distance is small and the angle
-            is unstable. It is a property of the rocks rather than of the method, and no processing
+            is unstable. It is a property of the rocks and not of the method, and no processing
             removes it.</span></details></li>
         <li><b>Switch the histogram to a linear count axis.</b> On step 3, untick the box.
           <details class="reveal"><summary>Answer</summary><span class="ans">The background bar near zero
             swamps everything and the tail vanishes. In a real clastic section the imbalance is far worse
             than in this model &mdash; the papers put it at roughly four samples in five being shale
             &mdash; which is why the published histograms use a logarithmic count axis. It is a display
-            choice rather than a processing one, and it changes whether you can see the thing you are
+            choice and not a processing one, and it changes whether you can see the thing you are
             looking for.</span></details></li>
         <li><b>Thin the sand.</b> Take the thickness to 10 ms and look at steps 2 and 3 together.
           <details class="reveal"><summary>Answer</summary><span class="ans">Every class loses separation at
@@ -272,10 +270,9 @@
             for.</span></details></li>
         <li><b>Add noise and watch which class fails first.</b> Take the noise to 30% on step 3.
           <details class="reveal"><summary>Answer</summary><span class="ans">Class 2 degrades first and
-            worst, because its separation was smallest to begin with and noise is added in absolute rather
-            than relative terms. The ordering is the useful part: the class that is hardest in clean data
+            worst, because its separation was smallest to begin with and noise is added in absolute terms and not relative ones. The ordering is the useful part: the class that is hardest in clean data
             is hardest in noisy data too, and by more. Any claim that a method works on class 2 should be
-            demonstrated on noisy class 2 data rather than argued from clean
+            demonstrated on noisy class 2 data and not argued from clean
             models.</span></details></li>
       </ol>
     </div>
@@ -312,14 +309,14 @@
         each lands cleanly in one quadrant of the intercept-gradient plane: <b>class 1</b> is a soft shale
         over a 10% porosity brine sand; <b>class 2</b> a soft shale over a 34% brine sand; <b>class 3</b> a
         soft shale over a 28% gas sand; <b>class 4</b> a tight sandstone over a 26% gas sand. The class
-        label shown on step 1 is computed from the signs of the modeled intercept and gradient rather than
+        label shown on step 1 is computed from the signs of the modeled intercept and gradient and not
         asserted, so if the rock model is ever retuned the labels follow it.</p>
       <p>Everything downstream is as in modules 02 through 09, applied identically to all four. The one
         difference is the polarity flip of module 03, applied where the intercept is positive.</p>
-      <p>The histograms are of DQ distance over the whole analysis window, binned uniformly, with the
+      <p>The histograms are of DQ over the whole analysis window, binned uniformly, with the
         samples falling inside the modeled sand marked separately. The logarithmic count axis follows the
         published displays; the note that roughly four samples in five are shale in a clastic section is
-        from the DQ display specification and describes field data rather than this model, where the
+        from the DQ display specification and describes field data and not this model, where the
         proportion depends on how thick you set the sand.</p>
       <p><b>What this module does not do.</b> It does not reproduce the published class sections, which are
         built from ray-traced synthetics over pseudo-well catalogs with lateral variation. It is four
@@ -491,8 +488,8 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth rather than a
-     lone sand, so that the trace looks like something worth picking: a
+  /* The near-stack reflectivity of one trace. A layered earth and not a
+     lone sand, so that the trace looks like something a picker would find: a
      contrasting bed above, the sand with an optional tight streak inside it,
      and a tight bed below. Every spike is computed from the two rocks it sits
      between. */
@@ -586,7 +583,7 @@
     /* Between each consecutive pair of crossings, keep the single largest
        peak or trough. Where a thin bed has put two extrema in one interval,
        the smaller is discarded; those are counted separately, and only inside
-       the sand, so that the count is about the sand and not about whatever
+       the sand, so that the count is about the sand not about whatever
        the beds above and below happen to be doing. */
     const ext = [], dropped = [];
     let doublets = 0, inSand = 0;
@@ -723,7 +720,7 @@
      THE PHASE FILTERS
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
-     trace rather than to the wavelet so that it also works with noise on.
+     trace and not to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
      the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
@@ -1023,7 +1020,7 @@
 
      Four fixed recipes in the shared rock model, one per quadrant of the
      intercept-gradient plane, run through the identical workflow. The class
-     label is computed from the modeled signs rather than asserted.
+     label is computed from the modeled signs and not asserted.
      ===================================================================== */
 
   const SOFT = 'rgba(22,25,28,0.45)';
@@ -1268,7 +1265,7 @@
     ctx.font = '9px "IBM Plex Mono", monospace';
     ctx.textAlign = 'left'; ctx.textBaseline = 'top';
     ctx.fillStyle = 'rgba(22,25,28,0.5)';
-    ctx.fillText('gray = near stack, color = DQ distance, \u21BB = polarity flipped',
+    ctx.fillText('gray = near stack, color = DQ, \u21BB = polarity flipped',
       rect.x, rect.y + rect.h + 8);
 
     const cur = runClass(current());

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Quadrant numbers | How the DQ Trace Actually Works</title>
-<meta name="description" content="How every sample between the StickOgram picks is labeled Q1 to Q9, why loops usually repeat numbers rather than omit them, and which end of the loop gets to be Q1.">
+<meta name="description" content="How every sample between the StickOgram picks is labeled Q1 to Q9, why loops usually repeat numbers and not omit them, and which end of the loop gets to be Q1.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -97,7 +97,7 @@
             <label class="check" style="grid-column:1/-1"><input type="checkbox" id="skipflip">
               Skip the polarity flip on class 1</label>
             <p class="hint-line" style="margin:-4px 0 12px">Step 3 shows what this does. Leave it off
-              until you get there.</p>
+              until we get there.</p>
             <button class="btn ghost small" id="resetBtn" type="button">Reset everything</button>
           </div>
         </div>
@@ -185,7 +185,7 @@
       once. With fewer, some are not used at all.</p>
 
     <p class="lede">
-      Which case you are in is set by frequency and sample rate together, and the arithmetic is not
+      Which case holds is set by frequency and sample rate together, and the arithmetic is not
       subtle. An exact fit needs a quarter cycle four samples long, which at 1 ms is a 16 ms period, which
       is <b>62.5 Hz</b>. Almost all seismic is well below that, so <b>repetition is the normal case and
       omission is the exception</b> &mdash; the opposite of what the phrase "too short a loop" suggests.</p>
@@ -207,7 +207,7 @@
     </div>
     <div class="legend">
       <span>Repetition changes little: several neighboring samples are told to use the same phase
-        filter, which is exactly what you would want in the middle of a long, smooth limb. Omission is
+        filter, which is exactly what we would want in the middle of a long, smooth limb. Omission is
         worse, because a number that never appears is a phase rotation that never gets applied, and the
         enhanced trace at that loop is built from a smaller set of filters than everywhere else.</span>
     </div>
@@ -225,7 +225,7 @@
       around, and every later attribute assumes it.</p>
 
     <p class="lede">
-      A class 1 sand breaks it. Its top is a peak rather than a trough, so applying the rule unchanged
+      A class 1 sand breaks it. Its top is a peak and not a trough, so applying the rule unchanged
       would number the top of the reservoir Q9 and the base Q1. The same rock would carry opposite numbers
       depending on what it happened to be sitting under, and nothing downstream could be compared between
       the two.</p>
@@ -247,7 +247,7 @@
       <div class="stat wide"><span>Reading</span><b id="s3f">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>Doing it upstream rather than at the numbering step is the important part. By the time the
+      <span>Doing it upstream and not at the numbering step is the important part. By the time the
         picks exist the near stack has already been used to define the layers, and flipping the numbers
         afterwards would leave the picks in place while reversing everything hung on them. Reversing the
         traces first means one set of rules runs on every dataset.</span>
@@ -262,7 +262,7 @@
 
     <p class="lede">A quadrant number is a statement about position in a waveform cycle, and it is
       deliberately not a statement about amplitude. Two samples with the same number are at the same place
-      in their respective loops, whatever the loops are worth in millivolts and however far apart they sit
+      in their respective loops, whatever the loop amplitudes are in millivolts and however far apart they sit
       in time. That is the property the rest of the method runs on.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
@@ -276,18 +276,17 @@
         straight from whether the numbers are counting up or down.</li>
       <li><b>Comparing samples across a survey.</b> A Q3 sample in a 20 Hz zone and a Q3 sample in a 45 Hz
         zone are at the same phase of their own cycles. That is the sense in which the DQ trace is
-        frequency independent, and it is the whole reason for numbering by proportion rather than by
+        frequency independent, and it is the whole reason for numbering by proportion and not by
         milliseconds.</li>
     </ul>
 
     <p class="lede">What the number cannot say is how long the loop was. A quarter cycle
       three samples long and one thirty samples long both run Q2, Q3, Q4, and after this step the
       difference between them has been thrown away. That is exactly the information the isochron of module
-      05 goes back and recovers, which is why the two attributes are computed side by side and why the DQ
-      distance and the isochron carry different things.</p>
+      05 goes back and recovers, which is why the two attributes are computed side by side and why the DQ and the isochron carry different things.</p>
 
     <div class="legend prose">
-      <span>Worth being clear that nothing here is an approximation to a continuous phase. The numbering is
+      <span>To be clear: nothing here is an approximation to a continuous phase. The numbering is
         a discrete bucket per sample, and the buckets are coarse: nine of them across a half cycle. Module
         06 rotates by twenty-two and a half degrees a step because that is what nine buckets over a half
         cycle works out to, not because the phase was measured that precisely.</span>
@@ -303,7 +302,7 @@
           <details class="reveal"><summary>Answer</summary><span class="ans">It happens around 62 Hz, where
             the period is 16 ms and the quarter cycle is 4 ms. That is the only setting at which Q2, Q3 and
             Q4 each land on exactly one sample. Everything slower repeats numbers and everything faster
-            starts dropping them, so an exact fit is a coincidence rather than a design target. Nothing in
+            starts dropping them, so an exact fit is a coincidence and not a design target. Nothing in
             the method tries to achieve it.</span></details></li>
         <li><b>Check that repetition is the normal case.</b> Set the frequency to 25 Hz and read the two
           counters on step 2, then to 70 Hz and read them again.
@@ -312,11 +311,11 @@
             about 15 and 50 Hz, repetition is what happens on real data essentially all of the time. The
             phrase "short isochron" in the method description &mdash; isochron here just means the time
             between two picks, which module 08 takes up properly &mdash; is describing the rare case, not
-            the usual one. Worth knowing before you read the papers.</span></details></li>
+            the usual one. This comes up in the papers.</span></details></li>
         <li><b>Coarsen the sampling instead.</b> Put the frequency back to 40 Hz and step the sample rate
           from 1 ms to 4 ms.
           <details class="reveal"><summary>Answer</summary><span class="ans">Omission arrives quickly,
-            because what matters is samples per quarter cycle rather than milliseconds. At 40 Hz the
+            because what matters is samples per quarter cycle and not milliseconds. At 40 Hz the
             quarter cycle is 6.3 ms, which is six samples at 1 ms and one or two at 4 ms. This is the same
             argument module 02 made about zero crossings, arriving from a different direction: the papers
             ask for 1 ms data because the method counts samples, and a coarse trace does not have enough of
@@ -327,7 +326,7 @@
             until it holds only the anchors, and then until it is not a separate loop at all. The numbering
             does not report a problem. It numbers whatever loops the waveform presented, and a merged thin
             bed presents one loop where the geology has two boundaries. Everything downstream inherits
-            that, which is why module 11 has to treat tuning as a first-class subject rather than as an
+            that, which is why module 11 has to treat tuning as a first-class subject and not as an
             error to be corrected.</span></details></li>
         <li><b>Skip the polarity flip on a class 1 sand.</b> On step 3, set the overburden to soft shale
           with oil at about 20% porosity so the sand is class 1, then tick the skip box.
@@ -343,7 +342,7 @@
             is a strong negative coefficient, so it is a trough and needs no flip. It is the class 1 case
             &mdash; a sand slower than what sits above it &mdash; that gets reversed. The convention is
             really about which way round the reservoir contrast points, and the AVO class label is a
-            convenient shorthand for it rather than the thing itself.</span></details></li>
+            convenient shorthand for it and not the thing itself.</span></details></li>
       </ol>
     </div>
   </section>
@@ -399,7 +398,7 @@
       <p>The polarity decision is made on the sign of the near-stack reflection coefficient at the top of
         the sand: positive means the reservoir top is a peak, so the traces are reversed. That reproduces
         the published grouping exactly &mdash; classes 4, 3 and 2 are left alone and class 1 is flipped
-        &mdash; while being stated in terms of the contrast itself rather than of the class label. In the
+        &mdash; while being stated in terms of the contrast itself and not of the class label. In the
         real workflow the reversal is applied to both partial stacks at the stacking step, before any
         picking, and this page does the same.</p>
       <p>What this module leaves out is what the numbers are then used for. Module 04 attaches a phase
@@ -569,8 +568,8 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth rather than a
-     lone sand, so that the trace looks like something worth picking: a
+  /* The near-stack reflectivity of one trace. A layered earth and not a
+     lone sand, so that the trace looks like something a picker would find: a
      contrasting bed above, the sand with an optional tight streak inside it,
      and a tight bed below. Every spike is computed from the two rocks it sits
      between. */
@@ -664,7 +663,7 @@
     /* Between each consecutive pair of crossings, keep the single largest
        peak or trough. Where a thin bed has put two extrema in one interval,
        the smaller is discarded; those are counted separately, and only inside
-       the sand, so that the count is about the sand and not about whatever
+       the sand, so that the count is about the sand not about whatever
        the beds above and below happen to be doing. */
     const ext = [], dropped = [];
     let doublets = 0, inSand = 0;
@@ -881,7 +880,7 @@
 
 
   /* The rock model itself, as bands in two-way time, so the layers are always
-     visible beside the wiggles rather than implied by them. */
+     visible beside the wiggles and not implied by them. */
   const LITHFILL = {
     soft: 'rgba(150,160,170,0.55)', hard: 'rgba(110,125,140,0.65)',
     tight: 'rgba(214,171,74,0.55)', sand: 'rgba(194,48,107,0.30)',
@@ -981,7 +980,7 @@
       }
       ctx.restore();
 
-      // a key, beside the strip rather than under it
+      // a key, beside the strip and not under it
       const kx = rect.x + rect.w + 34;
       ctx.font = '10px "IBM Plex Mono", monospace';
       ctx.textAlign = 'left'; ctx.textBaseline = 'middle';

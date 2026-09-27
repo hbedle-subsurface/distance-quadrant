@@ -284,8 +284,8 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth rather than a
-     lone sand, so that the trace looks like something worth picking: a
+  /* The near-stack reflectivity of one trace. A layered earth and not a
+     lone sand, so that the trace looks like something a picker would find: a
      contrasting bed above, the sand with an optional tight streak inside it,
      and a tight bed below. Every spike is computed from the two rocks it sits
      between. */
@@ -379,7 +379,7 @@
     /* Between each consecutive pair of crossings, keep the single largest
        peak or trough. Where a thin bed has put two extrema in one interval,
        the smaller is discarded; those are counted separately, and only inside
-       the sand, so that the count is about the sand and not about whatever
+       the sand, so that the count is about the sand not about whatever
        the beds above and below happen to be doing. */
     const ext = [], dropped = [];
     let doublets = 0, inSand = 0;
@@ -498,7 +498,14 @@
     const t = shuey(over, sand);
     return (t.A + t.B * S2N) > 0;
   }
-  const flipApplied = () => needsFlip() && !S.skipflip;
+  /* One decision for the whole line. The porosity changes from trace to trace,
+     and under a hard seal the low-porosity end of the sand is harder than the
+     shale while the high-porosity end is softer. Deciding per trace would
+     reverse part of the section and leave a polarity step in the middle of
+     beds that have not changed at all, so the decision is taken once, from the
+     middle of the line, exactly as it would be taken once for a survey. */
+  let lineFlip = null;
+  const flipApplied = () => (lineFlip === null ? needsFlip() : lineFlip) && !S.skipflip;
 
   function avoClass() {
     const over = LITHS[S.over];
@@ -516,7 +523,7 @@
      THE PHASE FILTERS
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
-     trace rather than to the wavelet so that it also works with noise on.
+     trace and not to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
      the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
@@ -816,7 +823,7 @@
 
      Four fixed recipes in the shared rock model, one per quadrant of the
      intercept-gradient plane, run through the identical workflow. The class
-     label is computed from the modeled signs rather than asserted.
+     label is computed from the modeled signs and not asserted.
      ===================================================================== */
 
   /* =====================================================================
@@ -853,6 +860,9 @@
        part of the DQ section through tuning, which is module 12's subject and
        the wrong first impression to give here. */
     const keep = S.phi;
+    const midPhi = Math.round(PH0 + (PH1 - PH0) * (0.15 + 0.75 * 0.5));
+    S.phi = midPhi;
+    lineFlip = needsFlip();
     const traces = [];
     for (let k = 0; k < NTR; k++) {
       const u = k / (NTR - 1);
@@ -874,6 +884,7 @@
                     win: sandWindow(TTOP, S.thick) });
     }
     S.phi = keep;
+    lineFlip = null;
     lineCache[key] = traces;
     return traces;
   }
@@ -892,18 +903,12 @@
     return 'rgb(' + Math.round(255 - 190 * t) + ',' + Math.round(255 - 130 * t) + ','
       + Math.round(255 - 30 * t) + ')';
   }
-  // one-sided: full increments above zero, two below, light gray at the low end
-  const DQ_UP = ['#EDEDEA', '#E8E86A', '#F2C64A', '#F09A45', '#E8683F',
-                 '#DE4046', '#CE2B60', '#C2306B', '#A82563'];
-  const DQ_DOWN = ['#C9CCD1', '#AEB4BC'];
-  function dqColor(v, lim) {
-    if (v < 0) {
-      const t = Math.min(1, -v / lim);
-      return DQ_DOWN[t > 0.5 ? 1 : 0];
-    }
-    const t = Math.max(0, Math.min(0.999, v / lim));
-    return DQ_UP[Math.floor(t * DQ_UP.length)];
-  }
+  /* The published DQ color bar: fourteen bands, seven each side of zero,
+     with the unfilled wiggle drawn over them. The band width is fixed, so a
+     color means the same DQ value whatever the controls are set to. */
+  const DQ_BAND = SEIS.DQ_BAND;
+  const NO_VALUE = '#EDEEEF';        // samples with no quadrant number
+  function dqColor(v) { return SEIS.dqBandColor(v, DQ_BAND); }
   // two-sided, ten degree bands, bolder on the positive side
   function pxColor(v) {
     const b = Math.max(-9, Math.min(8, Math.floor(v / 10)));
@@ -939,7 +944,7 @@
         const y = rect.y + (i / (nt - 1)) * rect.h;
         let col;
         if (mode === 'seis') col = seisColor(t.near[i], lim);
-        else if (mode === 'dq') col = t.has[i] ? dqColor(t.dq[i], lim) : DQ_DOWN[0];
+        else if (mode === 'dq') col = t.has[i] ? dqColor(t.dq[i]) : NO_VALUE;
         else col = t.has[i] ? pxColor(t.px[i]) : '#E9EAEC';
         ctx.fillStyle = col;
         ctx.fillRect(x0, y - ch / 2, tw + 0.6, ch + 0.6);
@@ -981,7 +986,7 @@
       const u = 1 - k / (N - 1);
       let col, val;
       if (mode === 'seis') { val = (u * 2 - 1) * lim; col = seisColor(val, lim); }
-      else if (mode === 'dq') { val = (u * 1.25 - 0.25) * lim; col = dqColor(val, lim); }
+      else if (mode === 'dq') { val = (u * 2 - 1) * DQ_BAND * 7; col = dqColor(val); }
       else { val = (u * 2 - 1) * 90; col = pxColor(val); }
       ctx.fillStyle = col;
       ctx.fillRect(x, y + (k / N) * h, w, h / N + 1);
@@ -996,8 +1001,9 @@
       ctx.fillText('0', x + w + 4, y + h / 2);
       ctx.fillText('\u221290', x + w + 4, y + h - 4);
     } else if (mode === 'dq') {
-      ctx.fillText('max', x + w + 4, y + 4);
-      ctx.fillText('0', x + w + 4, y + h * 0.8);
+      ctx.fillText('+' + (DQ_BAND * 7).toFixed(2), x + w + 4, y + 4);
+      ctx.fillText('0', x + w + 4, y + h / 2);
+      ctx.fillText('\u2212' + (DQ_BAND * 7).toFixed(2), x + w + 4, y + h - 4);
     } else {
       ctx.fillText('+', x + w + 4, y + 4);
       ctx.fillText('0', x + w + 4, y + h / 2);
@@ -1129,7 +1135,7 @@
     const ctx = SEIS.fitCanvas(c, W, H);
     ctx.clearRect(0, 0, W, H);
     const traces = line();
-    const x0 = 44, gapT = 40, gap = 16, cb = 34;
+    const x0 = 44, gapT = 40, gap = 16, cb = 56;
     const pw = (W - x0 - gapT - gap - cb) / 3;
     const top = 30, h = H - 72;
     const rR = { x: x0, y: top, w: pw, h };

@@ -28,7 +28,7 @@
     <p class="sub">Everything after this module operates on two traces. They come from one CDP of
       NMO-corrected gathers by averaging a narrow window of angles twice, at 0&ndash;10&deg; and at
       20&ndash;30&deg;. This module builds those two traces, shows that they are the intercept and the
-      gradient in a thin disguise, and works through why the method takes two averages rather than fitting
+      gradient in a thin disguise, and works through why the method takes two averages and does not fit
       a line through all the angles at once.</p>
   </div>
 
@@ -201,7 +201,7 @@
     </div>
     <div class="legend">
       <span>Move the far window in the panel and watch the multiplier on the right change. Push the far
-        window out and the gradient is measured with more leverage, which is worth having; the reasons not
+        window out and the gradient is measured with more leverage, and that helps; the reasons not
         to keep pushing are noise, moveout error, and the fact that the two-term equation itself stops
         holding much past 30&deg;.</span>
     </div>
@@ -271,7 +271,7 @@
       know what happens next. Everything from module 02 onward reads structure off the near stack: where it
       crosses zero, where its peaks are, where its troughs are. Those picks define the acoustic layers, and
       every quadrant number and phase filter in the method hangs off them. So the question that matters is
-      not which estimator has the smaller error bar. It is which one gives you a near-angle trace you can
+      not which estimator has the smaller error bar. It is which one gives us a near-angle trace we can
       trust the shape of.</p>
 
     <p class="lede">On that question step 3 is one-sided. The near stack averages ten degrees of angle, over
@@ -317,8 +317,7 @@
             0.007, and for most sands it is nearer 0.002. Set against intercepts of a tenth to half, that
             is a rounding error, and it is why the DQ papers use the near stack as the intercept without
             further comment. It is not an approximation to the physics &mdash; the physics is exact
-            &mdash; it is a decision that one hundredth of B is not worth carrying
-            around.</span></details></li>
+            &mdash; it is a decision that one hundredth of B can be dropped.</span></details></li>
         <li><b>Move the far window and watch the gradient scale.</b> On step 2, drag the far window from
           12&deg; out to 45&deg;, reading the multiplier on F &minus; N.
           <details class="reveal"><summary>Answer</summary><span class="ans">It climbs steeply: 0.0775 at a
@@ -412,7 +411,7 @@
         1 ms. Window averages are unweighted means of the traces whose angle falls inside the window, which
         is what a partial stack is. Because R is linear in sin&sup2;&theta;, the average over a window
         equals A + B times the mean of sin&sup2;&theta; across it; the page evaluates that mean numerically
-        rather than taking the value at the window center, and the difference between the two matters at
+        and does not take the value at the window center, and the difference between the two matters at
         the third decimal.</p>
       <p>The least-squares comparison in step 3 fits R = A + B&nbsp;sin&sup2;&theta; independently at every
         time sample, using all forty-one traces, by ordinary least squares on sin&sup2;&theta;. Its
@@ -422,7 +421,7 @@
       <p>Residual moveout is modeled as a time shift proportional to sin&sup2;&theta;, quoted in
         milliseconds at 40&deg;. Real leftover moveout is not that tidy, but the point of the step is the
         ratio between what a narrow window averages and what a full-gather fit averages, and that ratio is
-        set by the geometry rather than by the shape of the residual. Normal-moveout stretch, angle
+        set by the geometry and not by the shape of the residual. Normal-moveout stretch, angle
         dependent tuning, transmission loss and mode conversion are all left out. Every one of them would
         make the fit look worse than it does here.</p>
       <p>Noise is band-limited with the same wavelet, drawn independently for each trace in the gather, and
@@ -636,7 +635,7 @@
 
   const inBand = (d, band) => (d >= band[0] && d <= band[1]);
 
-  /* The noise field is keyed to the model rather than regenerated on every
+  /* The noise field is keyed to the model and not regenerated on every
      draw, so that dragging a slider changes the model and not the luck. */
   let noiseCache = null;
   function noiseField(m) {
@@ -1031,7 +1030,7 @@
     SEIS.frame(ctx, rect);
 
     // the fitted gradient is scaled by the same factor as F - N so that the
-    // two are drawn as the same physical quantity rather than as two numbers
+    // two are drawn as the same physical quantity and not as two numbers
     const fitBscaled = new Float32Array(NT);
     for (let i = 0; i < NT; i++) fitBscaled[i] = g.fitB[i] * g.m.gain;
 
@@ -1084,7 +1083,7 @@
         + 'for one over the other. Add noise, then add moveout.';
     } else if (S.rmo === 0) {
       verdict = 'A flat gather with noise only. The fit carries about half the noise of the two stacks, '
-        + 'because it uses all ' + NANG + ' traces rather than ' + g.near.n + ' and ' + g.far.n
+        + 'because it uses all ' + NANG + ' traces and not ' + g.near.n + ' and ' + g.far.n
         + '. On data like this it is the better estimator and there is nothing to discuss.';
     } else if (S.noise === 0) {
       verdict = 'Moveout only. Both gradients are now wrong, but the fit is wrong by about '
@@ -1203,7 +1202,7 @@
     if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3');
 
     /* Step 2 is the noiseless algebra behind the two traces. Noise and moveout
-       have nothing to say about it, so they go inactive rather than vanish. */
+       have nothing to say about it, so they go inactive and not vanish. */
     const two = (id === 'p2');
     ['noise', 'rmo'].forEach((k) => { const el = $(k); if (el) el.disabled = two; });
     const cd = $('colData');

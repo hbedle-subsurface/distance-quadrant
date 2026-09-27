@@ -129,12 +129,12 @@
 
     <p class="lede">
       What this step produces: a short list of samples that mark real acoustic boundaries, so that later
-      modules can attach a number to every sample by counting from the nearest boundary rather than by
+      modules can attach a number to every sample by counting from the nearest boundary and not by
       measuring the waveform again.</p>
 
     <p class="lede">
       The StickOgram is also used on its own. Reduced to picks, a seismic volume becomes a set of layer
-      boundaries rather than a set of wiggles, which makes it easier to map horizons, follow faults and
+      boundaries and not a set of wiggles, which makes it easier to map horizons, follow faults and
       outline geo-bodies, and much lighter to feed to a machine learning program. Timeslices through it at
       ten or twenty millisecond spacing give a first time-structure map before anyone has picked a
       horizon.</p>
@@ -205,7 +205,7 @@
       and the smaller is discarded along with the rest of the waveform. A thin bed will do it, and so will
       a thick sand under a long wavelet, where the top and base loops overlap enough to leave a shoulder.
       The counter below reports only the extrema discarded between the top and base of the sand, so that it
-      is about the sand rather than about whatever the beds above and below happen to be doing.</p>
+      is about the sand not about whatever the beds above and below happen to be doing.</p>
 
     <canvas id="c2b" aria-label="The trace with a doublet, showing which of the two extrema between a pair of crossings is kept"></canvas>
 
@@ -233,7 +233,7 @@
     </div>
 
     <p class="lede">
-      One trace of picks is not obviously worth having. A line of them is. Here is the same model run
+      One trace of picks does not show much on its own. A line of them is. Here is the same model run
       across seventy traces, with the sand thinning to the right and a normal fault partway along, drawn
       first as ordinary amplitudes and then as the StickOgram.</p>
 
@@ -249,7 +249,7 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>The fault reads as a break in the sticks rather than as a change of amplitude, which is why the
+      <span>The fault reads as a break in the sticks and not as a change of amplitude, which is why the
         display is used for structural work and for feeding machine learning: the events are already
         separated from the wavelet and from each other, and there is far less of it to carry. The AASPI
         pamphlet suggests slicing the same volume at ten or twenty millisecond intervals as a quick first
@@ -265,7 +265,7 @@
     </div>
 
     <p class="lede">The StickOgram has a life of its own as a display, and it is also the scaffolding for
-      everything else in the method. Those are worth keeping separate, because they explain why so much
+      everything else in the method. Keeping those separate helps, because they explain why so much
       care goes into a rule about which of two samples to take.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
@@ -275,11 +275,11 @@
         weak sense that its center is marked on every trace. Time slices through the StickOgram at ten or
         twenty millisecond spacing give a first time structure map before anyone has picked a
         horizon.</li>
-      <li><b>Faults as breaks rather than as dimming.</b> A fault interrupts the sticks. On an amplitude
+      <li><b>Faults as breaks and not as dimming.</b> A fault interrupts the sticks. On an amplitude
         section the same fault is a subtle change in a continuous field, and the eye has to do the
         work.</li>
       <li><b>A much smaller volume to hand a machine.</b> Four numbers a cycle instead of forty. Feeding
-        picks rather than samples to a classifier removes the wavelet from the input, which is otherwise
+        picks and not samples to a classifier removes the wavelet from the input, which is otherwise
         the loudest thing in it.</li>
     </ul>
 
@@ -343,7 +343,7 @@
             zero. The top and base have merged into one event, and the center of that event does not sit
             between the top and the base &mdash; it sits above the sand entirely. So the picks record that
             something is there while saying nothing whatever about its interior, and no attribute computed
-            from them can do better. Module 11 comes back to this: the DQ distance responds to bed
+            from them can do better. Module 11 comes back to this: the DQ responds to bed
             thickness where Theta PX does not, and this is where the sensitivity starts.</span></details></li>
         <li><b>Add noise and watch picks disappear.</b> On step 1, raise the noise from zero to 40% a few
           percent at a time, watching the pick count.
@@ -354,14 +354,14 @@
             merges with its neighbor. Losing a pick is the worse outcome of the two, because a spurious
             layer can be recognized as noise later while a missing one cannot be recovered at all. This is
             why module 01 cared so much about the near stack being clean, and why the papers say to bandpass
-            filter for signal to noise rather than for bandwidth.</span></details></li>
+            filter for signal to noise and not for bandwidth.</span></details></li>
         <li><b>Find the fault on the wrong display.</b> On step 3, set the noise to 25% and try to locate
           the fault on the amplitude section, then on the sticks.
           <details class="reveal"><summary>Answer</summary><span class="ans">On the amplitudes the fault is a
             subtle lateral shift inside a continuous field, and the noise sits on top of it. On the sticks
             it is a clean break in a set of lines, because the display has already thrown away everything
             that was not an event. This is the argument for using the StickOgram as a structural display
-            rather than only as an intermediate product, and it is the same argument for feeding it to a
+            and not only as an intermediate product, and it is the same argument for feeding it to a
             classifier.</span></details></li>
       </ol>
     </div>
@@ -411,22 +411,21 @@
         sample keeps the dead ends of the trace out of the pick list; it plays no part in the method itself
         and exists here only because a synthetic trace has exactly zero amplitude outside the modeled
         interval. The count of discarded extrema on step 2 is restricted to the samples between the top and
-        base of the sand, so that it reports on the sand rather than on interference between the beds above
+        base of the sand, so that it reports on the sand not on interference between the beds above
         and below it.</p>
       <p>The crossing error quoted on step 2 is the time between the chosen sample and the true crossing,
         found by linear interpolation between the two bracketing samples. It is bounded above by half the
-        sample interval, which is a property of the rule rather than of the data.</p>
+        sample interval, which is a property of the rule and not of the data.</p>
       <p>The layer stack is a contrasting bed from 14 to 26 ms, the sand from 50 ms down, an optional four
         millisecond tight sandstone streak three quarters of the way through it, and a tight bed from 118 to
-        130 ms. Structure moves the whole stack together. The extra beds are there so that the trace looks
-        like something worth picking rather than like a lone reflection in an empty window.</p>
+        130 ms. Structure moves the whole stack together. The extra beds are there so that the trace looks like something a picker would find and not like a lone reflection in an empty window.</p>
       <p>The section on step 3 is seventy traces. The top of the sand follows a gentle anticline, the sand
         thins linearly to the right, and a normal fault at the fortieth trace displaces everything below it
         by the throw set in the panel. Each trace is modeled and picked independently; nothing is smoothed or tracked laterally, so the continuity in the display is the
-        continuity in the model rather than something the picker imposed.</p>
+        continuity in the model and not something the picker imposed.</p>
       <p>Noise is band-limited with the same wavelet, drawn independently for each trace, and scaled as a
         percentage of the strongest reflection in the model. Where the sample rate is coarser than 1 ms the
-        trace is modeled directly at that rate rather than decimated, which flatters the coarse cases
+        trace is modeled directly at that rate and not decimated, which flatters the coarse cases
         slightly, since real decimation would alias as well.</p>
       <p>What this module leaves out is the polarity convention. For AVO classes 4, 3 and 2 the trough is
         Q1 and the peak is Q9. For class 1 sands and carbonate plays the polarity of both partial stacks is
@@ -600,8 +599,8 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth rather than a
-     lone sand, so that the trace looks like something worth picking: a
+  /* The near-stack reflectivity of one trace. A layered earth and not a
+     lone sand, so that the trace looks like something a picker would find: a
      contrasting bed above, the sand with an optional tight streak inside it,
      and a tight bed below. Every spike is computed from the two rocks it sits
      between. */
@@ -700,7 +699,7 @@
     /* Between each consecutive pair of crossings, keep the single largest
        peak or trough. Where a thin bed has put two extrema in one interval,
        the smaller is discarded; those are counted separately, and only inside
-       the sand, so that the count is about the sand and not about whatever
+       the sand, so that the count is about the sand not about whatever
        the beds above and below happen to be doing. */
     const ext = [], dropped = [];
     let doublets = 0, inSand = 0;
@@ -796,7 +795,7 @@
 
 
   /* The rock model itself, as bands in two-way time, so the layers are always
-     visible beside the wiggles rather than implied by them. */
+     visible beside the wiggles and not implied by them. */
   const LITHFILL = {
     soft: 'rgba(150,160,170,0.55)', hard: 'rgba(110,125,140,0.65)',
     tight: 'rgba(214,171,74,0.55)', sand: 'rgba(194,48,107,0.30)',
@@ -1218,7 +1217,7 @@
     if (lab) lab.hidden = !(id === 'p1' || id === 'p2' || id === 'p3');
 
     /* The fault only exists in the section, so it goes inactive elsewhere
-       rather than sitting there implying it does something. */
+       and does not sit there implying it does something. */
     const three = (id === 'p3');
     const th = $('throw'); if (th) th.disabled = !three;
 

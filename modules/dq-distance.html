@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The DQ distance | How the DQ Trace Actually Works</title>
-<meta name="description" content="Two quadrant-enhanced traces combined into one number per sample by Pythagoras, the sign taken from the slope of the near stack, and why the result looks blocked rather than sinusoidal.">
+<title>The DQ | How the DQ Trace Actually Works</title>
+<meta name="description" content="Two quadrant-enhanced traces combined into one number per sample by Pythagoras, the sign taken from the slope of the near stack, and why the result looks blocked and not sinusoidal.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -24,9 +24,9 @@
 
   <div class="mod-head">
     <p class="eyebrow">Module 05 &nbsp;·&nbsp; The DQ trace</p>
-    <h1>The DQ distance</h1>
+    <h1>The DQ</h1>
     <p class="sub">Two quadrant-enhanced traces go in and one number per sample comes out. The arithmetic is
-      Pythagoras and nothing more, which is worth saying plainly because the name and the build-up both
+      Pythagoras and nothing more, and that is said plainly here because the name and the build-up both
       suggest otherwise. What makes the result useful is not the equation but what has been done to its
       inputs over the previous six modules.</p>
   </div>
@@ -35,7 +35,7 @@
     <div class="labgrid">
       <div>
         <p class="cap" id="labCap">The rock model <span>&mdash; the layers, and the near stack they produce</span></p>
-        <canvas id="cMain" aria-label="The quadrant-enhanced near and far traces beside the DQ distance built from them"></canvas>
+        <canvas id="cMain" aria-label="The quadrant-enhanced near and far traces beside the DQ built from them"></canvas>
       </div>
       <div>
         <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
@@ -109,7 +109,7 @@
     <button role="tab" data-tab="p2" aria-selected="false">2 · Putting the sign back</button>
     <button role="tab" data-tab="p3" aria-selected="false">3 · Blocked, not sinusoidal</button>
     <button role="tab" data-tab="p4" aria-selected="false">4 · The picture it comes from</button>
-    <button role="tab" data-tab="p5" aria-selected="false">5 · Against the attributes you know</button>
+    <button role="tab" data-tab="p5" aria-selected="false">5 · DQ beside three familiar attributes</button>
     <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
     <span class="gap"></span>
     <button role="tab" data-tab="pe" aria-selected="false">Exercises</button>
@@ -127,7 +127,7 @@
       Module 04 produced two traces: QN, the quadrant-enhanced near stack, and QF, the far stack read
       through the same filters at the same samples. Module 01 established that the near stack is the
       intercept and that the difference between the stacks is the gradient. So write
-      <b>A&nbsp;=&nbsp;QN</b> and <b>B&nbsp;=&nbsp;QF&nbsp;&minus;&nbsp;QN</b>, and the DQ distance is the
+      <b>A&nbsp;=&nbsp;QN</b> and <b>B&nbsp;=&nbsp;QF&nbsp;&minus;&nbsp;QN</b>, and the DQ is the
       length of the vector they make:</p>
 
     <p class="lede" style="text-align:center;font-family:var(--mono);font-size:15px;margin:18px 0">
@@ -136,8 +136,7 @@
     <p class="lede">
       Substituting the two definitions gives the form the papers print,
       &radic;(2&thinsp;QN&sup2;&nbsp;+&nbsp;QF&sup2;&nbsp;&minus;&nbsp;2&thinsp;QN&thinsp;QF), which looks
-      like a different and more forbidding quantity and is the same expression rearranged. Worth expanding
-      once by hand: QN&sup2;&nbsp;+&nbsp;(QF&nbsp;&minus;&nbsp;QN)&sup2; multiplies out to exactly
+      like a different and more forbidding quantity and is the same expression rearranged. Expanding it once by hand: QN&sup2;&nbsp;+&nbsp;(QF&nbsp;&minus;&nbsp;QN)&sup2; multiplies out to exactly
       that.</p>
 
     <canvas id="c1a" aria-label="The quadrant-enhanced near trace, far trace, their difference, and the distance built from them"></canvas>
@@ -173,7 +172,7 @@
     <p class="lede">
       A distance is a length and lengths are positive. Left alone, the DQ trace would make a soft sand and
       a hard streak look alike, since both are large excursions from zero. So a sign is attached
-      afterwards, and it is read from the shape of the near stack rather than from the distance itself.</p>
+      afterwards, and it is read from the shape of the near stack and not from the distance itself.</p>
 
     <p class="lede">
       For AVO classes 4, 3 and 2 the rule is: <b>the peak, the trough, and every sample on a rising limb
@@ -215,18 +214,16 @@
     <p class="lede">
       A seismic trace oscillates. The DQ trace does not: it holds a roughly constant magnitude across each
       loop and steps to a new level at the next one. That change of character is the point of the whole
-      exercise, and it comes from the enhancement rather than from the distance.</p>
+      exercise, and it comes from the enhancement and not from the distance.</p>
 
     <p class="lede">
-      Every sample inside a loop was read at the phase that centers it, so every sample reports what its
-      own loop is worth rather than where in the loop it happens to sit. A loop's interior therefore comes
+      Every sample inside a loop was read at the phase that centers it, so every sample reports the size of its own loop and not where in the loop it happens to sit. A loop's interior therefore comes
       out flat. The measurement below is the variation within a loop, as a fraction of that loop's mean:
       near zero means blocked, and a plain seismic trace scores badly because it swings through zero
       twice.</p>
 
-    <canvas id="c3a" aria-label="The near stack, its envelope and the DQ distance drawn side by side to compare how blocked each is"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The near stack, its Hilbert envelope, and the DQ
-      distance, at the same scale. The envelope is the right comparison, because module 04 showed the enhancement lands close to it.</p>
+    <canvas id="c3a" aria-label="The near stack, its envelope and the DQ drawn side by side to compare how blocked each is"></canvas>
+    <p class="hint-line" style="margin:8px 0 18px">The near stack, its Hilbert envelope, and the DQ, at the same scale. The envelope is the right comparison, because module 04 showed the enhancement lands close to it.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Variation within a loop, near stack</span><b id="s3a">&mdash;</b></div>
@@ -237,7 +234,7 @@
     </div>
     <div class="legend">
       <span>Be careful about what this does and does not show. The DQ trace is blocked, and being blocked
-        is what makes it readable as layers rather than as wiggles. The envelope is nearly as blocked too,
+        is what makes it readable as layers and not as wiggles. The envelope is nearly as blocked too,
         and the envelope is a much older and simpler attribute. What the distance has that an envelope has
         not is the far stack: it is built from two angle ranges, so it carries AVO behavior, and the angle
         of step 4 carries more of it again. Blockiness is not the thing that tells them apart.</span>
@@ -253,7 +250,7 @@
     <p class="lede">
       Everything so far has treated the distance as an equation applied to two traces. It is better
       understood as a picture. Plot the quadrant-enhanced near stack on the x axis and the enhanced far
-      minus near on the y axis, and every time sample becomes a point. <b>The DQ distance is that point's
+      minus near on the y axis, and every time sample becomes a point. <b>The DQ is that point's
       distance from the origin</b>, and the equation of step 1 is just Pythagoras saying so.</p>
 
     <p class="lede">
@@ -273,37 +270,34 @@
 
     <canvas id="c4a" aria-label="The RDQ crossplot with conventional and quadrant-enhanced points for the same samples, and the sand-top sample drawn as a radius from the origin"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Every numbered sample on the trace, plotted twice. The
-      heavy crimson line is the sample at the top of the sand: its length is the DQ distance and its
+      heavy crimson line is the sample at the top of the sand: its length is the DQ and its
       bearing is the polar angle. The dashed line is the background shale baseline of module 06.</p>
 
     <p class="lede">
-      <b>&theta;<sub>px</sub></b> is what module 07 makes of that angle.</p>
+      Module 07 turns that bearing into <b>Theta PX</b>, and the short version is below, so that the
+      length and the angle can be seen together here. A bearing runs from 0 to 360&deg;, and the four
+      quarters of the plot repeat the same information: a direction and its opposite describe the same
+      rock contrast, once at the top of a bed and once at the base. Folding the four quarters onto one
+      leaves a single range of 0 to 90&deg;, and the folded angle then takes the sign of the DQ
+      trace.</p>
 
-    <p class="lede">
-      A bearing runs 0 to 360&deg;. But the four quarters of the plot carry the same information twice
-      over: a trend and its opposite describe the same rock contrast, once seen at the top of a bed and
-      once at the base. So the angle is folded into a single range of 0 to 90&deg;. Which fold you apply
-      depends on which quarter the point sits in, and the result takes the sign of the DQ trace:</p>
-
-    <div class="legend" style="font-family:var(--mono);font-size:12px;line-height:2">
-      <span>
-        0&deg; &le; &theta;<sub>p</sub> &lt; 90&deg;&emsp;&rarr;&emsp;&theta;<sub>px</sub> =
-        &theta;<sub>p</sub> &times; sign(DQ)<br>
-        90&deg; &le; &theta;<sub>p</sub> &lt; 180&deg;&emsp;&rarr;&emsp;&theta;<sub>px</sub> =
-        (180 &minus; &theta;<sub>p</sub>) &times; sign(DQ)<br>
-        180&deg; &le; &theta;<sub>p</sub> &lt; 270&deg;&emsp;&rarr;&emsp;&theta;<sub>px</sub> =
-        (&theta;<sub>p</sub> &minus; 180) &times; sign(DQ)<br>
-        270&deg; &le; &theta;<sub>p</sub> &lt; 360&deg;&emsp;&rarr;&emsp;&theta;<sub>px</sub> =
-        (360 &minus; &theta;<sub>p</sub>) &times; sign(DQ)
-      </span>
+    <div class="stats" style="margin:4px 0 14px">
+      <div class="stat"><span>&theta;<sub>p</sub> from 0 to 90&deg;</span>
+        <b>&theta;<sub>p</sub> &times; sign(DQ)</b></div>
+      <div class="stat"><span>&theta;<sub>p</sub> from 90 to 180&deg;</span>
+        <b>(180 &minus; &theta;<sub>p</sub>) &times; sign(DQ)</b></div>
+      <div class="stat"><span>&theta;<sub>p</sub> from 180 to 270&deg;</span>
+        <b>(&theta;<sub>p</sub> &minus; 180) &times; sign(DQ)</b></div>
+      <div class="stat"><span>&theta;<sub>p</sub> from 270 to 360&deg;</span>
+        <b>(360 &minus; &theta;<sub>p</sub>) &times; sign(DQ)</b></div>
     </div>
 
-    <p class="lede" style="margin-top:16px">
-      The readouts below apply that fold to the raw angle, so that you can see what it does. In the real
-      sequence two things happen first: module 06 rotates the shale baseline flat, and module 06 splits the
-      plot into sectors and flips the sign of the gradient for the middle quadrant numbers. &theta;<sub>px</sub>
-      is computed from the angle that survives both. Treat the number here as the shape of the idea rather
-      than as the finished attribute.</p>
+    <p class="lede">
+      The readouts below apply that fold to the raw angle of this model, which shows what the fold does
+      but not what the finished attribute looks like. In the full sequence module 06 comes first: it
+      rotates the shale baseline flat and splits the plot into sectors, flipping the sign of the gradient
+      for the middle quadrant numbers. Theta PX is computed from the angle that survives both steps, and
+      module 07 builds it there.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat key"><span>Distance at the sand top</span><b id="s4a">&mdash;</b></div>
@@ -318,20 +312,21 @@
         so most of a trace contributes little to a conventional AVO crossplot no matter how strong the
         rock contrast is. The enhanced points do not, which is what lets every sample in a bed contribute.
         Two samples can share a distance and differ completely in angle, and the pair is what carries
-        the AVO behavior. So the method computes an angle as well as a length: the distance answers how big, and the angle answers what kind. Module 07 is where the angle
-        earns its keep, on the class 1 dim spot and the flat spot.</span>
+        the AVO behavior. So the method computes an angle as well as a length: the distance answers how big, and the angle answers what kind. Module 07 puts the angle to
+        work on the class 1 dim spot and the flat spot.</span>
     </div>
   </section>
 
   <section class="tabpane" id="p5" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
-      <h3><span class="stepno">5</span>Against the attributes you know</h3>
-      <span class="hint">Intercept, [A+B]/2 and fluid factor, on the same model</span>
+      <h3><span class="stepno">5</span>DQ beside three familiar attributes</h3>
+      <span class="hint">The same near and far stacks, read four ways</span>
     </div>
 
     <p class="lede">
-      Three AVO attributes in common use are computed here from the same near and far stacks, without the
-      quadrant numbering and without the phase rotations. The intercept is the near stack. The gradient is
+      The four curves below are four attributes of the same model, computed from the same near and far
+      stacks. Three of them are AVO attributes in common use, computed without the quadrant numbering and
+      without the phase rotations; the fourth is the DQ trace built in steps 1 to 4. The intercept is the near stack. The gradient is
       the far minus the near, divided by the separation of the two windows. From those two come [A+B]/2,
       used as a hydrocarbon indicator by Castagna et al. (1994), and the fluid factor of Smith and Gidlow
       (1987), &Delta;F = R<sub>P</sub> &minus; 1.16 (V<sub>S</sub>/V<sub>P</sub>) R<sub>S</sub>, with
@@ -341,12 +336,12 @@
       All four curves share one fixed amplitude scale of &plusmn;0.35, so their sizes can be compared
       directly; the tight bed near 120 ms runs past that scale and is held at the edge. The three
       conventional attributes are computed from the sinusoidal traces, so they cross zero wherever the
-      traces do, and carry a clean reading only at the peaks and troughs. The DQ distance holds a value
+      traces do, and carry a clean reading only at the peaks and troughs. The DQ holds a value
       through the layer.</p>
 
     <p class="lede">
       The fluid factor also needs a background V<sub>S</sub>/V<sub>P</sub>, which is a property of the
-      basin rather than of the trace. The slider below changes it, and the fluid factor curve moves with it
+      basin and not of the trace. The slider below changes it, and the fluid factor curve moves with it
       while the other three stay where they are.</p>
 
     <div class="stepctl">
@@ -354,23 +349,23 @@
         <label for="bgk">Background V<sub>S</sub>/V<sub>P</sub> <span class="val" id="bgkV">0.50</span></label>
         <input type="range" id="bgk" min="40" max="60" step="1" value="50">
       </div>
-      <p class="say">Used by the fluid factor only. The DQ distance needs no such number.</p>
+      <p class="say">Used by the fluid factor only. The DQ needs no such number.</p>
     </div>
 
-    <canvas id="c5a" aria-label="The near stack, A plus B over two, the fluid factor and the DQ distance on one time axis"></canvas>
+    <canvas id="c5a" aria-label="The near stack, A plus B over two, the fluid factor and the DQ on one time axis"></canvas>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Intercept at the sand top</span><b id="s5a">&mdash;</b></div>
       <div class="stat"><span>[A+B]/2 at the sand top</span><b id="s5b">&mdash;</b></div>
       <div class="stat"><span>Fluid factor at the sand top</span><b id="s5c">&mdash;</b></div>
-      <div class="stat key"><span>DQ distance at the sand top</span><b id="s5d">&mdash;</b></div>
+      <div class="stat key"><span>DQ at the sand top</span><b id="s5d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s5e">&mdash;</b></div>
     </div>
     <div class="legend">
       <span>Inside the sand the three conventional curves pass through zero where the waveform does, which
         is why AVO crossplots are usually built from picked peaks and troughs alone. The DQ papers make the
         same comparison: the DQ trace carries a hydrocarbon detection component similar to the fluid factor
-        and [A+B]/2, with a value at every sample rather than two per cycle.</span>
+        and [A+B]/2, with a value at every sample and not two per cycle.</span>
     </div>
   </section>
 
@@ -382,7 +377,7 @@
 
     <p class="lede">The Hilbert envelope is
       &radic;(A<sub>0</sub>&sup2;&nbsp;+&nbsp;A<sub>90</sub>&sup2;), where A<sub>0</sub> is the trace and
-      A<sub>90</sub> is the same trace rotated by ninety degrees. The DQ distance is
+      A<sub>90</sub> is the same trace rotated by ninety degrees. The DQ is
       &radic;(A&sup2;&nbsp;+&nbsp;B&sup2;), where A and B are the intercept and gradient. Identical
       algebra, and the resemblance is not a coincidence &mdash; both are asking how far a two-component
       vector is from the origin.</p>
@@ -390,7 +385,7 @@
     <p class="lede">The difference is what the two components are. The envelope's components are one trace
       seen at two phases, so the pair carries information about waveform position and nothing about angle.
       The DQ pair carries two different angle stacks, so it carries the AVO behavior that the whole
-      exercise is about. The envelope tells you how strong the event is; the distance is meant to tell you
+      exercise is about. The envelope tells us how strong the event is; the distance is meant to tell us
       how strong it is <em>and</em> how it changes with offset, rolled into one number.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
@@ -405,7 +400,7 @@
       <span>Because B is B&nbsp;&times;&nbsp;0.17 in practice and nothing divides the factor out, the
         vector is a long way from balanced: the intercept dominates and the gradient tilts it slightly.
         Module 06's baseline rotation is the first step in doing something about that, and it is the
-        reason the rotation is onto the x axis rather than to minus forty-five degrees.</span>
+        reason the rotation is onto the x axis and not to minus forty-five degrees.</span>
     </div>
   </section>
 
@@ -419,9 +414,8 @@
             precision, because they are the same expression. Expanding
             QN&sup2;&nbsp;+&nbsp;(QF&nbsp;&minus;&nbsp;QN)&sup2; gives
             QN&sup2;&nbsp;+&nbsp;QF&sup2;&nbsp;&minus;&nbsp;2&thinsp;QN&thinsp;QF&nbsp;+&nbsp;QN&sup2;,
-            which is 2&thinsp;QN&sup2;&nbsp;+&nbsp;QF&sup2;&nbsp;&minus;&nbsp;2&thinsp;QN&thinsp;QF. The
-            published form is worth recognizing for what it is, because written that way it looks like a
-            quantity with its own meaning rather than a hypotenuse.</span></details></li>
+            which is 2&thinsp;QN&sup2;&nbsp;+&nbsp;QF&sup2;&nbsp;&minus;&nbsp;2&thinsp;QN&thinsp;QF. The published form is easy to recognize, because written that way it looks like a
+            quantity with its own meaning and not a hypotenuse.</span></details></li>
         <li><b>Compare the sizes of A and B.</b> Read the ratio at the top of the sand on step 1, then
           change the rocks and read it again.
           <details class="reveal"><summary>Answer</summary><span class="ans">It moves a lot. On the default
@@ -438,7 +432,7 @@
           thickness and read again.
           <details class="reveal"><summary>Answer</summary><span class="ans">The split stays roughly even
             &mdash; between about 35% and 55% positive across the thickness range &mdash; because a
-            waveform spends about as long rising as falling and the sign is read from the slope. That is worth knowing before you look at a DQ histogram: roughly half of any DQ
+            waveform spends about as long rising as falling and the sign is read from the slope. That matters before reading a DQ histogram: roughly half of any DQ
             volume is negative by construction, and the negative half is not an anomaly. What matters is
             the magnitude within each sign.</span></details></li>
         <li><b>Turn the sign off.</b> Untick the box in the panel and look at step 2 again.
@@ -450,7 +444,7 @@
         <li><b>Measure how blocked the trace is.</b> On step 3, compare the three variation figures.
           <details class="reveal"><summary>Answer</summary><span class="ans">The near stack scores worst by
             far &mdash; 0.63 &mdash; because within a loop it runs from an extremum through zero to the next extremum. Before reading a bright DQ body as good rock, note how many things could have produced it: a larger impedance contrast, a change of pore fluid, or simply a bed at tuning thickness. The distance alone cannot separate them, and modules 07 and 11 measure how much each contributes. The envelope scores 0.26 and the distance 0.24, so both are blocked and close to
-            each other. Worth being clear what that does and does not tell you: blockiness is a property of
+            each other. To be clear about what that does and does not show: blockiness is a property of
             how each sample was read, not of what it was read from, and both were read at the phase that
             centers them. The difference between the two lives in the far stack and in the angle, not
             here.</span></details></li>
@@ -459,7 +453,7 @@
           <details class="reveal"><summary>Answer</summary><span class="ans">The flip is applied upstream, in
             module 03's terms, so the reservoir top arrives here as a rising limb and takes a positive
             sign, exactly as a class 3 sand would. Nothing in this module has to know about AVO classes at
-            all. That is the payoff for having done the polarity work at the stacking step rather than
+            all. That is the payoff for having done the polarity work at the stacking step and not
             here: one sign rule covers every class.</span></details></li>
       </ol>
     </div>
@@ -483,8 +477,8 @@
           each other in module 09.</li>
         <li><b>One rule covers every AVO class</b>, because module 03 reversed the polarity of class 1 and
           carbonate cases before any picking happened.</li>
-        <li><b>The output is blocked rather than oscillating</b>, because every sample was read at the
-          phase that centers it and so reports what its own loop is worth.</li>
+        <li><b>The output is blocked and does not oscillate</b>, because every sample was read at the
+          phase that centers it and so reports the size of its own loop.</li>
         <li><b>Blockiness alone does not distinguish it from an envelope.</b> Both score around 0.25 on
           this model. What the distance has that an envelope has not is the far stack, and the angle that
           comes with it.</li>
@@ -497,12 +491,12 @@
       <summary>Method, assumptions, and where to read more</summary>
       <p>The rocks, the layer stack, the picker, the quadrant numbering and the phase filters are all as in
         modules 02, 03 and 04. The far stack is formed the same way as the near one, using the mean of
-        sin&sup2;&theta; over 20&ndash;30&deg; rather than 0&ndash;10&deg;, so that A and B here mean what
+        sin&sup2;&theta; over 20&ndash;30&deg; and not 0&ndash;10&deg;, so that A and B here mean what
         they meant in module 01. Both stacks are enhanced with the quadrant numbers picked from the near
         stack, and neither is repicked.</p>
       <p>The distance is computed as &radic;(A&sup2;&nbsp;+&nbsp;B&sup2;) and the published form is
         evaluated independently alongside it, so the agreement reported on step 1 is a real comparison of
-        two expressions rather than a restatement. The sign is applied afterwards from the sign of the
+        two expressions and not a restatement. The sign is applied afterwards from the sign of the
         sample-to-sample difference of the near stack, with extrema taken as positive.</p>
       <p>The blockiness measure on step 3 is the standard deviation of the magnitude within each
         extremum-to-extremum interval, divided by the mean of the magnitude over the same interval, then
@@ -528,7 +522,7 @@
     <h3><a href="baseline.html">06 · Rotating the crossplot</a></h3>
     <p>The background shale trend does not run at minus forty-five degrees, so rotating to that angle
       leaves it tilted. Rotating it onto the x axis instead is what lets the distance measure departure
-      from the background rather than distance from the origin.</p>
+      from the background and not distance from the origin.</p>
     <a class="btn" href="baseline.html">Open module 06 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
@@ -678,8 +672,8 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth rather than a
-     lone sand, so that the trace looks like something worth picking: a
+  /* The near-stack reflectivity of one trace. A layered earth and not a
+     lone sand, so that the trace looks like something a picker would find: a
      contrasting bed above, the sand with an optional tight streak inside it,
      and a tight bed below. Every spike is computed from the two rocks it sits
      between. */
@@ -773,7 +767,7 @@
     /* Between each consecutive pair of crossings, keep the single largest
        peak or trough. Where a thin bed has put two extrema in one interval,
        the smaller is discarded; those are counted separately, and only inside
-       the sand, so that the count is about the sand and not about whatever
+       the sand, so that the count is about the sand not about whatever
        the beds above and below happen to be doing. */
     const ext = [], dropped = [];
     let doublets = 0, inSand = 0;
@@ -910,7 +904,7 @@
      THE PHASE FILTERS
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
-     trace rather than to the wavelet so that it also works with noise on.
+     trace and not to the wavelet so that it also works with noise on.
      The tabulated filter is written for a rising limb; on a falling limb
      the phase that centers a sample runs the other way, so the filter is
      negated. Step 3 measures what happens if it is not.
@@ -1125,7 +1119,7 @@
 
 
   /* The rock model itself, as bands in two-way time, so the layers are always
-     visible beside the wiggles rather than implied by them. */
+     visible beside the wiggles and not implied by them. */
   const LITHFILL = {
     soft: 'rgba(150,160,170,0.55)', hard: 'rgba(110,125,140,0.65)',
     tight: 'rgba(214,171,74,0.55)', sand: 'rgba(194,48,107,0.30)',
@@ -1203,6 +1197,15 @@
       peak = Math.max(peak, Math.abs(b.QN[i]), Math.abs(b.QF[i]), Math.abs(b.D[i]));
     }
     const rect = { x: 62, y: 34, w: W - 92, h: H - 74 };
+    // the sand itself, so a change of thickness in the panel is visible here
+    const win = sandWindow(TTOP, S.thick);
+    const yOf = (i) => rect.y + (i / (nt - 1)) * rect.h;
+    ctx.fillStyle = 'rgba(132,22,23,0.06)';
+    ctx.fillRect(rect.x, yOf(win[0]), rect.w, yOf(win[1]) - yOf(win[0]));
+    ctx.font = '9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = CRIM;
+    ctx.fillText('sand, ' + S.thick + ' ms', rect.x + 4, (yOf(win[0]) + yOf(win[1])) / 2);
     panel(ctx, rect, [
       [b.A, NEARC, 'rgba(29,111,163,0.2)', 1.7, 'A = QN'],
       [b.QF, FARC, 'rgba(194,48,107,0.18)', 1.7, 'QF'],
@@ -1210,7 +1213,7 @@
       [b.D, CRIM, 'rgba(132,22,23,0.16)', 1.9, 'D'],
     ], peak, nt, 9);
 
-    /* Read A and B at the top of the sand rather than at their peaks. The
+    /* Read A and B at the top of the sand not at their peaks. The
        strongest event in this layer stack is the fixed tight sandstone bed, so a
        peak-to-peak ratio would report on that bed and not on the reservoir. */
     let pd = 0;
@@ -1283,7 +1286,7 @@
     panel(ctx, rect, [
       [b.near, 'rgba(22,25,28,0.6)', null, 1.5, 'NEAR STACK'],
       [b.env, NEARC, 'rgba(29,111,163,0.16)', 1.7, 'ENVELOPE'],
-      [b.D, CRIM, 'rgba(132,22,23,0.16)', 1.9, 'DQ DISTANCE'],
+      [b.D, CRIM, 'rgba(132,22,23,0.16)', 1.9, 'DQ'],
     ], peak, nt, 9);
 
     const bn = blockiness(b.near, b), be = blockiness(b.env, b), bd = blockiness(b.D, b);
@@ -1492,7 +1495,7 @@
 
   const AMP5 = 0.35;                       // one fixed scale for all four curves
 
-  // values past the fixed scale are held at the edge rather than drawn across
+  // values past the fixed scale are held at the edge and not drawn across
   // the neighboring panel
   function clamped(arr) {
     const out = new Float64Array(arr.length);
@@ -1539,7 +1542,7 @@
       [clamped(cl.A), 'rgba(22,25,28,0.65)', null, 1.5, 'INTERCEPT A'],
       [clamped(cl.Hf), NEARC, 'rgba(29,111,163,0.14)', 1.6, '[A+B] / 2'],
       [clamped(cl.F), '#4E7A2C', 'rgba(78,122,44,0.14)', 1.6, 'FLUID FACTOR'],
-      [clamped(b.D), CRIM, 'rgba(132,22,23,0.16)', 1.9, 'DQ DISTANCE'],
+      [clamped(b.D), CRIM, 'rgba(132,22,23,0.16)', 1.9, 'DQ'],
     ], AMP5, nt, 9);
 
     const i0 = sandTopIndex(b);
@@ -1557,7 +1560,7 @@
     }
     $('s5e').textContent = 'Through the sand, ' + small + ' of ' + tot
       + ' samples leave [A+B]/2 below a sixth of its value at the sand top, because the trace passes '
-      + 'through zero inside the layer. The DQ distance holds a value across the same interval, and the '
+      + 'through zero inside the layer. The DQ holds a value across the same interval, and the '
       + 'fluid factor moves whenever the background Vs/Vp is changed.';
   }
 

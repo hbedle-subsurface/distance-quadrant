@@ -276,7 +276,7 @@
       <div class="stat wide"><span>Reading</span><b id="s4e">&mdash;</b></div>
     </div>
     <div class="legend">
-      <span>The isochron section holds bands rather than wiggles, because every sample between two
+      <span>The isochron section holds bands and not wiggles, because every sample between two
         extrema carries the same number. Where the sand is thinner than the wavelet can resolve, its
         isochron stops following the bed and settles near the wavelet&rsquo;s own trough-to-peak time,
         which is the limit step 1 describes. Gray means no zone was defined there. That happens where the
@@ -293,8 +293,7 @@
     </div>
 
     <p class="lede">Isochron maps are older than any of this. The new part is computing one at every sample
-      of every trace rather than between two picked horizons, so that time thickness becomes a volume you
-      can slice, crossplot and hand to a classifier alongside amplitude. Nothing had to be interpreted
+      of every trace and not between two picked horizons, so that time thickness becomes a volume we can slice, crossplot and hand to a classifier alongside amplitude. Nothing had to be interpreted
       first, which is the point.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
@@ -323,10 +322,9 @@
       layered ones.</p>
 
     <div class="legend prose">
-      <span>The isochron is also the third axis of the crossplot in module 09. The DQ distance and Theta PX
+      <span>The isochron is also the third axis of the crossplot in module 09. The DQ and Theta PX
         describe the amplitude behavior at a sample; the signed half isochron describes the geometry of
-        the waveform it sits in. They are close to independent, which is what makes the three of them worth
-        plotting together.</span>
+        the waveform it sits in. They are close to independent, and so the three carry different information on one plot.</span>
     </div>
   </section>
 
@@ -340,7 +338,7 @@
             the isochron exactly, because the crossing is a sample inside the interval and the two pieces
             are measured to it and from it. Nothing is lost in the split, which means the half isochron
             carries strictly more information than the isochron and the isochron can always be recovered
-            from it. That is why the papers compute and store both rather than treating one as a summary of
+            from it. That is why the papers compute and store both and do not treat one as a summary of
             the other.</span></details></li>
         <li><b>Find out what sets the isochron in a thick layer.</b> On step 1, set the sand thickness to
           its maximum with a blocky profile, then drag the wavelet frequency.
@@ -366,13 +364,12 @@
             cleaner end has the sharper impedance contrast, which produces a tighter extremum sitting
             closer to the boundary, and that pulls the crossing toward it. So the asymmetry is a read on
             which end of the sand has the better rock &mdash; the same conclusion Choudhry et al. (2026) draw
-            from their Figure 2, and it comes out of the wavelet rather than out of any assumption about
+            from their Figure 2, and it comes out of the wavelet and not out of any assumption about
             depositional environment.</span></details></li>
         <li><b>Try to move the crossing with noise.</b> On step 2, with a blocky 24 ms sand at 25 Hz,
           walk the noise from zero to 40% and watch the isochron and the split.
           <details class="reveal"><summary>Answer</summary><span class="ans">Very little happens. The
-            isochron drifts from 22 ms to 19 and the split never leaves the high forties. That is worth knowing, because
-            it is the opposite of what the setup invites you to expect, and because it tells you what kind
+            isochron drifts from 22 ms to 19 and the split never leaves the high forties. That matters, because it is the opposite of what the setup invites you to expect, and because it tells you what kind
             of test this is: band-limited noise at the signal's own frequency perturbs a strong, isolated
             loop hardly at all. The instability Choudhry et al. (2026) report on field data &mdash; half
             isochron readings becoming varied and sometimes erratic in high-energy settings &mdash; comes
@@ -410,7 +407,7 @@
           cleaner end.</li>
         <li><b>The half isochron is the more sensitive of the two</b>, because it depends on the position
           of a zero crossing, which is always a low-amplitude sample. What moves a crossing is interference
-          from a nearby strong reflection rather than random noise.</li>
+          from a nearby strong reflection and not random noise.</li>
         <li><b>Where sands are soft and shales are not, the sign alone separates them</b>, which is what
           makes the attribute useful as a machine learning input.</li>
       </ul>
@@ -432,20 +429,20 @@
         to every sample in their zone and both signed by the slope, positive from trough down to peak.
         This reproduces Figure 1 of Choudhry et al. (2026), including its property that the two halves sum
         to the isochron.</p>
-      <p>Step 3 compares three profiles rather than four. The tight streak is still a model you can select
+      <p>Step 3 compares three profiles and not four. The tight streak is still a model you can select
         in the panel, and its effect on the isochron is real, but it is left out of the facies comparison:
         the direction it moves the split in this model does not match the one shown in Figure 2d of
         Choudhry et al. (2026), and the likeliest reason is that the published model is built from a real sand
         log whose contrast, thickness and position this page is only approximating. The published
         result is taken as the reference, and this model does not yet reproduce it.</p>
-      <p>The window holds the sand and nothing else. An earlier draft put a bed above and below it so the
+      <p>The window holds the sand nothing else. An earlier draft put a bed above and below it so the
         display would look like a layered earth, and that was a mistake: a neighbor close enough to fill
         the panel is also close enough to shift the sand's zero crossing, which is the measurement step 3
         depends on. With those beds in place a blocky sand stopped splitting evenly, which it should always
         do. The window is sized to the sand's own response instead.</p>
       <p>Noise is band-limited with the same wavelet and scaled as a percentage of the strongest reflection
         in the model, as in the earlier modules. The isochron is quantized to the sample interval by
-        construction, so a coarse sample rate limits it directly rather than through any modeling
+        construction, so a coarse sample rate limits it directly and not through any modeling
         choice.</p>
       <p>What this module leaves out is the use the signed half isochron is put to as the third axis of the
         RDQ crossplot, which is module 09, and the relationship between isochron and bed thickness in the
@@ -464,9 +461,9 @@
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
     <h3><a href="rdq-crossplot.html">09 · The RDQ crossplot in three axes</a></h3>
-    <p>Seven filters across nine quadrant numbers, applied by convolution rather than deconvolution. The
+    <p>Seven filters across nine quadrant numbers, applied by convolution and not deconvolution. The
       quadrant number chooses which phase-rotated version of the trace each sample is read from, and the
-      result is the quadrant-enhanced pair the DQ distance is built out of.</p>
+      result is the quadrant-enhanced pair the DQ is built out of.</p>
     <a class="btn" href="rdq-crossplot.html">Open module 09 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
@@ -681,7 +678,7 @@
     /* Between each consecutive pair of crossings, keep the single largest
        peak or trough. Where a thin bed has put two extrema in one interval,
        the smaller is discarded; those are counted separately, and only inside
-       the sand, so that the count is about the sand and not about whatever
+       the sand, so that the count is about the sand not about whatever
        the beds above and below happen to be doing. */
     const ext = [], dropped = [];
     let doublets = 0, inSand = 0;
@@ -1072,7 +1069,7 @@
     let best = sandIsochron(b);
     if (!best) {
       // no rising loop near the sand, so fall back to the nearest loop of
-      // either sign rather than showing nothing
+      // either sign and show something
       const win = sandWindow(TTOP, S.thick);
       const center = (win[0] + win[1]) / 2;
       const maxSpan = 2.5 * Math.sqrt(1.5) / (Math.PI * S.freq) / dt();
@@ -1348,7 +1345,7 @@
     return out;
   }
 
-  /* Opaque colors, mixed against the background rather than drawn with alpha,
+  /* Opaque colors, mixed against the background and not drawn with alpha,
      so neighboring sample rectangles do not leave seams where they meet. */
   function isoColor(v) {
     if (!v) return '#EDEEEF';
