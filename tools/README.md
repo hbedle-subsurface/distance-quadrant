@@ -64,7 +64,10 @@ loads `index.html` with the hero figure, checks the module numbering, the
 frequency slider, and recomputes what the figure and its caption claim: the
 cycle length in samples, that the DQ is colored at every sample from the first
 pick to the last and nowhere else, and that at each pick the DQ equals
-sqrt(N^2 + (F - N)^2) from the raw stacks. It also prints, without failing, any
+sqrt(N^2 + (F - N)^2) from the raw stacks. For the rock column it checks that
+each interval's thickness is its velocity times its one-way time, that the
+depth labels invert that conversion, and that the beds drawn are the beds that
+made the traces. It also prints, without failing, any
 place where two picks of the same sign fall in a row (a zero crossing skipped
 because both samples beside it are under the 1% floor).
 

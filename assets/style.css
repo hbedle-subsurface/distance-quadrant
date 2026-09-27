@@ -1078,3 +1078,45 @@ figure.hero-panel { margin: 0; }
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
 .hero-copy h1.title em::after { content: none; }
+
+/* --- landing page: about, references and footer --------------------------- */
+.hero-grid { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); }
+.about-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 48px; }
+.about-main > p { max-width: 72ch; }
+.about h3 {
+  font-family: var(--display); font-weight: 700; font-size: 1rem; color: var(--ink);
+  margin: 22px 0 8px;
+}
+/* author-year references with a hanging indent, as they are printed */
+.about ol.refs { list-style: none; padding: 0; margin: 0; max-width: 90ch; }
+.about ol.refs li {
+  font-size: 13.5px; color: var(--ink-soft); line-height: 1.5;
+  padding-left: 2em; text-indent: -2em; margin: 0 0 8px;
+}
+.about-side { border-left: 1px solid var(--rule); padding-left: 28px; }
+
+footer.site-foot { margin-top: 34px; padding: 26px 0 44px; }
+.foot-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; }
+.site-foot h2 {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--crimson); margin: 0 0 8px; font-weight: 500;
+}
+.site-foot p { margin: 0; font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; max-width: none; }
+.site-foot .cite {
+  background: var(--panel); border: 1px solid var(--rule); border-left: 3px solid var(--crimson);
+  padding: 8px 11px; font-size: 13px;
+}
+.site-foot .copy {
+  margin-top: 8px; font: 500 12.5px var(--body); color: var(--crimson);
+  background: transparent; border: 1px solid var(--crimson); padding: 5px 11px; cursor: pointer;
+}
+.site-foot .copy:hover { background: var(--cream); }
+.site-foot .privacy { margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.site-foot .privacy p { font-size: 12.5px; color: var(--slate); max-width: 110ch; }
+.site-foot .nowrap { white-space: nowrap; }
+@media (max-width: 940px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .about-grid { grid-template-columns: 1fr; gap: 24px; }
+  .about-side { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: 18px; }
+  .foot-cols { grid-template-columns: 1fr; gap: 22px; }
+}

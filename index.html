@@ -45,7 +45,7 @@
     </div>
 
     <figure class="hero-panel">
-      <canvas id="heroCanvas" aria-label="Near and far stack traces with their peaks and troughs marked, and the DQ trace computed from them, colored at every sample"></canvas>
+      <canvas id="heroCanvas" aria-label="A rock column of a brine sand, a gas sand and a hard shale in shale, beside the near and far stack traces with their peaks and troughs marked, and the DQ trace computed from them"></canvas>
       <div class="hero-ctl">
         <label for="heroFreq">Wavelet frequency <span class="val" id="heroFreqV">40 Hz</span></label>
         <input type="range" id="heroFreq" min="20" max="60" step="5" value="40">
@@ -55,9 +55,11 @@
         <div class="stat"><span>peaks and troughs picked</span><b id="heroExt">&mdash;</b></div>
         <div class="stat key"><span>samples given a DQ value</span><b id="heroValued">&mdash;</b></div>
       </div>
-      <figcaption>A brine sand, a gas sand and a hard shale in a soft shale. The black dots are the
-        samples a two-layer reading uses. The DQ column is colored with the published DQ color bar at
-        every sample between the first and last pick, computed by the workflow modules 02 to 05 build.</figcaption>
+      <figcaption>A brine sand, a gas sand and a hard shale in a soft shale. Depth is measured from the
+        top of the window and labeled down the rock column; two-way time runs down the right. The dashed
+        lines carry each bed boundary across the tracks. The black dots are the samples a two-layer
+        reading uses, and the DQ column is colored with the published DQ color bar at every sample
+        between the first and last pick, computed by the workflow modules 02 to 05 build.</figcaption>
     </figure>
    </div>
   </section>
@@ -211,8 +213,8 @@
   </section>
 
   <section id="about" class="about">
-    <div class="sec-row">
-      <div>
+    <div class="about-grid">
+      <div class="about-main">
         <h2>About</h2>
         <p>The distance and quadrant trace was developed by Dennis B. Neff and Warren Neff at Phillips
           Petroleum (Neff, 2003; Neff et al., 2005) and has been published with the AASPI consortium at
@@ -220,7 +222,8 @@
           <em>Interpretation</em>: Bedle et al. (2025a) on the DQ trace, Bedle et al. (2025b) on the RDQ
           crossplot workflow, and Bedle et al. (2025c) on RDQ inversion. The signed isochron attributes
           follow Choudhry et al. (2026).</p>
-        <ul class="refs">
+        <h3>References</h3>
+        <ol class="refs">
           <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method
             for quantitative seismic interpretation: Theory and application to a synthetic amplitude
             variation with offset data catalog: <em>Interpretation</em>, 13, T163&ndash;T176,
@@ -236,11 +239,9 @@
             6,654,692 B1.</li>
           <li>Neff, D. B., E. L. Butler, and W. A. Lucas, 2005, Concurrent phase angle graphic analysis:
             U.S. Patent 6,954,403 B2.</li>
-        </ul>
-        <p>Everything runs in the browser. There is no server, no upload and no install, and no data
-          generated on the page leaves it.</p>
+        </ol>
       </div>
-      <div>
+      <div class="about-side">
         <h2>Companion sets</h2>
         <ul class="sets">
           <li><a href="https://hbedle-subsurface.github.io/avo-basics/">How AVO Actually Works</a>
@@ -255,22 +256,44 @@
     </div>
   </section>
 
-  <footer>
-    <div class="foot-grid">
-      <p>Built for teaching by Heather Bedle, School of Geosciences, University of Oklahoma, with the
-        <a href="https://www.ou.edu/mcee/labs/aaspi">AASPI</a> consortium.</p>
-      <p class="lic">Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
-        Free to use, share and adapt for any purpose, including training in industry, provided the source is
-        credited and adapted versions carry the same license.</p>
-      <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of Oklahoma,
-        <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
-      <p class="lic">Nothing done inside these modules leaves the browser. The one request each page
-        makes is a page-view count, so that I can show the university these are being used. There is no
-        cookie, no account, no personal information.</p>
+  <footer class="site-foot">
+    <div class="foot-cols">
+      <div>
+        <h2>Built by</h2>
+        <p>Heather Bedle, School of Geosciences, University of Oklahoma, with the
+          <a href="https://www.ou.edu/mcee/labs/aaspi">AASPI</a> consortium, for teaching.</p>
+      </div>
+      <div>
+        <h2>To cite</h2>
+        <p class="cite" id="citeText">H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
+          Oklahoma, <span class="nowrap">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
+        <button type="button" class="copy" id="copyCite">Copy citation</button>
+      </div>
+      <div>
+        <h2>License</h2>
+        <p><a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Free to use, share
+          and adapt for any purpose, including training in industry, provided the source is credited and
+          adapted versions carry the same license.</p>
+      </div>
     </div>
+    <div class="privacy"><p>Everything runs in the browser. There is no server, no upload and no install, and
+      nothing done inside these modules leaves the page. The one request each page makes is a page-view
+      count, so that I can show the university these are being used. There is no cookie, no account and
+      no personal information.</p></div>
   </footer>
 </div>
 
+<script>
+(function () {
+  const b = document.getElementById('copyCite'), t = document.getElementById('citeText');
+  if (!b || !t) return;
+  b.addEventListener('click', () => {
+    const text = t.textContent.replace(/\s+/g, ' ').trim();
+    const done = () => { b.textContent = 'Copied'; setTimeout(() => { b.textContent = 'Copy citation'; }, 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, () => {});
+  });
+})();
+</script>
 <script src="assets/count.js"></script>
 <script src="assets/seismic.js"></script>
 <script src="assets/index-hero.js"></script>

@@ -162,48 +162,123 @@
     return { near, far, q, dq, ext: pk.ext, valued, cycle: 1 / (freq * DT) };
   }
 
+  /* ---- the rock column in depth -----------------------------------------
+     Each interval's thickness in meters is its velocity times its one-way
+     time. Depth is measured from the top of the window, so the column shows
+     how the two scales differ: 30 ms of gas sand is less rock than 30 ms of
+     shale, and 14 ms of hard shale is more than 14 ms of brine sand. */
+  const NAMES = { shale: 'soft shale', brine: 'brine sand', gas: 'gas sand', hard: 'hard shale' };
+  const FILL = { shale: '#C9CDC4', brine: '#E8DBA6', gas: '#F2C14E', hard: '#8E968C' };
+  function column() {
+    const bounds = [0];
+    LAYERS.forEach((L) => { bounds.push(L.t[0], L.t[1]); });
+    bounds.push((NT - 1) * DT);
+    const iv = [];
+    let z = 0;
+    for (let k = 0; k + 1 < bounds.length; k++) {
+      const r = (k % 2 === 1) ? LAYERS[(k - 1) / 2].r : 'shale';
+      const t0 = bounds[k], t1 = bounds[k + 1];
+      const dz = ROCK[r].vp * (t1 - t0) / 2;
+      iv.push({ r, t0, t1, z0: z, z1: z + dz });
+      z += dz;
+    }
+    return iv;
+  }
+  // time (s) at a depth (m), through the interval velocities
+  function timeAt(iv, z) {
+    for (const I of iv) if (z <= I.z1 + 1e-9) return I.t0 + (z - I.z0) * 2 / ROCK[I.r].vp;
+    return iv[iv.length - 1].t1;
+  }
+
   /* ---- drawing ---------------------------------------------------------- */
   const GAIN = 0.25;           // fixed amplitude scale: never rescaled to the data
   function draw(canvas, freq) {
     const box = canvas.parentElement, cs = root.getComputedStyle ? root.getComputedStyle(box) : null;
     const padX = cs ? (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0) : 0;
-    const W = Math.max(260, Math.floor(box.clientWidth - padX));
-    const H = Math.round(Math.min(460, Math.max(360, W * 0.9)));
+    const W = Math.max(280, Math.floor(box.clientWidth - padX));
+    const H = Math.round(Math.min(480, Math.max(380, W * 0.82)));
     const ctx = SE.fitCanvas(canvas, W, H);
     ctx.clearRect(0, 0, W, H);
     const r = compute(freq);
+    const iv = column();
 
-    const L = 44, R = 12, TOP = 26, BOT = 14;
+    const L = 46, R = 42, TOP = 30, BOT = 10, GAP = 8;
     const ph = H - TOP - BOT;
-    const colW = (W - L - R) / 3;
-    const yOf = (i) => TOP + (i / (NT - 1)) * ph;
+    const rockW = Math.max(58, Math.min(96, (W - L - R) * 0.22));
+    const colW = (W - L - R - rockW - GAP) / 3;
+    const xs = L + rockW + GAP;                         // first trace track
+    const yOfT = (t) => TOP + (t / ((NT - 1) * DT)) * ph;
+    const yOf = (i) => yOfT(i * DT);
     const half = colW * 0.5;
+    const x0 = (k) => xs + colW * k + half;
+    const X = (k, v) => x0(k) + Math.max(-1, Math.min(1, v / GAIN)) * half * 0.88;
+    const mono = '10px "IBM Plex Mono", monospace';
 
-    // time axis, two-way time down the side
-    ctx.font = '10px "IBM Plex Mono", monospace';
-    ctx.fillStyle = 'rgba(22,25,28,.6)';
-    ctx.strokeStyle = 'rgba(22,25,28,.12)'; ctx.lineWidth = 1;
-    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    // two-way time grid across the trace tracks, labeled down the right
+    ctx.font = mono; ctx.lineWidth = 1;
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
     for (let t = 0; t <= 160; t += 20) {
-      const y = yOf(t);
-      ctx.beginPath(); ctx.moveTo(L - 4, y); ctx.lineTo(W - R, y); ctx.stroke();
-      ctx.fillText(String(t), L - 7, y);
+      const y = yOfT(t / 1000);
+      ctx.strokeStyle = 'rgba(22,25,28,.10)';
+      ctx.beginPath(); ctx.moveTo(xs, y); ctx.lineTo(W - R + 3, y); ctx.stroke();
+      ctx.fillStyle = 'rgba(22,25,28,.6)'; ctx.fillText(String(t), W - R + 6, y);
     }
     ctx.save();
-    ctx.translate(11, TOP + ph / 2); ctx.rotate(-Math.PI / 2);
-    ctx.textAlign = 'center'; ctx.fillText('two-way time (ms)', 0, 0);
+    ctx.translate(W - 7, TOP + ph / 2); ctx.rotate(Math.PI / 2);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(22,25,28,.6)'; ctx.fillText('two-way time (ms)', 0, 0);
     ctx.restore();
 
-    const x0 = (k) => L + colW * k + half;
-    const X = (k, v) => x0(k) + Math.max(-1, Math.min(1, v / GAIN)) * half * 0.88;
+    // the rock column, each interval drawn at its two-way time
+    iv.forEach((I) => {
+      const y0 = yOfT(I.t0), y1 = yOfT(I.t1);
+      ctx.fillStyle = FILL[I.r]; ctx.fillRect(L, y0, rockW, y1 - y0);
+      if (I.r === 'gas' || I.r === 'brine') {           // sand stipple
+        ctx.fillStyle = 'rgba(22,25,28,.28)';
+        for (let yy = y0 + 3; yy < y1 - 1; yy += 5)
+          for (let xx = L + 3 + ((yy | 0) % 2) * 2; xx < L + rockW - 1; xx += 6) ctx.fillRect(xx, yy, 1.2, 1.2);
+      }
+      if (I.r !== 'shale') {
+        ctx.font = '600 10px "IBM Plex Sans", sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        const lab = NAMES[I.r];
+        const pad = ctx.measureText(lab).width + 8;
+        ctx.fillStyle = 'rgba(255,255,255,.82)';
+        ctx.fillRect(L + rockW / 2 - pad / 2, (y0 + y1) / 2 - 7, pad, 14);
+        ctx.fillStyle = '#16191C'; ctx.fillText(lab, L + rockW / 2, (y0 + y1) / 2);
+      }
+    });
+    ctx.strokeStyle = 'rgba(22,25,28,.45)'; ctx.strokeRect(L, TOP, rockW, ph);
+
+    // depth down the left side of the column, placed at the time it reaches
+    ctx.font = mono; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    const zMax = iv[iv.length - 1].z1;
+    for (let z = 0; z <= zMax + 1e-9; z += 25) {
+      const y = yOfT(timeAt(iv, z));
+      ctx.strokeStyle = 'rgba(22,25,28,.5)';
+      ctx.beginPath(); ctx.moveTo(L - 4, y); ctx.lineTo(L, y); ctx.stroke();
+      ctx.fillStyle = 'rgba(22,25,28,.6)'; ctx.fillText(String(z), L - 6, y);
+    }
+    ctx.save();
+    ctx.translate(8, TOP + ph / 2); ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(22,25,28,.6)'; ctx.fillText('depth (m)', 0, 0);
+    ctx.restore();
 
     // the DQ column: every valued sample painted in the published bands
-    const band = SE.DQ_BAND;
     for (let i = 0; i < NT; i++) {
       if (!r.q[i]) continue;
-      ctx.fillStyle = SE.dqBandColor(r.dq[i], band);
+      ctx.fillStyle = SE.dqBandColor(r.dq[i], SE.DQ_BAND);
       ctx.fillRect(x0(2) - half * 0.92, yOf(i - 0.5), half * 1.84, ph / (NT - 1) + 0.6);
     }
+
+    // guide lines: each bed boundary carried from the rock across every track
+    ctx.save();
+    ctx.setLineDash([3, 3]); ctx.strokeStyle = 'rgba(132,22,23,.55)'; ctx.lineWidth = 1;
+    LAYERS.forEach((Ly) => Ly.t.forEach((t) => {
+      const y = yOfT(t);
+      ctx.beginPath(); ctx.moveTo(L + rockW, y); ctx.lineTo(W - R, y); ctx.stroke();
+    }));
+    ctx.restore();
 
     const wiggle = (k, data, color, fill) => {
       ctx.strokeStyle = 'rgba(22,25,28,.28)';
@@ -225,18 +300,19 @@
     // the samples a two-layer reading uses: the peaks and troughs
     ctx.fillStyle = '#16191C';
     r.ext.forEach((e) => {
-      ctx.beginPath(); ctx.arc(X(0, r.near[e.i]), yOf(e.i), 3.4, 0, 2 * Math.PI); ctx.fill();
+      ctx.beginPath(); ctx.arc(X(0, r.near[e.i]), yOf(e.i), 3.2, 0, 2 * Math.PI); ctx.fill();
     });
 
     ctx.font = '600 11px "IBM Plex Sans", sans-serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = '#16191C'; ctx.fillText('rocks', L + rockW / 2, TOP - 8);
     [['near stack', '#1D6FA3'], ['far stack', '#841617'], ['DQ', '#16191C']].forEach(([t, c], k) => {
       ctx.fillStyle = c; ctx.fillText(t, x0(k), TOP - 8);
     });
     return r;
   }
 
-  root.DQHERO = { compute, draw, DT, NT, LAYERS, ROCK, S2N, S2F, shuey };
+  root.DQHERO = { compute, draw, column, timeAt, DT, NT, LAYERS, ROCK, S2N, S2F, shuey };
 
   // wire the page, if this is the page
   const doc = root.document;

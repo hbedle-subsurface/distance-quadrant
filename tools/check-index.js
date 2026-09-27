@@ -109,6 +109,39 @@ const top = H.shuey(H.ROCK.shale, H.ROCK.gas);
 console.log('   A', top.A.toFixed(3), ' B', top.B.toFixed(3));
 if (!(top.A < -0.03 && top.B < 0)) fail.push('the gas sand top is not class 3: A ' + top.A + ', B ' + top.B);
 
+console.log('\n--- the rock column: depth from interval velocities ---');
+{
+  const iv = H.column();
+  if (Math.abs(iv[0].t0) > 1e-12 || Math.abs(iv[0].z0) > 1e-12) fail.push('the column does not start at 0 ms and 0 m');
+  if (Math.abs(iv[iv.length - 1].t1 - (H.NT - 1) * H.DT) > 1e-12) fail.push('the column does not reach the bottom of the window');
+  let z = 0;
+  iv.forEach((I, k) => {
+    if (k && Math.abs(I.t0 - iv[k - 1].t1) > 1e-12) fail.push('gap in the column at ' + I.t0);
+    const dz = H.ROCK[I.r].vp * (I.t1 - I.t0) / 2;           // one-way time times velocity
+    if (Math.abs(I.z1 - I.z0 - dz) > 1e-9 || Math.abs(I.z0 - z) > 1e-9) fail.push('interval ' + k + ' depth is wrong');
+    z += dz;
+    // the depth labels are placed by timeAt; it must invert the column
+    const zm = (I.z0 + I.z1) / 2, tm = (I.t0 + I.t1) / 2;
+    if (Math.abs(H.timeAt(iv, zm) - tm) > 1e-9) fail.push('timeAt does not invert interval ' + k);
+  });
+  // the beds in the column are the beds that made the traces
+  const beds = iv.filter((I) => I.r !== 'shale');
+  H.LAYERS.forEach((L, k) => {
+    if (beds[k].r !== L.r || Math.abs(beds[k].t0 - L.t[0]) > 1e-12 || Math.abs(beds[k].t1 - L.t[1]) > 1e-12)
+      fail.push('column bed ' + k + ' does not match the reflectivity model');
+  });
+  beds.forEach((B) => console.log('   ' + B.r.padEnd(6) + (1000 * (B.t1 - B.t0)).toFixed(0).padStart(3) +
+    ' ms  = ' + (B.z1 - B.z0).toFixed(1).padStart(5) + ' m   (top ' + B.z0.toFixed(1) + ' m at ' + (1000 * B.t0).toFixed(0) + ' ms)'));
+  console.log('   column total ' + z.toFixed(1) + ' m over ' + (1000 * (H.NT - 1) * H.DT).toFixed(0) + ' ms');
+  const g = beds.find((B) => B.r === 'gas'), h = beds.find((B) => B.r === 'hard');
+  const mPerMsGas = (g.z1 - g.z0) / (1000 * (g.t1 - g.t0)), mPerMsHard = (h.z1 - h.z0) / (1000 * (h.t1 - h.t0));
+  if (!(mPerMsHard > mPerMsGas)) fail.push('depth and time are drawn as if proportional');
+}
+
+console.log('\n--- the citation copy button ---');
+if (!$('copyCite') || !$('citeText')) fail.push('the citation or its copy button is missing');
+else console.log('   "' + $('citeText').textContent.replace(/\s+/g, ' ').trim() + '"');
+
 if (notes.length) console.log('\nnoted (not failed):\n  ' + notes.join('\n  '));
 console.log(fail.length ? '\nFAILED\n  ' + fail.join('\n  ') : '\nevery quoted number checks out');
 process.exit(fail.length ? 1 : 0);
