@@ -148,7 +148,7 @@
       <div class="stat"><span>V<sub>P</sub>/V<sub>S</sub> there</span><b id="s1d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>Neither of these is measurable from seismic without work. Acoustic impedance needs an
         inversion, which needs a wavelet and usually a well. V<sub>P</sub>/V<sub>S</sub> needs shear
         information, which needs either converted waves or a simultaneous inversion. The question the next
@@ -197,7 +197,7 @@
       <div class="stat"><span>Distance spans</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>A pause here on what has and has not been shown. The distance carries porosity information,
         strongly. It does not yet give a porosity <em>value</em>: the vertical axis is in amplitude units
         and the conversion from one to the other is a slope and an intercept that nothing here supplies.
@@ -235,7 +235,7 @@
       <div class="stat"><span>Where the soft-shale contrast dies</span><b id="s3d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>This is the argument for the look-up catalogs the DQ workflow uses, made from first
         principles and not asserted. A catalog is a relationship between attribute values and rock
         properties that has been calibrated for one interval, and the reason we need a new one when the petrophysics changes is on this plot: the same attribute means the opposite thing under a different
@@ -283,7 +283,7 @@
       <div class="stat key"><span>Recovered at</span><b id="s4d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s4e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>One thing this does not show, and it matters. The sands here are separated by shale, so each
         top is a contrast against a fixed rock. Stack sands directly on one another and the DQ trace
         responds to the porosity <em>step</em> between them and not to porosity itself, because a
@@ -369,15 +369,12 @@
             module 07's angle is for, and it is the clearest argument on the site for computing both
             attributes and not one.</span></details></li>
         <li><b>Add noise.</b> Take the noise to 30% under tight sandstone and watch the correlation.
-          <details class="reveal"><summary>Answer</summary><span class="ans">It barely moves, and then it
-            gives way. The correlation stays around 0.98 or better all the way to about 35% noise, and
-            then drops sharply &mdash; to a little over 0.5 by 40% on the brine case, and further under
-            other fluids. That is a cliff and not a slope, and the reason is the picking and not the amplitudes: while the picks stay in the right places the
-            trend survives almost intact, and once noise starts inventing and destroying picks &mdash;
-            which module 02 measured directly &mdash; the workflow downstream has nothing sound to work with.
-            The practical reading is that this holds up in ordinary data and carries no weight at all in bad data, with less warning in between than you would like. Treat the figure as an upper bound in
-            any case: it is computed on one modeled sand at a time, not on a population of real
-            samples.</span></details></li>
+          <details class="reveal"><summary>Answer</summary><span class="ans">It barely moves. The correlation stays at
+            0.98 or better up to 35% noise for brine, oil and gas, and eases to between 0.91 and 0.95 at
+            40%, the end of the slider. The trend is carried by the sand's contrast with its seal, which
+            is large next to the noise, and the enhancement reads every sample of the loop and not just
+            its peak. The figure is an upper bound in any case: it is computed on one modeled sand at a
+            time, not on a population of real samples.</span></details></li>
       </ol>
     </div>
   </section>
@@ -827,9 +824,11 @@
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace and not to the wavelet so that it also works with noise on.
-     The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centers a sample runs the other way, so the filter is
-     negated. Step 3 measures what happens if it is not.
+     The tabulated filter is applied as printed on both limbs. The interior
+     numbers restart after every extremum (Q2-Q4 after it, Q6-Q8 before the
+     next), so the phase that centers a sample is the tabulated one whether
+     the limb rises or falls. Negating it on falling limbs, as an earlier
+     draft did, sends those samples toward zero at Q3 and Q7 (module 04).
      ===================================================================== */
 
   // the published table, one filter per quadrant number
@@ -874,7 +873,6 @@
       const q = qd.q[i];
       if (!q) continue;
       let deg = PHASE_OF[q];
-      if (sign[i] < 0) deg = -deg;                   // falling limb runs the other way
       if (!(deg in cache)) cache[deg] = rotate(tr, deg);
       out[i] = cache[deg][i];
       used.add(deg);
@@ -1164,8 +1162,15 @@
   const CRIM = '#841617';
   const OVCOL = { soft: '#1D6FA3', hard: '#4E7A2C', tight: '#C2306B' };
 
+  // the parent's content width: clientWidth includes its padding, and a
+  // canvas sized to that runs past the right edge of the card it sits in
   function width(el, fallback) {
-    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    const p = el && el.parentElement;
+    let w = p ? p.clientWidth : 0;
+    if (p && w && window.getComputedStyle) {
+      const cs = window.getComputedStyle(p);
+      w -= (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+    }
     return Math.max(280, w || fallback);
   }
 

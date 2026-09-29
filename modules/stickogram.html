@@ -167,7 +167,7 @@
       <div class="stat"><span>Peaks and troughs inside the sand</span><b id="s1f">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>Module 01 counted the samples conventional AVO can interpret and found two per waveform cycle.
         The StickOgram keeps four: a peak, a trough and the two crossings between them. That is not yet
         the every-sample method the course is heading for, but it is the frame the quadrant numbers are
@@ -216,7 +216,7 @@
       <div class="stat"><span>Extrema discarded inside the sand</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>This is why the papers specify a 1 ms sample rate and sync interpolation up to it before
         anything else runs. The rule is the best available choice between two samples, and the way to make
         it a good choice is to put the samples close together. At 4 ms the chosen crossing can sit two
@@ -248,7 +248,7 @@
       <div class="stat"><span>Fraction of samples kept</span><b id="s3d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>The fault reads as a break in the sticks and not as a change of amplitude, which is why the
         display is used for structural work and for feeding machine learning: the events are already
         separated from the wavelet and from each other, and there is far less of it to carry. The AASPI
@@ -737,8 +737,15 @@
   const CRIM = '#841617';
   const PEAKC = '#C2306B', TROUGHC = '#1D6FA3';   // peaks pink, troughs blue
 
+  // the parent's content width: clientWidth includes its padding, and a
+  // canvas sized to that runs past the right edge of the card it sits in
   function width(el, fallback) {
-    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    const p = el && el.parentElement;
+    let w = p ? p.clientWidth : 0;
+    if (p && w && window.getComputedStyle) {
+      const cs = window.getComputedStyle(p);
+      w -= (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+    }
     return Math.max(280, w || fallback);
   }
 

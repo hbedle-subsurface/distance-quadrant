@@ -131,7 +131,6 @@
     for (let i = 0; i < tr.length; i++) {
       if (!q[i]) continue;
       let deg = PHASE_OF[q[i]];
-      if (sign[i] < 0) deg = -deg;
       if (!(deg in cache)) cache[deg] = rotate(tr, deg);
       out[i] = cache[deg][i];
     }
@@ -159,7 +158,7 @@
       }
       dq[i] = s * Math.hypot(A, B);
     }
-    return { near, far, q, dq, ext: pk.ext, valued, cycle: 1 / (freq * DT) };
+    return { near, far, q, dq, QN, ext: pk.ext, valued, cycle: 1 / (freq * DT) };
   }
 
   /* ---- the rock column in depth -----------------------------------------

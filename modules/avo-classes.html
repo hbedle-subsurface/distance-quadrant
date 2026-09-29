@@ -129,7 +129,7 @@
       <div class="stat"><span>Class 4</span><b id="s1d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>All four are the same sand model with a different seal, fluid or porosity. Nothing exotic is
         required to move between classes, which is the point module 01 made with its three-rock
         demonstration and the reason a workflow cannot assume one class and expect to travel.</span>
@@ -160,7 +160,7 @@
       <div class="stat"><span>Sand top reads as</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>The class 2 column is the instructive one. Its intercept is close to zero, so the near stack
         barely registers the sand at all, and the distance is correspondingly small &mdash; this is the
         case module 07 used as its example of an unreliable angle, and it is the case every amplitude
@@ -196,7 +196,7 @@
       <div class="stat"><span>Separation</span><b id="s3d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>Read the separation figure across the four classes and not for one. It compares the
         brighter sand samples, at the eightieth percentile, with the median of the whole window, because a
         median taken over the sand alone is dragged down by its quiet middle. It is largest where the
@@ -210,7 +210,7 @@
   <section class="tabpane" id="pw" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
       <h3><span class="stepno">?</span>Why classes are the wrong unit, and still useful</h3>
-      <span class="hint">A caution and a defence</span>
+      <span class="hint">A caution and a defense</span>
     </div>
 
     <p class="lede">The class names are a convenience. A sand does not have a class; a sand under a
@@ -721,9 +721,11 @@
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace and not to the wavelet so that it also works with noise on.
-     The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centers a sample runs the other way, so the filter is
-     negated. Step 3 measures what happens if it is not.
+     The tabulated filter is applied as printed on both limbs. The interior
+     numbers restart after every extremum (Q2-Q4 after it, Q6-Q8 before the
+     next), so the phase that centers a sample is the tabulated one whether
+     the limb rises or falls. Negating it on falling limbs, as an earlier
+     draft did, sends those samples toward zero at Q3 and Q7 (module 04).
      ===================================================================== */
 
   // the published table, one filter per quadrant number
@@ -768,7 +770,6 @@
       const q = qd.q[i];
       if (!q) continue;
       let deg = PHASE_OF[q];
-      if (sign[i] < 0) deg = -deg;                   // falling limb runs the other way
       if (!(deg in cache)) cache[deg] = rotate(tr, deg);
       out[i] = cache[deg][i];
       used.add(deg);
@@ -1042,8 +1043,15 @@
     return B < 0 ? 'class 3' : 'class 4';
   };
 
+  // the parent's content width: clientWidth includes its padding, and a
+  // canvas sized to that runs past the right edge of the card it sits in
   function width(el, fallback) {
-    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    const p = el && el.parentElement;
+    let w = p ? p.clientWidth : 0;
+    if (p && w && window.getComputedStyle) {
+      const cs = window.getComputedStyle(p);
+      w -= (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+    }
     return Math.max(280, w || fallback);
   }
   function pct(arr, p) {

@@ -342,6 +342,10 @@
   /* ------------------------------------------------------------------ */
 
   function init() {
+    // the crimson readout is the one each step is built around; say so on hover
+    doc.querySelectorAll('.stat.key').forEach((el) => {
+      if (!el.title) el.title = 'The readout this step is built around';
+    });
     doc.querySelectorAll('.flow[data-at]').forEach(drawFlow);
     wirePopouts();
     autoGlossary();

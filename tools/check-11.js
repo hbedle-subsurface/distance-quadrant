@@ -53,17 +53,16 @@ for(const f of ['brine','oil','gas']){hit('[data-fluid="'+f+'"]');
  if(!(r($('s2a').textContent)>0.9)) fail.push('under tight sandstone with '+f+' the correlation is '+$('s2a').textContent);}
 hit('[data-fluid="brine"]');
 
-console.log('\n--- exercise 6: the correlation holds, then falls off a cliff ---');
-const seen=[];
-for(const n of [0,10,20,30,35,40]){set('noise',n);
- const v=r($('s2a').textContent); seen.push([n,v]);
- console.log('  ',String(n).padStart(2)+'%  ',$('s2a').textContent);}
-set('noise',0);
-const upTo35=seen.filter(([n])=>n<=35).map(([,v])=>v);
-if(!(Math.min(...upTo35)>0.9)) fail.push('the correlation dips below 0.9 before 35% noise: '+upTo35.join(', '));
-const at40=seen.find(([n])=>n===40)[1];
-if(!(at40<0.85)) fail.push('at 40% noise the correlation is '+at40+', answer says it drops sharply');
-if(!(at40<Math.min(...upTo35)-0.2)) fail.push('the drop at 40% is not sharp: '+at40+' vs '+Math.min(...upTo35));
+console.log('\n--- exercise 6: the correlation holds across the noise slider, every fluid ---');
+for(const fl of ['brine','oil','gas']){hit('[data-fluid="'+fl+'"]');const row=[];
+ for(const n of [0,10,20,30,35,40]){set('noise',n);row.push([n,r($('s2a').textContent)]);}
+ set('noise',0);
+ console.log('  ',fl.padEnd(6),row.map(([n,v])=>n+'%:'+v.toFixed(3)).join('  '));
+ const to35=row.filter(([n])=>n<=35).map(([,v])=>v), at40=row.find(([n])=>n===40)[1];
+ if(!(Math.min(...to35)>=0.98)) fail.push(fl+': below 0.98 before 35% noise, answer says 0.98 or better');
+ if(!(at40>=0.905&&at40<=0.955)) fail.push(fl+': '+at40.toFixed(3)+' at 40%, answer says between 0.91 and 0.95');
+}
+hit('[data-fluid="brine"]');
 
 console.log('\n--- step 4: recovering a five-sand porosity log ---');
 hit('#tabs button[data-tab="p4"]'); hit('[data-fluid="brine"]'); set('noise',0);

@@ -97,7 +97,9 @@
     <p class="lede">The left panel is the model, the answer both seismic sections are trying to show. A sand
       of constant thickness lies between layers of the rock chosen in the panel, with a thin contrasting bed
       above it and a tight sandstone bed below. When the surrounding rock is itself tight sandstone, that
-      lower bed has no contrast and gives no reflection. The sand&rsquo;s <span class="g" data-g="porosity">porosity</span> rises
+      lower bed has no contrast and gives no reflection. The sand top is at 50 ms on every setting, and its depth
+      changes with the rock: about 71 m under soft shale, 80 m under hard shale and 107 m under tight
+      sandstone, since faster rock puts more meters into each millisecond. The sand&rsquo;s <span class="g" data-g="porosity">porosity</span> rises
       from 12% at the left of the line to 33% at the right, and the color of the sand shows its pore
       fluid.</p>
 
@@ -106,14 +108,15 @@
       <span class="g" data-g="peak">peak</span> with <span class="g" data-g="sidelobe">sidelobes</span>
       above and below it. The brightness of each band combines the
       <span class="g" data-g="impedance">impedance</span> contrast at that boundary with the thickness of the
-      bed, and the interior of the sand sits near a <span class="g" data-g="zero-crossing">zero
+      bed, and the interior of the sand lies near a <span class="g" data-g="zero-crossing">zero
       crossing</span>.</p>
 
-    <p class="lede">On the DQ section the same sand appears as one filled body between its two boundaries.
-      Higher porosity lowers the sand&rsquo;s density and velocity, so its impedance falls. Under the default
+    <p class="lede">On the DQ section the same sand appears as a filled body between its two boundaries.
+      A thin sand&rsquo;s top and base merge into one body; in a thicker sand they separate, with a weaker
+      band between them (module 11). Higher porosity lowers the sand&rsquo;s density and velocity, so its impedance falls. Under the default
       tight sandstone that widens the contrast with the rock above, and the DQ color strengthens from left
       to right with the porosity in the model. Under a soft shale the sand&rsquo;s impedance approaches the
-      shale&rsquo;s as porosity rises, so the contrast and the DQ value weaken instead. The DQ value
+      shale&rsquo;s as porosity rises, so the contrast and the DQ value weaken. The DQ value
       responds to the contrast between rocks, not to porosity alone. Changing the pore fluid changes the
       color while the outline of the body stays in place.</p>
 
@@ -129,7 +132,7 @@
       <div class="stat wide"><span>Reading</span><b id="s0e">&mdash;</b></div>
     </div>
 
-    <div class="legend">
+    <div class="legend prose">
       <span>The dashed outline on both sections is the sand in the rock model. A second attribute, the angle
         of the same crossplot point (Theta PX, module 07), responds mainly to pore fluid and lithology and
         is not drawn here. Module 11 compares the two attributes across a wedge.</span>
@@ -524,9 +527,11 @@
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace and not to the wavelet so that it also works with noise on.
-     The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centers a sample runs the other way, so the filter is
-     negated. Step 3 measures what happens if it is not.
+     The tabulated filter is applied as printed on both limbs. The interior
+     numbers restart after every extremum (Q2-Q4 after it, Q6-Q8 before the
+     next), so the phase that centers a sample is the tabulated one whether
+     the limb rises or falls. Negating it on falling limbs, as an earlier
+     draft did, sends those samples toward zero at Q3 and Q7 (module 04).
      ===================================================================== */
 
   // the published table, one filter per quadrant number
@@ -571,7 +576,6 @@
       const q = qd.q[i];
       if (!q) continue;
       let deg = PHASE_OF[q];
-      if (sign[i] < 0) deg = -deg;                   // falling limb runs the other way
       if (!(deg in cache)) cache[deg] = rotate(tr, deg);
       out[i] = cache[deg][i];
       used.add(deg);
@@ -838,8 +842,15 @@
   const CRIM = '#841617';
   const NTR = 21;
 
+  // the parent's content width: clientWidth includes its padding, and a
+  // canvas sized to that runs past the right edge of the card it sits in
   function width(el, fallback) {
-    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    const p = el && el.parentElement;
+    let w = p ? p.clientWidth : 0;
+    if (p && w && window.getComputedStyle) {
+      const cs = window.getComputedStyle(p);
+      w -= (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+    }
     return Math.max(280, w || fallback);
   }
 
@@ -1196,7 +1207,7 @@
     }
     const topD = mid.has[mid.win[0]] ? mid.dq[mid.win[0]] : 0;
     const topP = mid.has[mid.win[0]] ? mid.px[mid.win[0]] : 0;
-    $('s0a').textContent = inSand + ' samples of section';
+    $('s0a').textContent = inSand + ' samples';
     $('s0b').textContent = numbered + ' of ' + inSand
       + ' (' + (100 * numbered / Math.max(1, inSand)).toFixed(0) + '%)';
     $('s0c').textContent = topD.toFixed(4);

@@ -145,7 +145,7 @@
       <div class="stat"><span>Porosity along the sand</span><b id="s1d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>Watch the thin ends. Where the sand drops below about a quarter of a wavelength the two
         reflections merge, the outline no longer matches a distinct body on either display, and the
         brightness there is tuning and not rock. Module 11 measured that; here the effect on a section is visible.</span>
@@ -180,7 +180,7 @@
       <div class="stat"><span>Fluid above it</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>A boundary that stays flat while the beds around it dip is the classic argument for a fluid
         contact and not a lithology change, because rock boundaries follow structure and fluid
         boundaries follow gravity. That reasoning is independent of which attribute we are looking at; the
@@ -219,12 +219,12 @@
       <div class="stat key"><span>Each peaks at</span><b id="s3d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>Both curves peak toward the right-hand end, where the sand is <em>thinnest</em> and its
         porosity is lowest. That is not a fault in the attributes: at 10 ms
         those beds sit at the tuning maximum module 11 measured, so their reflections are amplified by
         interference. An interpreter reading either section for rock quality would pick the worst part of
-        the reservoir. The defence is the half isochron on step 2, which shows the loop shortening there
+        the reservoir. The defense is the half isochron on step 2, which shows the loop shortening there
         and marks the zone as tuned.</span>
     </div>
   </section>
@@ -365,7 +365,7 @@
         The curves below the sections read the layer that contains the middle of the modeled sand.</p>
       <p><b>What this module does not do.</b> It does not ray trace, and each trace is modeled
         independently, so there is no lateral wave propagation, no diffraction from the fault tip and no
-        migration artefact. A real fault on real data produces all three. The structure here is a device
+        migration artifact. A real fault on real data produces all three. The structure here is a device
         for showing how the attributes behave when geology varies along a line, not a simulation of a
         seismic experiment.</p>
       <ul>
@@ -765,9 +765,11 @@
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace and not to the wavelet so that it also works with noise on.
-     The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centers a sample runs the other way, so the filter is
-     negated. Step 3 measures what happens if it is not.
+     The tabulated filter is applied as printed on both limbs. The interior
+     numbers restart after every extremum (Q2-Q4 after it, Q6-Q8 before the
+     next), so the phase that centers a sample is the tabulated one whether
+     the limb rises or falls. Negating it on falling limbs, as an earlier
+     draft did, sends those samples toward zero at Q3 and Q7 (module 04).
      ===================================================================== */
 
   // the published table, one filter per quadrant number
@@ -812,7 +814,6 @@
       const q = qd.q[i];
       if (!q) continue;
       let deg = PHASE_OF[q];
-      if (sign[i] < 0) deg = -deg;                   // falling limb runs the other way
       if (!(deg in cache)) cache[deg] = rotate(tr, deg);
       out[i] = cache[deg][i];
       used.add(deg);
@@ -1219,8 +1220,15 @@
   const SOFT = 'rgba(22,25,28,0.45)';
   const CRIM = '#841617';
 
+  // the parent's content width: clientWidth includes its padding, and a
+  // canvas sized to that runs past the right edge of the card it sits in
   function width(el, fallback) {
-    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    const p = el && el.parentElement;
+    let w = p ? p.clientWidth : 0;
+    if (p && w && window.getComputedStyle) {
+      const cs = window.getComputedStyle(p);
+      w -= (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+    }
     return Math.max(280, w || fallback);
   }
 

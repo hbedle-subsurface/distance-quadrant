@@ -138,7 +138,7 @@
       <div class="stat"><span>Reference line spacing</span><b id="s1d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>Note what the reader has to do here: the sand is a pair of colored bands, and telling where it
         starts and stops means deciding which band belongs to the top and which to the base. That is the
         ordinary work of seismic interpretation, and it is what the next display is trying to
@@ -176,7 +176,7 @@
       <div class="stat"><span>Maximum on the line</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>The sand now reads as a single colored body and not as two bands with a gap. That is the
         practical payoff of everything modules 02 to 05 did: the picking, the numbering and the phase
         filters exist to make each loop carry one value, and a one-sided color bar is how we display something that is one value per loop and not an oscillation.</span>
@@ -212,7 +212,7 @@
       <div class="stat"><span>Bands at the sand top</span><b id="s3d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>The line varies bed thickness from trace to trace, so its left-hand end runs through the
         tuning regime module 11 measured and its weakest traces sit near a crossover, where module 07
         showed the angle becomes unstable. That is why the sand top spans several bands across the line
@@ -245,7 +245,7 @@
     <div style="margin-top:12px">
       <button class="btn small" id="quizNew" type="button">New question</button>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>The displays follow the conventions of the three steps: one-sided color for the DQ,
         two-sided ten-degree bands for Theta PX. Porosity, pore fluid, bed thickness and the rock above
         the sand all move both displays, so a body that looks the same can come from more than one set of
@@ -770,9 +770,11 @@
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace and not to the wavelet so that it also works with noise on.
-     The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centers a sample runs the other way, so the filter is
-     negated. Step 3 measures what happens if it is not.
+     The tabulated filter is applied as printed on both limbs. The interior
+     numbers restart after every extremum (Q2-Q4 after it, Q6-Q8 before the
+     next), so the phase that centers a sample is the tabulated one whether
+     the limb rises or falls. Negating it on falling limbs, as an earlier
+     draft did, sends those samples toward zero at Q3 and Q7 (module 04).
      ===================================================================== */
 
   // the published table, one filter per quadrant number
@@ -817,7 +819,6 @@
       const q = qd.q[i];
       if (!q) continue;
       let deg = PHASE_OF[q];
-      if (sign[i] < 0) deg = -deg;                   // falling limb runs the other way
       if (!(deg in cache)) cache[deg] = rotate(tr, deg);
       out[i] = cache[deg][i];
       used.add(deg);
@@ -1084,8 +1085,15 @@
   const CRIM = '#841617';
   const NTR = 21;
 
+  // the parent's content width: clientWidth includes its padding, and a
+  // canvas sized to that runs past the right edge of the card it sits in
   function width(el, fallback) {
-    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    const p = el && el.parentElement;
+    let w = p ? p.clientWidth : 0;
+    if (p && w && window.getComputedStyle) {
+      const cs = window.getComputedStyle(p);
+      w -= (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+    }
     return Math.max(280, w || fallback);
   }
 

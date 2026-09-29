@@ -104,6 +104,31 @@ for (let fq = 20; fq <= 60; fq += 5) {
     Math.max(...Array.from(r.dq, Math.abs)).toFixed(3));
 }
 
+console.log('\n--- the enhanced near stack against its envelope, limb by limb ---');
+// Reading each sample from the filter that centers it should give about the
+// Hilbert envelope (module 04). A filter applied with the wrong sign on one
+// kind of limb shows as that limb matching far worse than the other.
+{
+  const SE = window.SEIS || window.eval('SEIS');
+  for (let fq = 20; fq <= 60; fq += 10) {
+    const r = H.compute(fq);
+    const hn = SE.hilbert(r.near);
+    const env = Array.from(r.near, (x, i) => Math.hypot(x, hn[i]));
+    const pk = Math.max(...env);
+    const ext = r.ext.map((e) => e.i).sort((a, b) => a - b);
+    const e = { 1: [0, 0], '-1': [0, 0] };
+    for (let k = 0; k + 1 < ext.length; k++) {
+      const a = ext[k], b = ext[k + 1], dir = r.near[b] > r.near[a] ? 1 : -1;
+      for (let i = a + 1; i < b; i++) { e[dir][0] += Math.abs(Math.abs(r.QN[i]) - env[i]) / pk; e[dir][1]++; }
+    }
+    const up = 100 * e[1][0] / Math.max(1, e[1][1]), dn = 100 * e[-1][0] / Math.max(1, e[-1][1]);
+    console.log('   ' + fq + ' Hz  mean mismatch, % of peak envelope: rising ' + up.toFixed(1) + '   falling ' + dn.toFixed(1));
+    if (dn > 2 * up + 1 || up > 2 * dn + 1) fail.push(fq + ' Hz: one limb matches the envelope far worse (rising ' +
+      up.toFixed(1) + '%, falling ' + dn.toFixed(1) + '%)');
+    if (Math.max(up, dn) > 5) fail.push(fq + ' Hz: the enhancement misses the envelope by ' + Math.max(up, dn).toFixed(1) + '%');
+  }
+}
+
 console.log('\n--- the gas sand is class 3, as the caption and figure imply ---');
 const top = H.shuey(H.ROCK.shale, H.ROCK.gas);
 console.log('   A', top.A.toFixed(3), ' B', top.B.toFixed(3));

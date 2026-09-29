@@ -159,7 +159,7 @@
       <div class="stat key"><span>Far minus near, same sample</span><b id="s1d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>Nothing has been fitted, inverted or deconvolved. Two windows were averaged and one trace was
         subtracted from another. Everything the DQ process does afterwards is built on these three traces
         and on nothing else.</span>
@@ -199,7 +199,7 @@
       <div class="stat"><span>Largest gap between N and A</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>Move the far window in the panel and watch the multiplier on the right change. Push the far
         window out and the gradient is measured with more leverage, and that helps; the reasons not
         to keep pushing are noise, moveout error, and the fact that the two-term equation itself stops
@@ -250,7 +250,7 @@
       <div class="stat"><span>Intercept bias, least squares</span><b id="s3i">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3f">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>A window ten degrees wide spans a small fraction of the moveout across the gather, so the
         traces inside it are still aligned with each other when they are averaged, and the near window
         spans almost none of it at all. A fit across the whole gather compares the same sample index at
@@ -767,8 +767,15 @@
   const INK = '#16191C', SOFT = 'rgba(22,25,28,0.45)';
   const CRIM = '#841617', NEARC = '#1D6FA3', FARC = '#C2306B';
 
+  // the parent's content width: clientWidth includes its padding, and a
+  // canvas sized to that runs past the right edge of the card it sits in
   function width(el, fallback) {
-    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    const p = el && el.parentElement;
+    let w = p ? p.clientWidth : 0;
+    if (p && w && window.getComputedStyle) {
+      const cs = window.getComputedStyle(p);
+      w -= (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+    }
     return Math.max(280, w || fallback);
   }
 

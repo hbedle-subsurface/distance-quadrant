@@ -55,6 +55,21 @@ const topDQ=(t)=>Math.abs(t.dq[t.win[0]]);
 console.log('   |DQ| at sand top, left / right:',topDQ(L[0]).toFixed(4),topDQ(L[20]).toFixed(4));
 if(!(topDQ(L[20])>topDQ(L[0]))) fail.push('DQ does not strengthen left to right under tight sandstone with gas');
 
+console.log('\n--- step 1: depth of the sand top under each rock ---');
+{
+  const vp = {}; for (const m of h.matchAll(/(soft|hard|tight): \{ vp: (\d+)/g)) vp[m[1]] = +m[2];
+  const beda = h.match(/const BEDA = \[([\d.]+), ([\d.]+)\]/).slice(1).map(Number);
+  const ttop = +h.match(/TTOP = ([\d.]+)/)[1];
+  const quoted = { soft: 71, hard: 80, tight: 107 };
+  for (const o of ['soft', 'hard', 'tight']) {
+    const other = o === 'soft' ? 'hard' : 'soft';              // the thin bed above, as the page draws it
+    const z = vp[o] * (beda[0] + (ttop - beda[1])) / 2 + vp[other] * (beda[1] - beda[0]) / 2;
+    console.log('   ' + o.padEnd(6) + ' sand top at ' + (1000 * ttop) + ' ms = ' + z.toFixed(1) + ' m   (text: ' + quoted[o] + ')');
+    if (Math.round(z) !== quoted[o]) fail.push('sand top under ' + o + ' is ' + z.toFixed(1) + ' m, text says ' + quoted[o]);
+  }
+  if (!/about 71 m under soft shale, 80 m under hard shale and 107 m under tight\s+sandstone/.test(h))
+    fail.push('the depth sentence in step 1 has changed; update this check');
+}
 console.log('\n=======================================');
 if(fail.length){fail.forEach(f=>console.log('  -',f));process.exit(1);}
 console.log('every quoted number checks out');

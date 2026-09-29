@@ -75,6 +75,22 @@ The hero figure in `assets/index-hero.js` runs module 00's workflow, ported
 line for line. If module 00's picker, numbering, filters or sign rule change,
 change them there too.
 
+## The phase-filter rule
+
+```
+node tools/check-phase-rule.js
+```
+
+The published filter table (Q1/Q9 0, Q2-Q4 +22.5/+45/+67.5, Q5 -90, Q6-Q8
+-67.5/-45/-22.5) is applied as printed on rising and falling limbs alike,
+because the interior numbers restart after every extremum. An earlier draft
+negated it on falling limbs, which sends Q3 and Q7 toward zero there; the
+code had been copied into eleven modules and the landing page. This check
+reads every file that carries the table and fails if the table differs or
+any angle is negated. `check-index.js` tests the behavior itself on the
+landing figure, comparing the enhanced near stack with its Hilbert envelope
+limb by limb.
+
 ## Adding a module
 
 Copy the nearest existing checker, point it at the new file, and assert the

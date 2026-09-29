@@ -177,7 +177,7 @@
       <div class="stat"><span>Total energy in the trace</span><b id="s1d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>The energy readout does not move, because a phase rotation cannot change it. The peak amplitude
         does move, and by a lot: a &minus;90&deg; rotation of a Ricker wavelet peaks at about 0.83 of the
         unrotated one. That difference is not a nuisance to be tidied away &mdash; it is the whole subject
@@ -212,7 +212,10 @@
     <canvas id="c2a" aria-label="One loop magnified, with each sample linked to the filtered trace it is read from"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">One loop, magnified. The gray curves are the eight
       filtered traces; the colored dot on each sample marks which one that sample was read from, and the
-      heavy line is the result.</p>
+      heavy line is the result. The dot is not always on the outermost curve. Its quadrant number picks
+      the filter from where the sample lies in the loop, and the eight angles are 22.5&deg; apart, so at
+      some samples the copy that happens to be largest is the neighboring one. That spacing is the small
+      difference from the Hilbert envelope that step 3 measures.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Samples enhanced</span><b id="s2a">&mdash;</b></div>
@@ -221,7 +224,7 @@
       <div class="stat key"><span>Peak of QN</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>Notice that QN is no longer a seismic trace in the ordinary sense. Neighboring samples come
         from different filters, so it is not the convolution of anything with a single wavelet, and its
         wiggle no longer has a wavelet's shape. It is a trace of amplitudes read at consistent phase
@@ -249,17 +252,17 @@
 
     <canvas id="c3a" aria-label="The quadrant-enhanced trace drawn against the Hilbert envelope of the near stack"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The magnitude of the enhanced trace against the Hilbert
-      envelope of the same near stack. Tick the box in the panel to apply the tabulated filters on falling
-      limbs without negating them, and watch the agreement fall apart.</p>
+      envelope of the same near stack. Tick the box in the panel to invert the tabulated angles, the other
+      sign convention for a phase rotation, and watch the agreement fall apart on both limbs.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat key"><span>Difference from the envelope</span><b id="s3a">&mdash;</b></div>
       <div class="stat"><span>Correlation with the envelope</span><b id="s3b">&mdash;</b></div>
-      <div class="stat"><span>Falling-limb filters</span><b id="s3c">&mdash;</b></div>
+      <div class="stat"><span>Filter angles</span><b id="s3c">&mdash;</b></div>
       <div class="stat"><span>Samples compared</span><b id="s3d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>Two sign conventions are in use for what a phase rotation means. With the published angles under the convention used here, the enhanced
         trace follows the envelope closely; with the signs inverted it does not.</span>
     </div>
@@ -292,7 +295,7 @@
       <div class="stat key"><span>Effect on the enhanced trace</span><b id="s4e">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s4f">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>The gains are close to one: about 20% at 90&deg;, and under 4% for everything up to 45&deg;.
         Applied across the trace they change it by roughly 5% of its own amplitude, because the large
         correction only reaches the zero-crossing samples. That matters, because the step is sometimes described as the thing that stops the
@@ -854,9 +857,8 @@
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace and not to the wavelet so that it also works with noise on.
-     The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centers a sample runs the other way, so the filter is
-     negated. Step 3 measures what happens if it is not.
+     The tabulated filter is applied as printed on both limbs; step 3
+     measures what happens under the other rotation convention.
      ===================================================================== */
 
   // the published table, one filter per quadrant number
@@ -896,10 +898,10 @@
 
   /* Each sample is read from the filter its own quadrant number names, with no
      sign adjustment. That works because module 03's interior count restarts
-     after every extremum, so the phase keeps advancing down the trace and the tabulated
-     filter is always the right one. The switch in the panel mirrors the
-     numbering on falling limbs instead, which is what an earlier draft of this
-     course did, so that step 3 can measure the difference. */
+     after every extremum, so the phase keeps advancing down the trace and the
+     tabulated filter is always the right one, on rising and falling limbs
+     alike. The switch in the panel inverts every angle, the other rotation
+     convention, so that step 3 can measure the difference. */
   function enhance(tr, qd, pk, mirrored) {
     const nt = tr.length;
     const sign = limbSigns(tr, pk, nt);
@@ -953,8 +955,15 @@
     5: '#8A8F95', 6: '#DCA8BF', 7: '#D07FA2', 8: '#C9578A', 9: '#C2306B',
   };
 
+  // the parent's content width: clientWidth includes its padding, and a
+  // canvas sized to that runs past the right edge of the card it sits in
   function width(el, fallback) {
-    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    const p = el && el.parentElement;
+    let w = p ? p.clientWidth : 0;
+    if (p && w && window.getComputedStyle) {
+      const cs = window.getComputedStyle(p);
+      w -= (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+    }
     return Math.max(280, w || fallback);
   }
 
@@ -1296,12 +1305,12 @@
     const rms = Math.sqrt(e / Math.max(1, n)) / Math.max(1e-9, pkE) * 100;
     $('s3a').textContent = rms.toFixed(1) + '% of peak';
     $('s3b').textContent = (num / Math.max(1e-12, Math.sqrt(da * db))).toFixed(3);
-    $('s3c').textContent = S.naive ? 'tabulated' : 'negated';
+    $('s3c').textContent = S.naive ? 'inverted' : 'as tabulated';
     $('s3d').textContent = n + '';
     $('s3e').textContent = S.naive
-      ? 'With the tabulated filters used on both limbs the difference is ' + rms.toFixed(0)
-        + '% of the peak envelope, and the mismatch sits entirely on the falling limbs. That is the '
-        + 'signature to look for if a DQ volume comes out wrong.'
+      ? 'With the angles inverted the difference is ' + rms.toFixed(0) + '% of the peak envelope, on '
+        + 'rising and falling limbs alike: every interior sample is rotated away from its extremum and '
+        + 'shrinks toward zero at Q3 and Q7. That is the signature to look for if a DQ volume comes out wrong.'
       : 'The enhanced trace sits within ' + rms.toFixed(0) + '% of the envelope. The residual is the '
         + 'coarseness of a nine-bucket scheme, not error, and it is nowhere near enough to make the '
         + 'unbalanced trace usable. Step 4 applies the only correction the method specifies.';

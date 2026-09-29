@@ -158,7 +158,7 @@
       <div class="stat"><span>Quarter of the wavelet period</span><b id="s1d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>Drag the sand thickness and watch the value at the sand top barely move once the bed is
         resolved; drag the wavelet frequency instead and it moves at once. So this axis is a waveform measure, sensitive to the bandwidth and to interference. It is on the plot because samples from different parts of a loop behave differently, not because it reports the geology directly.</span>
     </div>
@@ -191,7 +191,7 @@
       <div class="stat key"><span>Half isochron range</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>The published displays add a fourth dimension by symbol and color: shale an orange inverted
         triangle, wet sand a blue cross, oil a green plus, gas a magenta triangle, with black circles for
         samples not yet classified. On modeled data those labels are known; on real data they are what the
@@ -228,7 +228,7 @@
       <div class="stat"><span>Median distance, all samples</span><b id="s3d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
-    <div class="legend">
+    <div class="legend prose">
       <span>The statistics matter more than they look. They are what turns a cluster on a screen into a
         number that can be carried forward &mdash; into a polygon definition, into a comparison between
         time windows, or into the look-up catalogs module 10 described. A crossplot we can only look at
@@ -244,7 +244,7 @@
 
     <p class="lede">A seismic section shows where things are; a crossplot shows what they are.
       Neither replaces the other, and the DQ workflow uses both: the sections of modules 05 and 07 to
-      locate an anomaly, and this plot to characterise it.</p>
+      locate an anomaly, and this plot to characterize it.</p>
 
     <p class="lede">What makes this crossplot unusual is that it is built to be worked in polar
       coordinates as well as Cartesian ones. The baseline rotation of module 06 is a polar operation, the
@@ -750,9 +750,11 @@
 
      A rotation of theta is x cos(theta) + H(x) sin(theta), applied to the
      trace and not to the wavelet so that it also works with noise on.
-     The tabulated filter is written for a rising limb; on a falling limb
-     the phase that centers a sample runs the other way, so the filter is
-     negated. Step 3 measures what happens if it is not.
+     The tabulated filter is applied as printed on both limbs. The interior
+     numbers restart after every extremum (Q2-Q4 after it, Q6-Q8 before the
+     next), so the phase that centers a sample is the tabulated one whether
+     the limb rises or falls. Negating it on falling limbs, as an earlier
+     draft did, sends those samples toward zero at Q3 and Q7 (module 04).
      ===================================================================== */
 
   // the published table, one filter per quadrant number
@@ -797,7 +799,6 @@
       const q = qd.q[i];
       if (!q) continue;
       let deg = PHASE_OF[q];
-      if (sign[i] < 0) deg = -deg;                   // falling limb runs the other way
       if (!(deg in cache)) cache[deg] = rotate(tr, deg);
       out[i] = cache[deg][i];
       used.add(deg);
@@ -1051,8 +1052,15 @@
     5: '#8A8F95', 6: '#DCA8BF', 7: '#D07FA2', 8: '#C9578A', 9: '#C2306B',
   };
 
+  // the parent's content width: clientWidth includes its padding, and a
+  // canvas sized to that runs past the right edge of the card it sits in
   function width(el, fallback) {
-    const w = el && el.parentElement ? el.parentElement.clientWidth : 0;
+    const p = el && el.parentElement;
+    let w = p ? p.clientWidth : 0;
+    if (p && w && window.getComputedStyle) {
+      const cs = window.getComputedStyle(p);
+      w -= (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+    }
     return Math.max(280, w || fallback);
   }
 

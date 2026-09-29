@@ -601,7 +601,15 @@ footer p { margin: 0 0 6px; max-width: 62ch; }
 .legend span { display: flex; align-items: center; gap: 6px; min-width: 0; }
 /* prose legends: a paragraph, not a row of keyed swatches */
 .legend.prose { display: block; }
-.legend.prose span { display: block; line-height: 1.65; max-width: none; }
+.legend.prose > span { display: block; line-height: 1.65; max-width: none; }
+/* anything inside a sentence stays in the sentence: glossary terms, italics,
+   bold, links. Without this, the swatch rules above turn an italic word into
+   a 15 px line and a glossary term into a block of its own. */
+.legend.prose > span span, .legend.prose a, .legend.prose b,
+.legend.prose em, .legend.prose sub, .legend.prose sup { display: inline; }
+.legend.prose i {
+  display: inline; width: auto; height: auto; border: 0; flex: initial; font-style: italic;
+}
 .legend i {
   width: 15px; height: 0; flex: none;
   border-top-width: 2px; border-top-style: solid; display: inline-block;
