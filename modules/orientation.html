@@ -834,7 +834,8 @@
      READING A DQ SECTION
 
      The three color conventions from the DQ display specification, applied
-     to one modeled line: symmetric for seismic, one-sided for DQ, banded
+     to one modeled line: symmetric for seismic, the published fourteen-band
+     DQ bar, banded
      two-sided for the angle.
      ===================================================================== */
 
@@ -884,8 +885,8 @@
       const dq = new Float64Array(nt), px = new Float64Array(nt);
       const has = new Uint8Array(nt);
       r.pts.forEach((p) => {
-        // signed, as module 07 defines it: the one-sided color bar depends on
-        // the sign, and an unsigned distance would put every sample above zero
+        // signed, as module 05 defines it: the published bar is two-sided, and
+        // an unsigned distance would put every sample above zero
         const sgn = b.sgn[p.i] >= 0 ? 1 : -1;
         dq[p.i] = Math.hypot(p.x, p.y) * sgn;
         px[p.i] = fold(bearing(p.x, p.y)) * sgn;

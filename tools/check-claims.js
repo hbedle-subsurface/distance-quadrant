@@ -14,6 +14,9 @@ const WRONG = [
   // a quarter-wavelength bed is half the wavelet period in two-way time (12.5 ms at 40 Hz)
   [/quarter of (the|a) (wavelet )?period[^.]{0,60}tun|tun[^.]{0,80}quarter of (the|a) (wavelet )?period|6\.3 ms at 40 Hz/i,
     'tuning given as a quarter of the period'],
+  // the published DQ bar has fourteen bands, seven each side of zero
+  [/one-sided (color )?bar|DQ bar is one-sided|one-sided for DQ|two increments (below zero|for everything negative)/i,
+    'the DQ color bar called one-sided'],
   // a rotation about the origin keeps every distance from the origin; it changes direction only
   [/rotat[^.]{0,80}(converts|turns) (a )?distance|lets the distance measure|distance becomes interpretable/i,
     'a rotation said to change the distance'],

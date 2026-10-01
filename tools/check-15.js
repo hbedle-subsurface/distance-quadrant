@@ -51,6 +51,18 @@ console.log('\n--- the overlay toggle ---');
 chk('wiggle',false); chk('wiggle',true);
 console.log('   overlay toggles without error');
 
+console.log('\n--- the DQ bar on the page is the published one ---');
+{
+  // every band color the page can draw must be the published color for that band
+  const SE = window.eval('SEIS'), B = SE.DQ_BAND;
+  const pub = ['#A9AAFA','#E099D3','#D9BCD0','#A4B3EC','#B3B3B3','#CECED0','#E4E2E5',
+               '#D4F300','#E1F605','#FDE308','#FBB100','#FD8608','#FB0007','#FA02BB'];
+  let bad = 0;
+  for (let b = 0; b < 14; b++) { const v = (b - 7 + 0.5) * B; if (SE.dqBandColor(v, B).toUpperCase() !== pub[b]) bad++; }
+  console.log('   14 bands checked against the published colors, mismatches ' + bad);
+  if (bad) fail.push(bad + ' DQ bands differ from the published bar');
+  if (!/fourteen bands, seven each\s+side of\s+zero/.test(h)) fail.push('step 2 no longer states fourteen bands, seven each side of zero');
+}
 console.log('\n=======================================');
 if(fail.length){fail.forEach(f=>console.log('  -',f));process.exit(1);}
 console.log('every quoted number checks out');

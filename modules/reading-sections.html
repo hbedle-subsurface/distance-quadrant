@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reading a DQ section | How the DQ Trace Actually Works</title>
-<meta name="description" content="The display conventions the DQ papers use: a symmetric color bar for seismic, a one-sided one for DQ, ten-degree bands for Theta PX, and why a DQ histogram needs a log axis.">
+<meta name="description" content="The display conventions the DQ papers use: a symmetric color bar for seismic, the published fourteen-band bar for DQ, ten-degree bands for Theta PX, and why a DQ histogram needs a log axis.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -149,23 +149,25 @@
   <section class="tabpane" id="p2" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
       <h3><span class="stepno">2</span>The DQ convention</h3>
-      <span class="hint">One-sided, because the interest is one-sided</span>
+      <span class="hint">Fourteen fixed bands, seven each side of zero</span>
     </div>
 
     <p class="lede">
-      A DQ section is colored differently, and the difference is deliberate. The color bar is
-      <b>one-sided</b>: the full range of increments is spent on zero to the maximum, and everything
-      negative gets two increments and no more. On a soft-sand play the sands are the positive samples,
-      and the shales are mostly negative, so the bar spends its resolution where the interest is and
-      compresses the rest.</p>
+      A DQ section has its own color bar. The published bar has <b>fourteen bands, seven each side of
+      zero</b>, and every band spans the same fixed range of DQ, so one color means one value on every
+      section. Above zero the colors run from yellow-green through yellow, orange and red to magenta;
+      below zero they run from grays through blue, mauve, pink and violet. The sign follows module 05:
+      peaks, troughs and samples on a rising limb are positive.</p>
 
     <p class="lede">
-      The low and negative end is <b>light gray and not white</b>. White washes out against the page
-      and makes the background look like missing data; gray reads as background. The overlay wiggle is
+      The first band below zero is <b>light gray and not white</b>. White washes out against the page
+      and makes the background look like missing data; gray reads as background. The first band above
+      zero is already a saturated yellow-green, so a small positive DQ and a small negative one look very
+      different, and zero is the sharpest edge on the bar. The overlay wiggle is
       scaled up less than on a seismic section, about one and a half times, because the DQ trace is blocked
       and not oscillatory and does not need as much exaggeration to be legible.</p>
 
-    <canvas id="c2a" aria-label="The same line as a DQ section with a one-sided color bar"></canvas>
+    <canvas id="c2a" aria-label="The same line as a DQ section on the published fourteen-band color bar"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The same line, as DQ. Compare where the sand
       reads against the seismic section above it.</p>
 
@@ -177,9 +179,11 @@
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>The sand now reads as a single colored body and not as two bands with a gap. That is the
-        practical payoff of everything modules 02 to 05 did: the picking, the numbering and the phase
-        filters exist to make each loop carry one value, and a one-sided color bar is how we display something that is one value per loop and not an oscillation.</span>
+      <span>The sand reads as a colored body between its boundaries, where the stack section shows a
+        trough and a peak with a near-zero gap between them. Modules 02 to 05 built that: the picking,
+        the numbering and the phase filters give each loop one value, and a bar of fixed bands shows one
+        value per loop as one color. A thick sand can still show its top and base as two bands with a
+        weaker one between (module 11).</span>
     </div>
   </section>
 
@@ -191,7 +195,7 @@
 
     <p class="lede">
       &theta;<sub>px</sub> gets a third treatment: two-sided from &minus;90 to +90, but with <b>bolder
-      colors on the positive side</b> for the same reason the DQ bar is one-sided, and divided into
+      colors on the positive side</b>, and divided into
       <b>ten-degree bands with the boundaries kept sharp</b> and not smoothly graded.</p>
 
     <p class="lede">
@@ -246,8 +250,8 @@
       <button class="btn small" id="quizNew" type="button">New question</button>
     </div>
     <div class="legend prose">
-      <span>The displays follow the conventions of the three steps: one-sided color for the DQ,
-        two-sided ten-degree bands for Theta PX. Porosity, pore fluid, bed thickness and the rock above
+      <span>The displays follow the conventions of the three steps: the published fourteen-band bar for
+        the DQ, two-sided ten-degree bands for Theta PX. Porosity, pore fluid, bed thickness and the rock above
         the sand all move both displays, so a body that looks the same can come from more than one set of
         rocks.</span>
     </div>
@@ -260,12 +264,14 @@
     </div>
 
     <p class="lede">Each of these three color bars encodes a claim about what its attribute is for. The
-      seismic bar is symmetric because amplitude's two signs matter equally. The DQ bar is one-sided
-      because the attribute is a distance and the interest is at one end. The angle bar is banded because
+      seismic bar is symmetric because amplitude's two signs matter equally. The DQ bar has bands of one
+      fixed width on both sides of zero, so a color means one value on every section, and its two halves
+      use different color families so the sign reads at a glance. The angle bar is banded because
       the useful features are narrow and a smooth ramp would swallow them.</p>
 
     <p class="lede">Get any of them wrong and we have not corrupted the data, we have hidden part of it.
-      A symmetric bar on a DQ section spends half its resolution on shale. A smooth ramp on an angle
+      A seismic red-white-blue bar on a DQ section turns small positive and negative values the same
+      pale color, and the sign the DQ carries is lost. A smooth ramp on an angle
       section loses a flat spot. A linear count axis on a DQ histogram buries the tail under the
       background, which is why the published histograms use a logarithmic one &mdash; in a clastic section
       roughly four samples in five are shale sitting near zero.</p>
@@ -334,10 +340,10 @@
       <ul>
         <li><b>Seismic sections use a symmetric red-white-blue bar</b>, limits scanned from the data and
           rounded up, because amplitude's two signs matter equally.</li>
-        <li><b>DQ sections use a one-sided bar:</b> full increments from zero to the maximum, two
-          increments for everything negative.</li>
-        <li><b>Low and negative values are light gray, not white</b>, so the background reads as background
-          and not as missing data.</li>
+        <li><b>DQ sections use the published bar:</b> fourteen bands of one fixed width, seven each
+          side of zero, warm colors above and grays to violet below.</li>
+        <li><b>The first band below zero is light gray, not white</b>, so the background reads as
+          background and not as missing data.</li>
         <li><b>&theta;<sub>px</sub> sections are two-sided from &minus;90 to +90</b>, bolder on the
           positive side, in ten-degree bands.</li>
         <li><b>The band boundaries are kept sharp on purpose</b>, so that a feature confined to one band
@@ -360,8 +366,7 @@
         setting in the panel to about twice it. Everything else is held constant, so the only thing varying
         along the line is bed thickness.</p>
       <p>The display conventions are taken from the DQ display specification and reproduced as closely as
-        this format allows: the symmetric seismic bar with limits scanned and rounded, the one-sided DQ bar
-        with two increments below zero and light gray and not white at the low end, the two-sided
+        this format allows: the symmetric seismic bar with limits scanned and rounded, the two-sided
         angle bar in ten-degree steps with sharp boundaries and bolder colors on the positive side, and
         the overlay wiggle scalars. The specification also describes color interpolation between samples
         in six directions on a 3D cube, which this page does not attempt; here the color is drawn as flat
@@ -1077,7 +1082,8 @@
      READING A DQ SECTION
 
      The three color conventions from the DQ display specification, applied
-     to one modeled line: symmetric for seismic, one-sided for DQ, banded
+     to one modeled line: symmetric for seismic, the published fourteen-band
+     DQ bar, banded
      two-sided for the angle.
      ===================================================================== */
 
@@ -1120,8 +1126,8 @@
       const dq = new Float64Array(nt), px = new Float64Array(nt);
       const has = new Uint8Array(nt);
       r.pts.forEach((p) => {
-        // signed, as module 05 defines it: the one-sided color bar depends on
-        // the sign, and an unsigned distance would put every sample above zero
+        // signed, as module 05 defines it: the published bar is two-sided, and
+        // an unsigned distance would put every sample above zero
         const sgn = b.sgn[p.i] >= 0 ? 1 : -1;
         dq[p.i] = Math.hypot(p.x, p.y) * sgn;
         px[p.i] = fold(bearing(p.x, p.y)) * sgn;
@@ -1391,7 +1397,7 @@
   }
 
   function drawStep2() {
-    const r = panel('c2a', 'dq', 'DQ, ONE-SIDED COLOR BAR');
+    const r = panel('c2a', 'dq', 'DQ, PUBLISHED COLOR BAR');
     if (!r) return;
     let pos = 0, tot = 0, mx = 0;
     r.traces.forEach((t) => {
