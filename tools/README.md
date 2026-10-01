@@ -91,6 +91,39 @@ any angle is negated. `check-index.js` tests the behavior itself on the
 landing figure, comparing the enhanced near stack with its Hilbert envelope
 limb by limb.
 
+## Known physics errors
+
+```
+node tools/check-claims.js
+```
+
+Statements a reviewer caught wrong, held as patterns so they cannot return
+through an edit or a copy from an older page: a class 1 sand called slower
+than its seal (it is harder and faster, positive intercept, top a peak);
+porosity said to weaken a rock against P-waves more than S-waves (the
+reverse, which is why Vp/Vs rises); tuning given as a quarter of the period
+(a quarter-wavelength bed is half the period in two-way time, 12.5 ms at
+40 Hz); and a rotation said to change the distance (a rotation about the
+origin keeps every distance and changes only direction). Add a pattern here
+whenever a review finds another.
+
+## The Explorer
+
+```
+node tools/check-explorer.js
+```
+
+`dq-explorer.html` runs the whole workflow on one synthetic line (module 00's
+layered line or module 14's dipping, faulted one) with four linked plots. Its
+engine, `assets/dq-explorer-engine.js`, is checked against module 00's
+workflow taken unchanged from `assets/index-hero.js`: quadrant numbers,
+enhanced traces and DQ must agree sample by sample on eight model cases,
+including noise and 2 ms sampling. The check also recomputes Theta PX from
+module 07's rule, confirms the baseline rotation leaves every distance
+unchanged, that polarity is decided once per line, that depths come from
+interval velocities, that the display ranges never move, and that the
+crossplot selection and outside-frame counts are right.
+
 ## Adding a module
 
 Copy the nearest existing checker, point it at the new file, and assert the

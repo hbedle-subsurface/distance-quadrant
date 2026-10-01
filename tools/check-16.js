@@ -41,18 +41,24 @@ console.log('   thickest',$('s3c').textContent,'  peaks:',$('s3d').textContent);
 const a=parseFloat($('s3a').textContent), su=parseFloat($('s3b').textContent);
 if(!(a>0&&su>0)) fail.push('layer attributes are zero: '+a+', '+su);
 if(!(su>a)) fail.push('the sum ('+su+') is not larger than the average ('+a+')');
+const NTR0=31;
 const pk=$('s3d').textContent.match(/average at (\d+), sum at (\d+)/);
 const kThick=parseInt($('s3c').textContent.match(/trace (\d+)/)[1]);
 console.log('   thickest trace',kThick,' average peak',pk[1],' sum peak',pk[2]);
 // at 40 Hz the 10 ms ends are near the tuning maximum, so both layer
 // attributes peak there rather than on the thick, porous middle. The module
 // teaches that; assert it so the example cannot silently change.
-if(!(parseInt(pk[1])>kThick+4)) fail.push('the average no longer peaks toward the thin end: '+pk[1]);
-if(!(parseInt(pk[2])>kThick+4)) fail.push('the sum no longer peaks toward the thin end: '+pk[2]);
+// the thin ends are the first and last five traces; the answer says the
+// average peaks at the right-hand one and the sum at the left-hand one
+const atThin=(t)=>t<=5||t>=NTR0-4;
+if(!(atThin(+pk[1])&&+pk[1]>kThick)) fail.push('the average no longer peaks at the right-hand thin end: '+pk[1]);
+if(!(atThin(+pk[2])&&+pk[2]<kThick)) fail.push('the sum no longer peaks at the left-hand thin end: '+pk[2]);
 set('freq',70);
 const hi=$('s3d').textContent.match(/average at (\d+), sum at (\d+)/);
 console.log('   at 70 Hz, once the thin end resolves: average at',hi[1],' sum at',hi[2]);
 if(!(parseInt(hi[1])<parseInt(pk[1]))) fail.push('raising the frequency did not move the average peak inward');
+if(Math.abs(parseInt(hi[2])-kThick)>3) fail.push('at 70 Hz the sum peaks at trace '+hi[2]+', answer says trace 14, next to the thickest');
+if(!/the sum moves to trace 14/.test(h)) fail.push('exercise answer no longer quotes trace 14');
 set('freq',40);
 
 console.log('\n--- every display renders for every fluid and seal ---');
@@ -72,6 +78,17 @@ for(const f of ['brine','oil','gas']){hit('[data-fluid="'+f+'"]');
 if(new Set(geo).size!==1) fail.push('the geometry changed with fluid: '+[...new Set(geo)].join(' / '));
 hit('[data-fluid="gas"]');
 
+console.log('\n--- the line follows modules 05 to 07 ---');
+{
+  const ln = h.slice(h.indexOf('function line()'), h.indexOf('/* ------------------------------- drawing'));
+  const ok = [
+    [/rotXY\(A, B, TURN\)/.test(ln) && /isSplit\(qd\.q\[i\]\)/.test(ln), 'Theta PX on the rotated, split crossplot (modules 06, 07)'],
+    [/slopeSign\(near, qd\)/.test(ln) && !/limbSigns\(near, pk, nt\)/.test(ln), 'DQ sign by module 05\'s rule'],
+    [/noise\[k \* nt \+ i\]/.test(ln) && /noise\[\(NTR \+ k\) \* nt \+ i\]/.test(ln), 'independent noise per trace and per stack'],
+    [/sum \+= ls \* Math\.abs\(dq\[i\]\)/.test(ln), 'layer attributes summed with the layer\'s own sign'],
+  ];
+  ok.forEach(([pass, what]) => { console.log('   ' + (pass ? 'yes ' : 'NO  ') + what); if (!pass) fail.push('line(): ' + what); });
+}
 console.log('\n=======================================');
 if(fail.length){fail.forEach(f=>console.log('  -',f));process.exit(1);}
 console.log('every quoted number checks out');

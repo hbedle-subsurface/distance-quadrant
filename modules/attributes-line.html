@@ -220,7 +220,7 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>Both curves peak toward the right-hand end, where the sand is <em>thinnest</em> and its
+      <span>Both curves peak at a thin end of the sand, where it is <em>thinnest</em> and its
         porosity is lowest. That is not a fault in the attributes: at 10 ms
         those beds sit at the tuning maximum module 11 measured, so their reflections are amplified by
         interference. An interpreter reading either section for rock quality would pick the worst part of
@@ -301,8 +301,9 @@
             boundaries follow gravity. Note also where it stops &mdash; it can only show where the sand is
             present and thick enough to contain it.</span></details></li>
         <li><b>Compare DQ average with DQ sum.</b> On step 3, read where each peaks.
-          <details class="reveal"><summary>Answer</summary><span class="ans">Both peak near the thin
-            right-hand end and not in the thick, porous middle, because a 10 ms bed at 40 Hz is close
+          <details class="reveal"><summary>Answer</summary><span class="ans">Both peak at a thin
+            end of the sand, the average at the right and the sum at the left, and not in the thick,
+            porous middle, because a 10 ms bed at 40 Hz is close
             to the tuning maximum and its reflections are amplified. The lesson is the one module 11 makes
             numerically, seen here as a picture: a layer attribute inherits every problem the samples it
             is built from already had. Raise the wavelet frequency to 70 Hz, so the thin end is resolved,
@@ -1146,18 +1147,21 @@
     const key = [S.over, S.fluid, S.owc, S.freq, S.dt, S.noise].join('|');
     if (lineCache[key]) return lineCache[key];
     const nt = ntOf(), D = dt();
-    const noise = noiseField(1);
+    // independent noise for every trace and for each stack: traces 0..NTR-1
+    // of the field go to the near stacks, NTR..2NTR-1 to the far stacks
+    const noise = noiseField(2 * NTR);
     const traces = [];
     for (let k = 0; k < NTR; k++) {
       const a = spikesAt(k, meanSin2(0, 10));
       const b = spikesAt(k, meanSin2(20, 30));
       const near = SEIS.traceFromSpikes(a.sp, T0, D, nt, wavelet());
       const far = SEIS.traceFromSpikes(b.sp, T0, D, nt, wavelet());
-      if (noise) for (let i = 0; i < nt; i++) { near[i] += noise[i]; far[i] += noise[i]; }
+      if (noise) for (let i = 0; i < nt; i++) { near[i] += noise[k * nt + i]; far[i] += noise[(NTR + k) * nt + i]; }
       const pk = pick(near, null);
       const qd = quadrants(near, pk);
       const QN = enhance(near, qd, pk).out, QF = enhance(far, qd, pk).out;
-      const sgn = limbSigns(near, pk, nt);
+      // module 05's sign: peaks, troughs and rising-limb samples positive
+      const sgn = slopeSign(near, qd);
 
       const dq = new Float64Array(nt), px = new Float64Array(nt), iso = new Float64Array(nt);
       const has = new Uint8Array(nt);
@@ -1178,7 +1182,10 @@
         const A = QN[i], B = QF[i] - QN[i];
         const s = sgn[i] >= 0 ? 1 : -1;
         dq[i] = Math.hypot(A, B) * s;
-        px[i] = fold((Math.atan2(B, A) * 180 / Math.PI + 360) % 360) * s;
+        // module 07: the angle on the rotated crossplot, Q3-Q7 reflected (module 06)
+        let [rx, ry] = rotXY(A, B, TURN);
+        if (isSplit(qd.q[i])) ry = -ry;
+        px[i] = fold(bearing(rx, ry)) * s;
         has[i] = 1;
       }
 
@@ -1188,10 +1195,16 @@
       const ext = pk.ext.slice().sort((u, v) => u.i - v.i);
       const layers = [];
       for (let z = 0; z + 1 < ext.length; z++) {
+        /* A layer is one limb, extremum to extremum, and every sample in it,
+           the two bounding extrema included, takes the layer's sign. The DQ
+           section itself keeps module 05's rule (extrema positive), but a
+           peak or trough bounds two layers, and counting it positive inside a
+           falling one would cancel part of that layer against its own ends. */
+        const ls = near[ext[z + 1].i] > near[ext[z].i] ? 1 : -1;
         let sum = 0, n = 0;
         for (let i = ext[z].i; i <= ext[z + 1].i; i++) {
           if (!has[i]) continue;
-          sum += dq[i]; n++;
+          sum += ls * Math.abs(dq[i]); n++;
         }
         if (n) layers.push({ i0: ext[z].i, i1: ext[z + 1].i, sum, avg: sum / n, n });
       }

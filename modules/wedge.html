@@ -120,7 +120,8 @@
     <p class="lede">
       Thin a bed and its top and base reflections move together until they overlap. Where they overlap
       constructively the amplitude is larger than either reflection alone; thin further and they begin to
-      cancel. The peak sits a little below the classical quarter-wavelength thickness, and everything below it is the tuning
+      cancel. The peak comes a little below the quarter-wavelength thickness, which is half the wavelet period
+      in two-way time, and everything thinner is the tuning
       regime, where amplitude reports thickness as much as it reports rock.</p>
 
     <p class="lede">
@@ -130,8 +131,8 @@
 
     <canvas id="c1a" aria-label="The DQ at the sand top plotted against bed thickness"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The distance read at the top of the sand as the bed
-      thins. The marker is the thickness set in the panel; the dashed line is a quarter of the wavelet
-      period.</p>
+      thins. The marker is the thickness set in the panel; the dashed line is a quarter wavelength,
+      half the wavelet period in two-way time.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Distance at the marked thickness</span><b id="s1a">&mdash;</b></div>
@@ -262,8 +263,9 @@
           peaks, then change the wavelet frequency.
           <details class="reveal"><summary>Answer</summary><span class="ans">It peaks at 8 ms at 40 Hz, and
             at 14, 11 and 7 ms for 25, 30 and 55 Hz, because tuning is a property of the wavelet and not
-            of the rock. The classical figure is a quarter of the period, 6.3 ms at 40 Hz; the measured
-            peak sits a little thicker than that because the attribute is read at a picked sample and not at the true maximum of a continuous curve. What matters is not the exact number but the fact that the peak follows the bandwidth.</span></details></li>
+            of the rock. A quarter-wavelength bed is half the wavelet period in two-way time, 12.5 ms
+            at 40 Hz (Widess, 1973). An isolated Ricker wavelet reaches its largest amplitude at a thinner
+            bed, 9.8 ms at 40 Hz, and the DQ read at the picked sand-top sample peaks a little thinner again. What matters is not the exact number but the fact that the peak follows the bandwidth.</span></details></li>
         <li><b>Measure how much thickness moves the distance.</b> Read the variation figure on step 1.
           <details class="reveal"><summary>Answer</summary><span class="ans">About a third of the maximum
             across a wedge from 6 to 55 ms. That is the same order as the change module 10 got from
@@ -335,9 +337,10 @@
       <p>This is a two-interface wedge in a fixed seal, not a true wedge section with lateral continuity.
         The published wedge displays vary thickness across traces and show the section; this page varies it
         along an axis and plots the attribute, which is the same experiment presented as a curve and not as a picture. Nothing else in the model changes as the thickness moves.</p>
-      <p>The tuning peak quoted in the prose is the maximum of the sampled curve, not an analytic quarter
-        period. The two differ by a few milliseconds because the attribute is read at a picked sample and
-        the picking is quantised to the sample rate, so the curve is a stepped approximation to a smooth
+      <p>The tuning peak quoted in the prose is the maximum of the sampled curve, not the quarter-wavelength
+        thickness. The two differ by a few milliseconds: an isolated Ricker wavelet already reaches its largest
+        amplitude below a quarter wavelength (9.8 ms against 12.5 ms at 40 Hz), and the attribute is read at a
+        picked sample and the picking is quantized to the sample rate, so the curve is a stepped approximation to a smooth
         one. Raising the sample rate control moves the peak around by a millisecond or two for that reason
         and not because the physics changed.</p>
       <p>The claim that the angle is blind to thickness holds where the reflection is strong. It is stated

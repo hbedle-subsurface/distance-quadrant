@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Shale baseline rotation | How the DQ Trace Actually Works</title>
-<meta name="description" content="The background trend in AB space does not run at minus forty-five degrees. Rotating it onto the x axis instead of to minus forty-five is what turns distance from the origin into departure from the background.">
+<meta name="description" content="The background trend in AB space does not run at minus forty-five degrees. Rotating it onto the x axis leaves every distance unchanged and makes the vertical coordinate a departure from the background.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -25,10 +25,11 @@
   <div class="mod-head">
     <p class="eyebrow">Module 06 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Shale baseline rotation</h1>
-    <p class="sub">The DQ measures how far a sample sits from the origin of AB space. That is only
-      useful if the background rock sits at the origin, and it does not &mdash; it sits along a line
-      through it. Rotating that line flat is what converts a distance from the origin into a departure
-      from the background, and the angle you rotate by is not the one the textbooks use.</p>
+    <p class="sub">The DQ measures how far a sample lies from the origin of AB space, and the
+      background rock does not plot at one point: it lies along a line through the origin. Rotating the
+      crossplot so that line is flat leaves every distance as it was and changes the directions: the
+      vertical coordinate becomes a departure from the background, and module 07's angle is measured from
+      it. The angle of that rotation is not the one the textbooks use.</p>
   </div>
 
   <div class="labhead">
@@ -224,7 +225,7 @@
   <section class="tabpane" id="p3" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
       <h3><span class="stepno">3</span>What the rotation does</h3>
-      <span class="hint">Departure from the background, not distance from nothing</span>
+      <span class="hint">Same distances, new directions</span>
     </div>
 
     <p class="lede">
@@ -251,11 +252,12 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>This is also where module 05's distance becomes interpretable. An unrotated distance is
-        measured from the origin, and the origin is not a meaningful place &mdash; it is where a rock
-        identical to its overburden would sit, which is nothing in particular. After the rotation the
-        distance from the horizontal is measured from the background, and that is a place with a
-        meaning.</span>
+      <span>The rotation leaves module 05's distance exactly as it was: turning the plot about the origin
+        cannot change how far any point is from the origin. The origin is where a rock identical to its
+        overburden would plot, so the DQ reports how different a sample is from the rock above it. What the
+        rotation adds is direction. The vertical coordinate is now measured from the background trend, and
+        so is the angle of module 07, so together they report which way a sample differs and whether that
+        is the way porosity alone would move it.</span>
     </div>
   </section>
 
@@ -374,8 +376,9 @@
           operation, so some spread always survives.</li>
         <li><b>After the rotation the two coordinates mean something individually</b>: departure from the
           background, and position along it.</li>
-        <li><b>This is what makes a distance interpretable.</b> Measured from the origin it reports
-          porosity; measured from the background it reports departure from the background.</li>
+        <li><b>The distance does not change.</b> A rotation about the origin keeps every point at the same
+          distance from it. The rotation changes direction: the vertical coordinate and the angle of
+          module 07 are measured from the background.</li>
         <li><b>The rotation is a change of coordinates.</b> It adds no information and removes none.</li>
       </ul>
     </div>

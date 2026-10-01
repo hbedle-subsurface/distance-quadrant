@@ -14,13 +14,28 @@ const hit=q=>doc.querySelector(q).dispatchEvent(new window.MouseEvent('click',{b
 const set=(i,v)=>{const e=$(i);e.value=String(v);e.dispatchEvent(new window.Event('input',{bubbles:true}));};
 const num=t=>parseFloat(String(t).replace('\u2212','-'));
 const fail=[];
+// largest |amplitude| of an opposite-polarity pair of Ricker reflections, by bed thickness in ms TWT
+function rickerWedgePeak(f){const ric=t=>{const a=Math.PI*Math.PI*f*f*t*t;return(1-2*a)*Math.exp(-a);};
+ let best=0,bt=0;for(let th=0.5;th<=40;th+=0.05){const d=th/1000;let m=0;
+  for(let t=-0.06;t<=0.1;t+=0.00005){const v=-ric(t)+ric(t-d);if(Math.abs(v)>m)m=Math.abs(v);}
+  if(m>best){best=m;bt=th;}}return bt;}
 
 console.log('--- exercise 1: the tuning peak follows the wavelet ---');
 hit('#tabs button[data-tab="p1"]'); hit('[data-over="tight"]'); hit('[data-fluid="gas"]'); set('phi',24);
 const peaks=[];
 for(const f of [25,30,40,55]){set('freq',f);
  const m=$('s1b').textContent.match(/at (\d+) ms/); peaks.push([f,parseInt(m[1])]);
- console.log('  ',String(f).padStart(2)+' Hz  peak',$('s1b').textContent,'  quarter period',(250/f).toFixed(1),'ms');}
+ const pk=parseInt(String($('s1b').textContent).split(' at ')[1]);
+ const rk=rickerWedgePeak(f), half=500/f;
+ console.log('  ',String(f).padStart(2)+' Hz  peak',$('s1b').textContent,'  Ricker wedge',rk.toFixed(1),'ms   quarter wavelength (T/2)',half.toFixed(1),'ms');
+ if(!(pk<=rk+0.5)) fail.push(f+' Hz: DQ peak '+pk+' ms is not at or below the Ricker wedge peak '+rk.toFixed(1)+', answer says it peaks a little thinner');
+ if(!(rk<half)) fail.push(f+' Hz: Ricker wedge peak '+rk.toFixed(1)+' is not below a quarter wavelength '+half.toFixed(1));}
+// the quoted benchmarks: a quarter wavelength is half the period in two-way time,
+// and the Ricker figure is computed here from the wavelet, not taken from the page
+if(Math.abs(500/40-12.5)>1e-9) fail.push('quarter wavelength at 40 Hz');
+if(rickerWedgePeak(40).toFixed(1)!=='9.8') fail.push('Ricker wedge peak at 40 Hz is '+rickerWedgePeak(40).toFixed(1)+', text says 9.8');
+if(!/12\.5 ms\s+at 40 Hz \(Widess, 1973\)/.test(h)) fail.push('exercise 1 no longer quotes 12.5 ms at 40 Hz');
+if(/6\.3 ms|quarter of the period|quarter of the wavelet\s+period/.test(h)) fail.push('a quarter-period tuning figure is still on the page');
 set('freq',40);
 for(let i=1;i<peaks.length;i++) if(peaks[i][1]>peaks[i-1][1])
   fail.push('the tuning peak did not move down with frequency: '+JSON.stringify(peaks));

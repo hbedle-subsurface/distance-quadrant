@@ -234,3 +234,12 @@ source is credited and adapted versions carry the same license.
 
 To cite: H. Bedle, *How the DQ Trace Actually Works*, University of Oklahoma,
 `hbedle-subsurface.github.io/distance-quadrant`.
+
+## DQ Explorer
+
+`dq-explorer.html` puts the whole workflow on one page for readers who know
+the method: workflow strip, controls rail, linked section, traces, rotated
+crossplot and DQ histogram, one cursor, and box selection on the crossplot
+that highlights the samples on the section. It is linked from the landing
+page after the fifteen modules and is not one of them. Test it with
+`node tools/check-explorer.js`.

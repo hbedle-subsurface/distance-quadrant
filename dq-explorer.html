@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DQ Explorer · How the DQ Trace Actually Works</title>
+<meta name="description" content="The whole DQ workflow on one synthetic line: stack section, picks, quadrant numbers, phase-enhanced traces, DQ, Theta PX, half isochron and the rotated crossplot, linked by one cursor.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/dq-explorer.css">
+</head>
+<body class="xp">
+<div class="xp-wrap">
+  <header class="masthead">
+    <a class="brand" href="index.html"><span class="dot"></span>How the DQ trace <b>actually</b> works</a>
+    <nav>
+      <a href="index.html#modules">Modules</a>
+      <a href="#xpDrawer">Notes</a>
+      <a href="https://www.ou.edu/mcee/labs/aaspi">AASPI</a>
+    </nav>
+  </header>
+
+  <div class="xp-head">
+    <h1>DQ Explorer</h1>
+    <p>The whole workflow on one synthetic line, every stage at once. Click the section to move the cursor;
+      drag a box on the crossplot to find those samples on the section.</p>
+  </div>
+
+  <nav class="xp-strip" id="xpStrip" aria-label="Workflow stages">
+    <button type="button" data-stage="stacks">Stacks</button>
+    <button type="button" data-stage="picks">Picks</button>
+    <button type="button" data-stage="quadrants">Quadrant numbers</button>
+    <button type="button" data-stage="enhanced">Enhanced traces</button>
+    <button type="button" data-stage="dq">DQ</button>
+    <button type="button" data-stage="px">Theta PX</button>
+    <button type="button" data-stage="rdq">RDQ crossplot</button>
+  </nav>
+
+  <div class="xp-grid">
+    <aside class="xp-rail" aria-label="Model controls">
+      <h2>Line</h2>
+      <div class="seg" data-key="line">
+        <button type="button" data-val="layered">layered</button>
+        <button type="button" data-val="faulted">dipping, faulted</button>
+      </div>
+      <h2>Rocks</h2>
+      <label class="lab">Overburden</label>
+      <div class="seg" data-key="over">
+        <button type="button" data-val="soft">soft shale</button>
+        <button type="button" data-val="hard">hard shale</button>
+        <button type="button" data-val="tight">tight sandstone</button>
+      </div>
+      <label class="lab">Pore fluid</label>
+      <div class="seg" data-key="fluid">
+        <button type="button" data-val="brine">brine</button>
+        <button type="button" data-val="oil">oil</button>
+        <button type="button" data-val="gas">gas</button>
+      </div>
+      <div class="ctl" id="thickCtl">
+        <label for="xThick">Sand thickness <span class="val" id="xThickV"></span></label>
+        <input type="range" id="xThick" min="8" max="50" step="1">
+      </div>
+      <h2>Wavelet</h2>
+      <div class="ctl">
+        <label for="xFreq">Ricker frequency <span class="val" id="xFreqV"></span></label>
+        <input type="range" id="xFreq" min="20" max="60" step="1">
+      </div>
+      <h2>Data quality</h2>
+      <div class="ctl">
+        <label for="xNoise">Noise <span class="val" id="xNoiseV"></span></label>
+        <input type="range" id="xNoise" min="0" max="40" step="1">
+      </div>
+      <label class="lab">Sample rate</label>
+      <div class="seg" data-key="dt">
+        <button type="button" data-val="1">1 ms</button>
+        <button type="button" data-val="2">2 ms</button>
+        <button type="button" data-val="4">4 ms</button>
+      </div>
+      <button type="button" class="btn ghost xp-reset" id="xReset">Reset</button>
+    </aside>
+
+    <main class="xp-main">
+      <section class="xp-card">
+        <div class="xp-cardhead">
+          <h2>Section</h2>
+          <div class="seg small" data-key="view">
+            <button type="button" data-val="near">near stack</button>
+            <button type="button" data-val="far">far stack</button>
+            <button type="button" data-val="dq">DQ</button>
+            <button type="button" data-val="px">Theta PX</button>
+            <button type="button" data-val="iso">half isochron</button>
+          </div>
+        </div>
+        <canvas id="xSection" aria-label="The line as a section, in the view chosen above, with the modeled sand outlined"></canvas>
+        <p class="xp-note" id="xSecNote"></p>
+      </section>
+
+      <div class="xp-row">
+        <section class="xp-card xp-traces">
+          <div class="xp-cardhead"><h2>Traces at the cursor</h2><span class="xp-sub" id="xTrHead"></span></div>
+          <canvas id="xTraces" aria-label="The rock column at the cursor trace, then its near and far stacks, quadrant numbers, enhanced traces, DQ and Theta PX"></canvas>
+        </section>
+        <div class="xp-col">
+          <section class="xp-card">
+            <div class="xp-cardhead"><h2>Rotated crossplot</h2><span class="xp-sub" id="xXpHead"></span></div>
+            <canvas id="xCross" aria-label="Every sample of the line on the rotated, split crossplot; drag a box to select"></canvas>
+          </section>
+          <section class="xp-card">
+            <div class="xp-cardhead"><h2>DQ histogram</h2><span class="xp-sub">log count</span></div>
+            <canvas id="xHist" aria-label="Histogram of the DQ values of the line on a logarithmic count axis"></canvas>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <aside class="xp-read" aria-label="Readouts at the cursor">
+      <h2>At the cursor</h2>
+      <dl id="xRead"></dl>
+      <h2>Line</h2>
+      <dl id="xLine"></dl>
+    </aside>
+  </div>
+
+  <details class="xp-drawer" id="xpDrawer">
+    <summary>Notes on each stage <span>the full explanations are in the modules</span></summary>
+    <div class="notes" id="xpNotes">
+      <div data-stage="stacks"><h3>Stacks <a href="modules/two-stacks.html">module 01</a></h3>
+        <p>A near and a far partial stack of the same line, zero phase and in relative amplitude. The near stack
+          approximates the intercept and far minus near is proportional to the gradient. Polarity is decided once
+          for the whole line: if the sand top on the middle trace is a peak, both stacks are flipped so the
+          reservoir contrast reads as a trough.</p></div>
+      <div data-stage="picks"><h3>Picks <a href="modules/stickogram.html">module 02</a></h3>
+        <p>The near stack is reduced to its zero crossings and, between each pair of crossings, its single
+          largest peak or trough. Samples below one percent of the largest amplitude on the trace do not count.
+          The far stack is never picked; it is read at the near-stack picks.</p></div>
+      <div data-stage="quadrants"><h3>Quadrant numbers <a href="modules/quadrants.html">module 03</a></h3>
+        <p>Every sample between two picks gets a number from 1 to 9 for where it lies in its loop: 1 a trough,
+          9 a peak, 5 the zero crossing, 2 to 4 after an extremum and 6 to 8 before the next one.</p></div>
+      <div data-stage="enhanced"><h3>Enhanced traces <a href="modules/phase-filters.html">module 04</a></h3>
+        <p>Each quadrant number names a phase rotation from the published table. Each sample of the near stack is
+          read from its rotated copy, which raises it to the equivalent of a peak or trough; the result is QN.
+          The far stack read the same way, at the near-stack numbers, gives QF. The table applies as printed on
+          rising and falling limbs alike.</p></div>
+      <div data-stage="dq"><h3>DQ <a href="modules/dq-distance.html">module 05</a></h3>
+        <p>The distance of the point (QN, QF &minus; QN) from the origin of the crossplot, by Pythagoras. Peaks,
+          troughs and samples on rising limbs are positive and the rest negative. The section uses the
+          published DQ color bar, seven bands each side of zero.</p></div>
+      <div data-stage="px"><h3>Theta PX <a href="modules/theta-px.html">module 07</a></h3>
+        <p>The angle of the same point on the rotated, split crossplot, folded into 0 to 90 degrees and given
+          the sign of the DQ. The distance reports how strong the response is and the angle which way it
+          points. Where the distance is small the angle is poorly determined and swings.</p></div>
+      <div data-stage="rdq"><h3>RDQ crossplot <a href="modules/baseline.html">modules 06</a> and <a href="modules/rdq-crossplot.html">09</a></h3>
+        <p>The crossplot rotated by 16 degrees so the background trend lies along the x axis, and the samples
+          numbered 3 to 7 reflected in it. A rotation about the origin leaves every distance unchanged; it makes
+          the vertical coordinate a departure from the background. Clusters picked on this plot are found on
+          the section by dragging a box.</p></div>
+    </div>
+  </details>
+
+  <footer class="site-foot">
+    <div class="foot-cols">
+      <div><h2>Built by</h2><p>Heather Bedle, School of Geosciences, University of Oklahoma, with the
+        <a href="https://www.ou.edu/mcee/labs/aaspi">AASPI</a> consortium, for teaching.</p></div>
+      <div><h2>Model</h2><p>Synthetic throughout: quartz sand with Gassmann fluid substitution, Shuey&rsquo;s
+        two terms, a Ricker wavelet, 0&ndash;10&deg; near and 20&ndash;30&deg; far stacks. No field data.</p></div>
+      <div><h2>License</h2><p><a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+        Free to use, share and adapt, provided the source is credited and adapted versions carry the same
+        license.</p></div>
+    </div>
+  </footer>
+</div>
+
+<script src="assets/count.js"></script>
+<script src="assets/seismic.js"></script>
+<script src="assets/glossary.js"></script>
+<script src="assets/dq-explorer-engine.js"></script>
+<script src="assets/dq-explorer.js"></script>
+<script src="assets/dq-ui.js"></script>
+</body>
+</html>

@@ -31,9 +31,9 @@ errors.forEach((e) => fail.push('script error: ' + e));
 console.log('   ' + (errors.length || 'none'));
 
 console.log('\n--- the module list ---');
-const parts = [...doc.querySelectorAll('.part')];
+const parts = [...doc.querySelectorAll('.part:not(.part-extra)')];
 const counts = parts.map((p) => p.querySelectorAll('.mod').length);
-const nos = [...doc.querySelectorAll('.mod-no')].map((e) => e.textContent.trim());
+const nos = [...doc.querySelectorAll('.part:not(.part-extra) .mod-no')].map((e) => e.textContent.trim());
 console.log('   parts', counts.join(' + '), '=', nos.length, '  numbers', nos.join(' '));
 nos.forEach((n, k) => { if (n !== String(k).padStart(2, '0')) fail.push('module ' + k + ' is numbered ' + n); });
 const words = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
@@ -41,10 +41,11 @@ const words = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'E
 const head = doc.querySelector('#modules .sec-head p').textContent;
 if (!head.includes(words[nos.length] + ' modules in ' + ['', 'one', 'two', 'three', 'four', 'five'][parts.length] + ' parts'))
   fail.push('the section head does not say ' + words[nos.length] + ' modules in ' + parts.length + ' parts: "' + head + '"');
-[...doc.querySelectorAll('.part-no')].forEach((e, k) => {
+[...doc.querySelectorAll('.part:not(.part-extra) .part-no')].forEach((e, k) => {
   if (e.textContent.trim() !== 'Part ' + (k + 1)) fail.push('part ' + (k + 1) + ' is labeled ' + e.textContent);
 });
 
+if (!doc.querySelector('.part-extra a[href="dq-explorer.html"]')) fail.push('the Explorer entry is missing');
 console.log('\n--- internal links ---');
 let dead = 0;
 [...doc.querySelectorAll('a[href]')].forEach((a) => {
