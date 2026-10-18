@@ -116,20 +116,10 @@
       <span class="hint">Symmetric, because amplitude is symmetric</span>
     </div>
 
-    <p class="lede">
-      A seismic section is colored red through white to blue, with the two ends the same distance from
-      zero. That symmetry is not decoration: amplitude is a signed quantity whose two signs mean equally
-      important and opposite things, so a color bar that treated them differently would be lying about the
-      data. The limits are set by scanning the volume and rounding up, and white lies at zero.</p>
-
-    <p class="lede">
-      Over the color goes a wiggle, scaled up so the deflections read - about twice the trace
-      spacing is a usual starting point - and horizontal dotted reference lines every ten, twenty,
-      twenty-five, fifty or a hundred milliseconds depending on how much time is on the page.</p>
+    <p class="lede">A seismic section is colored red through white to blue, with the two ends the same distance from zero. That symmetry isn't decoration. Amplitude is signed, and its two signs mean equally important and opposite things, so a bar that treated them differently would misrepresent the data. The limits come from scanning the volume and rounding up, and white lies at zero.</p>
 
     <canvas id="c1a" aria-label="A seismic section with a symmetric red white blue color bar and an overlay wiggle"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The near stack across the line, colored by amplitude.
-      The sand thickens from left to right.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The near stack across the line, colored by amplitude. The sand thickens from left to right.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Traces on the line</span><b id="s1a">&mdash;</b></div>
@@ -139,10 +129,7 @@
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>Note what the reader has to do here: the sand is a pair of colored bands, and telling where it
-        starts and stops means deciding which band belongs to the top and which to the base. That is the
-        ordinary work of seismic interpretation, and it is what the next display is trying to
-        avoid.</span>
+      <span>Here the sand is a pair of colored bands, and telling where it starts and stops means deciding which band is the top and which the base. That's the ordinary work of seismic interpretation, and the next display is trying to avoid it.</span>
     </div>
   </section>
 
@@ -152,24 +139,12 @@
       <span class="hint">Fourteen fixed bands, seven each side of zero</span>
     </div>
 
-    <p class="lede">
-      A DQ section has its own color bar. The published bar has <b>fourteen bands, seven each side of
-      zero</b>, and every band spans the same fixed range of DQ, so one color means one value on every
-      section. Above zero the colors run from yellow-green through yellow, orange and red to magenta;
-      below zero they run from grays through blue, mauve, pink and violet. The sign follows module 05:
-      peaks, troughs and samples on a rising limb are positive.</p>
+    <p class="lede">A DQ section has its own color bar. The published bar has <b>fourteen bands, seven each side of zero</b>, and every band spans the same fixed range of DQ, so one color means one value on every section. Above zero the colors run from yellow-green through yellow, orange and red to magenta, and below zero from grays through blue, mauve, pink and violet. The sign follows module 05: peaks, troughs and samples on a rising limb are positive.</p>
 
-    <p class="lede">
-      The first band below zero is <b>light gray and not white</b>. White washes out against the page
-      and makes the background look like missing data; gray reads as background. The first band above
-      zero is already a saturated yellow-green, so a small positive DQ and a small negative one look very
-      different, and zero is the sharpest edge on the bar. The overlay wiggle is
-      scaled up less than on a seismic section, about one and a half times, because the DQ trace is blocked
-      and not oscillatory and does not need as much exaggeration to be legible.</p>
+    <p class="lede">The first band below zero is <b>light gray and not white</b>. White washes out against the page and looks like missing data, and gray reads as background. The first band above zero is already a saturated yellow-green, so a small positive and a small negative DQ look very different, and zero is the sharpest edge on the bar. The wiggle is scaled up less than on a seismic section, about one and a half times, because the DQ trace is blocked and doesn't need as much exaggeration.</p>
 
     <canvas id="c2a" aria-label="The same line as a DQ section on the published fourteen-band color bar"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The same line, as DQ. Compare where the sand
-      reads against the seismic section above it.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The same line, as DQ. We can compare where the sand reads against the seismic section above it.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Bands above zero</span><b id="s2a">&mdash;</b></div>
@@ -179,11 +154,7 @@
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>The sand reads as a colored body between its boundaries, where the stack section shows a
-        trough and a peak with a near-zero gap between them. Modules 02 to 05 built that: the picking,
-        the numbering and the phase filters give each loop one value, and a bar of fixed bands shows one
-        value per loop as one color. A thick sand can still show its top and base as two bands with a
-        weaker one between (module 11).</span>
+      <span>The sand reads as a colored body between its boundaries, where the stack shows a trough and a peak with a near-zero gap between. Modules 02 to 05 built that: the picking, numbering and phase filters give each loop one value, and a bar of fixed bands shows it as one color. A thick sand can still show its top and base as two bands with a weaker one between (module 11).</span>
     </div>
   </section>
 
@@ -193,21 +164,10 @@
       <span class="hint">Two-sided, banded, and deliberately not smooth</span>
     </div>
 
-    <p class="lede">
-      &theta;<sub>px</sub> gets a third treatment: two-sided from &minus;90 to +90, but with <b>bolder
-      colors on the positive side</b>, and divided into
-      <b>ten-degree bands with the boundaries kept sharp</b> and not smoothly graded.</p>
-
-    <p class="lede">
-      The sharp boundaries are the unusual choice. Every instinct in modern display design says to
-      interpolate, and here it would be wrong: a feature confined to one ten-degree band - the papers
-      give a flat spot as the example - disappears into a smooth ramp and survives a banded one. The
-      two sections are meant to be read as a pair, so they share a sign convention and a geometry, and only
-      the coloring differs.</p>
+    <p class="lede">&theta;<sub>px</sub> gets a third treatment: two-sided from &minus;90 to +90, with <b>bolder colors on the positive side</b>, in <b>ten-degree bands with sharp boundaries</b> and not a smooth grade.</p>
 
     <canvas id="c3a" aria-label="The same line as a Theta PX section with banded ten degree colors"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The same line again, as &theta;<sub>px</sub>. Toggle
-      the overlay in the panel to see the color alone.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The same line again, as &theta;<sub>px</sub>. Toggle the overlay to see the color alone.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Band width</span><b id="s3a">&mdash;</b></div>
@@ -217,11 +177,7 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>The line varies bed thickness from trace to trace, so its left-hand end runs through the
-        tuning regime module 11 measured and its weakest traces sit near a crossover, where module 07
-        showed the angle becomes unstable. That is why the sand top spans several bands across the line
-        and does not hold one. Read the banding as a display convention here; module 11 is where the
-        angle's response to thickness is measured properly, on a model built for the purpose.</span>
+      <span>The line varies bed thickness from trace to trace, so its left end runs through the tuning regime from module 11 and its weakest traces lie near a crossover, where module 07 showed the angle becomes unstable. That's why the sand top spans several bands across the line. The banding is a display convention here, and module 11 measures the angle's response to thickness properly.</span>
     </div>
   </section>
 
@@ -231,11 +187,7 @@
       <span class="hint">The rocks are hidden until the answer is given</span>
     </div>
 
-    <p class="lede">
-      Three rock models are listed below. One of them produced the two sections. The earth model panel
-      stays blank until a choice is made, and then it appears beside the sections with the answer. Where
-      two of the models give displays too close to tell apart, the reveal says so, which is as much the
-      point of the exercise as getting it right.</p>
+    <p class="lede">Three rock models are listed below, and one of them produced the two sections. The earth model panel stays blank until we make a choice, and then it appears beside the sections with the answer. Where two models give displays too close to tell apart, the reveal says so, and that's as much the point as getting it right.</p>
 
     <div class="quiz" id="quizOpts"></div>
 
@@ -250,10 +202,7 @@
       <button class="btn small" id="quizNew" type="button">New question</button>
     </div>
     <div class="legend prose">
-      <span>The displays follow the conventions of the three steps: the published fourteen-band bar for
-        the DQ, two-sided ten-degree bands for Theta PX. Porosity, pore fluid, bed thickness and the rock above
-        the sand all move both displays, so a body that looks the same can come from more than one set of
-        rocks.</span>
+      <span>The displays follow the conventions of the three steps: the published fourteen-band bar for the DQ and two-sided ten-degree bands for Theta PX. Porosity, pore fluid, bed thickness and the rock above the sand all move both displays, so a body that looks the same can come from more than one set of rocks.</span>
     </div>
   </section>
 
@@ -263,68 +212,47 @@
       <span class="hint">Three bars, three arguments</span>
     </div>
 
-    <p class="lede">Each of these three color bars encodes a claim about what its attribute is for. The
-      seismic bar is symmetric because amplitude's two signs matter equally. The DQ bar has bands of one
-      fixed width on both sides of zero, so a color means one value on every section, and its two halves
-      use different color families so the sign reads at a glance. The angle bar is banded because
-      the useful features are narrow and a smooth ramp would swallow them.</p>
-
-    <p class="lede">Get any of them wrong and we have not corrupted the data, we have hidden part of it.
-      A seismic red-white-blue bar on a DQ section turns small positive and negative values the same
-      pale color, and the sign the DQ carries is lost. A smooth ramp on an angle
-      section loses a flat spot. A linear count axis on a DQ histogram buries the tail under the
-      background, which is why the published histograms use a logarithmic one - in a clastic section
-      roughly four samples in five are shale sitting near zero.</p>
-
-    <div class="legend prose">
-      <span>Which is the argument for treating display conventions as part of the method and not as a
-        matter of taste. They are documented alongside the algorithm in the DQ papers for the same reason
-        the sample rate is: get them wrong and the output no longer shows us what it computed.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
       <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
-        <li><b>Compare the two sections.</b> Look at step 1 and step 2 with the same model.
+        <li><b>Comparing the two sections.</b> We look at step 1 and step 2 with the same model.
           <details class="reveal"><summary>Answer</summary><span class="ans">On the seismic section the sand
             is a pair of bands with a gap between them, and locating it means deciding which band is the
             top and which the base. On the DQ section it is one body. Nothing has been added - the
-            DQ trace is computed from the same two partial stacks - but the display is showing one
-            value per loop instead of an oscillation, which is what the picking and numbering of modules 02
+            DQ trace is computed from the same two partial stacks - but the display is showing one value per loop and not an oscillation, which is what the picking and numbering of modules 02
             and 03 were for.</span></details></li>
-        <li><b>Count the increments.</b> On step 2, read how the color bar is divided.
+        <li><b>Counting the increments.</b> On step 2, we read how the color bar is divided.
           <details class="reveal"><summary>Answer</summary><span class="ans">The full set above zero and
             only two below. That is the published specification, and the reasoning is that on a soft-sand
-            play the sands are the positive samples and the shales are mostly negative. A symmetric bar
-            would spend half its resolution distinguishing shades of background from one another. This is a
+            play the sands are the positive samples and the shales are mostly negative. A symmetric bar would use half its range to separate shades of background from one another. This is a
             display choice that assumes a play type, and it would need rethinking on a hard-sand or
             carbonate project.</span></details></li>
-        <li><b>Change the fluid and watch the angle section.</b> On step 3, switch between brine and gas.
+        <li><b>Changing the fluid and watching the angle section.</b> On step 3, we switch between brine and gas.
           <details class="reveal"><summary>Answer</summary><span class="ans">The colors inside the sand
             shift, and the range at the sand top changes with them. Be careful reading more into this line
             than it can carry: it varies bed thickness across the traces, so its thin end is in the tuning
             regime and its weakest traces are near a crossover where module 07 showed the angle to be
-            unstable. What the banding does is make a change of a few tens of degrees visible at a glance
-            instead of hiding it in a smooth ramp. Whether the angle is responding to fluid and not to
+            unstable. What the banding does is make a change of a few tens of degrees visible at a glance, where a smooth ramp would hide it. Whether the angle is responding to fluid and not to
             geometry is module 11's question, answered there on a model built for
             it.</span></details></li>
-        <li><b>Turn off the overlay wiggle.</b> Untick the box in the panel.
+        <li><b>Turning off the overlay wiggle.</b> We untick the box in the panel.
           <details class="reveal"><summary>Answer</summary><span class="ans">The color alone is easier to
             read for extent and harder to read for detail. The papers keep both because they answer
             different questions: the color shows us where a body is, the wiggle shows us what the trace
             is doing sample by sample. The scaling differs too - about twice for a seismic wiggle,
             about one and a half times for a DQ wiggle, because a blocked trace needs less
             exaggeration.</span></details></li>
-        <li><b>Add noise and see which display degrades first.</b> Take the noise to 30%.
+        <li><b>Adding noise and seeing which display degrades first.</b> We take the noise to 30%.
           <details class="reveal"><summary>Answer</summary><span class="ans">The angle section goes first,
             because banded color has no tolerance: a sample that moves a few degrees crosses a boundary
             and changes color completely, where the same movement on a smooth bar would be invisible.
             Sharp bands make small real features visible and small spurious ones equally visible. That is a
             trade the convention accepts deliberately, and it is a reason to look at the DQ section and the
             angle section together and not either alone.</span></details></li>
-        <li><b>Look along the line and not at one trace.</b> The sand thickens from left to right,
+        <li><b>Looking along the line and not at one trace.</b> The sand thickens from left to right,
           so the section is a wedge.
           <details class="reveal"><summary>Answer</summary><span class="ans">The DQ body brightens toward the
             thin end, which is module 11's tuning seen as a picture and not as a curve. A reader
@@ -347,7 +275,7 @@
         <li><b>&theta;<sub>px</sub> sections are two-sided from &minus;90 to +90</b>, bolder on the
           positive side, in ten-degree bands.</li>
         <li><b>The band boundaries are kept sharp on purpose</b>, so that a feature confined to one band
-          survives instead of dissolving into a ramp.</li>
+          survives and does not dissolve into a ramp.</li>
         <li><b>Overlay wiggles are scaled about twice for seismic and one and a half times for DQ</b>,
           because a blocked trace needs less exaggeration.</li>
         <li><b>DQ histograms need a logarithmic count axis</b>, because most samples in a clastic section
@@ -375,10 +303,7 @@
         describes a field clastic section, not this model, where the proportion depends on how thick we
         make the sand. It is quoted because it is the reason for the logarithmic histogram axis, which
         module 12 uses.</p>
-      <p><b>What this module does not do.</b> It does not reproduce the published sections, which come from
-        ray-traced synthetics over pseudo-well catalogs and from field data. It shows what the
-        conventions are and what each one is protecting, on a model simple enough that we can see the
-        convention and not the geology.</p>
+      <p><b>Limits of the model.</b> The published sections come from ray-traced synthetics over pseudo-well catalogs and from field data. Here we use a model simple enough that we can see each display convention and what it protects, without the geology getting in the way.</p>
       <ul>
         <li>Neff, D. B., and W. Neff, Seismic plots: the four display types used in the DQ and RDQ
           papers, unpublished notes.</li>

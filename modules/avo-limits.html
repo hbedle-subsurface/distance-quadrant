@@ -141,38 +141,13 @@
       <span class="hint">The picture AVO theory actually describes</span>
     </div>
 
-    <p class="lede">
-      Start with the simplest possible case: an infinitely thick overburden resting on an infinitely thick
-      sand, and a single boundary between them. Send a wave down at some angle and part of it comes back.
-      How much comes back depends on the angle, and that dependence is the entire content of AVO.</p>
+    <p class="lede">Let's start with the simplest case: an infinitely thick overburden resting on an infinitely thick sand, with a single boundary between them. We send a wave down at some angle and part of it comes back. How much depends on the angle, and that dependence is what AVO is.</p>
 
-    <p class="lede">
-      Two terms first. <b>Acoustic impedance</b> is a rock's P-wave velocity multiplied by its density; a
-      reflection happens where impedance changes across a boundary, and the bigger the change, the stronger
-      the reflection. The <b>reflection coefficient</b> is the fraction of the incoming amplitude that
-      comes back, so it is a number between &minus;1 and +1 whose sign says whether the rock below is
-      faster and denser than the rock above, or slower and lighter.</p>
+    <p class="lede">Two terms first. <b>Acoustic impedance</b> is a rock's P-wave velocity times its density. A reflection happens where impedance changes across a boundary, and the bigger the change, the stronger the reflection. The <b>reflection coefficient</b> is the fraction of the incoming amplitude that comes back, a number between &minus;1 and +1, and its sign says whether the rock below is faster and denser than the rock above, or slower and lighter.</p>
 
-    <p class="lede">
-      Shuey's approximation writes the angle dependence as a straight line in
-      <span class="k">sin&sup2;&theta;</span>: <b>R(&theta;) = A + B&nbsp;sin&sup2;&theta;</b>. <b>A</b> is
-      the <b>intercept</b>, the reflection coefficient the boundary would give at zero angle, controlled
-      mostly by the impedance contrast. <b>B</b> is the <b>gradient</b>, how fast the reflection changes as
-      the angle opens up. The gradient depends on how V<sub>P</sub>/V<sub>S</sub> changes across the
-      boundary, and because gas lowers a sand's V<sub>P</sub>/V<sub>S</sub> much more than it lowers its
-      density, the gradient is where a fluid change usually shows up.</p>
+    <p class="lede">Shuey's approximation writes the angle dependence as a straight line in <span class="k">sin&sup2;&theta;</span>: <b>R(&theta;) = A + B&nbsp;sin&sup2;&theta;</b>. <b>A</b> is the <b>intercept</b>, the reflection coefficient at zero angle, controlled mostly by the impedance contrast. <b>B</b> is the <b>gradient</b>, how fast the reflection changes as the angle opens up. It depends on how V<sub>P</sub>/V<sub>S</sub> changes across the boundary, and since gas lowers a sand's V<sub>P</sub>/V<sub>S</sub> much more than its density, the gradient is where a fluid change usually shows up.</p>
 
-    <p class="lede">
-      There is no button for AVO class in the panel above. We set three things - what the overburden
-      is, how porous the sand is, and what fluid fills its pores - and the class is whatever those
-      three choices produce. Drag the porosity slider and watch the class label change without us having
-      asked for it.</p>
-
-    <p class="lede">
-      That ordering is the point. The class comes out of the contrast between the sand and the rock above
-      it, so it belongs to the pair and not to the reservoir. Everything we are setting by hand here
-- the shale properties, the porosity, the fluid - is something nobody knows at the start
-      of a project, which is exactly where the DQ workflow is meant to be used.</p>
+    <p class="lede">There's no button for AVO class in the panel. We set three things - the overburden, how porous the sand is, and what fluid fills its pores - and the class is whatever those produce. Drag the porosity slider and watch the class label change without us asking for it.</p>
 
     <canvas id="c1a" aria-label="Reflection coefficient plotted against incidence angle"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The shaded bands are the two angle ranges the DQ
@@ -194,15 +169,7 @@
       <div class="stat wide"><span>What an interpreter would call this</span><b id="s1e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>The faint curves on the crossplot are where this sand would land at every other porosity, one
-        curve per fluid. Both plots keep the same axes whatever we build, so a weak sand stays near the
-        origin instead of being blown up to fill the box, and the difference in reflection strength between
-        one model and the next is something we can see and not read off a tick label. Two corners of
-        the model run past the edge - soft shale over a tight sand, and tight sandstone over a very porous
-        gas sand - and there the point is pinned to the frame with an arrow while the exact numbers
-        stay in the boxes below. Nothing here is wrong: every quantity is exact for the model it
-        describes. The trouble is that the model has one
-        boundary, no bed thickness, and no wavelet, and seismic data has all three.</span>
+      <span>The faint curves on the crossplot show where this sand would land at every other porosity, one curve per fluid. Both plots keep the same axes whatever we build, so a weak sand stays near the origin and the difference in reflection strength between models is something we can see. Two corners of the model run past the edge - soft shale over a tight sand, and tight sandstone over a very porous gas sand - and there the point is pinned to the frame with an arrow while the exact numbers stay in the boxes below. Nothing here is wrong: every quantity is exact for the model it describes. The trouble is that the model has one boundary, no bed thickness and no wavelet, and seismic data has all three.</span>
     </div>
   </section>
 
@@ -213,36 +180,16 @@
       <span class="hint">Same sand, now with a base and a wavelet</span>
     </div>
 
-    <p class="lede">
-      Give the sand a base as well as a top and we have two reflection coefficients instead of one, equal
-      and opposite. Convolve them with a wavelet and we no longer have two numbers on the trace - we
-      have a smooth waveform spread over tens of milliseconds, and every sample in it is a mixture of both
-      boundaries. That is the trace shown above.</p>
+    <p class="lede">Give the sand a base as well as a top and we have two reflection coefficients, equal and opposite. Convolve them with a wavelet and we no longer have two numbers on the trace... we have a smooth waveform spread over tens of milliseconds, and every sample is a mixture of both boundaries. That's the trace shown above.</p>
 
-    <p class="lede">
-      Now crossplot it. Take the near-stack amplitude at every sample as the x value and the far-minus-near
-      difference at every sample as the y value, exactly as an AB crossplot would. The single point from
-      step 1 spreads out into a long streak.</p>
+    <p class="lede">Now we crossplot it, with the near-stack amplitude at every sample as x and the far-minus-near difference as y, like an AB crossplot. The single point from step 1 spreads out into a long streak.</p>
 
-    <p class="lede">
-      The y axis here is the raw difference between the two stacks, which is what the DQ workflow uses as
-      its gradient. It is not the gradient of step 1 to scale. Subtracting the near stack from the far
-      stack leaves B multiplied by the difference in mean sin&sup2;&theta; between the two angle bands, and
-      that factor is only 0.17. The streak is wide and flat for that reason and not because the sand is
-      unusual: on square axes, a gradient always draws seventeen times smaller than an intercept of the
-      same size. Everything from module 06 onward has to cope with that, and the RDQ crossplot's rotation
-      is one of the ways it does.</p>
+    <p class="lede">The y axis is the raw difference between the two stacks, which the DQ workflow uses as its gradient, and it's a different quantity from the gradient of step 1. Far minus near is B times the difference in mean sin&sup2;&theta; between the two bands, and that factor is only 0.17. So the streak is wide and flat for that reason and not because the sand is unusual: on square axes a gradient always draws seventeen times smaller than an intercept of the same size. Everything from module 06 on has to cope with that, and the RDQ rotation is one way.</p>
 
     <canvas id="c2a" aria-label="Every sample of the trace plotted on an intercept versus gradient crossplot"></canvas>
-    <p class="hint-line" style="margin:8px 0 16px">Every sample in the window is plotted. The crimson
-      cross marks the two-layer answer from step 1 - where all of this data ought to be if the theory
-      described the data. The axes are the same ones step 1 used and do not rescale, so the streak really does shrink and grow as we change the model. Drag the thickness slider and watch it
-      breathe.</p>
+    <p class="hint-line" style="margin:8px 0 16px">Every sample in the window is plotted. The crimson cross is the two-layer answer from step 1, where the data ought to be if the theory described it. The axes don't rescale, so the streak really does shrink and grow as we change the model. Drag the thickness slider and watch it breathe.</p>
 
-    <p class="hint-line" style="margin:0 0 16px"><b>Polar angle</b> below means the direction of a point
-      from the origin of the crossplot, measured as a bearing. The spread is how much that direction varies
-      across the samples: zero means every sample lies along one line through the origin. It becomes an
-      attribute in its own right in module 05.</p>
+    <p class="hint-line" style="margin:0 0 16px"><b>Polar angle</b> here means the direction of a point from the origin of the crossplot, as a bearing. The spread is how much that direction varies across the samples, and zero means every sample lies along one line through the origin. It becomes an attribute in its own right in module 05.</p>
 
     <div class="stats">
       <div class="stat"><span>Samples plotted</span><b id="s2a">&mdash;</b></div>
@@ -252,13 +199,7 @@
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>With the underburden following the overburden, the base of the sand is the exact mirror of its
-        top, every sample is the same mixture of the two boundaries, and the crossplot collapses to a
-        straight segment through the origin. Clear the underburden checkbox and pick a different rock below
-        the sand: the segment opens into the loop the DQ papers call a torpedo, and the polar angle spread
-        stops reading zero. Neither shape is noise and neither is an error. Both follow from convolving a two-spike reflectivity with a band-limited wavelet, and the torpedo appears in every
-        real AVO crossplot ever made, where it is usually hidden inside a cloud of hundreds of thousands of
-        points.</span>
+      <span>With the underburden following the overburden, the base of the sand is the exact mirror of its top, every sample is the same mixture of the two boundaries, and the crossplot collapses to a straight segment through the origin. Clear the underburden checkbox and pick a different rock below the sand, and the segment opens into the loop the DQ papers call a torpedo, with the polar angle spread no longer zero. Neither shape is noise or an error. Both come from convolving a two-spike reflectivity with a band-limited wavelet, and the torpedo appears in every real AVO crossplot, usually hidden inside a cloud of hundreds of thousands of points.</span>
     </div>
   </section>
 
@@ -269,24 +210,12 @@
       <span class="hint">Which of those points is anyone allowed to interpret?</span>
     </div>
 
-    <p class="lede">
-      The two-layer equation is cleanest where the waveform is at a peak maximum or a trough minimum. At
-      those two places the sample is dominated by one boundary and the wavelet's own shape is momentarily
-      flat, so reading an amplitude off the trace is close to reading a reflection coefficient. Move away
-      from an extremum and the sample becomes a blend of two boundaries in a proportion that depends on the
-      wavelet and the bed thickness, so an intercept and gradient measured there describe interference as
-      much as rock. The reading does not switch off; it degrades, and it degrades fastest in thin
-      beds.</p>
+    <p class="lede">The two-layer equation is cleanest where the waveform is at a peak or a trough. There the sample is dominated by one boundary and the wavelet's shape is momentarily flat, so an amplitude is close to a reflection coefficient. Away from an extremum the sample blends two boundaries in a proportion set by the wavelet and the bed thickness, and so an intercept and gradient measured there describe interference as much as rock. The reading doesn't switch off, it degrades, fastest in thin beds.</p>
 
-    <p class="lede">
-      So a defensible AVO crossplot keeps only the extrema. Here they are marked on the near stack, and
-      here is the crossplot with everything else removed. Keep that count in mind: it is the number the
-      rest of the course is trying to raise, and module 05 is where we see whether it worked.</p>
+    <p class="lede">So a defensible AVO crossplot keeps only the extrema. Here they are marked on the near stack, and here's the crossplot with everything else removed. That count is the number the rest of the course is trying to raise, and module 05 is where we see whether it worked.</p>
 
     <canvas id="c3a" aria-label="The near-stack trace drawn vertically in two-way time, with its peak maxima and trough minima marked"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Time runs down the page, as on a seismic section.
-      Filled circles are the samples conventional AVO can interpret. Open circles are the ones it
-      cannot.</p>
+    <p class="hint-line" style="margin:8px 0 18px">Time runs down the page, as on a seismic section. Filled circles are samples conventional AVO can interpret and open circles are the ones it can't.</p>
 
     <p class="sublabel"><b>2</b> The crossplot, before and after
       <span class="note">gray is everything, crimson is what survives, axes fixed as before</span></p>
@@ -300,9 +229,7 @@
       <div class="stat wide"><span>Verdict</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>Halve the sample rate and the trace holds twice as many numbers, while the number that can be
-        interpreted stays at two per cycle. Recording the data more finely adds no more AVO information. That
-        is the observation the DQ trace was built on, and module 01 starts building it.</span>
+      <span>Halve the sample rate and the trace holds twice as many numbers, while the number we can interpret stays at two per cycle. Recording the data more finely adds no AVO information, and that's the observation the DQ trace was built on. Module 01 starts building it.</span>
     </div>
   </section>
 
@@ -313,14 +240,12 @@
       <span class="hint">What is lost when 95% of the trace goes unused</span>
     </div>
 
-    <p class="lede">A discarded sample is not a neutral thing. Each one is a place in the reservoir where
-      the seismic data has something to say and the interpretation method has decided not to listen. The
-      losses fall in specific places, and they are the places that matter most.</p>
+    <p class="lede">Each discarded sample is a place in the reservoir where the seismic data has something to say and the method isn't listening. The losses fall in specific places, and they're the places that matter most.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       What goes missing</h2>
     <ul class="lede" style="padding-left:20px">
-      <li><b>The inside of the reservoir.</b> The peak and trough sit at the top and base of the sand. Every
+      <li><b>The inside of the reservoir.</b> The peak and trough lie at the top and base of the sand. Every
         sample between them - the part of the trace that is actually inside the pay - is
         discarded. Vertical variation in porosity within a sand body is invisible to a method that only
         looks at its edges.</li>
@@ -337,31 +262,15 @@
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       The two ways out</h2>
-    <p class="lede">There are broadly two responses to this problem. One is <b>deconvolution and
-      inversion</b>: estimate the wavelet, remove it, and recover something closer to reflectivity or
-      impedance. It works, and it requires a wavelet estimate, well control, and a low-frequency model, none
-      of which exist at the start of a project. It also introduces its own artifacts through spectral
-      whitening.</p>
-    <p class="lede">The other is to <b>convert every sample into the equivalent of a peak or a trough</b>,
-      so that the two-layer equation becomes applicable everywhere without ever estimating a wavelet. That
-      is the DQ trace. It is a strange idea on first hearing, and the next four modules are spent making it
-      ordinary.</p>
-    <div class="legend prose">
-      <span>Neither route is a replacement for the other. The DQ process does not create events that were
-        not already in the data - it makes the events that are there easier to see and easier to
-        interpret, and it does so early, before the well correlation and wavelet estimation work has been
-        done.</span>
-    </div>
-  </section>
+    <p class="lede">The other is to <b>convert every sample into the equivalent of a peak or a trough</b>, so the two-layer equation applies everywhere without estimating a wavelet. That's the DQ trace. It's a strange idea on first hearing, and the next four modules make it ordinary.</p>
+    </section>
 
   <!-- ============================== EXERCISES ============================== -->
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
       <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
-        <li><b>One sand, three classes.</b> Set the porosity to 20% and the fluid to oil, and leave the
-          underburden following the overburden. Now step through the three overburden lithologies on step
-          1, reading the class label each time.
+        <li><b>One sand, three classes.</b> We set the porosity to 20% and the fluid to oil, and leave the underburden following the overburden. Then we step through the three overburden lithologies on step 1, reading the class label each time.
           <details class="reveal"><summary>Answer</summary><span class="ans">Soft shale gives class 1, with
             an intercept near +0.11. Hard shale gives class 2, intercept near &minus;0.03. The tight
             sandstone gives class 4, intercept near &minus;0.22. Nothing about the reservoir changed
@@ -370,7 +279,7 @@
             laterally into a cemented sand, or a compaction boundary crossing the interval - one
             continuous pay sand will produce several different AVO responses, and an interpreter who fixed
             the class at the start of the project is wrong over part of the field.</span></details></li>
-        <li><b>Find the porosity where the sand vanishes.</b> Choose the soft shale overburden and a brine
+        <li><b>Finding the porosity where the sand vanishes.</b> We choose the soft shale overburden and a brine
           fill, then drag the porosity slider slowly and watch the intercept and the near-stack value.
           <details class="reveal"><summary>Answer</summary><span class="ans">Starting at 24% the label runs
             class 1, then 2p, then 2, then 3. The intercept passes through zero between 32 and 33%: there
@@ -378,10 +287,10 @@
             and the whole response lives in the gradient. Just below the crossing the intercept is still
             faintly positive while the far stack has already gone negative, which is what class 2p means
 - the reflection changes sign partway across the gather, and a full stack cancels much of
-            it. Switch to gas and the same sequence happens about seven porosity units earlier. Neither
+            it. With gas, the same sequence happens about seven porosity units earlier. Neither
             number means anything on its own; both move the moment the shale does. What matters here is that being invisible on the near stack is a coincidence between two rocks, and it happens to
             perfectly good reservoirs.</span></details></li>
-        <li><b>Substitute the fluid and watch three numbers move.</b> Soft shale, porosity 25%. Read the
+        <li><b>Substituting the fluid and watching three numbers move.</b> Soft shale, porosity 25%. We read the
           sand's V<sub>P</sub>, V<sub>S</sub> and density for brine, then oil, then gas.
           <details class="reveal"><summary>Answer</summary><span class="ans">V<sub>P</sub> falls from about
             3300 to 3130 m/s and density falls from 2.24 to 2.04 g/cm&sup3;, both of which we would
@@ -390,7 +299,7 @@
             strength and so leaves the modulus alone, and the density went down. The class moves from 1 to
             2p on the way. A dim spot and a polarity reversal here are the same sand with different
             fluid.</span></details></li>
-        <li><b>Open the torpedo.</b> On step 2, clear the underburden checkbox and put a different rock
+        <li><b>Opening the torpedo.</b> On step 2, we clear the underburden checkbox and put a different rock
           below the sand, watching the crossplot and the polar angle spread.
           <details class="reveal"><summary>Answer</summary><span class="ans">While the underburden follows
             the overburden the two reflection coefficients are equal and opposite, so the near stack and
@@ -400,7 +309,7 @@
             Give the sand a different floor and the base is no longer the mirror of the top, the two axes
             stop being proportional, and the segment opens into a loop. Real sands are almost never
             symmetrically encased, which is why the torpedo is what turns up in field data.</span></details></li>
-        <li><b>Collapse the loop.</b> On step 2, set the thickness to 60 ms and then reduce it to 8 ms,
+        <li><b>Collapsing the loop.</b> On step 2, we set the thickness to 60 ms and then reduce it to 8 ms,
           watching the crossplot.
           <details class="reveal"><summary>Answer</summary><span class="ans">At 60 ms the top and base
             reflections are separate events and the loop has two clear ends, each near the two-layer answer
@@ -409,7 +318,7 @@
             nothing on the crossplot is close to the correct two-layer answer, even though the reflection
             coefficients that generated the trace never changed. The AVO response of a thin bed is a
             property of the wavelet as much as of the rock.</span></details></li>
-        <li><b>Change the sample rate and count.</b> On step 3, step the sample rate from 4 ms down to
+        <li><b>Changing the sample rate and counting.</b> On step 3, we step the sample rate from 4 ms down to
           0.5 ms, reading both counters each time.
           <details class="reveal"><summary>Answer</summary><span class="ans">The number of samples in the
             window goes up by a factor of eight. The number AVO can use stays at two per cycle, so the
@@ -418,7 +327,7 @@
             converts the extra samples into usable ones, which is why the papers specify a 1 ms sample rate
             and eight quadrants and not the 2 ms and four quadrants used
             earlier.</span></details></li>
-        <li><b>Lose track of which extremum is the sand.</b> Set the wavelet to 20 Hz and the thickness to
+        <li><b>Losing track of which extremum is the sand.</b> We set the wavelet to 20 Hz and the thickness to
           10 ms, then look at the marked trace on step 3 and count the filled circles.
           <details class="reveal"><summary>Answer</summary><span class="ans">There are four, and only one of
             them is the top of the sand. The top and base have merged into a single event and the
@@ -427,7 +336,7 @@
             interpret it. Thinning the bed does not just reduce the number of usable samples - it
             makes the surviving ones harder to trust. This is the boundary shale problem that module 06
             has to solve.</span></details></li>
-        <li><b>Check whether the background trend really lies at 45 degrees.</b> Set the fluid to brine and
+        <li><b>Checking whether the background trend really lies at 45 degrees.</b> We set the fluid to brine and
           step the porosity across its whole range, watching the point against the dashed B = &minus;A line
           on the step 1 crossplot.
           <details class="reveal"><summary>Answer</summary><span class="ans">The brine sands trace out a line

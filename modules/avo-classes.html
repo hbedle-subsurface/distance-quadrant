@@ -43,9 +43,7 @@
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>The comparison</h2>
-            <p class="hint-line" style="margin:0 0 10px;grid-column:1/-1">The four classes are fixed
-              recipes in this rock model, listed in the method tab. The controls below change how they are
-              imaged, not what they are.</p>
+            <p class="hint-line" style="margin:0 0 10px;grid-column:1/-1">The four classes are fixed recipes in this rock model, listed in the method tab. The controls change how they're imaged and not what they are.</p>
             <div class="ctl">
               <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
               <input type="range" id="thick" min="6" max="40" step="1" value="30">
@@ -69,8 +67,7 @@
             </div>
             <label class="check" style="grid-column:1/-1"><input type="checkbox" id="logy" checked>
               Log count axis on the histogram</label>
-            <p class="hint-line" style="margin:-4px 0 0">The papers use one, because most samples in a
-              clastic section are background.</p>
+            <p class="hint-line" style="margin:-4px 0 0">The papers use one, because most samples in a clastic section are background.</p>
           </div>
 
           <div class="ctl-col" id="colData">
@@ -109,18 +106,10 @@
       <span class="hint">What the class names actually name</span>
     </div>
 
-    <p class="lede">
-      An AVO class is a position, not a rock. It says which quadrant of the intercept-gradient plane the
-      top of a sand falls in, and that is decided jointly by the sand and by whatever lies above it.
-      <b>Class 3</b> is the familiar bright spot: negative intercept, negative gradient, getting brighter
-      with offset. <b>Class 1</b> is a hard sand under a soft seal, positive intercept and negative
-      gradient, dimming and eventually reversing. <b>Class 2</b> lies near the origin with almost no
-      normal-incidence contrast. <b>Class 4</b> has a negative intercept with a positive gradient, so it is
-      bright at zero offset and dims away.</p>
+    <p class="lede">An AVO class is a position and not a rock. It says which quadrant of the intercept-gradient plane the top of a sand falls in, and that's decided jointly by the sand and whatever lies above it. <b>Class 3</b> is the familiar bright spot: negative intercept, negative gradient, brighter with offset. <b>Class 1</b> is a hard sand under a soft seal, with positive intercept and negative gradient, dimming and eventually reversing. <b>Class 2</b> lies near the origin with almost no normal-incidence contrast, and <b>Class 4</b> has a negative intercept with a positive gradient, so it's bright at zero offset and dims away.</p>
 
     <canvas id="c1a" aria-label="The intercept-gradient plane with the four class regions and the four exemplars marked"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The four exemplars this module uses, on the plane
-      module 01 introduced. The dashed line is the background trend of module 06.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The four exemplars on the plane from module 01. The dashed line is the background trend of module 06.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Class 1</span><b id="s1a">&mdash;</b></div>
@@ -129,12 +118,7 @@
       <div class="stat"><span>Class 4</span><b id="s1d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>All four are the same sand model with a different seal, fluid or porosity. Nothing exotic is
-        required to move between classes, which is the point module 01 made with its three-rock
-        demonstration and the reason a workflow cannot assume one class and expect to travel.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="p2" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
@@ -142,16 +126,10 @@
       <span class="hint">The same processing, four times</span>
     </div>
 
-    <p class="lede">
-      Each exemplar is now put through everything: partial stacks, picks, quadrant numbers, phase filters,
-      the distance of module 05 and the angle of module 07. Nothing is tuned per class. The one thing that
-      changes is the polarity flip - module 03 established that class 1 sands have both partial
-      stacks reversed before picking, so that the top of the reservoir arrives at the picker as a trough
-      like every other class.</p>
+    <p class="lede">Each exemplar goes through everything: partial stacks, picks, quadrant numbers, phase filters, the distance of module 05 and the angle of module 07, with nothing tuned per class. The only change is the polarity flip. Module 03 showed that class 1 sands have both partial stacks reversed before picking, so the top of the reservoir arrives at the picker as a trough like every other class.</p>
 
     <canvas id="c2a" aria-label="Near stack and DQ trace for each of the four AVO classes side by side"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Near stack above, DQ below, for each class in
-      turn. The shaded band is the sand.</p>
+    <p class="hint-line" style="margin:8px 0 18px">Near stack above and DQ below, for each class in turn. The shaded band is the sand.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Polarity flip applied to</span><b id="s2a">&mdash;</b></div>
@@ -161,10 +139,7 @@
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>The class 2 column is the instructive one. Its intercept is close to zero, so the near stack
-        barely registers the sand at all, and the distance is correspondingly small - this is the
-        case module 07 used as its example of an unreliable angle, and it is the case every amplitude
-        method finds hardest. Nothing here fixes it; what the workflow does is make the weakness visible and does not hide it inside a single bright number.</span>
+      <span>The class 2 column is the instructive one. The intercept is close to zero, so the near stack barely registers the sand and the distance is small. It's the case module 07 used as its example of an unreliable angle, and the one every amplitude method finds hardest. The workflow doesn't fix it... it makes the weakness visible and doesn't hide it inside a single bright number.</span>
     </div>
   </section>
 
@@ -174,20 +149,12 @@
       <span class="hint">How the papers summarise a volume</span>
     </div>
 
-    <p class="lede">
-      A section shows where things are; a histogram shows what the population looks like. The DQ
-      papers pair the two, plotting the distribution of DQ values in an analysis window with the shale
-      background, the wet sands and the gas sands marked as bands on the axis.</p>
+    <p class="lede">A section shows where things are and a histogram shows what the population looks like. The DQ papers pair the two, plotting the distribution of DQ values in an analysis window with the shale background, wet sands and gas sands marked as bands on the axis.</p>
 
-    <p class="lede">
-      The scale matters. In a clastic section the great majority of samples are background shale sitting
-      near zero, so on a linear count axis the interesting tail is invisible under a single enormous bar.
-      A logarithmic count axis makes the tail readable. Untick the box in the panel to see what the linear
-      version hides.</p>
+    <p class="lede">The scale matters. In a clastic section most samples are background shale near zero, so on a linear count axis the interesting tail disappears under one enormous bar. A logarithmic count axis makes the tail readable, and the box in the panel shows what the linear version hides.</p>
 
     <canvas id="c3a" aria-label="Histograms of DQ for each of the four classes"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The distribution of DQ for each class, over
-      the same analysis window. The shaded band marks the samples that come from inside the sand.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The distribution of DQ for each class over the same analysis window. The shaded band marks samples from inside the sand.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Samples in the window</span><b id="s3a">&mdash;</b></div>
@@ -197,13 +164,7 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>Read the separation figure across the four classes and not for one. It compares the
-        brighter sand samples, at the eightieth percentile, with the median of the whole window, because a
-        median taken over the sand alone is dragged down by its quiet middle. It is largest where the
-        intercept contrast is largest and smallest for class 2, which is the same ordering the sections
-        show and the same one an interpreter would expect. The histogram is not adding information; it is
-        making the population structure legible, which is what lets a delimiter or a polygon be placed
-        sensibly on module 09's crossplot.</span>
+      <span>We read the separation figure across all four classes. It compares the brighter sand samples, at the eightieth percentile, with the median of the whole window, since a median over the sand alone is dragged down by its quiet middle. It's largest where the intercept contrast is largest and smallest for class 2, the same ordering the sections show. The histogram doesn't add information, and it makes the population legible, which helps us place a delimiter or polygon sensibly on module 09's crossplot.</span>
     </div>
   </section>
 
@@ -213,21 +174,8 @@
       <span class="hint">A caution and a defense</span>
     </div>
 
-    <p class="lede">The class names are a convenience. A sand does not have a class; a sand under a
-      particular seal at a particular depth has one, and the same reservoir can change class laterally as
-      the overburden changes or vertically as compaction moves both trends. Module 01 showed one sand
-      becoming class 1, 2 and 4 by changing only the rock above it.</p>
-
-    <p class="lede">They remain useful because they name the thing that decides how an amplitude method
-      will behave. Knowing the setting is class 2 tells us the intercept is near zero and that
-      anything depending on it will be fragile, and that matters before a workflow is built on it.
-      The DQ workflow does not remove that fragility. What it does is carry a second number, the angle, whose
-      failure mode is different from the distance's, so that the two disagree in a detectable way and do not fail silently together.</p>
-
     <div class="legend prose">
-      <span>The practical version, and the reason the papers cross-plot sliding time windows: watch the
-        cluster. If it moves between windows, the class has changed, and any calibration tied to the old
-        position no longer applies.</span>
+      <span>The practical version, and the reason the papers crossplot sliding time windows: watch the cluster. If it moves between windows the class has changed, and any calibration tied to the old position no longer applies.</span>
     </div>
   </section>
 
@@ -235,40 +183,39 @@
     <div class="tryit" style="max-width:none">
       <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
-        <li><b>Read the four positions.</b> On step 1, note the intercept and gradient of each exemplar.
+        <li><b>Reading the four positions.</b> On step 1, we note the intercept and gradient of each exemplar.
           <details class="reveal"><summary>Answer</summary><span class="ans">Class 1 has a positive
             intercept and a negative gradient, class 3 has both negative, class 4 has a negative intercept
-            with a positive gradient, and class 2 lies near the origin. Those four sign combinations are the entire content of the classification. Note what that does not tell us: two sands in the same class can be quite different rocks, and the same rock changes class when the seal changes. A class is a statement about a boundary, so it is shared by every pair of rocks that happens to produce those signs. Everything else attached to the names - bright
+            with a positive gradient, and class 2 lies near the origin. Those four sign combinations are the entire content of the classification. Two sands in the same class can be quite different rocks, and the same rock changes class when the seal changes. A class is a statement about a boundary, so it is shared by every pair of rocks that happens to produce those signs. Everything else attached to the names - bright
             spot, dim spot, phase reversal - follows from where the line through those two numbers
             crosses zero.</span></details></li>
-        <li><b>Find the polarity flip.</b> On step 2, see which class has it applied.
+        <li><b>Finding the polarity flip.</b> On step 2, we see which class has it applied.
           <details class="reveal"><summary>Answer</summary><span class="ans">Class 1, because its intercept
             is positive and the reservoir top arrives as a peak and not a trough. Troughs are Q1 and peaks Q9, so
             without the flip a class 1 top would be labeled Q9 while a class 3 top is Q1. Reversing both
             partial stacks before picking gives the same boundary the same label in every class.</span></details></li>
-        <li><b>Compare the class 2 column with the others.</b> On step 2, read the distance at the sand top
+        <li><b>Comparing the class 2 column with the others.</b> On step 2, we read the distance at the sand top
           for each class.
           <details class="reveal"><summary>Answer</summary><span class="ans">Class 2 is much the smallest,
-            because its intercept is close to zero by definition and the near stack is essentially the
-            intercept. This is the same weakness module 07 met at its class 2 crossover and module 11 met
+            because its intercept is close to zero by definition and the near stack is really the intercept. This is the same weakness module 07 met at its class 2 crossover and module 11 met
             under a soft shale: near a crossover the vector is short, the distance is small and the angle
             is unstable. It is a property of the rocks and not of the method, and no processing
             removes it.</span></details></li>
-        <li><b>Switch the histogram to a linear count axis.</b> On step 3, untick the box.
+        <li><b>Switching the histogram to a linear count axis.</b> On step 3, we untick the box.
           <details class="reveal"><summary>Answer</summary><span class="ans">The background bar near zero
             swamps everything and the tail vanishes. In a real clastic section the imbalance is far worse
             than in this model - the papers put it at roughly four samples in five being shale
 - which is why the published histograms use a logarithmic count axis. It is a display
             choice and not a processing one, and it changes whether we can see the thing we are
             looking for.</span></details></li>
-        <li><b>Thin the sand.</b> Take the thickness to 10 ms and look at steps 2 and 3 together.
+        <li><b>Thinning the sand.</b> We take the thickness to 10 ms and look at steps 2 and 3 together.
           <details class="reveal"><summary>Answer</summary><span class="ans">Every class loses separation at
             once, because module 11's tuning applies to all of them equally: the top and base reflections
             merge and the sand no longer has a sample of its own. The classes differ in how bright they
             are, not in how they respond to thinning, so a thin class 3 sand can read like a thick class 2
             one. That ambiguity is exactly what module 11's pairing of distance with angle is
             for.</span></details></li>
-        <li><b>Add noise and watch which class fails first.</b> Take the noise to 30% on step 3.
+        <li><b>Adding noise and watching which class fails first.</b> We take the noise to 30% on step 3.
           <details class="reveal"><summary>Answer</summary><span class="ans">Class 2 degrades first and
             worst, because its separation was smallest to begin with and noise is added in absolute terms and not relative ones. The ordering is the useful part: the class that is hardest in clean data
             is hardest in noisy data too, and by more. Any claim that a method works on class 2 should be
@@ -318,11 +265,7 @@
         published displays; the note that roughly four samples in five are shale in a clastic section is
         from the DQ display specification and describes field data and not this model, where the
         proportion depends on how thick we set the sand.</p>
-      <p><b>What this module does not do.</b> It does not reproduce the published class sections, which are
-        built from ray-traced synthetics over pseudo-well catalogs with lateral variation. It is four
-        single traces from one rock model, intended to show what the class names mean and how the same
-        workflow treats each. Comparisons between classes here are internally consistent; their absolute
-        values are not calibrated to anything.</p>
+      <p><b>Limits of the model.</b> The published class sections are built from ray-traced synthetics over pseudo-well catalogs with lateral variation. Here we have four single traces from one rock model, which show what the class names mean and how the same workflow treats each. Comparisons between classes are internally consistent, and the absolute values are not calibrated to anything.</p>
       <ul>
         <li>Rutherford, S. R., and R. H. Williams, 1989, Amplitude-versus-offset variations in gas sands:
           <em>Geophysics</em>, 54, 680&ndash;688.</li>

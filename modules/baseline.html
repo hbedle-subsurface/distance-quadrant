@@ -80,10 +80,7 @@
                 <button type="button" data-rot="flat" aria-pressed="true">onto the x axis</button>
               </div>
             </div>
-            <p class="hint-line" style="margin:-4px 0 12px">The middle option is the classical AVO
-              rotation, which assumes the background runs along B&nbsp;=&nbsp;&minus;A. The third is what
-              the DQ workflow does: measure the background where it actually is, and rotate that
-              flat.</p>
+            <p class="hint-line" style="margin:-4px 0 12px">The middle option is the classical AVO rotation, which assumes the background runs along B&nbsp;=&nbsp;&minus;A. The third is what the DQ workflow does: it measures the background where it actually is and rotates that flat.</p>
             <label class="check" style="grid-column:1/-1"><input type="checkbox" id="showall" checked>
               Show the oil and gas tracks as well</label>
             <div class="ctl" style="margin-top:10px">
@@ -93,9 +90,7 @@
                 <button type="button" data-axes="ab" aria-pressed="false">true A and B</button>
               </div>
             </div>
-            <p class="hint-line" style="margin:-4px 0 0">The workflow crossplots the near stack against
-              far minus near, not the true intercept against the true gradient. It matters more than it
-              sounds.</p>
+            <p class="hint-line" style="margin:-4px 0 0">The workflow crossplots the near stack against far minus near, not the true intercept against the true gradient, and that matters more than it sounds.</p>
           </div>
 
           <div class="ctl-col" id="colData">
@@ -104,9 +99,7 @@
               <label for="scatter">Scatter on the background <span class="val" id="scatterV">0%</span></label>
               <input type="range" id="scatter" min="0" max="40" step="1" value="0">
             </div>
-            <p class="hint-line" style="margin:-8px 0 14px">Real shale trends are a cloud, not a line. This
-              adds spread so we can see what the rotation does when the baseline is only approximately
-              known.</p>
+            <p class="hint-line" style="margin:-8px 0 14px">Real shale trends are a cloud and not a line. This adds spread, so we can see what the rotation does when the baseline is only approximately known.</p>
             <button class="btn ghost small" id="resetBtn" type="button">Reset everything</button>
           </div>
         </div>
@@ -133,34 +126,12 @@
       <span class="hint">Measured, and not assumed</span>
     </div>
 
-    <p class="lede">
-      Module 01 crossplotted intercept against gradient and drew B&nbsp;=&nbsp;&minus;A on it as a
-      reference line, because that is what AVO crossplotting has used since Castagna and Swan. The
-      background trend is supposed to run along it, and anomalies are supposed to be departures from
-      it.</p>
+    <p class="lede">Here's the same crossplot with the background actually fitted. The brine sand track across the full porosity range is the background: same rock, same fluid, just varying in how much of it there is.</p>
 
-    <p class="lede">
-      Here is the same crossplot with the background actually fitted. The brine sand track across the full
-      porosity range is the background: same rock, same fluid, varying only in how much of it there is.</p>
-
-    <p class="lede">
-      <b>The choice of axes changes the answer.</b> The DQ workflow crossplots the near stack against far
-      minus near, and module 01 established that far minus near is the gradient multiplied by 0.17. That
-      compresses the vertical axis, so the same physical trend reads much flatter than it does in true
-      intercept-gradient space. On the workflow's own axes the background comes out at about
-      <b>&minus;16&deg;</b>, a bearing of <b>344&deg;</b>. In true A and B it is
-      <b>&minus;58&deg;</b>. Same rocks, same data, two very different numbers - and only one of
-      them is the one to rotate by.</p>
-
-    <p class="lede">
-      The workflow figure is the one that matters, and 344&deg; is not a number this model invented. The
-      published RDQ crossplots quote field shale baselines at 340&deg;, with rotation examples at
-      345&deg;, 333&deg; and 330&deg;. Switch the axes control in the panel to see both.</p>
+    <p class="lede"><b>The choice of axes changes the answer.</b> The DQ workflow crossplots the near stack against far minus near, and module 01 showed far minus near is the gradient times 0.17. That compresses the vertical axis, so the same trend reads much flatter. On the workflow's axes the background comes out at about <b>&minus;16&deg;</b>, a bearing of <b>344&deg;</b>, and in true A and B it's <b>&minus;58&deg;</b>. Same rocks, same data, two very different numbers.</p>
 
     <canvas id="c1a" aria-label="Intercept against gradient with the brine sand background track and the fitted trend line"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Blue is the brine sand track from 8% to 36% porosity,
-      the solid crimson line is the fit through it, and the dashed gray line is B&nbsp;=&nbsp;&minus;A for
-      comparison. The gap between them is the whole subject of this module.</p>
+    <p class="hint-line" style="margin:8px 0 18px">Blue is the brine sand track from 8% to 36% porosity, the crimson line is the fit through it, and the dashed gray line is B&nbsp;=&nbsp;&minus;A. The gap between them is what this module is about.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Fitted slope</span><b id="s1a">&mdash;</b></div>
@@ -170,15 +141,7 @@
       <div class="stat"><span>As a bearing</span><b id="s1f">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>The number moves very little with the overburden. The two shales give 344&deg; on the workflow
-        axes, within half a degree of each other; the tight sandstone gives 342&deg;, about three degrees
-        steeper, because its own V<sub>P</sub>/V<sub>S</sub> is much lower than a shale's and that tilts the
-        gradient. So the direction is mostly set by how the sand's properties change with porosity, with a
-        smaller contribution from the seal. The classical reference line comes from assuming a fixed
-        V<sub>P</sub>/V<sub>S</sub> of 2, and real rocks do not oblige.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="p2" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
@@ -186,22 +149,12 @@
       <span class="hint">Rotating to a convention, or rotating to the data</span>
     </div>
 
-    <p class="lede">
-      Rotating a crossplot is just a change of coordinates: the points do not move relative to each other,
-      only the axes do. The question is what we rotate <em>to</em>.</p>
+    <p class="lede">Rotating a crossplot is just a change of coordinates... the points don't move relative to each other, only the axes do. The question is what we rotate <em>to</em>.</p>
 
-    <p class="lede">
-      Classical AVO crossplotting rotates so that B&nbsp;=&nbsp;&minus;A lies along the horizontal. If the
-      background really ran at &minus;45&deg;, that would lay it flat. It does not, and on the workflow's
-      own axes it is not even on the same side: the background is at &minus;16&deg;, which is
-      <em>shallower</em> than &minus;45&deg;, so the classical rotation turns it past the horizontal and
-      out the other side. The DQ workflow rotates by the measured angle instead, putting the fitted trend
-      itself on the horizontal.</p>
+    <p class="lede">Classical AVO crossplotting rotates so B&nbsp;=&nbsp;&minus;A lies along the horizontal. If the background really ran at &minus;45&deg;, that would lay it flat, but it doesn't. On the workflow's axes the background is at &minus;16&deg;, <em>shallower</em> than &minus;45&deg;, so the classical rotation turns it past the horizontal and out the other side. The DQ workflow rotates by the measured angle, and so the fitted trend ends up on the horizontal.</p>
 
     <canvas id="c2a" aria-label="The same crossplot after rotating to minus forty-five degrees and after rotating the fitted trend onto the x axis"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The same points, twice. On the left the classical
-      rotation, on the right the measured one. The shaded band on each is how far the background spreads
-      from the horizontal after the rotation.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The same points, twice: the classical rotation on the left and the measured one on the right. The shaded band is how far the background spreads from the horizontal after the rotation.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Background spread, no rotation</span><b id="s2a">&mdash;</b></div>
@@ -211,14 +164,7 @@
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>On the workflow axes the classical rotation makes matters <b>worse</b>: the background spread
-        goes from 0.106 to 0.127, because turning a trend that was only 16&deg; off horizontal by a full
-        45&deg; leaves it 29&deg; off on the other side. Rotating onto the measured trend takes it to
-        0.025, a factor of four. Switch the axes to true A and B and the picture flips - there the
-        background is steeper than &minus;45&deg;, so the classical rotation helps by 2.7 times and the
-        measured one by 8. The convention is not simply wrong; it is right about the idea and wrong about
-        the number, and how wrong depends on axes most people never think about. The residue is curvature,
-        which no straight rotation can remove.</span>
+      <span>On the workflow axes the classical rotation makes things <b>worse</b>. The background spread goes from 0.106 to 0.127, because turning a trend that was 16&deg; off horizontal by a full 45&deg; leaves it 29&deg; off on the other side. Rotating onto the measured trend takes it to 0.025, a factor of four. With the axes set to true A and B the picture flips: the background is steeper than &minus;45&deg;, so the classical rotation helps by 2.7 times and the measured one by 8. The convention is right about the idea and wrong about the number. What's left is curvature, which no straight rotation removes.</span>
     </div>
   </section>
 
@@ -228,21 +174,12 @@
       <span class="hint">Same distances, new directions</span>
     </div>
 
-    <p class="lede">
-      With the background flat, the vertical coordinate of a point is how far it departs from the
-      background, and the horizontal coordinate is where along the background it lies. Those are two
-      separately meaningful numbers, which is what the unrotated pair was not.</p>
+    <p class="lede">With the background flat, the vertical coordinate is how far a point departs from the background, and the horizontal coordinate is where along the background it lies. Those are two separately meaningful numbers, which the unrotated pair wasn't.</p>
 
-    <p class="lede">
-      The test is whether a hydrocarbon sand now stands clear of the brine trend. Unrotated it does not:
-      the gas track runs right through the range the brine track already covers, so a large distance from
-      the origin means a porous rock and not a charged one. After the rotation the brine track collapses
-      onto the horizontal and the gas track lifts off it.</p>
+    <p class="lede">The test is whether a hydrocarbon sand now stands clear of the brine trend. Unrotated it doesn't, since the gas track runs right through the range the brine track covers, and so a large distance from the origin means a porous rock and not a charged one. After the rotation the brine track collapses onto the horizontal and the gas track lifts off it.</p>
 
     <canvas id="c3a" aria-label="The brine, oil and gas tracks before and after rotating the background onto the x axis"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">All three fluid tracks, before and after. The measure
-      below is how far the selected sand lies from the horizontal, against how far the brine background
-      spreads - a separation of one means the anomaly is no bigger than the background scatter.</p>
+    <p class="hint-line" style="margin:8px 0 18px">All three fluid tracks, before and after. The measure is how far the selected sand lies from the horizontal against how far the brine background spreads, and a separation of one means the anomaly is no bigger than the background scatter.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Selected sand, departure</span><b id="s3a">&mdash;</b></div>
@@ -252,12 +189,7 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>The rotation leaves module 05's distance exactly as it was: turning the plot about the origin
-        cannot change how far any point is from the origin. The origin is where a rock identical to its
-        overburden would plot, so the DQ reports how different a sample is from the rock above it. What the
-        rotation adds is direction. The vertical coordinate is now measured from the background trend, and
-        so is the angle of module 07, so together they report which way a sample differs and whether that
-        is the way porosity alone would move it.</span>
+      <span>The rotation leaves module 05's distance exactly as it was, since turning the plot about the origin can't change how far a point is from the origin. The origin is where a rock identical to its overburden would plot, so the DQ reports how different a sample is from the rock above it. The rotation adds direction: the vertical coordinate is now measured from the background trend, and so is the angle of module 07, and together they tell us which way a sample differs and whether that's the way porosity alone would move it.</span>
     </div>
   </section>
 
@@ -267,16 +199,7 @@
       <span class="hint">Where minus forty-five came from, and what it assumed</span>
     </div>
 
-    <p class="lede">The B&nbsp;=&nbsp;&minus;A line is not arbitrary. It falls out of the two-term Shuey
-      equation when the background rocks have a V<sub>P</sub>/V<sub>S</sub> ratio of 2 and the density
-      contrast is small. Under those assumptions the intercept and gradient of a wet rock move together in
-      opposite directions at equal rates, and the background is a line at &minus;45&deg;.</p>
-
-    <p class="lede">Neither assumption is safe. The V<sub>P</sub>/V<sub>S</sub> of a sand varies with
-      porosity - in this model it runs from about 1.75 at low porosity to over 2 at high - and
-      density does contrast. So the real background is steeper, and how much steeper depends on the rocks.
-      The DQ workflow does not try to predict the angle. It measures it and rotates by what it
-      finds.</p>
+    <p class="lede">Neither assumption is safe. The V<sub>P</sub>/V<sub>S</sub> of a sand varies with porosity, from about 1.75 at low porosity to over 2 at high in this model, and density does contrast. So the real background is steeper, by an amount that depends on the rocks. The DQ workflow doesn't try to predict the angle... it measures it and rotates by what it finds.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       What this does not fix</h2>
@@ -291,18 +214,13 @@
         compaction and with lithology. The sector splitting in the second half of this module is partly a response to that.</li>
     </ul>
 
-    <div class="legend prose">
-      <span>To be clear: this rotation is a change of coordinates and nothing more. It adds no
-        information and removes none. What it does is put the axes somewhere that makes the two
-        coordinates individually interpretable, and that is the whole of its contribution.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
       <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
-        <li><b>Measure the background angle under each overburden.</b> On step 1, switch between soft
+        <li><b>Measuring the background angle under each overburden.</b> On step 1, we switch between soft
           shale, hard shale and tight sandstone.
           <details class="reveal"><summary>Answer</summary><span class="ans">The two shales land within half
             a degree of each other - 344&deg; on the workflow axes, &minus;58.4&deg; and
@@ -312,7 +230,7 @@
             V<sub>P</sub>/V<sub>S</sub>, and the tight sandstone's is far lower than a shale's. The
             practical reading is that one baseline can serve a whole area of similar seals, and that it
             stops serving when either the reservoir trend or the seal changes character.</span></details></li>
-        <li><b>Compare the two rotations.</b> On step 2, read the background spread after each.
+        <li><b>Comparing the two rotations.</b> On step 2, we read the background spread after each.
           <details class="reveal"><summary>Answer</summary><span class="ans">On the workflow axes: 0.106
             unrotated, <b>0.127</b> after the classical rotation, 0.025 after rotating onto the fitted
             trend. The classical rotation makes it worse, because the background was only 16&deg; off
@@ -321,7 +239,7 @@
             is useful in one plot and harmful in the other, and the DQ workflow uses the one where it is
             harmful. That is the practical content of "to the x axis, not minus forty-five", and it is a
             stronger statement than it first looks.</span></details></li>
-        <li><b>Find out why the spread does not go to zero.</b> Look at the shape of the background track
+        <li><b>Finding out why the spread does not go to zero.</b> We look at the shape of the background track
           on step 1.
           <details class="reveal"><summary>Answer</summary><span class="ans">It is curved. The
             V<sub>P</sub>/V<sub>S</sub> trend the sand is built from is a quadratic in porosity, so the
@@ -329,7 +247,7 @@
             leaves the curvature as residue, and that residue is the floor on how well any single rotation
             can separate background from anomaly. Nothing later in the method removes it
             either.</span></details></li>
-        <li><b>Check whether the anomaly actually separates.</b> On step 3, read the two separation
+        <li><b>Checking whether the anomaly actually separates.</b> On step 3, we read the two separation
           figures for a gas sand at 28% porosity.
           <details class="reveal"><summary>Answer</summary><span class="ans">Unrotated, the separation is
             well below one, meaning the gas sand lies inside the range the brine background already
@@ -337,18 +255,16 @@
             about fluid. Rotated, it goes above two. The anomaly was always there; what the rotation does
             is put it on an axis where it can be seen without the background in the
             way.</span></details></li>
-        <li><b>Blur the baseline.</b> Raise the scatter to 30% and read step 2 again.
+        <li><b>Blurring the baseline.</b> We raise the scatter to 30% and read step 2 again.
           <details class="reveal"><summary>Answer</summary><span class="ans">The fitted angle wanders and the
             rotated spread grows, because the rotation can only be as good as the estimate of where the
             background is. This is the limit of the technique on real data, where nobody hands us a clean brine track. It is also the argument for fitting the baseline on as much data as
             possible and for checking it against a well and not for taking it from the densest part of a
             cloud.</span></details></li>
-        <li><b>Try a low-porosity sand.</b> Set the porosity to 12% with gas and look at step 3.
+        <li><b>Trying a low-porosity sand.</b> We set the porosity to 12% with gas and look at step 3.
           <details class="reveal"><summary>Answer</summary><span class="ans">The separation shrinks. A tight
             gas sand is a small anomaly because there is very little pore space for the gas to be in, so
-            the fluid substitution barely moves the rock. The rotation has not failed; there is less
-            to see. Remember that when a DQ volume looks quiet, because a quiet answer can be a correct
-            one.</span></details></li>
+            the fluid substitution barely moves the rock. The rotation has worked, and there is less to see. So when a DQ volume looks quiet, a quiet answer can be a correct one.</span></details></li>
       </ol>
     </div>
   </section>
@@ -357,7 +273,7 @@
     <div class="takeaway" style="max-width:none">
       <h3>The main points</h3>
       <ul>
-        <li><b>The background trend is not at &minus;45&deg;</b>, and where it does sit depends on the
+        <li><b>The background trend is not at &minus;45&deg;</b>, and where it does lie depends on the
           axes. On the workflow's near-stack against far-minus-near plot it is at about
           &minus;16&deg;, a bearing of 344&deg; under either shale and 342&deg; under the tight sandstone;
           in true intercept and gradient it is &minus;58.5&deg; and &minus;61.2&deg;.</li>
@@ -393,8 +309,7 @@
         across the interface. This module works entirely in intercept-gradient space and does not build a
         trace, so no wavelet, sampling or picking is involved.</p>
       <p><b>Two sets of axes.</b> The DQ workflow crossplots the near stack against far minus near, which
-        is what the published RDQ crossplots show. That is not intercept against gradient: far minus near
-        is the gradient multiplied by 0.1701, so the vertical axis is compressed and the background trend
+        is what the published RDQ crossplots show. Far minus near is the gradient multiplied by 0.1701, and so this is not intercept against gradient, so the vertical axis is compressed and the background trend
         reads far flatter. This page computes both, and the panel switches between them. The angles are &minus;15.7&deg;
         (a bearing of 344&deg;) on the workflow axes and &minus;58.4&deg; in true A and B, for the same
         rocks. The workflow figure is the one to rotate by, and it agrees with the field baselines the RDQ

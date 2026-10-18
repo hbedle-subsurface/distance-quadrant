@@ -108,16 +108,8 @@
       <h3><span class="stepno">1</span>Two windows on a gather</h3>
     </div>
 
-    <p class="lede">An angle gather holds one trace per <span class="g" data-g="incidence-angle">incidence
-      angle</span> at a single <span class="g" data-g="cdp">CDP</span>. After
-      <span class="g" data-g="nmo">NMO correction</span> the top and base of the sand arrive at the same
-      <span class="g" data-g="two-way-time">two-way time</span> on every trace, and only the amplitude
-      changes with angle.</p>
-    <p class="lede">The <span class="g" data-g="near-stack">near stack</span> N is the average of the traces
-      from 0 to 10&deg;. The <span class="g" data-g="far-stack">far stack</span> F is the average of a
-      ten-degree window further out, 20 to 30&deg; in the DQ papers. Subtracting one from the other gives a
-      third trace, F&nbsp;&minus;&nbsp;N, which records how much the reflection changed between the two
-      windows.</p>
+    <p class="lede">Here's an angle gather: one trace for each <span class="g" data-g="incidence-angle">incidence angle</span> at a single <span class="g" data-g="cdp">CDP</span>. After <span class="g" data-g="nmo">NMO correction</span> the top and base of the sand arrive at the same <span class="g" data-g="two-way-time">two-way time</span> on every trace, and so only the amplitude changes with angle.</p>
+    <p class="lede">The <span class="g" data-g="near-stack">near stack</span> N is the average of the traces from 0 to 10&deg;, and the <span class="g" data-g="far-stack">far stack</span> F is a ten-degree window further out, 20 to 30&deg; in the DQ papers. Subtracting one from the other gives F&nbsp;&minus;&nbsp;N, which shows how much the reflection changed between the two windows.</p>
 
     <div class="stepctl">
       <div class="ctl">
@@ -143,23 +135,10 @@
       <h3><span class="stepno">2</span>Intercept and gradient</h3>
     </div>
 
-    <p class="lede">At a single boundary the <span class="g" data-g="rc">reflection coefficient</span>
-      plotted against sin&sup2;&theta; is close to a straight line
-      (<span class="g" data-g="shuey">Shuey, 1985</span>): R(&theta;)&nbsp;=&nbsp;A&nbsp;+&nbsp;B&nbsp;sin&sup2;&theta;.
-      A is where the line meets zero angle. B, the gradient, is how steeply the line rises or falls.</p>
-    <p class="lede">The average of a straight line over a window is the line&rsquo;s value at the window&rsquo;s
-      mean sin&sup2;&theta;. That mean is <b>0.0101</b> for 0&ndash;10&deg; and <b>0.1802</b> for
-      20&ndash;30&deg;. So N&nbsp;=&nbsp;A&nbsp;+&nbsp;0.0101&nbsp;B, which is the intercept to within a
-      hundredth of the gradient, and F&nbsp;&minus;&nbsp;N&nbsp;=&nbsp;0.1701&nbsp;B, the gradient scaled
-      down by the separation of the two windows.</p>
-    <p class="lede">The right-hand plot is a <span class="g" data-g="crossplot">crossplot</span> of N against
-      F&nbsp;&minus;&nbsp;N, the form the DQ papers use. Both axes share one fixed scale, so the 0.17 factor
-      shows as a compressed vertical spread.</p>
-    <p class="lede">Changing the pore fluid moves the sand-top point. Gas lowers the sand&rsquo;s P-wave
-      velocity strongly and its density slightly, so its <span class="g" data-g="impedance">impedance</span>
-      drops and A becomes more negative. Gas lowers V<sub>P</sub> much more than V<sub>S</sub>, so
-      <span class="g" data-g="vpvs">V<sub>P</sub>/V<sub>S</sub></span> falls and B generally becomes more
-      negative as well.</p>
+    <p class="lede">At a single boundary the <span class="g" data-g="rc">reflection coefficient</span> plotted against sin&sup2;&theta; is close to a straight line (<span class="g" data-g="shuey">Shuey, 1985</span>): R(&theta;)&nbsp;=&nbsp;A&nbsp;+&nbsp;B&nbsp;sin&sup2;&theta;. A is where the line meets zero angle, and B, the gradient, is how steeply it rises or falls.</p>
+    <p class="lede">The average of a straight line over a window is its value at the window's mean sin&sup2;&theta;, which is <b>0.0101</b> for 0&ndash;10&deg; and <b>0.1802</b> for 20&ndash;30&deg;. So N&nbsp;=&nbsp;A&nbsp;+&nbsp;0.0101&nbsp;B, the intercept to within a hundredth of the gradient, and F&nbsp;&minus;&nbsp;N&nbsp;=&nbsp;0.1701&nbsp;B, the gradient scaled down by the separation of the windows.</p>
+    <p class="lede">On the right is a <span class="g" data-g="crossplot">crossplot</span> of N against F&nbsp;&minus;&nbsp;N, the form the DQ papers use. Both axes share one fixed scale, and so the 0.17 factor shows up as a compressed vertical spread.</p>
+    <p class="lede">Now change the pore fluid and the sand-top point moves. Gas lowers the sand's P-wave velocity a lot and its density a little, so the <span class="g" data-g="impedance">impedance</span> drops and A becomes more negative. Gas lowers V<sub>P</sub> much more than V<sub>S</sub>, so <span class="g" data-g="vpvs">V<sub>P</sub>/V<sub>S</sub></span> falls and B generally becomes more negative too.</p>
 
     <div class="stepctl">
       <div class="ctl">
@@ -178,9 +157,7 @@
       <div class="stat key"><span>F &minus; N divided by B</span><b id="s2d">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>Small dots: the reflection coefficient at each whole degree. Open squares: the two window
-        averages, N and F. Black dot: the intercept A. On the crossplot, the filled circle is the sand top,
-        the open circle the sand base, and the gray line this fluid at every porosity from 8 to 36%.</span>
+      <span>Small dots are the reflection coefficient at each whole degree, open squares are the window averages N and F, and the black dot is the intercept A. On the crossplot, the filled circle is the sand top, the open circle is the base, and the gray line is this fluid at every porosity from 8 to 36%.</span>
     </div>
   </section>
 
@@ -190,23 +167,8 @@
       <h3><span class="stepno">3</span>Where the reading holds</h3>
     </div>
 
-    <p class="lede">The equation in step 2 describes one boundary and no wavelet, the
-      <span class="g" data-g="two-layer">two-layer model</span>. A seismic trace is the reflectivity
-      <span class="g" data-g="convolution">convolved</span> with a <span class="g" data-g="wavelet">wavelet</span>,
-      so each sample mixes the top and base reflections and their
-      <span class="g" data-g="sidelobe">sidelobes</span>.</p>
-    <p class="lede">At a <span class="g" data-g="peak">peak</span> or <span class="g" data-g="trough">trough</span>
-      one boundary dominates, and the sample lands near the two-layer answer on the crossplot. Between the
-      <span class="g" data-g="extremum">extrema</span> the mixture changes from sample to sample, and the points
-      form a path through the origin. The two-layer reading is cleanest at the extrema: two samples in
-      each waveform cycle, out of 25 at 40&nbsp;Hz and a 1&nbsp;ms
-      <span class="g" data-g="sample-rate">sample rate</span>.</p>
-    <p class="lede">The DQ workflow is designed to convert every sample to the equivalent of a peak or
-      trough, so that the two-layer reading can be applied to all of them (Bedle et al., 2025a). The papers
-      note where this works less well: in beds thinner than about a quarter wavelength, and where the
-      lithology changes within one waveform loop. Modules 02 to 05 build the conversion one operation at a
-      time.</p>
-
+    <p class="lede">That equation describes one boundary and no wavelet, the <span class="g" data-g="two-layer">two-layer model</span>. A seismic trace is the reflectivity <span class="g" data-g="convolution">convolved</span> with a <span class="g" data-g="wavelet">wavelet</span>, and so each sample mixes the top and base reflections and their <span class="g" data-g="sidelobe">sidelobes</span>.</p>
+    <p class="lede">At a <span class="g" data-g="peak">peak</span> or <span class="g" data-g="trough">trough</span> one boundary dominates, and the sample lands near the two-layer answer on the crossplot. Between the <span class="g" data-g="extremum">extrema</span> the mixture changes from sample to sample, and the points trace a path through the origin. So the two-layer reading is cleanest at the extrema, which is two samples in each cycle... out of 25 at 40&nbsp;Hz and a 1&nbsp;ms <span class="g" data-g="sample-rate">sample rate</span>.</p>
     <div class="stepctl">
       <div class="ctl">
         <label for="tpick">Sample time <span class="val" id="tpickV">45 ms</span></label>
@@ -225,9 +187,7 @@
       <div class="stat"><span>Samples per waveform cycle</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>Black dots: the peaks and troughs of the near stack. Crimson crosses: the two-layer answers for
-        the sand top and base. Large crimson dot: the sample under the cursor. Gray: every other
-        sample.</span>
+      <span>Black dots are the peaks and troughs of the near stack, and the crimson crosses are the two-layer answers for the sand top and base. The large crimson dot is the sample under the cursor, and gray is every other sample.</span>
     </div>
   </section>
 
@@ -237,17 +197,9 @@
       <h3><span class="stepno">4</span>What the input has to be</h3>
     </div>
 
-    <p class="lede">The workflow assumes three things about the two stacks: that the data are
-      <span class="g" data-g="zero-phase">zero phase</span>, that
-      <span class="g" data-g="nmo">NMO correction</span> has flattened every reflection across the gather,
-      and that the amplitudes are <span class="g" data-g="relative-amplitude">relative amplitude</span>, so
-      the near and far stacks can be compared directly (Bedle et al., 2025a).</p>
+    <p class="lede">The workflow assumes the data are <span class="g" data-g="zero-phase">zero phase</span>, that <span class="g" data-g="nmo">NMO correction</span> has flattened every reflection across the gather, and that the amplitudes are <span class="g" data-g="relative-amplitude">relative amplitude</span>, so the near and far stacks can be compared directly (Bedle et al., 2025a).</p>
 
-    <p class="lede">Each control below breaks one of those assumptions. The faint dashed curves are the
-      same model with all three at zero, so the difference between the two is the error the input carries
-      into everything that follows. On the crossplot the cross is the two-layer answer and the filled
-      circle is what the distorted input reports. The three controls stay set while the other steps are open,
-      so the panel&rsquo;s reset button, or returning all three to zero, restores the clean model.</p>
+    <p class="lede">Each control below breaks one of those assumptions. The faint dashed curves are the same model with all three at zero, so the difference is the error the input carries into everything after it. On the crossplot, the cross is the two-layer answer and the filled circle is what the distorted input gives us. The three controls stay set while the other steps are open, so the reset button, or returning all three to zero, gets the clean model back.</p>
 
     <div class="stepctl" style="grid-template-columns:1fr">
       <div class="controls" style="margin:0">
@@ -276,13 +228,7 @@
       <div class="stat wide"><span>Reading</span><b id="s4e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>Phase moves the peaks and troughs away from the boundaries, so every later operation picks
-        the wrong samples. Residual moveout leaves the far reflection late, so the subtraction compares
-        two different parts of the waveform and the difference is partly timing and not amplitude
-        change. A gain error on the far stack scales the gradient directly, which moves a point vertically
-        on the crossplot and can change the AVO class the data appear to belong to. The DQ papers list
-        these as the preparation the workflow needs, along with a time-variant scalar on the far stack and
-        interpolation to 1&nbsp;ms.</span>
+      <span>Phase moves the peaks and troughs away from the boundaries, so every later operation picks the wrong samples. Residual moveout makes the subtraction partly a timing measurement, and a gain error on the far stack scales the gradient directly, which can change the AVO class the data appear to belong to.</span>
     </div>
   </section>
 
@@ -296,7 +242,7 @@
           <details class="reveal"><summary>Answer</summary><span class="ans">F&nbsp;&minus;&nbsp;N at the sand
             top is <span id="x1a">&minus;0.042</span>, and B is <span id="x1b">&minus;0.247</span>. The ratio
             is the 0.1701 from step 2. The far-minus-near trace is the gradient scaled by how far apart the two
-            windows sit in sin&sup2;&theta;.</span></details></li>
+            windows lie in sin&sup2;&theta;.</span></details></li>
         <li><b>What does the far window position do to that ratio?</b> How does the ratio on step 2 change as
           the far window (its slider is on step 1) moves from 12&ndash;22&deg; out to 20&ndash;30&deg;?
           <details class="reveal"><summary>Answer</summary><span class="ans">The ratio rises from
@@ -327,7 +273,7 @@
             change in the overlying rock can move the point as far as a change in fluid. Reading the fluid
             from the point requires some independent knowledge of the rock above the sand, from a well or
             from the regional geology.</span></details></li>
-        <li><b>What does a zero crossing contribute?</b> Where does the crossplot point sit when the step 3
+        <li><b>What does a zero crossing contribute?</b> Where does the crossplot point lie when the step 3
           cursor is halfway between the trough and the peak?
           <details class="reveal"><summary>Answer</summary><span class="ans">The point lies close to the origin
             of the crossplot. The sample is real data from inside the sand, yet both N and F&nbsp;&minus;&nbsp;N

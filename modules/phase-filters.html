@@ -28,7 +28,7 @@
     <p class="sub">Every sample now carries a quadrant number. That number selects which of eight
       phase-rotated copies of the near stack the sample's value is read from, and the same selection is
       applied to the far stack. The two traces that come out are the quadrant-enhanced pair everything
-      after this is built on. This is the step that looks like magic and is not.</p>
+      after this is built on. This is the step that looks complicated and is really pretty straightforward.</p>
   </div>
 
   <div class="labhead">
@@ -124,44 +124,16 @@
       <span class="hint">What a phase rotation does to a trace</span>
     </div>
 
-    <p class="lede">
-      A phase rotation of &theta; degrees takes a trace and returns
-      x&nbsp;cos&thinsp;&theta;&nbsp;+&nbsp;H(x)&nbsp;sin&thinsp;&theta;, where H is the Hilbert transform.
-      For a zero-phase trace that is the same as convolving the reflectivity with a rotated wavelet. The
-      amplitude spectrum is untouched and only the phase spectrum moves.</p>
+    <p class="lede">A phase rotation of &theta; degrees takes a trace x and returns x&nbsp;cos&thinsp;&theta;&nbsp;+&nbsp;H(x)&nbsp;sin&thinsp;&theta;, where H is the Hilbert transform. For a zero-phase trace that's the same as convolving the reflectivity with a rotated wavelet. The amplitude spectrum stays the same and only the phase moves.</p>
 
-    <p class="lede">
-      Here we rotate the whole trace at each angle, because that shows the concept cleanly. The published
-      workflow is not a Hilbert construction. It applies short phase-shift filters, about two cycles
-      long, with a scaling set for each sample, so the boundaries between loops are sharper than anything
-      this whole-trace version produces.</p>
+    <p class="lede">Here we rotate the whole trace at each angle because that shows the concept cleanly. The published workflow isn't a Hilbert construction. It uses short phase-shift filters, about two cycles long, with a scaling set for each sample, and so the boundaries between loops are sharper than anything this whole-trace version gives us.</p>
 
-    <p class="lede">
-      <b>This is a convolution, not a deconvolution.</b> Nothing is being sharpened, nothing is being
-      estimated, and no information is added or removed. Energy is moved around within each loop: a
-      rotation of &minus;90&deg; turns every zero crossing into an extremum and every extremum into a zero
-      crossing, and the intermediate angles do intermediate amounts of that. Seven filters are needed
-      because Q1 and Q9 both take the unrotated trace.</p>
+    <p class="lede"><b>This is a convolution, not a deconvolution.</b> Nothing is sharpened, nothing is estimated, and no information is added or removed. A rotation of &minus;90&deg; turns every zero crossing into an extremum and every extremum into a zero crossing, and the angles in between do part of that. We need seven filters because Q1 and Q9 both take the unrotated trace.</p>
 
-    <p class="lede">
-      What this step produces: a version of the trace in which every numbered sample has been shifted so that
-      it lies where an extremum would, which is what lets the two-layer reading of module 01 be applied at
-      samples that were not extrema to begin with.</p>
-
-    <p class="lede">
-      The addition can be seen here and does not have to be taken on trust. <b>H(x) is the quadrature trace</b>: the
-      near stack with every frequency component shifted back by a quarter cycle, which turns each peak into
-      a zero crossing and each zero crossing into a peak. A rotation is then nothing more than a weighted
-      sum of the trace and its own quadrature, with the weights cos&thinsp;&theta; and
-      sin&thinsp;&theta;. At 0&deg; the quadrature contributes nothing and we get the trace back; at
-      90&deg; the trace contributes nothing and we get the quadrature; in between we get a blend, and
-      because cos&sup2;&nbsp;+&nbsp;sin&sup2;&nbsp;=&nbsp;1 the blend keeps the energy constant.</p>
+    <p class="lede">We can see the addition here. <b>H(x) is the quadrature trace</b>: the near stack with every frequency shifted by a quarter cycle, so each peak becomes a zero crossing and each zero crossing becomes a peak. A rotation is a weighted sum of the trace and its quadrature, with weights cos&thinsp;&theta; and sin&thinsp;&theta;. At 0&deg; we get the trace back, at 90&deg; we get the quadrature, and in between a blend, which keeps the energy constant because cos&sup2;&nbsp;+&nbsp;sin&sup2;&nbsp;=&nbsp;1.</p>
 
     <canvas id="c1b" aria-label="The near stack, its quadrature trace, and the two weighted and summed to give the rotated trace"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The trace, its quadrature, and the sum. In the third
-      panel the two faint curves are the weighted parts and the heavy line is their sum; the dashed line
-      behind it is the rotation computed directly, which is the same thing. Drag the filter in the panel to
-      change &theta;.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The trace, its quadrature, and the sum. In the third panel the faint curves are the weighted parts and the heavy line is their sum, and the dashed line is the rotation computed directly. Drag the filter to change &theta;.</p>
 
     <div class="stats" style="margin:0 0 20px">
       <div class="stat"><span>Weight on the trace, cos&thinsp;&theta;</span><b id="s1f">&mdash;</b></div>
@@ -173,8 +145,7 @@
     <p class="sublabel"><b>2</b> The whole bank
       <span class="note">the same trace at all eight phases</span></p>
     <canvas id="c1a" aria-label="The near stack drawn eight times, once at each phase rotation"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The same trace at all eight phases, with the one selected in the panel drawn heavier. Watch a single event: the peak walks sideways and changes shape,
-      but the loop it belongs to stays where it is.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The same trace at all eight phases, with the selected one drawn heavier. For a single event the peak walks sideways and changes shape, but its loop stays where it is.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Filter highlighted</span><b id="s1a">&mdash;</b></div>
@@ -184,10 +155,7 @@
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>The energy readout does not move, because a phase rotation cannot change it. The peak amplitude
-        does move, and by a lot: a &minus;90&deg; rotation of a Ricker wavelet peaks at about 0.83 of the
-        unrotated one. That difference is not a nuisance to be tidied away - it is the whole subject
-        of step 4, and leaving it uncorrected is what makes the filter bank inconsistent.</span>
+      <span>The energy readout doesn't move, because a rotation can't change it. The peak amplitude does move, and by a lot: a &minus;90&deg; rotation of a Ricker wavelet peaks at about 0.83 of the unrotated one. That's what step 4 is about, since leaving it uncorrected makes the filter bank inconsistent.</span>
     </div>
   </section>
 
@@ -197,31 +165,12 @@
       <span class="hint">Quadrant enhancement, one integer at a time</span>
     </div>
 
-    <p class="lede">
-      Now put the two halves together. Each sample carries a quadrant number from module 03, and each
-      number names a phase. Q1 and Q9 take 0&deg;, Q2 through Q4 take +22.5&deg;, +45&deg; and +67.5&deg;, Q5
-      takes &minus;90&deg;, and Q6 through Q8 take &minus;67.5&deg;, &minus;45&deg; and &minus;22.5&deg; on the way back. Read
-      each sample from the filter its own number names, and write the result to a new trace. That trace is
-      <b>QN</b>. Doing the same to the far stack, using the numbers picked from the near stack and not
-      repicking, gives <b>QF</b>. In the published attribute list QN is the
-      <span class="g" data-g="near-optimized">near optimized</span> section and QF &minus; QN is the
-      <span class="g" data-g="far-near-optimized">far-near optimized</span> section, and both are
-      displayed in their own right when crossplot clusters are being defined (Neff and Neff,
-      unpublished).</p>
+    <p class="lede">Now we put the two halves together. Each sample carries a quadrant number from module 03, and each number names a phase. Q1 and Q9 take 0&deg;, Q2 through Q4 take +22.5&deg;, +45&deg; and +67.5&deg;, Q5 takes &minus;90&deg;, and Q6 through Q8 take &minus;67.5&deg;, &minus;45&deg; and &minus;22.5&deg; on the way back. Each sample is read from the filter its number names, and the result is a new trace, <b>QN</b>. Doing the same to the far stack with the numbers from the near stack, without repicking, gives <b>QF</b>. In the published attribute list QN is the <span class="g" data-g="near-optimized">near optimized</span> section and QF &minus; QN is the <span class="g" data-g="far-near-optimized">far-near optimized</span> section (Neff and Neff, unpublished).</p>
 
-    <p class="lede">
-      The interior count restarts after every extremum, so one table serves every half cycle: a limb
-      running from a peak down to a trough takes the same filters in the same order as one running from a
-      trough down to a peak. The angles are applied as published (Bedle et al., 2025a). Step 3 shows what
-      happens to the result if their signs are inverted.</p>
+    <p class="lede">The count restarts after every extremum, so one table serves every half cycle. A limb running peak to trough takes the same filters in the same order as one running trough to peak. We apply the angles as published (Bedle et al., 2025a), and step 3 shows what happens if their signs are inverted.</p>
 
     <canvas id="c2a" aria-label="One loop magnified, with each sample linked to the filtered trace it is read from"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">One loop, magnified. The gray curves are the eight
-      filtered traces; the colored dot on each sample marks which one that sample was read from, and the
-      heavy line is the result. The dot is not always on the outermost curve. Its quadrant number picks
-      the filter from where the sample lies in the loop, and the eight angles are 22.5&deg; apart, so at
-      some samples the copy that happens to be largest is the neighboring one. That spacing is the small
-      difference from the Hilbert envelope that step 3 measures.</p>
+    <p class="hint-line" style="margin:8px 0 18px">One loop, magnified. The gray curves are the eight filtered traces, the colored dot on each sample marks the one it was read from, and the heavy line is the result. The dot isn't always on the outermost curve, because the eight angles are 22.5&deg; apart and at some samples the largest copy is the neighbor. That spacing is the small difference from the envelope that step 3 measures.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Samples enhanced</span><b id="s2a">&mdash;</b></div>
@@ -230,13 +179,7 @@
       <div class="stat key"><span>Peak of QN</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>Notice that QN is no longer a seismic trace in the ordinary sense. Neighboring samples come
-        from different filters, so it is not the convolution of anything with a single wavelet, and its
-        wiggle no longer has a wavelet's shape. It is a trace of amplitudes read at consistent phase
-        positions, which is a different kind of object and is exactly what the DQ needs.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="p3" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
@@ -244,23 +187,10 @@
       <span class="hint">A smooth envelope as a yardstick</span>
     </div>
 
-    <p class="lede">
-      Reading each sample from the filter that centers it is very close to asking, at every sample, how big
-      the waveform would be if that sample were at the middle of an event. A smooth envelope answers a
-      similar question, so we use it here as a yardstick, not as the method. With whole-trace rotations
-      the enhanced trace lands within a couple of percent of it on the default model.</p>
-
-    <p class="lede">
-      That is expected for this version, since both ask a similar question and the enhancement is a coarse,
-      nine-bucket way of answering it. The published filters are short and applied sample by sample, so
-      they would depart from a smooth envelope, most visibly at the boundaries between loops. An
-      envelope is also a single trace, and the enhancement produces a matched pair, near and far, which
-      is what lets module 05 form a vector out of them. Step 4 applies the scaling to that pair.</p>
+    <p class="lede">Reading each sample from the filter that centers it is very close to asking how big the waveform would be if that sample were at the middle of an event. A smooth envelope asks something similar, so we use it as a yardstick and not as the method. With whole-trace rotations the enhanced trace lands within a couple of percent of it on the default model.</p>
 
     <canvas id="c3a" aria-label="The quadrant-enhanced trace drawn against the Hilbert envelope of the near stack"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The magnitude of the enhanced trace against the Hilbert
-      envelope of the same near stack. Tick the box in the panel to invert the tabulated angles, the other
-      sign convention for a phase rotation, and watch the agreement fall apart on both limbs.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The enhanced trace against the envelope of the same near stack. Tick the box in the panel to invert the tabulated angles, the other sign convention, and watch the agreement fall apart on both limbs.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat key"><span>Difference from the envelope</span><b id="s3a">&mdash;</b></div>
@@ -269,11 +199,7 @@
       <div class="stat"><span>Samples compared</span><b id="s3d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>Two sign conventions are in use for what a phase rotation means. With the published angles under the convention used here, the enhanced
-        trace follows the envelope closely; with the signs inverted it does not.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="p4" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
@@ -281,18 +207,10 @@
       <span class="hint">The one scaling step the method specifies, and what it does</span>
     </div>
 
-    <p class="lede">
-      Step 1 showed that a rotation preserves energy and does not preserve peak amplitude. Left alone that
-      would make the filter bank inconsistent: a sample read through the 90&deg; filter would come back
-      systematically smaller than one read through 0&deg;, for no reason to do with the rock. The method
-      corrects it in one line. <b>Each filter is normalized so that the peak amplitude of a three-layer
-      block model is 1.0</b>, and the papers add that power calculations must not be used for the
-      normalization, because what the scheme needs is histograms of peak and trough amplitudes.</p>
+    <p class="lede">Step 1 showed that a rotation preserves energy and not peak amplitude. Left alone, a sample read through the 90&deg; filter would come back systematically smaller than one read through 0&deg;, for no reason to do with the rock. The method corrects it in one line: <b>each filter is normalized so the peak amplitude of a three-layer block model is 1.0</b>. The papers add that power calculations must not be used, because the scheme needs histograms of peak and trough amplitudes.</p>
 
     <canvas id="c4a" aria-label="A three-layer block model filtered at each phase, with the peak of each filtered response marked"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The reference block model, filtered at each phase. The
-      mark on each is its peak amplitude, and the gain that brings that peak back to the unrotated one is
-      the balancing scalar.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The reference block model, filtered at each phase. The mark is the peak amplitude, and the gain that brings it back to the unrotated one is the balancing scalar.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Gain at 22.5&deg;</span><b id="s4a">&mdash;</b></div>
@@ -303,13 +221,7 @@
       <div class="stat wide"><span>Reading</span><b id="s4f">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>The gains are close to one: about 20% at 90&deg;, and under 4% for everything up to 45&deg;.
-        Applied across the trace they change it by roughly 5% of its own amplitude, because the large
-        correction only reaches the zero-crossing samples. That matters, because the step is sometimes described as the thing that stops the
-        DQ trace collapsing toward a Hilbert envelope, and on this model it cannot be: across one loop the
-        envelope varies by a factor of around twenty-five, and a 21% correction on one quadrant does not
-        undo that. Either the description points at something else, or the reference block model is not the
-        untuned one used here. The method tab sets out what is and is not established.</span>
+      <span>The gains are close to one: about 20% at 90&deg; and under 4% up to 45&deg;. Across the trace they change it by roughly 5%, because the big correction only reaches the zero-crossing samples. The step is sometimes described as what stops the DQ trace collapsing toward an envelope, and on this model it can't be, since the envelope varies by a factor of around twenty-five across one loop and a 21% correction on one quadrant doesn't undo that. Either the description points at something else, or the reference block model isn't the untuned one used here. The method tab sets out what is and isn't established.</span>
     </div>
   </section>
 
@@ -319,40 +231,19 @@
       <span class="hint">The idea underneath the machinery</span>
     </div>
 
-    <p class="lede">Conventional AVO reads amplitudes at picked events, which module 01 counted at two
-      samples per waveform cycle. The reason it cannot read the samples in between is not that they are
-      unimportant - it is that their amplitude depends on where in the wavelet they sit as much as on
-      the rock. A sample halfway down a limb is small because it is halfway down a limb, and comparing it
-      with a peak somewhere else is comparing two different questions.</p>
+    <p class="lede">Conventional AVO reads amplitudes at picked events, two samples per cycle in module 01. It can't read the samples in between because their amplitude depends on where they lie in the wavelet as much as on the rock. A sample halfway down a limb is small because it's halfway down a limb, and comparing it with a peak somewhere else is comparing two different questions.</p>
 
-    <p class="lede">Quadrant enhancement removes that dependence. Rotating the trace so that a given sample
-      lies at the center of an event, and reading it there, gives a number that means the same thing at
-      every sample. Two samples with the same quadrant number have been treated identically, so their
-      values can be compared. That is what turns two interpretable samples per cycle into all of them, and
-      it is the central trick of the method.</p>
+    <p class="lede">Quadrant enhancement removes that dependence. We rotate the trace so a given sample lies at the center of an event and read it there, and the number means the same thing at every sample. Two samples with the same quadrant number have been treated identically, so we can compare them. That's what takes us from two interpretable samples per cycle to all of them.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       Why it is not deconvolution</h2>
-    <p class="lede">Deconvolution estimates a wavelet and tries to remove it, which means estimating
-      something that was never recorded and can be wrong. Phase rotation estimates nothing. It is a fixed
-      linear filter with a known, exact response, applied seven times. If the input is relative-amplitude
-      preserved then so is every output, and the whole step is reversible. What changes is that the wavelet is
-      still there afterwards - the method does not sharpen anything - and the benefit is that
-      nothing can be introduced that was not in the data.</p>
-
-    <div class="legend prose">
-      <span>The seven filters are applied to N and to F, giving sixteen traces across eight phases, and
-        carrying F&nbsp;&minus;&nbsp;N as well brings the total to twenty-four. That is the working set the
-        rest of the method draws from, and it helps to see how ordinary it is: a bandpass-safe filter
-        bank, applied once, with an integer per sample deciding which output to keep.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
       <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
-        <li><b>Watch the two weights trade off.</b> On step 1, step the highlighted filter through all
+        <li><b>Watching the two weights trade off.</b> On step 1, we step the highlighted filter through all
           eight and read cos&thinsp;&theta;, sin&thinsp;&theta; and their squares.
           <details class="reveal"><summary>Answer</summary><span class="ans">At 0&deg; the weights are 1 and
             0, so the output is the trace untouched. At &minus;90&deg; they are 0 and &minus;1, so the
@@ -362,7 +253,7 @@
             components are orthogonal, so Pythagoras applies to them just as it does to the intercept and
             gradient in module 05. And the sum always matches the rotation computed directly, to machine
             precision, because they are the same operation written two ways.</span></details></li>
-        <li><b>Check that a rotation conserves energy.</b> On step 1, step the highlighted filter through
+        <li><b>Checking that a rotation conserves energy.</b> On step 1, we step the highlighted filter through
           all eight and watch the energy readout and the peak amplitude.
           <details class="reveal"><summary>Answer</summary><span class="ans">The energy does not change at
             all, because a phase rotation multiplies the spectrum by a unit-magnitude complex number and
@@ -370,7 +261,7 @@
             of a Ricker peaks at 0.83 of the unrotated one. Energy and peak amplitude are different
             questions and this step separates them cleanly, which is the whole reason step 4 has something to
             do.</span></details></li>
-        <li><b>Find the filter with the smallest peak.</b> Read the relative peak for each of the eight.
+        <li><b>Finding the filter with the smallest peak.</b> We read the relative peak for each of the eight.
           <details class="reveal"><summary>Answer</summary><span class="ans">90&deg;, at 0.827 of the
             unrotated peak. The sequence is 1.000, 0.988, 0.954, 0.899, 0.827 as the rotation goes from
             0&deg; to 90&deg; in steps of 22.5&deg;, and back up symmetrically. Those five numbers are the
@@ -378,30 +269,29 @@
             makes the filters comparable. The spread is about 21%, which does not sound like much
             until we remember it is applied systematically by quadrant number and therefore correlates
             with waveform position and does not average out.</span></details></li>
-        <li><b>Compare QN with the near stack.</b> On step 2, read the two peak amplitudes.
+        <li><b>Comparing QN with the near stack.</b> On step 2, we read the two peak amplitudes.
           <details class="reveal"><summary>Answer</summary><span class="ans">QN's peak is the same as the near stack's, a ratio of 1.00 on the default model.
             Every extremum comes through untouched, because a Q1 or Q9 sample takes the 0&deg; filter, so the
             enhancement never lowers anything. What it does is lift the interior of every loop toward what that
             loop's extremum would be, so the enhanced trace lies on or above the original everywhere and
             touches it at the extrema. That is the behavior of an envelope, and of this whole-trace version.</span></details></li>
-        <li><b>Measure how close to an envelope it is.</b> On step 3, read the difference and the
+        <li><b>Measuring how close to an envelope it is.</b> On step 3, we read the difference and the
           correlation.
           <details class="reveal"><summary>Answer</summary><span class="ans">On the default model, 1.5% of
             the peak envelope, at a correlation of 0.999. The residual is not error - it is the
             coarseness of the scheme. Nine numbers across a half cycle means each covers 22.5&deg;, and a
             sample is assigned one by counting samples and not by measuring its phase, so it is
-            centered only to within about ten degrees. Switch the overburden to hard shale or
-            tight sandstone and the gap stays at 1.5%. Either way this version is an envelope with a rounding
+            centered only to within about ten degrees. With hard shale or tight sandstone overburden the gap stays at 1.5%. Either way this version is an envelope with a rounding
             error on it, and an envelope has thrown away the polarity and the amplitude contrast the whole
             method exists to measure. The published short filters give sharper loop boundaries than this,
             so the closeness to an envelope belongs to the teaching version.</span></details></li>
-        <li><b>Break it on purpose.</b> Tick the invert box in the panel and read step 3 again.
+        <li><b>Breaking it on purpose.</b> We tick the invert box in the panel and read step 3 again.
           <details class="reveal"><summary>Answer</summary><span class="ans">The difference goes from 1.5%
             to 31.7% and the correlation from 0.999 to 0.67. Two sign conventions are in use for what "rotate by
             theta" means; they differ by conjugating the analytic trace. The published angles are written for
             one of them, and inverting the signs is equivalent to using the other. With the other convention the
             enhanced trace no longer follows the envelope.</span></details></li>
-        <li><b>Add noise and see how little the agreement cares.</b> Step the noise from zero to 30% on
+        <li><b>Adding noise and seeing how little the agreement cares.</b> We step the noise from zero to 30% on
           step 3.
           <details class="reveal"><summary>Answer</summary><span class="ans">The difference barely moves,
             from 1.5% to about 2%, and the correlation stays at 0.999. That sounds reassuring and is not.

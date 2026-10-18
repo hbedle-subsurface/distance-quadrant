@@ -127,33 +127,14 @@
       <span class="hint">What survives when the waveform is thrown away</span>
     </div>
 
-    <p class="lede">
-      What this step produces: a short list of samples that mark real acoustic boundaries, so that later
-      modules can attach a number to every sample by counting from the nearest boundary and not by
-      measuring the waveform again.</p>
+    <p class="lede">What we want out of this step is a short list of samples that mark real acoustic boundaries, so that later modules can number every sample by counting from the nearest boundary and not by measuring the waveform again.</p>
 
-    <p class="lede">
-      The StickOgram is also used on its own. Reduced to picks, a seismic volume becomes a set of layer
-      boundaries and not a set of wiggles, which makes it easier to map horizons, follow faults and
-      outline geo-bodies, and much lighter to feed to a machine learning program. Timeslices through it at
-      ten or twenty millisecond spacing give a first time-structure map before anyone has picked a
-      horizon.</p>
+    <p class="lede">The StickOgram is the center of every peak, the center of every trough, and every zero crossing on the near stack. That's all. The amplitudes between the picks and the wavelet shape are set aside, and what's left is a skeleton of where the acoustic layers begin and end.</p>
 
-    <p class="lede">
-      The StickOgram is the center of every peak, the center of every trough, and every zero crossing
-      found on the near stack. Nothing else. The amplitudes between those picks are set aside, the wavelet
-      shape is set aside, and what is left is a skeleton of where the acoustic layers begin and end.</p>
-
-    <p class="lede">
-      Only the near stack is picked. The far stack is noisier and its extrema sit at slightly different
-      times, and what follows depends on one set of picks being applied to both traces, so
-      that a quadrant number means the same thing on N as it does on F. Picking each trace separately would
-      break that before it started.</p>
+    <p class="lede">We pick only the near stack. The far stack is noisier and its extrema lie at slightly different times, and the same picks have to be applied to both traces so that a quadrant number means the same thing on N as it does on F.</p>
 
     <canvas id="c1a" aria-label="The near-stack trace with zero crossings, peak centers and trough centers marked"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Time runs down the page. Red dots are peak centers, blue
-      dots are trough centers, and the open circles are zero crossings. The gray dots are every other
-      sample on the trace, all of which the StickOgram discards.</p>
+    <p class="hint-line" style="margin:8px 0 18px">Time runs down the page. Red dots are peak centers, blue dots are trough centers, and open circles are zero crossings. The gray dots are every other sample, and the StickOgram discards all of them.</p>
 
     <p class="sublabel"><b>2</b> The same trace as a StickOgram
       <span class="note">the picks alone, with the waveform removed</span></p>
@@ -167,13 +148,7 @@
       <div class="stat"><span>Peaks and troughs inside the sand</span><b id="s1f">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>Module 01 counted the samples conventional AVO can interpret and found two per waveform cycle.
-        The StickOgram keeps four: a peak, a trough and the two crossings between them. That is not yet
-        the every-sample method the course is heading for, but it is the frame the quadrant numbers are
-        hung on, and everything after this is about filling in the gaps between these picks.</span>
-    </div>
-  </section>
+    </section>
 
   <!-- ================================ STEP 2 ================================ -->
   <section class="tabpane" id="p2" role="tabpanel" hidden>
@@ -182,30 +157,14 @@
       <span class="hint">A rule that only exists because the data is sampled</span>
     </div>
 
-    <p class="lede">
-      A zero crossing is a time, and almost never a sample. The trace goes from positive at one sample to
-      negative at the next, and the crossing is somewhere in between. The method needs a sample, because
-      every quadrant number afterwards is written to a sample, so it has to choose one of the two.</p>
+    <p class="lede">A zero crossing is a time, and almost never a sample. The trace goes positive at one sample and negative at the next, and the crossing is somewhere in between. Every quadrant number is written to a sample, so we have to choose one of the two.</p>
 
-    <p class="lede">
-      The rule is: <b>of the two samples either side of a zero crossing, take the one with the smaller
-      absolute amplitude</b>. That is the sample closer to zero, so it is the closer of the two to the
-      crossing itself. In the quadrant scheme of module 03 this sample is called Q5, and it is the anchor
-      the rest of the numbering counts away from.</p>
+    <p class="lede">The rule is: <b>of the two samples either side of a zero crossing, take the one with the smaller absolute amplitude</b>. That sample is closer to zero, and so closer to the crossing itself. In the quadrant scheme of module 03 it's called Q5, the anchor the rest of the numbering counts away from.</p>
 
     <canvas id="c2a" aria-label="A zoomed view of one zero crossing showing the two candidate samples and which one is chosen"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">One crossing, magnified, with time running down as
-      usual. The two candidates are drawn hollow, the chosen one is filled, and the true crossing is the dashed line. Drag the sample rate in
-      the panel and watch the chosen sample move further from the truth.</p>
+    <p class="hint-line" style="margin:8px 0 18px">One crossing, magnified. The two candidates are hollow, the chosen one is filled, and the dashed line is the true crossing. Drag the sample rate and watch the chosen sample move away from the truth.</p>
 
-    <p class="lede">
-      The second rule follows from the first. <b>Between each pair of consecutive crossings, take the
-      single largest peak or trough</b>. Usually there is only one and the rule does nothing. When
-      interference puts two extrema inside a single loop - a doublet - only the larger is kept
-      and the smaller is discarded along with the rest of the waveform. A thin bed will do it, and so will
-      a thick sand under a long wavelet, where the top and base loops overlap enough to leave a shoulder.
-      The counter below reports only the extrema discarded between the top and base of the sand, so that it
-      is about the sand not about whatever the beds above and below happen to be doing.</p>
+    <p class="lede">The second rule follows from the first. <b>Between each pair of consecutive crossings, take the single largest peak or trough</b>. Usually there's only one and the rule does nothing. When interference puts two extrema inside one loop - a doublet - only the larger is kept. A thin bed will do it, and so will a thick sand under a long wavelet. The counter below only counts extrema discarded between the top and base of the sand.</p>
 
     <canvas id="c2b" aria-label="The trace with a doublet, showing which of the two extrema between a pair of crossings is kept"></canvas>
 
@@ -216,14 +175,7 @@
       <div class="stat"><span>Extrema discarded inside the sand</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>This is why the papers specify a 1 ms sample rate and sync interpolation up to it before
-        anything else runs. The rule is the best available choice between two samples, and the way to make
-        it a good choice is to put the samples close together. At 4 ms the chosen crossing can sit two
-        milliseconds from the truth, and every quadrant number counted away from it inherits that
-        error.</span>
-    </div>
-  </section>
+    </section>
 
   <!-- ================================ STEP 3 ================================ -->
   <section class="tabpane" id="p3" role="tabpanel" hidden>
@@ -232,14 +184,10 @@
       <span class="hint">What the picks look like when there are hundreds of traces</span>
     </div>
 
-    <p class="lede">
-      One trace of picks does not show much on its own. A line of them is. Here is the same model run
-      across seventy traces, with the sand thinning to the right and a normal fault partway along, drawn
-      first as ordinary amplitudes and then as the StickOgram.</p>
+    <p class="lede">One trace of picks doesn't show much, but a line of them does. Here's the same model across seventy traces, with the sand thinning to the right and a normal fault partway along, first as ordinary amplitudes and then as the StickOgram.</p>
 
     <canvas id="c3a" aria-label="A seismic section drawn as amplitudes, and the same section drawn as a StickOgram"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Left, the near-stack amplitudes. Right, the picks alone.
-      Peaks and zero crossings that go from trough to peak are pink, troughs and crossings that go from peak to trough are blue, so a fault offset shows in both. Drag the fault throw and the noise in the panel.</p>
+    <p class="hint-line" style="margin:8px 0 18px">On the left are the near-stack amplitudes and on the right the picks alone. Peaks and crossings that go trough to peak are pink, and the ones that go peak to trough are blue, so a fault offset shows in both. Drag the fault throw and the noise in the panel.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Traces in the section</span><b id="s3a">&mdash;</b></div>
@@ -248,14 +196,7 @@
       <div class="stat"><span>Fraction of samples kept</span><b id="s3d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>The fault reads as a break in the sticks and not as a change of amplitude, which is why the
-        display is used for structural work and for feeding machine learning: the events are already
-        separated from the wavelet and from each other, and there is far less of it to carry. The AASPI
-        pamphlet suggests slicing the same volume at ten or twenty millisecond intervals as a quick first
-        pass at a time structure map.</span>
-    </div>
-  </section>
+    </section>
 
   <!-- ============================ WHY IT MATTERS ============================ -->
   <section class="tabpane" id="pw" role="tabpanel" hidden>
@@ -263,10 +204,6 @@
       <h3><span class="stepno">?</span>What the picks are for</h3>
       <span class="hint">Two different jobs, one set of picks</span>
     </div>
-
-    <p class="lede">The StickOgram has a life of its own as a display, and it is also the scaffolding for
-      everything else in the method. Keeping those separate helps, because they explain why so much
-      care goes into a rule about which of two samples to take.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       As a display in its own right</h2>
@@ -278,27 +215,17 @@
       <li><b>Faults as breaks and not as dimming.</b> A fault interrupts the sticks. On an amplitude
         section the same fault is a subtle change in a continuous field, and the eye has to do the
         work.</li>
-      <li><b>A much smaller volume to hand a machine.</b> Four numbers a cycle instead of forty. Feeding
+      <li><b>A much smaller volume for a classifier.</b> Four numbers a cycle and not forty. Feeding
         picks and not samples to a classifier removes the wavelet from the input, which is otherwise
         the loudest thing in it.</li>
     </ul>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       As the frame for everything after it</h2>
-    <p class="lede">Module 03 numbers the samples between the picks from one to nine. Module 08 measures the
-      time between them and calls it the isochron. Module 04 replaces the amplitude at each numbered sample
-      with the output of a phase filter chosen by that number. Every one of those steps counts outward from
-      a crossing or a peak, so a pick in the wrong place does not degrade the answer gracefully. It
-      renumbers everything downstream of it.</p>
-
-    <p class="lede">The rule is spelled out carefully for that reason, and it is why the papers ask for 1 ms data before any of it runs. The choice between two samples is small. What
-      hangs off it is not.</p>
+    <p class="lede">Module 03 numbers the samples between the picks from one to nine, module 08 measures the time between them (the isochron), and module 04 swaps the amplitude at each numbered sample for the output of a phase filter chosen by that number. Every one of those steps counts outward from a crossing or a peak, and so a pick in the wrong place renumbers everything downstream of it.</p>
 
     <div class="legend prose">
-      <span>The picks are made on the near stack and then applied unchanged to the far stack and to the
-        difference between them. Nothing is picked twice. This is what keeps a quadrant number meaning the
-        same thing on all three traces, and it is the reason module 01 spent so long on whether the near
-        stack can be trusted.</span>
+      <span>The picks are made on the near stack and then applied unchanged to the far stack and to the difference. Nothing is picked twice, and that keeps a quadrant number meaning the same thing on all three traces.</span>
     </div>
   </section>
 
@@ -307,7 +234,7 @@
     <div class="tryit" style="max-width:none">
       <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
-        <li><b>Count what survives.</b> On step 1, with the default model, compare the number of samples on
+        <li><b>Counting what survives.</b> On step 1, with the default model, we compare the number of samples on
           the trace with the number of picks.
           <details class="reveal"><summary>Answer</summary><span class="ans">About 94% of the trace
             is discarded: nine picks out of 151 samples, whichever rock and fluid are chosen. Where there is an event the picks come at four per
@@ -317,7 +244,7 @@
             is not yet an improvement in how much of the trace is usable. It is the same information,
             reorganized into a frame. The gain comes in module 04, when every sample between the picks is
             given a value.</span></details></li>
-        <li><b>Coarsen the sampling and watch the crossings drift.</b> On step 2, step the sample rate from
+        <li><b>Coarsening the sampling and watching the crossings drift.</b> On step 2, we step the sample rate from
           1 ms to 4 ms, reading the worst crossing error each time.
           <details class="reveal"><summary>Answer</summary><span class="ans">The error is bounded by half the
             sample interval, because the rule always takes the nearer of the two samples to zero. At 1 ms
@@ -325,7 +252,7 @@
             most of a tenth of a cycle. Everything after this counts samples away from that crossing, so the
             error does not stay where it started - it shifts the quadrant numbering of the whole
             loop.</span></details></li>
-        <li><b>Make a doublet.</b> With the default model - 30 ms of sand at 40 Hz - switch the
+        <li><b>Making a doublet.</b> With the default model - 30 ms of sand at 40 Hz - we switch the
           tight streak on and off on step 2, watching the counter and the dashed circles.
           <details class="reveal"><summary>Answer</summary><span class="ans">Zero discarded extrema without
             the streak, two with it. The thin tight sandstone streak puts a second extremum inside a loop that
@@ -334,15 +261,15 @@
             scheme in module 03 needs exactly one extremum between each pair of crossings, and a rule that
             sometimes returned two would have nothing to number. Doublets are an interference effect, and a thin bed inside the sand is one way to
             get one.</span></details></li>
-        <li><b>Thin the sand until it holds no picks at all.</b> On step 1, drag the thickness down from
+        <li><b>Thinning the sand until it holds no picks at all.</b> On step 1, we drag the thickness down from
           30 ms, watching the count of peaks and troughs inside the sand.
           <details class="reveal"><summary>Answer</summary><span class="ans">At 8 ms and below it reaches
-            zero. The top and base have merged into one event, and the center of that event does not sit
+            zero. The top and base have merged into one event, and the center of that event does not lie
             between the top and the base - it lies above the sand entirely. So the picks record that
             something is there while saying nothing whatever about its interior, and no attribute computed
             from them can do better. Module 11 comes back to this: the DQ responds to bed
             thickness where Theta PX does not, and this is where the sensitivity starts.</span></details></li>
-        <li><b>Add noise and watch the picks multiply.</b> On step 1, raise the noise from zero to 40% a few
+        <li><b>Adding noise and watching the picks multiply.</b> On step 1, we raise the noise from zero to 40% a few
           percent at a time, watching the pick count.
           <details class="reveal"><summary>Answer</summary><span class="ans">It climbs. With the
             default model it goes 9 with no noise, 19 at 5%, and 25 from 10% on. Noise invents extrema and
@@ -350,7 +277,7 @@
             a crossing by several samples or merge it with its neighbor, which changes the numbering of the whole loop. This is
             why module 01 cared so much about the near stack being clean, and why the papers say to bandpass
             filter for signal to noise and not for bandwidth.</span></details></li>
-        <li><b>Find the fault on the wrong display.</b> On step 3, set the noise to 25% and try to locate
+        <li><b>Finding the fault on the wrong display.</b> On step 3, we set the noise to 25% and try to locate
           the fault on the amplitude section, then on the sticks.
           <details class="reveal"><summary>Answer</summary><span class="ans">On the amplitudes the fault is a
             subtle lateral shift inside a continuous field, and the noise lies on top of it. On the sticks
@@ -378,8 +305,7 @@
           for 1 ms data, sync interpolated if necessary, before any of this runs.</li>
         <li><b>The picks are made once and applied to all three traces</b>, near, far and their difference,
           so that a quadrant number means the same thing on each.</li>
-        <li><b>As a display it shows structure and faults directly</b>, because a fault breaks the sticks
-          instead of subtly changing a continuous amplitude field.</li>
+        <li><b>As a display it shows structure and faults directly</b>, because a fault breaks the sticks, where it would only subtly change a continuous amplitude field.</li>
         <li><b>A pick in the wrong place is not a small error.</b> Everything downstream counts samples away
           from these picks, so a misplaced crossing renumbers a whole loop.</li>
       </ul>
@@ -422,8 +348,7 @@
         trace is modeled directly at that rate and not decimated, which flatters the coarse cases
         slightly, since real decimation would alias as well.</p>
       <p>What this module leaves out is the polarity convention. For AVO classes 4, 3 and 2 the trough is
-        Q1 and the peak is Q9. For class 1 sands and carbonate plays the polarity of both partial stacks is
-        reversed at the stacking step instead, so that the numbering scheme never has to change. Module 03
+        Q1 and the peak is Q9. For class 1 sands and carbonate plays the polarity of both partial stacks is reversed at the stacking step, so that the numbering scheme never has to change. Module 03
         takes that up.</p>
       <ul>
         <li>Shuey, R. T., 1985, A simplification of the Zoeppritz equations: <em>Geophysics</em>, 50,

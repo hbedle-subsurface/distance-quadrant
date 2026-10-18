@@ -116,16 +116,10 @@
       <span class="hint">Four sectors, one range</span>
     </div>
 
-    <p class="lede">
-      Take the coordinates module 06 produced and measure the bearing of each sample from the origin. That
-      bearing runs from 0 to 360&deg;, and the four sectors of the plot carry overlapping information: a
-      direction and its opposite describe the same contrast seen from opposite ends. So the bearing is
-      folded into <b>0 to 90&deg;</b>, by a rule that depends on which sector the sample is in.</p>
+    <p class="lede">We take the coordinates from module 06 and measure the bearing of each sample from the origin. It runs 0 to 360&deg;, and the four sectors carry overlapping information, since a direction and its opposite describe the same contrast from opposite ends. So we fold the bearing into <b>0 to 90&deg;</b>, using a rule that depends on the sector.</p>
 
     <canvas id="c1a" aria-label="The four sectors of the crossplot with the fold rule shown for each"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Each sector folds onto the same quarter. A point at
-      170&deg; and a point at 10&deg; both come out at 10&deg;; the fold has thrown away which sector they
-      were in, and step 2 puts back the part of that which mattered.</p>
+    <p class="hint-line" style="margin:8px 0 18px">Each sector folds onto the same quarter. A point at 170&deg; and a point at 10&deg; both come out at 10&deg;, so the fold has thrown away which sector they were in, and step 2 puts back the part of that which mattered.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Bearing at the sand top</span><b id="s1a">&mdash;</b></div>
@@ -135,10 +129,7 @@
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>The fold is a measurement of how far the sample lies from the background trend in direction
-        and not in distance. Zero means the sample lies along the rotated baseline - the
-        background itself. Ninety means it lies at right angles to it, which is as far from ordinary as the
-        angle can report.</span>
+      <span>The fold measures how far the sample lies from the background trend in direction and not in distance. Zero means it lies along the rotated baseline, the background itself, and ninety means it lies at right angles to it, as far from ordinary as the angle can report.</span>
     </div>
   </section>
 
@@ -148,22 +139,10 @@
       <span class="hint">Which side of the background the sample lies on</span>
     </div>
 
-    <p class="lede">
-      The folded angle is a magnitude between 0 and 90&deg; and cannot say which way the departure runs.
-      The sign of the DQ trace supplies that: whatever polarity module 05 gave the distance at a sample,
-      &theta;<sub>px</sub> at that sample takes the same one. The result runs from &minus;90 to
-      +90&deg;, and the two halves are read differently.</p>
-
-    <p class="lede">
-      This is also why the two attributes are designed to be displayed together. They share a sign
-      convention, so a positive DQ section and a positive &theta;<sub>px</sub> section are picking out the
-      same samples. The published displays call them twin sisters and color them so that the positive side
-      is the bold one, because on a soft-sand play that is where the sands are.</p>
+    <p class="lede">The folded angle is a magnitude from 0 to 90&deg;, and it can't say which way the departure runs. The sign of the DQ trace supplies that: whatever polarity module 05 gave the distance at a sample, &theta;<sub>px</sub> takes the same one. So the result runs &minus;90 to +90&deg;, and the two halves are read differently.</p>
 
     <canvas id="c2a" aria-label="Theta px down the trace, with and without the sign applied"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The folded angle down the trace, unsigned on the left
-      and signed on the right, with the near stack for reference. Untick the box in the panel to freeze the
-      right-hand panel unsigned.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The folded angle down the trace, unsigned on the left and signed on the right, with the near stack for reference. Untick the box to freeze the right-hand panel unsigned.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Samples with an angle</span><b id="s2a">&mdash;</b></div>
@@ -173,10 +152,7 @@
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>Note that the sign is not measured from the angle. It comes from the slope of the near stack,
-        the same rule module 05 used for the distance and module 08 used for the half isochron. Three
-        attributes, one sign convention, so that any two of them can be crossplotted without one of them
-        being upside down.</span>
+      <span>The sign isn't measured from the angle. It comes from the slope of the near stack, the same rule module 05 used for the distance and module 08 for the half isochron. Three attributes share one sign convention, and so any two can be crossplotted without one being upside down.</span>
     </div>
   </section>
 
@@ -186,29 +162,14 @@
       <span class="hint">And where it stops being trustworthy</span>
     </div>
 
-    <p class="lede">
-      An angle earns a place only if it says something the distance does not. Here is the test: the
-      sand top at a fixed porosity, filled with brine, oil and gas in turn, read both ways.</p>
+    <p class="lede">The angle is only useful if it says something the distance doesn't. So here's the test: the sand top at a fixed porosity, filled with brine, oil and gas in turn, read both ways.</p>
 
-    <p class="lede">
-      At 20% porosity under soft shale the angle separates the three fluids cleanly - <b>+6&deg; for
-      brine, +15&deg; for oil, +23&deg; for gas</b> - while the distance moves the wrong way, falling
-      from 0.147 to 0.103 as the sand is charged. A reader with only the distance would call the gas sand
-      the weaker anomaly. Under tight sandstone the position reverses: the angles crowd into a few degrees and
-      say almost nothing, while the distance separates the fluids well.</p>
+    <p class="lede">At 20% porosity under soft shale the angle separates the three fluids cleanly - <b>+6&deg; for brine, +15&deg; for oil, +23&deg; for gas</b> - while the distance moves the wrong way, falling from 0.147 to 0.103 as the sand is charged. With only the distance, we'd call the gas sand the weaker anomaly. Under tight sandstone it reverses: the angles crowd into a few degrees and say almost nothing, while the distance separates the fluids well.</p>
 
-    <p class="lede">
-      <b>These angles belong to this rock model.</b> Different rock models give different results. The
-      published Class 3 example has wet sand at 50 to 70&deg; and gas sand at 20 to 40&deg;, the opposite
-      ordering from the one above, and its Class 4 and Class 2 sands sit near +18&deg; and &minus;18&deg;.
-      The velocities, densities, compaction and overburden all move the angle. What carries over from one
-      model to another is the question the angle answers, which is how far a sample's direction departs
-      from the background trend. The numbers themselves do not carry over.</p>
+    <p class="lede"><b>These angles belong to this rock model.</b> Different rock models give different results. The published Class 3 example has wet sand at 50 to 70&deg; and gas sand at 20 to 40&deg;, the opposite ordering, and its Class 4 and Class 2 sands lie near +18&deg; and &minus;18&deg;. Velocities, densities, compaction and overburden all move the angle. What carries over is the question the angle answers, which is how far a sample's direction departs from the background trend, and the numbers themselves don't carry over.</p>
 
     <canvas id="c3a" aria-label="Theta px and DQ for the three fluids across porosity"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Both attributes at the sand top, across the porosity
-      range, for the three fluids under the overburden we have selected. Switch the overburden and watch
-      which of the two panels does the separating.</p>
+    <p class="hint-line" style="margin:8px 0 18px">Both attributes at the sand top across the porosity range, for the three fluids under the overburden we've selected. Change the overburden and see which panel does the separating.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>&theta;<sub>px</sub>, brine / oil / gas</span><b id="s3a">&mdash;</b></div>
@@ -218,95 +179,64 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>The failure mode carries as much information as the success. A short vector has a badly determined
-        direction - module 06 made the same point about the Q5 samples nearest the origin - so
-        wherever the distance is small the angle is unstable. Near a class 2 crossover, where the intercept
-        passes through zero, the distance can fall to a few thousandths and the angle swings wildly. Read
-        the two together or not at all.</span>
+      <span>The failure is as informative as the success. A short vector has a badly determined direction, as module 06 found for the Q5 samples nearest the origin, so wherever the distance is small the angle is unstable. Near a class 2 crossover the intercept passes through zero, the distance can fall to a few thousandths, and the angle swings wildly. So the two are read together.</span>
     </div>
   </section>
 
   <section class="tabpane" id="pw" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
-      <h3><span class="stepno">?</span>Two numbers instead of one</h3>
-      <span class="hint">Why the method does not settle for the distance</span>
+      <h3><span class="stepno">?</span>Two numbers and not one</h3>
+      <span class="hint">Why the method does not stop at the distance</span>
     </div>
 
-    <p class="lede">The DQ attributes pamphlet calls &theta;<sub>px</sub> a <b>crossplot cluster
-      mapping attribute</b>, which names its job precisely. Rock types that sit in different places on the
-      crossplot take different angles, so a section or map colored by the angle shows where each cluster
-      lies in space. That is a different question from how strong the response is, which is what the
-      distance answers.</p>
-
-    <p class="lede">Module 05 made the point in the abstract: rolling a two-component vector into a length
-      throws away the ratio of its components, and two very different pairs can share a distance. This
-      module is that point made concrete. The distance answers "how big" and the angle answers "which
-      way", and on this model each of them fails somewhere the other works.</p>
-
-    <p class="lede">Which is the more useful depends on the overburden, which is not something we get to
-      choose. Under a soft shale the fluid effect shows up mostly as a change of direction; under tight sandstone
-      it shows up mostly as a change of length. A workflow that computed only one of them would work in
-      one setting and quietly under-perform in the other, and nothing in the output would say which situation produced it.</p>
+    <p class="lede">Which is more useful depends on the overburden, and we don't get to choose that. Under a soft shale the fluid effect shows up mostly as a change of direction, and under tight sandstone mostly as a change of length. A workflow that computed only one would work in one setting and quietly under-perform in the other, and nothing in the output would say which.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       Reading a &theta;<sub>px</sub> section</h2>
-    <p class="lede">The published displays use a two-sided color bar from &minus;90 to +90 in ten degree
-      steps, with the boundaries kept sharp and not smoothly graded, so that a feature confined to one
-      ten-degree band stays visible. The positive side is colored boldly and the negative side held back,
-      for the same reason as on a DQ section: on a soft-sand play the sands are the positive samples. The
-      two sections are meant to be read as a pair, and the papers describe a flat spot as something that
-      appears on the angle section where the distance section shows nothing in particular.</p>
-
-    <div class="legend prose">
-      <span>Module 10 adds the third axis. The signed half isochron of module 08 has been carried along
-        unused since then, and the three together - distance, angle and time thickness - are
-        what the RDQ crossplot actually plots.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
       <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
-        <li><b>Watch the fluids separate in angle.</b> On step 3, with soft shale at 20% porosity, read the
+        <li><b>Watching the fluids separate in angle.</b> On step 3, with soft shale at 20% porosity, we read the
           three angles and the three distances.
           <details class="reveal"><summary>Answer</summary><span class="ans">The angle gives +6&deg;,
             +15&deg; and +23&deg; for brine, oil and gas: clean, monotonic, and in the direction we would
             want. The distance gives 0.147, 0.123 and 0.103 - it falls as the sand is charged, so on
-            distance alone the gas sand looks like the weakest anomaly of the three. That is not an error
-            in the distance; it is what happens when a charged sand's intercept moves toward the origin
+            distance alone the gas sand looks like the weakest anomaly of the three. The distance is behaving correctly here: it is what happens when a charged sand's intercept moves toward the origin
             while its direction swings away from the background. One number cannot carry both
             facts.</span></details></li>
-        <li><b>Now switch the overburden to tight sandstone.</b> Read the same six numbers.
+        <li><b>Switching the overburden to tight sandstone.</b> We read the same six numbers.
           <details class="reveal"><summary>Answer</summary><span class="ans">The two attributes swap roles.
             The angles crowd into a few degrees and barely separate the fluids at all, while the distance
             spreads them cleanly. So neither attribute is the useful one in general - which one
             works depends on what the reservoir is sitting under, and that is not something an interpreter
             chooses. This is the concrete version of module 05's argument for computing both.</span></details></li>
-        <li><b>Find where the angle becomes unreliable.</b> Set soft shale with oil and drag the porosity
+        <li><b>Finding where the angle becomes unreliable.</b> We set soft shale with oil and drag the porosity
           up to about 28%, watching the distance and the angle together.
           <details class="reveal"><summary>Answer</summary><span class="ans">The distance falls to about 0.04,
             well below its value at neighboring porosities, and the angle swings to a large value that means nothing. That is a class 2
             crossover: the intercept passes through zero, the vector is almost at the origin, and the
             direction of a point at the origin is undefined. Module 06 made the same observation about the
-            Q5 samples, which sit nearest the origin and have the least trustworthy angles. The practical
+            Q5 samples, which lie nearest the origin and have the least trustworthy angles. The practical
             rule is the same in both cases: an angle is only as good as the distance it belongs
             to.</span></details></li>
-        <li><b>Take the sign off.</b> Untick the box in the panel and look at step 2.
+        <li><b>Taking the sign off.</b> We untick the box in the panel and look at step 2.
           <details class="reveal"><summary>Answer</summary><span class="ans">Everything becomes positive and
             the section loses the ability to distinguish a departure on one side of the background from a
             departure on the other. The magnitude of the fold is a measure of how unusual a sample is; the
             sign is what tells us in which sense. It is taken from the near stack slope, exactly as the
             distance and the half isochron take theirs, so all three can be crossplotted against each other
             without one arriving upside down.</span></details></li>
-        <li><b>Check the range.</b> Step through several models and watch the folded angle readout on
+        <li><b>Checking the range.</b> We step through several models and watch the folded angle readout on
           step 1.
           <details class="reveal"><summary>Answer</summary><span class="ans">It never leaves 0 to 90&deg;
             before the sign is applied, and never leaves &minus;90 to +90&deg; after. That is guaranteed by
             the fold and not observed: each of the four sector rules maps its quarter onto the first
             one. Bedle et al. (2025b) describe the sector angles as lying between 0 and 90&deg;, which
             is the unsigned form, and the published color bar runs the full &plusmn;90.</span></details></li>
-        <li><b>Coarsen the sampling.</b> Step the sample rate to 4 ms.
+        <li><b>Coarsening the sampling.</b> We step the sample rate to 4 ms.
           <details class="reveal"><summary>Answer</summary><span class="ans">Fewer samples carry an angle at
             all, and the ones that remain inherit the coarser quadrant numbering that module 03 measured.
             Every attribute in this course degrades the same way for the same reason, which is why the
@@ -332,7 +262,7 @@
         <li><b>Under soft shale the angle separates fluids and the distance does not.</b> At 20% porosity:
           +6&deg;, +15&deg;, +23&deg; for brine, oil and gas, while the distance falls from 0.147 to
           0.103.</li>
-        <li><b>Angle values depend on the rock model.</b> The same fluid can sit at +23&deg; here and at
+        <li><b>Angle values depend on the rock model.</b> The same fluid can lie at +23&deg; here and at
           20 to 40&deg; in a published Class 3 example, so the numbers are read against a local calibration.</li>
         <li><b>Under tight sandstone the two swap roles.</b> The angles crowd together and the distance
           separates cleanly.</li>

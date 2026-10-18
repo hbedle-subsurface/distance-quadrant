@@ -79,9 +79,7 @@
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
               <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
-            <p class="hint-line" style="margin:-8px 0 0">Frequency is the control that matters most here.
-              It sets how many samples there are between one pick and the next, and therefore whether the
-              interior numbers fit exactly, have to be repeated, or have to be dropped.</p>
+            <p class="hint-line" style="margin:-8px 0 0">Frequency is the control that matters most here. It sets how many samples lie between one pick and the next, and so whether the interior numbers fit exactly, get repeated, or get dropped.</p>
           </div>
 
           <div class="ctl-col" id="colData">
@@ -124,35 +122,16 @@
       <span class="hint">From four picks a cycle to every sample numbered</span>
     </div>
 
-    <p class="lede">
-      The picks from module 02 already carry three of the nine numbers. A trough is <b>Q1</b>, the zero
-      crossing sample is <b>Q5</b>, and a peak is <b>Q9</b>. Everything else on the trace lies between two
-      of those, and gets a number by counting.</p>
+    <p class="lede">The picks from module 02 already carry three of the nine numbers. A trough is <b>Q1</b>, the zero crossing sample is <b>Q5</b>, and a peak is <b>Q9</b>. Everything else lies between two of those, and we number it by counting.</p>
 
-    <p class="lede">
-      One warning about the word. A <b>quadrant number</b> is a position along a waveform, one of nine.
-      Later modules also refer to the four <b>sectors</b> of a crossplot, which are quarters of a plot and
-      have nothing to do with quadrant numbers. The word comes from the original patents, where a "quadrant" was a
-      quarter of a waveform cycle and each one was given its own phase filter. Here a quadrant number says which phase filter a sample receives, and the sectors of a crossplot are a separate idea, which modules 06 and 09 take up.
-      The published papers use a symmetric assignment of the numbers around the zero crossing. The authors' working code gives the rising half of the waveform one more sample than the falling half, which matters only for exact sample counts and not for the concept taught here.</p>
+    <p class="lede">One thing about the word. A <b>quadrant number</b> is a position along a waveform, one of nine. The four <b>sectors</b> of a crossplot, which come later in modules 06 and 09, are quarters of a plot and a separate idea. The word comes from the original patents, where a "quadrant" was a quarter of a waveform cycle with its own phase filter. The published papers assign the numbers symmetrically around the zero crossing, and the authors' working code gives the rising half one more sample than the falling half. That only matters for exact sample counts, and not for the concept here.</p>
 
-    <p class="lede">
-      Between Q1 and Q5 there are three numbers to place, Q2, Q3 and Q4, and the rule is to spread them
-      uniformly across however many samples happen to be there. The same goes for Q6, Q7 and Q8 between Q5
-      and Q9.</p>
+    <p class="lede">Between Q1 and Q5 there are three numbers to place, Q2, Q3 and Q4, and we spread them uniformly across however many samples are there. Same for Q6, Q7 and Q8 between Q5 and Q9.</p>
 
-    <p class="lede">
-      <b>Then the count starts again.</b> Below a peak the interior numbers run 2, 3, 4 up to the next zero
-      crossing and 6, 7, 8 down to the next trough, so the sequence down a trace reads 1, 2, 3, 4, 5, 6, 7,
-      8, 9, 2, 3, 4, 5, 6, 7, 8, 1 (Bedle et al., 2025a, Figure 4a). Troughs are always Q1 and peaks always
-      Q9. Both take the unrotated trace, which is why the published filter table gives them the same
-      0&deg; filter. The papers describe this as eight quadrants for 1 ms data; a four-quadrant version was
-      used on 2 ms data (Neff, 2003).</p>
+    <p class="lede"><b>Then the count starts again.</b> Below a peak the interior numbers run 2, 3, 4 up to the next zero crossing and 6, 7, 8 down to the next trough, so the sequence down a trace reads 1, 2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 6, 7, 8, 1 (Bedle et al., 2025a, Figure 4a). Troughs are always Q1 and peaks always Q9, and both take the unrotated trace, which is why they share the same 0&deg; filter. The papers describe eight quadrants for 1 ms data, and a four-quadrant version was used on 2 ms data (Neff, 2003).</p>
 
     <canvas id="c1a" aria-label="The near-stack trace with every sample labeled by its quadrant number"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Each sample is drawn at its quadrant number, with the
-      picks marked. The three anchors are filled circles; everything between them was assigned by counting.
-      Drag the frequency in the panel and watch the interior numbering stretch and compress.</p>
+    <p class="hint-line" style="margin:8px 0 18px">Each sample is drawn at its quadrant number. The three anchors are filled circles, and everything between them was assigned by counting. Drag the frequency and watch the interior numbering stretch and compress.</p>
 
     <p class="sublabel"><b>2</b> The same trace as a quadrant track
       <span class="note">what a DQ volume actually carries at this stage</span></p>
@@ -165,14 +144,7 @@
       <div class="stat"><span>Samples left unnumbered</span><b id="s1d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>This is the step where the method stops being a picking scheme and becomes something that
-        touches every sample. Module 01 counted two interpretable samples per cycle and module 02 kept
-        four. Here the count is every sample between the first pick and the last, and the quadrant number
-        is what module 04 uses to decide which phase-rotated version of the trace to read at each
-        one.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="p2" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
@@ -180,20 +152,12 @@
       <span class="hint">Omission, repetition, and which one is normal</span>
     </div>
 
-    <p class="lede">
-      Three interior numbers need three samples. A quarter cycle almost never has exactly three, so the
-      rule has to say what happens otherwise. With more than three samples some numbers are used more than
-      once. With fewer, some are not used at all.</p>
+    <p class="lede">Three interior numbers need three samples, and a quarter cycle almost never has exactly three. With more, some numbers get used more than once, and with fewer, some don't get used at all.</p>
 
-    <p class="lede">
-      Which case holds is set by frequency and sample rate together, and the arithmetic is not
-      subtle. An exact fit needs a quarter cycle four samples long, which at 1 ms is a 16 ms period, which
-      is <b>62.5 Hz</b>. Almost all seismic is well below that, so <b>repetition is the normal case and
-      omission is the exception</b> - the opposite of what the phrase "too short a loop" suggests.</p>
+    <p class="lede">Frequency and sample rate decide which case we get. An exact fit needs a quarter cycle four samples long, which at 1 ms is a 16 ms period, or <b>62.5 Hz</b>. Almost all seismic is well below that, so <b>repetition is the normal case and omission is the exception</b>, which is the opposite of what "too short a loop" suggests.</p>
 
     <canvas id="c2a" aria-label="How the three interior numbers are distributed across quarter cycles of different lengths"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Every quarter-cycle length from one sample to fifteen,
-      with the numbers each would be given. The row matching the current model is highlighted.</p>
+    <p class="hint-line" style="margin:8px 0 18px">Every quarter-cycle length from one sample to fifteen, with the numbers each would get. The row matching the current model is highlighted.</p>
 
     <p class="sublabel"><b>2</b> How many samples carry each number
       <span class="note">on the trace as it stands</span></p>
@@ -206,13 +170,7 @@
       <div class="stat key"><span>Gaps that omit a number</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>Repetition changes little: several neighboring samples are told to use the same phase
-        filter, which is exactly what we would want in the middle of a long, smooth limb. Omission is
-        worse, because a number that never appears is a phase rotation that never gets applied, and the
-        enhanced trace at that loop is built from a smaller set of filters than everywhere else.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="p3" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
@@ -220,22 +178,11 @@
       <span class="hint">The convention, and why it is enforced upstream</span>
     </div>
 
-    <p class="lede">
-      The numbering has an orientation. For AVO classes 4, 3 and 2 the trough is Q1 and the peak is Q9,
-      which puts Q1 at the top of a soft reservoir. That is the convention the whole method is written
-      around, and every later attribute assumes it.</p>
+    <p class="lede">The numbering has an orientation. For AVO classes 4, 3 and 2 the trough is Q1 and the peak is Q9, which puts Q1 at the top of a soft reservoir. The whole method is written around that convention.</p>
 
-    <p class="lede">
-      A class 1 sand breaks it. Its top is a peak and not a trough, so applying the rule unchanged
-      would number the top of the reservoir Q9 and the base Q1. The same rock would carry opposite numbers
-      depending on what it happened to be sitting under, and nothing downstream could be compared between
-      the two.</p>
+    <p class="lede">A class 1 sand breaks it. Its top is a peak, so the rule unchanged would number the top of the reservoir Q9 and the base Q1. The same rock would then carry opposite numbers depending on what it lies under, and nothing downstream could be compared.</p>
 
-    <p class="lede">
-      The fix is not a second numbering rule. <b>The polarity of the near and far stacks is reversed at the
-      partial-stack step</b>, before any picking happens, so that a class 1 sand arrives at the picker
-      looking like a class 3 one. The same applies to carbonate plays. The numbering rule then never has to
-      change. Tick the box in the panel to see what happens if the flip is skipped.</p>
+    <p class="lede">The fix isn't a second numbering rule. <b>We reverse the polarity of the near and far stacks at the partial-stack step</b>, before any picking, so a class 1 sand arrives at the picker looking like a class 3 one. Same for carbonate plays. Tick the box in the panel to see what happens if the flip is skipped.</p>
 
     <canvas id="c3a" aria-label="The same sand under a soft and a hard overburden, numbered with and without the polarity flip"></canvas>
 
@@ -247,24 +194,13 @@
       <div class="stat key"><span>The sand's own loop</span><b id="s3e">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3f">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>Doing it upstream and not at the numbering step is the important part. By the time the
-        picks exist the near stack has already been used to define the layers, and flipping the numbers
-        afterwards would leave the picks in place while reversing everything hung on them. Reversing the
-        traces first means one set of rules runs on every dataset.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="pw" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
       <h3><span class="stepno">?</span>What a quadrant number tells us</h3>
       <span class="hint">Why the method bothers with an integer per sample</span>
     </div>
-
-    <p class="lede">A quadrant number is a statement about position in a waveform cycle, and it is
-      deliberately not a statement about amplitude. Two samples with the same number are at the same place
-      in their respective loops, whatever the loop amplitudes are in millivolts and however far apart they sit
-      in time. That is the property the rest of the method runs on.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       What it is used for</h2>
@@ -281,16 +217,10 @@
         milliseconds.</li>
     </ul>
 
-    <p class="lede">What the number cannot say is how long the loop was. A quarter cycle
-      three samples long and one thirty samples long both run Q2, Q3, Q4, and after this step the
-      difference between them has been thrown away. That is exactly the information the isochron of module
-      05 goes back and recovers, which is why the two attributes are computed side by side and why the DQ and the isochron carry different things.</p>
+    <p class="lede">What the number can't say is how long the loop was. A quarter cycle three samples long and one thirty samples long both run Q2, Q3, Q4. That is the information the isochron of module 08 goes back and recovers, and so the DQ and the isochron carry different things.</p>
 
     <div class="legend prose">
-      <span>To be clear: nothing here is an approximation to a continuous phase. The numbering is
-        a discrete bucket per sample, and the buckets are coarse: nine of them across a half cycle. Module
-        06 rotates by twenty-two and a half degrees a step because that is what nine buckets over a half
-        cycle works out to, not because the phase was measured that precisely.</span>
+      <span>The numbering is pretty coarse: nine numbers across a half cycle. Module 04 rotates in steps of twenty-two and a half degrees because that is what nine numbers over a half cycle works out to, and the phase of each sample isn't measured that precisely.</span>
     </div>
   </section>
 
@@ -298,19 +228,18 @@
     <div class="tryit" style="max-width:none">
       <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
-        <li><b>Find the frequency that fits exactly.</b> On step 2, with 1 ms sampling, drag the frequency
-          from 15 to 45 Hz and watch the interior count.
+        <li><b>Finding the frequency that fits exactly.</b> On step 2, with 1 ms sampling, we drag the frequency from 15 to 45 Hz and watch the interior count.
           <details class="reveal"><summary>Answer</summary><span class="ans">Three interior samples per quarter cycle
             would need a 4 ms quarter cycle, a period of 16 ms or about 62 Hz, which is above the slider range. At 45 Hz the
             quarter cycle is about 5.6 ms, and at 15 Hz it is about 16.7 ms. Every gap is longer than three samples, so numbers repeat. An exact fit
             is a coincidence and not a design target.</span></details></li>
-        <li><b>Check that repetition is the normal case.</b> Compare the two counters on step 2 at 15 Hz and at 45 Hz.
+        <li><b>Checking that repetition is the normal case.</b> We compare the two counters on step 2 at 15 Hz and at 45 Hz.
           <details class="reveal"><summary>Answer</summary><span class="ans">Across the whole range, gaps repeat numbers and none omits any.
             Omission needs a quarter cycle shorter than three samples, which is above about 60 Hz at 1 ms sampling. Almost all seismic lies between
             about 15 and 50 Hz, so repetition is what happens on real data essentially all of the time. The
             phrase "short isochron" in the method description (isochron here is the time
             between two picks, which module 08 takes up) describes the rare case. This comes up in the papers.</span></details></li>
-        <li><b>Coarsen the sampling instead.</b> Put the frequency back to 40 Hz and step the sample rate
+        <li><b>Coarsening the sampling.</b> We put the frequency back to 40 Hz and step the sample rate
           from 1 ms to 4 ms.
           <details class="reveal"><summary>Answer</summary><span class="ans">Omission arrives quickly,
             because what matters is samples per quarter cycle and not milliseconds. At 40 Hz the
@@ -318,7 +247,7 @@
             argument module 02 made about zero crossings, arriving from a different direction: the papers
             ask for 1 ms data because the method counts samples, and a coarse trace does not have enough of
             them to count.</span></details></li>
-        <li><b>Watch a thin bed lose its interior numbers.</b> On step 1, drag the sand thickness down
+        <li><b>Watching a thin bed lose its interior numbers.</b> On step 1, we drag the sand thickness down
           while watching the quadrant track.
           <details class="reveal"><summary>Answer</summary><span class="ans">The sand's own loop shortens
             until it holds only the anchors, and then until it is not a separate loop at all. The numbering
@@ -326,7 +255,7 @@
             bed presents one loop where the geology has two boundaries. Everything downstream inherits
             that, which is why module 11 has to treat tuning as a first-class subject and not as an
             error to be corrected.</span></details></li>
-        <li><b>Skip the polarity flip on a class 1 sand.</b> On step 3, set the overburden to soft shale
+        <li><b>Skipping the polarity flip on a class 1 sand.</b> On step 3, we set the overburden to soft shale
           with oil at about 20% porosity so the sand is class 1, then tick the skip box.
           <details class="reveal"><summary>Answer</summary><span class="ans">The reservoir top changes from a
             trough to a peak. The reservoir top is now a peak, so it is labeled Q9, and the base
@@ -334,7 +263,7 @@
             correctly to a trace of the opposite polarity, and no error is reported. The difference appears
             only when this area is compared with a class 3 area, or when both are passed to the same
             classifier: the same boundary carries opposite labels in the two.</span></details></li>
-        <li><b>Compare a tight sandstone overburden.</b> With the flip left on, switch the overburden between
+        <li><b>Comparing a tight sandstone overburden.</b> With the flip left on, we switch the overburden between
           soft shale and tight sandstone at a fixed porosity and fluid, and watch the flip indicator.
           <details class="reveal"><summary>Answer</summary><span class="ans">A porous sand under tight sandstone
             is a strong negative coefficient, so it is a trough and needs no flip. It is the class 1 case

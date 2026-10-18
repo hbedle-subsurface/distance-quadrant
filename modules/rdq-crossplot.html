@@ -123,37 +123,14 @@
       <span class="hint">What the half isochron is, and what it is not</span>
     </div>
 
-    <p class="lede">
-      Module 08 built the signed half isochron and then set it aside. Here is where it is used: the RDQ
-      crossplot carries it as the <b>z axis</b>, alongside the amplitude and gradient that module 06
-      rotated and split. Those two axes are the
-      <span class="g" data-g="near-optimized">near optimized</span> and
-      <span class="g" data-g="far-near-optimized">far-near optimized</span> sections of module 04, and
-      the three together are the cubes the published cluster crossplot is built from (Neff and Neff,
-      unpublished).</p>
+    <p class="lede">Module 08 built the signed half isochron and set it aside, and here's where it gets used. The RDQ crossplot carries it as the <b>z axis</b>, alongside the amplitude and gradient that module 06 rotated and split. Those two are the <span class="g" data-g="near-optimized">near optimized</span> and <span class="g" data-g="far-near-optimized">far-near optimized</span> sections of module 04, and the three together are the cubes the published cluster crossplot is built from (Neff and Neff, unpublished).</p>
 
-    <p class="lede">
-      To be precise about what it measures: the half isochron is the time from a sample to
-      the pick that bounds its half loop, signed positive from trough to peak. That makes it a
-      <b>description of the waveform's shape at that sample</b> - how long the loop is and which way
-      it runs - and not a measurement of how thick a bed is. Once a bed is resolved the loop at its
-      top belongs to the wavelet, so the half isochron settles to a value set by the bandwidth and stops
-      responding to thickness altogether. The panel below shows that directly.</p>
+    <p class="lede">The half isochron is the time from a sample to the pick that bounds its half loop, signed positive from trough to peak. So it describes the <b>shape of the waveform at that sample</b>, how long the loop is and which way it runs, and it doesn't measure how thick a bed is. Once a bed is resolved, the loop at its top belongs to the wavelet, and the half isochron settles to a value set by the bandwidth. The panel below shows that directly.</p>
 
-    <p class="lede">
-      <b>What that is useful for.</b> The DQ attributes pamphlet gives two purposes and both follow
-      from the waveform reading. A section of half isochron shows layers thinning, thickening and pinching
-      out without anyone mapping a horizon, because a loop that shortens laterally is a bed that is
-      thinning. It also separates <b>layers of uniform lithology from layers that are internally
-      variable</b>: a clean, homogeneous bed produces one long regular loop, while a bed with internal
-      contrasts breaks into several short ones, and the half isochron reports that difference sample by
-      sample. And because a shortening loop is what tuning looks like, the same section flags the zones
-      where amplitudes are tuned and therefore not to be read as rock. Merged with a velocity cube it
-      converts to a depth thickness and a gross rock volume.</p>
+    <p class="lede"><b>What it's useful for.</b> The DQ attributes pamphlet gives two purposes. A section of half isochron shows layers thinning, thickening and pinching out without anyone mapping a horizon, because a loop that shortens laterally is a bed that's thinning. It also separates <b>layers of uniform lithology from layers that are internally variable</b>: a clean bed gives one long regular loop, and a bed with internal contrasts breaks into several short ones. And since a shortening loop is what tuning looks like, the section flags where amplitudes are tuned and not to be read as rock. Merged with a velocity cube it gives a depth thickness and a gross rock volume.</p>
 
     <canvas id="c1a" aria-label="The signed half isochron down the trace, beside the near stack and the picks that define it"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The near stack, the picks, and the signed half isochron
-      each sample carries. Positive counts trough to peak, negative counts peak to trough.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The near stack, the picks, and the signed half isochron each sample carries. Positive counts trough to peak and negative counts peak to trough.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Samples with a half isochron</span><b id="s1a">&mdash;</b></div>
@@ -163,8 +140,7 @@
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>Drag the sand thickness and watch the value at the sand top barely move once the bed is
-        resolved; drag the wavelet frequency instead and it moves at once. So this axis is a waveform measure, sensitive to the bandwidth and to interference. It is on the plot because samples from different parts of a loop behave differently, not because it reports the geology directly.</span>
+      <span>Drag the sand thickness and the value at the sand top barely moves once the bed is resolved, but drag the wavelet frequency and it moves right away. So this axis is a waveform measure, sensitive to bandwidth and interference. It's on the plot because samples from different parts of a loop behave differently, and not because it reports the geology directly.</span>
     </div>
   </section>
 
@@ -174,19 +150,12 @@
       <span class="hint">Front, top and side</span>
     </div>
 
-    <p class="lede">
-      A 3D scatter is awkward to read on a page, so the DQ papers unfold it into three flat views: the
-      <b>front wall</b> is amplitude against gradient, the plot every earlier module has been drawing; the
-      <b>top view</b> looks down, putting amplitude against half isochron; and the <b>side view</b> looks
-      in from the right, putting half isochron against gradient.</p>
+    <p class="lede">A 3D scatter is awkward on a page, so the DQ papers unfold it into three flat views. The <b>front wall</b> is amplitude against gradient, the plot every earlier module has drawn. The <b>top view</b> looks down, with amplitude against half isochron, and the <b>side view</b> looks in from the right, with half isochron against gradient.</p>
 
-    <p class="lede">
-      Each view answers a different question about the same points. The front wall says what the AVO
-      behavior is. The top and side views say where in the waveform those points came from, which is how we tell a cluster made of peak samples from one made of crossing samples.</p>
+    <p class="lede">Each view answers a different question about the same points. The front wall says what the AVO behavior is, and the top and side views say where in the waveform the points came from, which is how we tell a cluster of peak samples from a cluster of crossing samples.</p>
 
     <canvas id="c2a" aria-label="The crossplot unfolded into front, top and side views"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The same samples three ways. Color is the quadrant
-      number, so each point can be followed through its loop across all three panels.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The same samples three ways. Color is the quadrant number, so we can follow each point through its loop across all three panels.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Samples plotted</span><b id="s2a">&mdash;</b></div>
@@ -195,13 +164,7 @@
       <div class="stat key"><span>Half isochron range</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>The published displays add a fourth dimension by symbol and color: shale an orange inverted
-        triangle, wet sand a blue cross, oil a green plus, gas a magenta triangle, with black circles for
-        samples not yet classified. On modeled data those labels are known; on real data they are what the
-        crossplot is being used to decide.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="p3" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
@@ -209,24 +172,12 @@
       <span class="hint">Delimiters, polygons and statistics</span>
     </div>
 
-    <p class="lede">
-      The crossplot is a tool and not a picture, and it is worked in three ways. First, every column
-      can act as a <b>delimiter</b>: set a range and only samples inside it are drawn. The half isochron
-      delimiter is in the panel, set as a signed band. It starts at +6 to +10 ms, the range used in the
-      published example, where keeping only positive half isochron values thinned the shale points from
-      294 to 76 before a distance cut removed the rest. Here we use a reduced range to show the idea.
-      Move the limits and watch the plot thin out.</p>
+    <p class="lede">The crossplot is a working tool, and we use it three ways. First, every column can act as a <b>delimiter</b>: we set a range and only samples inside it are drawn. The half isochron delimiter in the panel is a signed band, starting at +6 to +10 ms, the range in the published example, where keeping only those values thinned the shale points from 294 to 76 before a distance cut removed the rest. We use a reduced range here to show the idea. Move the limits and watch the plot thin out.</p>
 
-    <p class="lede">
-      Second, regions of the plot are enclosed as <b>polygons</b>, defined either by corners in x and y or,
-      unusually, by a pair of polar coordinates - a minimum and maximum angle with a minimum and
-      maximum distance, which is a natural way to draw a region on a plot whose whole geometry is polar.
-      Third, <b>statistics</b> are read back for whatever is enclosed: maximum, median, minimum, the 80th,
-      50th and 20th percentiles, and a count.</p>
+    <p class="lede">Second, we enclose regions of the plot as <b>polygons</b>, by corners in x and y or, unusually, by a pair of polar coordinates, a minimum and maximum angle with a minimum and maximum distance. That's a natural way to draw a region on a plot whose geometry is polar. Third, we read back <b>statistics</b> for whatever is enclosed: maximum, median, minimum, the 80th, 50th and 20th percentiles, and a count.</p>
 
     <canvas id="c3a" aria-label="The front wall with a half isochron delimiter applied, showing which samples survive"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Samples inside the half isochron band in color,
-      excluded samples in gray. Drag the delimiter in the panel.</p>
+    <p class="hint-line" style="margin:8px 0 18px">Samples inside the half isochron band are in color and excluded samples are gray. Drag the limits in the panel.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat key"><span>Samples passing the delimiter</span><b id="s3a">&mdash;</b></div>
@@ -235,13 +186,7 @@
       <div class="stat"><span>Median distance, all samples</span><b id="s3d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>The statistics matter more than they look. They are what turns a cluster on a screen into a
-        number that can be carried forward - into a polygon definition, into a comparison between
-        time windows, or into the look-up catalogs module 10 described. A crossplot we can only look at
-        is a figure; one we can measure is an instrument.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="pw" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
@@ -249,19 +194,8 @@
       <span class="hint">And why this one is built differently</span>
     </div>
 
-    <p class="lede">A seismic section shows where things are; a crossplot shows what they are.
-      Neither replaces the other, and the DQ workflow uses both: the sections of modules 05 and 07 to
-      locate an anomaly, and this plot to characterize it.</p>
-
-    <p class="lede">What makes this crossplot unusual is that it is built to be worked in polar
-      coordinates as well as Cartesian ones. The baseline rotation of module 06 is a polar operation, the
-      sector split of module 06 is defined by quadrant number, and Theta PX is an angle. So the natural way
-      to enclose a region here is with an angle range and a distance range and not with a box.</p>
-
     <div class="legend prose">
-      <span>This module explains the plot and the operations
-        performed on it. It does not demonstrate that any particular cluster separation works on real
-        data, which the papers address and a field dataset would show.</span>
+      <span>Whether a particular cluster separation works on real data is addressed in the papers and would show up in a field dataset.</span>
     </div>
   </section>
 
@@ -269,7 +203,7 @@
     <div class="tryit" style="max-width:none">
       <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
-        <li><b>Check what the third axis responds to.</b> On step 1, drag the sand thickness across its
+        <li><b>Checking what the third axis responds to.</b> On step 1, we drag the sand thickness across its
           range and watch the value at the sand top, then do the same with the wavelet frequency.
           <details class="reveal"><summary>Answer</summary><span class="ans">Thickness barely moves it once
             the bed is resolved; frequency moves it immediately. The half isochron at a sand top is
@@ -277,32 +211,32 @@
             that loop is a property of the wavelet. Useful to know before reading too much into the axis:
             it tells us about the shape of the waveform at a sample, not about the thickness of the bed
             underneath it.</span></details></li>
-        <li><b>Find the sign change.</b> On step 1, follow the half isochron down through a peak.
+        <li><b>Finding the sign change.</b> On step 1, we follow the half isochron down through a peak.
           <details class="reveal"><summary>Answer</summary><span class="ans">It flips from positive to
             negative at the peak, because the sign is set by whether the waveform is rising or falling and
             a peak is where that changes. That is the same convention module 05 gave the distance and
             module 07 gave the angle, which is what lets all three be plotted against each other without
             one arriving upside down.</span></details></li>
-        <li><b>Compare the three views.</b> On step 2, find a cluster on the front wall and then locate the
+        <li><b>Comparing the three views.</b> On step 2, we find a cluster on the front wall and then locate the
           same points in the top and side views.
-          <details class="reveal"><summary>Answer</summary><span class="ans">Points that sit together on the
+          <details class="reveal"><summary>Answer</summary><span class="ans">Points that lie together on the
             front wall can be spread across the top view, because two samples with similar AVO behavior
             may come from quite different parts of a loop. Without the third axis, samples are grouped by what they look like and not by where they came from.</span></details></li>
-        <li><b>Use the delimiter.</b> On step 3, start from the +6 to +10 ms band, then move the limits and
+        <li><b>Using the delimiter.</b> On step 3, we start from the +6 to +10 ms band, then move the limits and
           watch the counts and the statistics.
           <details class="reveal"><summary>Answer</summary><span class="ans">On the default model the +6 to +10 ms band keeps
             12 of 31 samples, and their median distance is 0.054 against 0.039 for all of them. A positive
             band keeps only trough-to-peak half loops, and the 6 to 10 ms range leaves out the samples
-            nearest the zero crossings, which module 06 showed sit closest to the origin. Opening the band
+            nearest the zero crossings, which module 06 showed lie closest to the origin. Opening the band
             to the full range brings the count back to 31. Delimiting chooses which part of the waveform to
             look at and does not filter out noise, and the statistics readout tells how many samples that
             choice removed.</span></details></li>
-        <li><b>Change the reservoir and watch the cluster move.</b> On step 3, switch the fluid from brine
+        <li><b>Changing the reservoir and watching the cluster move.</b> On step 3, we switch the fluid from brine
           to gas.
           <details class="reveal"><summary>Answer</summary><span class="ans">The sand samples move as a group
             while the background stays put. That movement is what the crossplot exists to show, and it is why the workflow crossplots sliding time windows: a cluster that shifts between windows
             means the AVO class has changed, which is the signal that a new calibration is needed and not a new interpretation.</span></details></li>
-        <li><b>Coarsen the sample rate.</b> Take it to 4 ms and look at step 2.
+        <li><b>Coarsening the sample rate.</b> We take it to 4 ms and look at step 2.
           <details class="reveal"><summary>Answer</summary><span class="ans">The plot empties out, because
             the quadrant numbering that admits a sample to the plot needs samples to number, and module 03
             measured how quickly those disappear. The half isochron suffers doubly: it is a count of
@@ -355,11 +289,7 @@
         that merging it with a velocity cube gives a depth thickness and a gross rock volume. This page
         does not demonstrate those on field data; it explains what the axis measures and how the plot is
         worked.</p>
-      <p><b>What this module deliberately does not claim.</b> It does not show that delimiting on the half
-        isochron improves any particular separation, and it does not reproduce the cluster patterns the
-        papers report from field data. This is a model with one sand in one seal, and the purpose here is
-        to explain what the plot is and how it is worked. Whether a given delimiter helps is a question
-        about a dataset, not about the method.</p>
+      <p><b>Limits of the model.</b> This is one sand in one seal, so it does not show that delimiting on the half isochron improves any particular separation, and it does not reproduce the cluster patterns the papers report from field data. Whether a given delimiter helps depends on the dataset.</p>
       <p>One measured caution: the half isochron at a sand top does not track bed
         thickness. Across a wedge from 6 to 54 ms it settles to a constant once the bed is resolved. The
         axis is a waveform descriptor, and step 1 says so and does not leave the reader to assume

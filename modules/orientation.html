@@ -94,33 +94,13 @@
   </div>
 
   <section class="tabpane" id="p1" role="tabpanel">
-    <p class="lede">The left panel is the model, the answer both seismic sections are trying to show. A sand
-      of constant thickness lies between layers of the rock chosen in the panel. The sand top is at 50 ms on every setting, and its depth
-      changes with the rock: about 68 m under soft shale, 84 m under hard shale and 120 m under tight
-      sandstone, since faster rock puts more meters into each millisecond. The sand&rsquo;s <span class="g" data-g="porosity">porosity</span> rises
-      from 12% at the left of the line to 33% at the right, and the color of the sand shows its pore
-      fluid.</p>
+    <p class="lede">Okay, so on the left we've got the model, which is the answer both sections are trying to show. We have a sand of constant thickness between layers of the rock we pick in the panel. The top is at 50 ms every time, and the depth changes with the rock: about 68 m under soft shale, 84 m under hard shale and 120 m under tight sandstone, since faster rock puts more meters into each millisecond. The <span class="g" data-g="porosity">porosity</span> rises from 12% on the left to 33% on the right, and the color of the sand is the pore fluid.</p>
 
-    <p class="lede">On the stack section each boundary of the sand appears as a
-      <span class="g" data-g="wavelet">wavelet</span>, a <span class="g" data-g="trough">trough</span> or a
-      <span class="g" data-g="peak">peak</span> with <span class="g" data-g="sidelobe">sidelobes</span>
-      above and below it. The brightness of each band combines the
-      <span class="g" data-g="impedance">impedance</span> contrast at that boundary with the thickness of the
-      bed, and the interior of the sand lies near a <span class="g" data-g="zero-crossing">zero
-      crossing</span>.</p>
+    <p class="lede">On the stack section, each boundary of the sand shows up as a <span class="g" data-g="wavelet">wavelet</span>, a <span class="g" data-g="trough">trough</span> or a <span class="g" data-g="peak">peak</span> with <span class="g" data-g="sidelobe">sidelobes</span>. Inside the sand we're near a <span class="g" data-g="zero-crossing">zero crossing</span>, so the stack goes pretty quiet there.</p>
 
-    <p class="lede">On the DQ section the same sand appears as a filled body between its two boundaries.
-      A thin sand&rsquo;s top and base merge into one body; in a thicker sand they separate, with a weaker
-      band between them (module 11). Higher porosity lowers the sand&rsquo;s density and velocity, so its impedance falls. Under the default
-      tight sandstone that widens the contrast with the rock above, and the DQ color strengthens from left
-      to right with the porosity in the model. Under a soft shale the sand&rsquo;s impedance approaches the
-      shale&rsquo;s as porosity rises, so the contrast and the DQ value weaken. The DQ value
-      responds to the contrast between rocks, not to porosity alone. Changing the pore fluid changes the
-      color while the outline of the body stays in place.</p>
+    <p class="lede">On the DQ section the same sand is a filled body between its two boundaries. Under the default tight sandstone, higher porosity lowers the sand's <span class="g" data-g="impedance">impedance</span> and widens the contrast with the rock above, and so the DQ color gets stronger from left to right. Under a soft shale it goes the other way, because the sand's impedance gets closer to the shale's. So DQ responds to the contrast between rocks, and not to porosity alone. Changing the fluid changes the color while the outline stays put.</p>
 
-    <p class="lede">Both sections are computed from the same two partial stacks. The DQ section does not add
-      information to them; it assigns a value to every sample inside the sand, where the stack section is
-      close to zero (Bedle et al., 2025a). The modules that follow build that step by step.</p>
+    <p class="lede">Both sections come from the same two partial stacks. DQ doesn't add information to them... it gives a value to every sample inside the sand, where the stack is close to zero (Bedle et al., 2025a). The next modules build that step by step.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Samples in the sand, stack section</span><b id="s0a">&mdash;</b></div>
@@ -131,9 +111,7 @@
     </div>
 
     <div class="legend prose">
-      <span>The dashed outline on both sections is the sand in the rock model. A second attribute, the angle
-        of the same crossplot point (Theta PX, module 07), responds mainly to pore fluid and lithology and
-        is not drawn here. Module 11 compares the two attributes across a wedge.</span>
+      <span>The dashed outline is the sand in the rock model. The angle of the same crossplot point (Theta PX, module 07) responds mainly to fluid and lithology, and it's not drawn here.</span>
     </div>
 
     <section class="nextup" style="display:block;margin-top:26px">

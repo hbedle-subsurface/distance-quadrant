@@ -132,21 +132,12 @@
       <span class="hint">Where the two input traces come from</span>
     </div>
 
-    <p class="lede">
-      The DQ process starts from one CDP of NMO-corrected gathers with relative amplitudes preserved. Every
-      trace in the gather is the same two boundaries seen at a different incidence angle, so the reflection
-      coefficient changes across the gather while the arrival time does not. That is what NMO correction is
-      for, and step 3 shows what happens when it has not quite worked.</p>
+    <p class="lede">The DQ process starts from one CDP of NMO-corrected gathers with relative amplitudes preserved. Every trace in the gather is the same two boundaries seen at a different incidence angle, so the reflection coefficient changes across the gather while the arrival time does not. That's what NMO correction is for, and step 3 shows what happens when it hasn't quite worked.</p>
 
-    <p class="lede">
-      Two windows are cut from that gather and the traces inside each are averaged. The near window is
-      0&ndash;10&deg;, the far window is ten degrees wide starting wherever we put it, 20&ndash;30&deg; by
-      default. Averaging turns eleven traces into one, and the gather becomes two traces called N and F.</p>
+    <p class="lede">We cut two windows from that gather and average the traces inside each. The near window is 0&ndash;10&deg;, and the far window is ten degrees wide, starting at 20&ndash;30&deg; by default. Averaging turns eleven traces into one, and so the gather becomes two traces, N and F.</p>
 
     <canvas id="c1a" aria-label="The angle gather drawn as wiggle traces with the near and far windows shaded"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Time runs down the page. Each wiggle is one incidence
-      angle. All wiggles share one fixed amplitude scale, so a stronger reflection draws a larger wiggle. Blue traces fall inside the near window, pink inside the far window, gray outside both. Turn
-      the noise up in the panel and the individual traces get worse while the two averages hold up.</p>
+    <p class="hint-line" style="margin:8px 0 18px">Time runs down the page and each wiggle is one incidence angle, all on one fixed amplitude scale. Blue traces fall inside the near window, pink inside the far window, and gray outside both. Turn the noise up and the individual traces get worse while the two averages hold up.</p>
 
     <p class="sublabel"><b>2</b> The two traces, and their difference
       <span class="note">these three are the whole input to everything that follows</span></p>
@@ -160,9 +151,7 @@
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>Nothing has been fitted, inverted or deconvolved. Two windows were averaged and one trace was
-        subtracted from another. Everything the DQ process does afterwards is built on these three traces
-        and on nothing else.</span>
+      <span>Nothing has been fitted, inverted or deconvolved. We averaged two windows and subtracted one trace from another, and everything the DQ process does afterwards is built on those three traces.</span>
     </div>
   </section>
 
@@ -173,24 +162,12 @@
       <span class="hint">The near stack is the intercept, and the difference is the gradient</span>
     </div>
 
-    <p class="lede">
-      Module 01 wrote the reflection as R(&theta;) = A + B&nbsp;sin&sup2;&theta;. Averaging that over an
-      angle window is easy, because R is linear in sin&sup2;&theta; and the average of a straight line over
-      an interval is the line evaluated at the average of the interval. So the near stack is
-      A + B&nbsp;&times;&nbsp;&#10216;sin&sup2;&theta;&#10217;<sub>near</sub> and the far stack is
-      A + B&nbsp;&times;&nbsp;&#10216;sin&sup2;&theta;&#10217;<sub>far</sub>, with no approximation
-      anywhere.</p>
+    <p class="lede">Module 01 wrote the reflection as R(&theta;) = A + B&nbsp;sin&sup2;&theta;. That's linear in sin&sup2;&theta;, and so the average over a window is the line evaluated at the average of the window. The near stack is A + B&nbsp;&times;&nbsp;&#10216;sin&sup2;&theta;&#10217;<sub>near</sub> and the far stack is A + B&nbsp;&times;&nbsp;&#10216;sin&sup2;&theta;&#10217;<sub>far</sub>, with no approximation anywhere.</p>
 
-    <p class="lede">
-      Put the numbers in. Over 0&ndash;10&deg; the mean of sin&sup2;&theta; is <b>0.0101</b>, and over
-      20&ndash;30&deg; it is <b>0.1802</b>. That makes the near stack the intercept plus a hundredth of the
-      gradient, which is why the DQ papers write N and mean A. Subtract the two and the intercept cancels
-      exactly, leaving the gradient multiplied by the difference of those two numbers, <b>0.1701</b>.</p>
+    <p class="lede">Over 0&ndash;10&deg; the mean of sin&sup2;&theta; is <b>0.0101</b>, and over 20&ndash;30&deg; it is <b>0.1802</b>. So the near stack is the intercept plus a hundredth of the gradient, which is why the DQ papers write N and mean A. Subtract the two and the intercept cancels, leaving the gradient times <b>0.1701</b>.</p>
 
     <canvas id="c2a" aria-label="Two scatter plots: the near stack against the intercept, and the far-minus-near difference against the gradient"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Every porosity from 8 to 36% and all three fluids, under
-      the overburden we picked, computed with no wavelet and no noise. The dashed lines are N = A on the
-      left and F &minus; N = 0.1701&nbsp;B on the right. Both scatters sit on them.</p>
+    <p class="hint-line" style="margin:8px 0 18px">Every porosity from 8 to 36% and all three fluids, under the overburden we picked, with no wavelet and no noise. The dashed lines are N = A on the left and F &minus; N = 0.1701&nbsp;B on the right, and both scatters lie on them.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Mean sin&sup2;&theta;, near</span><b id="s2a">&mdash;</b></div>
@@ -200,10 +177,7 @@
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>Move the far window in the panel and watch the multiplier on the right change. Push the far
-        window out and the gradient is measured with more leverage, and that helps; the reasons not
-        to keep pushing are noise, moveout error, and the fact that the two-term equation itself stops
-        holding much past 30&deg;.</span>
+      <span>Move the far window and watch the multiplier on the right change. Pushing it out gives the gradient more leverage, which helps. The reasons not to keep pushing are noise, moveout error, and the fact that the two-term equation stops holding much past 30&deg;.</span>
     </div>
   </section>
 
@@ -214,30 +188,12 @@
       <span class="hint">The honest comparison, including the part that favors the regression</span>
     </div>
 
-    <p class="lede">
-      An obvious objection: the gather has forty-one traces and the two windows use twenty-two of them. Why
-      not fit R = A + B&nbsp;sin&sup2;&theta; through every angle at every sample and get A and B directly?
-      That is a real method, it is what AVO inversion does, and on clean data it is the better estimator.
-      Fitting all forty-one angles measures the gradient with about four times less variance than taking
-      the difference of two window averages. There is no argument to be had about that.</p>
+    <p class="lede">Now, an obvious question. The gather has forty-one traces and the two windows use twenty-two of them, so why not fit R = A + B&nbsp;sin&sup2;&theta; through every angle at every sample? That's a real method, it's what AVO inversion does, and on clean data it's the better estimator. Fitting all forty-one angles gives the gradient with about four times less variance than the difference of two window averages.</p>
 
-    <p class="lede">
-      The reasons to take two averages instead are about what real gathers do. The readouts below separate
-      the two things that go wrong. <b>Noise</b> is the standard error each estimator carries, which follows
-      from the geometry and needs no particular realization to work out. <b>Bias</b> is measured on a
-      noiseless gather, so it is purely what the leftover moveout did. Turn the noise up first, then leave
-      it alone and drag the moveout.</p>
-
-    <p class="lede">
-      They do not win the same one. With four milliseconds of moveout at 40&deg; the two-stack gradient is
-      out by 30% and the fitted gradient by 71%. The intercept is starker: the near stack is still exact,
-      while the fitted intercept is out by 23%, and by eight milliseconds it is out by half. The fit is the
-      more precise estimator and the more biased one.</p>
+    <p class="lede">They don't win the same one. With four milliseconds of moveout at 40&deg; the two-stack gradient is out by 30% and the fitted gradient by 71%. The intercept is starker: the near stack is still exact, while the fitted intercept is out by 23%, and by eight milliseconds it's out by half. So the fit is the more precise estimator and the more biased one.</p>
 
     <canvas id="c3a" aria-label="The near stack, far stack, far-minus-near difference and the least-squares intercept and gradient traces drawn side by side"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The same gather, read two ways. On the left the two
-      window averages and their difference. On the right the intercept and gradient from a least-squares
-      fit at every sample. All five are drawn at the same scale.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The same gather, read two ways. On the left are the two window averages and their difference, and on the right the intercept and gradient from a least-squares fit at every sample, all five at the same scale.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Moveout across the near window</span><b id="s3a">&mdash;</b></div>
@@ -250,15 +206,7 @@
       <div class="stat"><span>Intercept bias, least squares</span><b id="s3i">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3f">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>A window ten degrees wide spans a small fraction of the moveout across the gather, so the
-        traces inside it are still aligned with each other when they are averaged, and the near window
-        spans almost none of it at all. A fit across the whole gather compares the same sample index at
-        0&deg; and at 40&deg;, which after a few milliseconds of leftover curvature are different parts of
-        the waveform. The fit does not know that. It returns a confident number with a small standard
-        error and the wrong value in it.</span>
-    </div>
-  </section>
+    </section>
 
   <!-- ============================ WHY IT MATTERS ============================ -->
   <section class="tabpane" id="pw" role="tabpanel" hidden>
@@ -267,18 +215,9 @@
       <span class="hint">The reason that has nothing to do with statistics</span>
     </div>
 
-    <p class="lede">The strongest reason the DQ process takes partial stacks only becomes visible once we
-      know what happens next. Everything from module 02 onward reads structure off the near stack: where it
-      crosses zero, where its peaks are, where its troughs are. Those picks define the acoustic layers, and
-      every quadrant number and phase filter in the method hangs off them. So the question that matters is
-      not which estimator has the smaller error bar. It is which one gives us a near-angle trace we can
-      trust the shape of.</p>
+    <p class="lede">The strongest reason for partial stacks shows up once we know what happens next. Everything from module 02 on reads structure off the near stack: where it crosses zero, and where its peaks and troughs are. Those picks define the acoustic layers, and every quadrant number and phase filter hangs off them. So the question that matters is which estimator gives us a near-angle trace whose shape we can trust.</p>
 
-    <p class="lede">On that question step 3 is one-sided. The near stack averages ten degrees of angle, over
-      which the leftover moveout is a fraction of a millisecond, and its intercept stays exact however far
-      we push the moveout slider. The fitted intercept has to extrapolate back to zero angle from a lever
-      arm forty degrees long, and by eight milliseconds it is out by half. A trace that is wrong by half is
-      not something to pick zero crossings on.</p>
+    <p class="lede">On that question step 3 is one-sided. The near stack averages ten degrees of angle, where the leftover moveout is a fraction of a millisecond, and its intercept stays exact however far we push the slider. The fitted intercept has to extrapolate back to zero angle from a lever arm forty degrees long, and by eight milliseconds it's out by half. And a trace that's wrong by half isn't something we want to pick zero crossings on.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       The rest of the practical case</h2>
@@ -297,28 +236,20 @@
         crime than regressing across forty.</li>
     </ul>
 
-    <div class="legend prose">
-      <span>None of this makes AVO inversion wrong. It is a different tool with different inputs and a
-        different place in the sequence. The DQ trace is meant to run early, on what is available, before
-        the well ties and the wavelet estimation, and the two partial stacks are the earliest usable thing
-        there is.</span>
-    </div>
-  </section>
+    </section>
 
   <!-- ============================== EXERCISES ============================== -->
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
       <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
-        <li><b>Check that the near stack really is the intercept.</b> On step 2, read the largest gap
-          between N and A, then compare it with the intercept itself for a few models.
+        <li><b>Checking that the near stack really is the intercept.</b> On step 2, we read the largest gap between N and A, then compare it with the intercept itself for a few models.
           <details class="reveal"><summary>Answer</summary><span class="ans">The gap is A + 0.0101&nbsp;B
             minus A, which is a hundredth of the gradient. Across the whole model it never exceeds about
             0.007, and for most sands it is nearer 0.002. Set against intercepts of a tenth to half, that
             is a rounding error, and it is why the DQ papers use the near stack as the intercept without
-            further comment. It is not an approximation to the physics - the physics is exact
-- it is a decision that one hundredth of B can be dropped.</span></details></li>
-        <li><b>Move the far window and watch the gradient scale.</b> On step 2, drag the far window from
+            further comment. The physics is exact, and so using the near stack as the intercept is a decision that one hundredth of B can be dropped.</span></details></li>
+        <li><b>Moving the far window and watching the gradient scale.</b> On step 2, we drag the far window from
           12&deg; out to 45&deg;, reading the multiplier on F &minus; N.
           <details class="reveal"><summary>Answer</summary><span class="ans">It climbs steeply: 0.0775 at a
             12&ndash;22&deg; window, 0.1701 at 20&ndash;30&deg;, 0.3198 at 30&ndash;40&deg;. Moving the
@@ -328,7 +259,7 @@
             noisiest, they carry the most moveout error and the most stretch, and past about 30&deg; the
             two-term equation is no longer describing the same physics. 20&ndash;30&deg; is a compromise,
             not a law.</span></details></li>
-        <li><b>Be fair to the fit first.</b> On step 3, leave the residual moveout at zero and raise the
+        <li><b>Being fair to the fit first.</b> On step 3, we leave the residual moveout at zero and raise the
           noise to 40%, then read the two gradient noise figures.
           <details class="reveal"><summary>Answer</summary><span class="ans">57% of the true gradient for the
             two stacks against 28% for the fit - almost exactly half, which is the square root of the
@@ -336,7 +267,7 @@
             averages uses eleven and eleven, and then divides by 0.1701, which magnifies whatever noise
             survived. On a flat gather the fit is simply the better estimator, and if that were the whole
             story this module would end differently.</span></details></li>
-        <li><b>Now break it with four milliseconds.</b> Set the noise back to zero and raise the residual
+        <li><b>Breaking it with four milliseconds.</b> We set the noise back to zero and raise the residual
           moveout to 4 ms, reading the two gradient bias figures.
           <details class="reveal"><summary>Answer</summary><span class="ans">30% for the two stacks against
             71% for the fit. The near window spans about a third of a millisecond of the moveout and the
@@ -345,7 +276,7 @@
             apart on the waveform, and reports the difference between two parts of a wavelet as a property
             of the rock. Four milliseconds is not a badly processed gather. It is an ordinary
             one.</span></details></li>
-        <li><b>Watch the intercept while we do it.</b> Push the moveout on to 8 ms and read the two
+        <li><b>Watching the intercept while we do it.</b> We push the moveout on to 8 ms and read the two
           intercept bias figures.
           <details class="reveal"><summary>Answer</summary><span class="ans">The near stack is still exact.
             The fitted intercept is out by about half. The near stack averages ten degrees of angle, over
@@ -355,7 +286,7 @@
             picks zero crossings, peaks and troughs off the near stack, and module 03 writes quadrant
             numbers into the gaps between them. Those picks have to be in the right place, and precision on
             the gradient is no consolation if they are not.</span></details></li>
-        <li><b>Find a model where the far stack is the only thing that sees the sand.</b> Try the soft
+        <li><b>Finding a model where the far stack is the only thing that sees the sand.</b> We try the soft
           shale with gas, around 25% porosity, and read the two key numbers on step 1.
           <details class="reveal"><summary>Answer</summary><span class="ans">The near stack lies close to
             zero while F &minus; N is clearly negative, and the far stack has the opposite sign to the
@@ -382,8 +313,7 @@
           scaled by the separation between the two windows. The scale factor is not divided out, so
           gradients always plot small next to intercepts.</li>
         <li><b>On a flat gather a least-squares fit is the better estimator</b>, carrying about half the
-          noise on the gradient. The case for partial stacks is robustness and availability, not
-          precision.</li>
+          noise on the gradient. The case for partial stacks rests on robustness and availability, and precision favors the fit.</li>
         <li><b>Residual moveout biases the fit about twice as hard.</b> At 4 ms the two-stack gradient is
           out by 30% and the fitted gradient by 71%, because a ten degree window spans a fraction of the
           moveout and a forty degree fit spans all of it.</li>

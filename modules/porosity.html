@@ -62,8 +62,7 @@
                 <button type="button" data-fluid="gas" aria-pressed="false">gas</button>
               </div>
             </div>
-            <p class="hint-line" style="margin:2px 0 0;grid-column:1/-1">The porosity slider marks one
-              point on the curves and does not set the model; the curves span the whole range.</p>
+            <p class="hint-line" style="margin:2px 0 0;grid-column:1/-1">The porosity slider marks one point on the curves and doesn't set the model, since the curves span the whole range.</p>
           </div>
 
           <div class="ctl-col" id="colLayers">
@@ -117,30 +116,12 @@
       <span class="hint">Before any seismic is involved</span>
     </div>
 
-    <p class="lede">
-      This is where the DQ trace fits the description the DQ attributes pamphlet gives it: before any
-      inversion, it is a <b>relative porosity curve</b>. Relative because the vertical axis is in amplitude
-      units and nothing here converts them to porosity units; a curve, because it varies down the trace
-      with the rock and does not report a single number per layer. After an inversion tied to wells it
-      becomes a quantitative prediction of porosity or hydrocarbon pore volume, which is the third
-      paper.</p>
+    <p class="lede">This is where the DQ trace fits the description in the DQ attributes pamphlet: before any inversion, it's a <b>relative porosity curve</b>. Relative because the vertical axis is in amplitude units and nothing here converts to porosity units, and a curve because it varies down the trace with the rock. After an inversion tied to wells it becomes a quantitative prediction of porosity or hydrocarbon pore volume, which is the third paper.</p>
 
-    <p class="lede">
-      Start with no seismic at all. Porosity is the fraction of a rock's volume that is pore space and not mineral grains. Raising it replaces quartz, which is dense and fast, with brine or gas, which
-      are lighter and slower. So the bulk density falls, and the P-wave velocity falls with it because
-      sound travels more slowly through the fluid than through the frame. Acoustic impedance is velocity
-      multiplied by density, so both terms push the same way and the impedance falls steadily.</p>
-
-    <p class="lede">
-      The V<sub>P</sub>/V<sub>S</sub> ratio moves the other way. Only the mineral frame resists shear, and
-      adding porosity weakens the frame, so the shear modulus falls steeply. The pore fluid resists
-      compression and holds the bulk modulus up, so it falls less. The rock is weakened against an S-wave
-      more than against a P-wave, and so the ratio of the two velocities rises. Both relationships are close to monotonic here, and both belong to
-      the sand alone - nothing above it enters into either.</p>
+    <p class="lede">Let's start with no seismic at all. Porosity is the fraction of a rock's volume that's pore space and not mineral grains. Raising it replaces quartz, which is dense and fast, with brine or gas, which are lighter and slower. So the bulk density falls, and the P-wave velocity falls with it. Acoustic impedance is velocity times density, so both terms push the same way and the impedance falls steadily.</p>
 
     <canvas id="c1a" aria-label="Acoustic impedance and Vp over Vs plotted against porosity"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The two classical porosity indicators for this rock
-      model, across the full porosity range. The marker is the porosity set in the panel.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The two classical porosity indicators for this rock model across the full porosity range. The marker is the porosity set in the panel.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Impedance against porosity</span><b id="s1a">&mdash;</b></div>
@@ -149,13 +130,7 @@
       <div class="stat"><span>V<sub>P</sub>/V<sub>S</sub> there</span><b id="s1d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>Neither of these is measurable from seismic without work. Acoustic impedance needs an
-        inversion, which needs a wavelet and usually a well. V<sub>P</sub>/V<sub>S</sub> needs shear
-        information, which needs either converted waves or a simultaneous inversion. The question the next
-        step asks is how close the DQ gets to the same information with neither.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="p2" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
@@ -163,33 +138,14 @@
       <span class="hint">The same curve, from seismic amplitudes alone</span>
     </div>
 
-    <p class="lede">
-      Now run the whole workflow. For each porosity in turn, build the sand, model the near and far stacks,
-      pick, number, filter, enhance, and read the DQ at the top of the sand. No wavelet has been
-      estimated, no well has been used and nothing has been inverted.</p>
+    <p class="lede">Now we run the whole workflow. For each porosity in turn we build the sand, model the near and far stacks, pick, number, filter, enhance, and read the DQ at the top of the sand. No wavelet has been estimated, no well has been used and nothing has been inverted.</p>
 
-    <p class="lede">
-      Under a tight sandstone seal the result is a near-straight line. The distance rises with porosity at a
-      correlation of about <b>0.99</b>, against 0.99 for acoustic impedance and 1.00 for
-      V<sub>P</sub>/V<sub>S</sub> - the same information, from amplitudes.</p>
+    <p class="lede">Under a tight sandstone seal the result is a near-straight line. The distance rises with porosity at a correlation of about <b>0.99</b>, against 0.99 for acoustic impedance and 1.00 for V<sub>P</sub>/V<sub>S</sub>... the same information, from amplitudes.</p>
 
-    <p class="lede">
-      The sequence of causes is set out once here, because the rest of the module depends on it. Porosity raises pore
-      volume, which lowers density and velocity, which lowers the sand's impedance. The seal's impedance
-      does not change, so the contrast across the top of the sand grows. A larger contrast gives a larger
-      reflection coefficient at both the near and the far angle, which gives a longer vector on the
-      crossplot, which gives a larger DQ. Each link is ordinary rock physics or ordinary
-      reflection theory; the attribute carries the result through to a number we can map.</p>
-
-    <p class="lede">
-      Read the correlation for what it is. It is measured on one modeled sand at a time under a fixed
-      seal, with no shale content and no lithological variation, so it is an upper bound and not an
-      estimate of field performance. What it establishes is that the information is present in the
-      attribute.</p>
+    <p class="lede">Here's the chain of causes once, because the rest of the module depends on it. Porosity raises pore volume, which lowers density and velocity, which lowers the sand's impedance. The seal's impedance doesn't change, so the contrast across the top of the sand grows. A larger contrast gives a larger reflection coefficient at both near and far angles, which gives a longer vector on the crossplot, and so a larger DQ. Each link is ordinary rock physics or reflection theory.</p>
 
     <canvas id="c2a" aria-label="The DQ plotted against porosity, beside acoustic impedance"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The DQ at the top of the sand across the
-      porosity range, with impedance behind it on its own scale for shape comparison.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The DQ at the top of the sand across the porosity range, with impedance behind it on its own scale for comparing shape.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat key"><span>Distance against porosity</span><b id="s2a">&mdash;</b></div>
@@ -199,10 +155,7 @@
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>A pause here on what has and has not been shown. The distance carries porosity information,
-        strongly. It does not yet give a porosity <em>value</em>: the vertical axis is in amplitude units
-        and the conversion from one to the other is a slope and an intercept that nothing here supplies.
-        A well tie supplies them, and that is the subject of the third of the DQ papers and not of this course.</span>
+      <span>A pause on what we've shown. The distance carries porosity information, strongly, but it doesn't give a porosity <em>value</em> yet. The vertical axis is in amplitude units, and converting to porosity takes a slope and an intercept that a well tie supplies, which is the third DQ paper and not this course.</span>
     </div>
   </section>
 
@@ -212,22 +165,10 @@
       <span class="hint">The result that decides how the method is used</span>
     </div>
 
-    <p class="lede">
-      Change the rock above the sand and the relationship changes character. Under tight sandstone the distance
-      rises with porosity. Under a soft shale it <b>falls</b>, just as cleanly, because a porous sand
-      approaches the shale's own impedance and the contrast between them dies away entirely in the mid
-      thirties. Under a hard shale the
-      contrast passes through zero in the middle of the range and the relationship is a V, which no single
-      correlation describes at all.</p>
-
-    <p class="lede">
-      The sand is identical in all three. Nothing about the reservoir has changed, and the attribute has
-      reversed its sign. Whatever relationship holds between the DQ and porosity, it belongs to
-      the interval and not to the method.</p>
+    <p class="lede">Change the rock above the sand and the relationship changes character. Under tight sandstone the distance rises with porosity. Under a soft shale it <b>falls</b>, just as cleanly, because a porous sand approaches the shale's own impedance and the contrast dies away entirely in the mid thirties. Under a hard shale the contrast passes through zero in the middle of the range and we get a V, which no single correlation describes.</p>
 
     <canvas id="c3a" aria-label="The DQ against porosity under all three overburdens"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The same sand under each of the three seals. Untick the
-      box in the panel to show only the one we have selected.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The same sand under each of the three seals. Untick the box to show only the one selected.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat key"><span>Under tight sandstone</span><b id="s3a">&mdash;</b></div>
@@ -236,13 +177,7 @@
       <div class="stat"><span>Where the soft-shale contrast dies</span><b id="s3d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>This is the argument for the look-up catalogs the DQ workflow uses, made from first
-        principles and not asserted. A catalog is a relationship between attribute values and rock
-        properties that has been calibrated for one interval, and the reason we need a new one when the petrophysics changes is on this plot: the same attribute means the opposite thing under a different
-        seal.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="p4" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
@@ -250,32 +185,14 @@
       <span class="hint">One synthetic trace, three sands, a known answer</span>
     </div>
 
-    <p class="lede">
-      The previous steps compared one model against another. This one does the test properly: a single
-      synthetic, a porosity log we chose, and a DQ trace computed from the seismic with no knowledge of
-      it. Five sand bodies of different porosity, each encased in the same seal, with shale between them
-      so that every sand's top is a contrast against the same rock.</p>
+    <p class="lede">Now we do the test properly: a single synthetic, a porosity log we chose, and a DQ trace computed from the seismic with no knowledge of it. We have five sand bodies of different porosity, each in the same seal, with shale between them so every sand top is a contrast against the same rock.</p>
 
-    <p class="lede">
-      Read the DQ trace at each sand top and compare it with the porosity that built that sand. Under a
-      tight sandstone seal the two track each other at a correlation of <b>1.00</b>, and the five readings
-      rank the three sands in the right order; under a soft shale the correlation is <b>&minus;1.00</b>, the
-      same ranking reversed. In this noise-free, single-mineral model the log is recovered up to a sign and
-      a scale that step 3 explained and that only a well can supply. With real data, noise, mixed
-      lithology, fluid changes and bed thickness all move the DQ value as well, so the match is weaker and
-      a bright DQ value has more than one possible cause.</p>
+    <p class="lede">We read the DQ trace at each sand top and compare it with the porosity that built that sand. Under a tight sandstone seal the two track each other at a correlation of <b>1.00</b>, and under a soft shale it's <b>&minus;1.00</b>, the same ranking reversed. In this noise-free, single-mineral model the log is recovered up to a sign and a scale that only a well can supply. With real data, noise, mixed lithology, fluid changes and bed thickness all move the DQ value too, so the match is weaker and a bright DQ value has more than one possible cause.</p>
 
-    <p class="lede">
-      The spacing matters more than it looks. These sands sit 62 ms apart, so the base of one is more
-      than a wavelength from the top of the next and each reflection stands on its own. Pack them to 24 ms
-      and the correlation falls to about 0.8, because the value read at a sand top is then contaminated by
-      its neighbors and no longer describes its own rock. That is a limit on the seismic, not on the
-      attribute, and module 11 takes it up in earnest.</p>
+    <p class="lede">The spacing matters more than it looks. These sands lie 62 ms apart, so the base of one is more than a wavelength from the top of the next and each reflection stands on its own. Pack them to 24 ms and the correlation falls to about 0.8, because the value at a sand top is then contaminated by its neighbors. That's a limit on the seismic and not the attribute, and module 11 takes it up.</p>
 
     <canvas id="c4a" aria-label="A five-sand porosity log beside the near stack and the DQ trace computed from it"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The porosity log we put in, the near stack that a
-      seismic survey would record, and the DQ trace that comes out. The markers show where each sand top
-      was read. Time runs down all three.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The porosity log we put in, the near stack a survey would record, and the DQ trace that comes out. Markers show where each sand top was read, and time runs down all three.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Sand tops found</span><b id="s4a">&mdash;</b></div>
@@ -285,12 +202,7 @@
       <div class="stat wide"><span>Reading</span><b id="s4e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>One thing this does not show, and it matters. The sands here are separated by shale, so each
-        top is a contrast against a fixed rock. Stack sands directly on one another and the DQ trace
-        responds to the porosity <em>step</em> between them and not to porosity itself, because a
-        reflection is a contrast and never an absolute. That is a real limit on what any amplitude
-        attribute can do, and it is why a DQ section reads a layered sequence well and a gradational one
-        badly.</span>
+      <span>One thing this doesn't show. The sands here are separated by shale, so each top is a contrast against a fixed rock. Stack sands directly on one another and the DQ responds to the porosity <em>step</em> between them and not to porosity itself, because a reflection is a contrast. That's a real limit on any amplitude attribute, and it's why a DQ section reads a layered sequence well and a gradational one badly.</span>
     </div>
   </section>
 
@@ -300,55 +212,34 @@
       <span class="hint">Detection, calibration, and the line between them</span>
     </div>
 
-    <p class="lede">The DQ papers separate two things.
-      <b>Detection</b> asks where something interesting is, and does not need a well: the earlier modules
-      are all detection, and so is the correlation on step 2. <b>Quantitative prediction</b> asks how much
-      porosity is there, in porosity units, and does need a well, because the conversion from an amplitude
-      to a rock property has a slope and an intercept that only a calibration can supply.</p>
-
-    <p class="lede">The method's authors are explicit that this ordering was historical as well as logical.
-      The original work was built for quantitative inversion and required forward modeling from full well
-      log suites; the detection attributes were a by-product that turned out not to need any of it. Bedle et
-      al. (2025a, 2025b) describe the detection attributes, and Bedle et al. (2025c) returns to quantitative
-      inversion.</p>
+    <p class="lede">The DQ papers separate two things. <b>Detection</b> asks where something interesting is and doesn't need a well, and the earlier modules are all detection, as is the correlation on step 2. <b>Quantitative prediction</b> asks how much porosity is there, in porosity units, and does need a well, because converting an amplitude to a rock property takes a slope and an intercept that only a calibration supplies.</p>
 
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       Why one catalog is never enough</h2>
-    <p class="lede">Step 3 shows the sign flipping between seals. In a real basin the same thing happens
-      with depth: compaction moves both the sand trend and the shale trend, and where they cross, the
-      relationship inverts. The reported field practice matches - two catalogs over a two-second
-      window in one offshore dataset, a forced catalog switch at an unconformity in another where the
-      petrophysics changed abruptly, and a single catalog sufficing in a third field where it did not.
-      None of that is a weakness of the attribute. It is what any amplitude-based rock property estimate
-      has to live with, and the DQ workflow at least makes the boundary visible by letting us crossplot a time window and watch the cluster move.</p>
+    <p class="lede">Step 3 shows the sign flipping between seals, and in a real basin the same thing happens with depth: compaction moves both the sand trend and the shale trend, and where they cross, the relationship inverts. Reported field practice matches... two catalogs over a two-second window in one offshore dataset, a forced catalog switch at an unconformity in another, and a single catalog sufficing in a third. That's something any amplitude-based rock property estimate has to live with, and the DQ workflow makes the boundary visible by letting us crossplot a time window and watch the cluster move.</p>
 
-    <div class="legend prose">
-      <span>The honest summary of this module: the DQ sees the rock. It sees it through the
-        contrast with whatever is above it, which is true of every reflection attribute ever devised, and
-        the practical consequence is that calibration happens per interval and not once.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="pe" role="tabpanel" hidden>
     <div class="tryit" style="max-width:none">
       <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
-        <li><b>Read the correlation under tight sandstone.</b> On step 2, with a tight sandstone seal and brine fill,
-          read the two correlation figures.
+        <li><b>Reading the correlation under tight sandstone.</b> On step 2, with a tight sandstone seal and brine fill,
+          we read the two correlation figures.
           <details class="reveal"><summary>Answer</summary><span class="ans">About 0.99 against porosity and
             about 1.00 against acoustic impedance. In this model the attribute, computed from partial-stack
             amplitudes alone with no wavelet estimate and no well, follows porosity about as closely as
             impedance does. The model has one mineral, one seal and no noise, so the figure is an upper
             limit. The attribute carries porosity information; it does not deliver a porosity number, and
             step 2's legend explains why.</span></details></li>
-        <li><b>Now switch to a soft shale seal.</b> Read the same figure.
+        <li><b>Switching to a soft shale seal.</b> We read the same figure.
           <details class="reveal"><summary>Answer</summary><span class="ans">About &minus;0.97. The
             correlation is nearly as strong and points the other way. A porous sand under a soft shale is
             acoustically similar to the shale, so the reflection weakens as porosity rises, and the
             distance falls. The rock has not changed; the seal has. Anyone who calibrated a DQ-to-porosity
             relationship under tight sandstone and applied it under shale would have the sign
             backwards.</span></details></li>
-        <li><b>Find where the contrast dies.</b> Still on soft shale, look at where the curve bottoms
+        <li><b>Finding where the contrast dies.</b> Still on soft shale, we look at where the curve bottoms
           out on step 3.
           <details class="reveal"><summary>Answer</summary><span class="ans">In the mid thirties, where the
             distance falls to about two hundredths - on the 2% sampling this page uses, the minimum
@@ -356,20 +247,20 @@
             there is almost no reflection, and the attribute has nothing to measure. Module 07 used the
             same region as its example of an unreliable angle, for the same underlying reason. Near a
             crossover, every attribute in this course is weak at once.</span></details></li>
-        <li><b>Try the hard shale.</b> Read its correlation on step 3.
+        <li><b>Trying the hard shale.</b> We read its correlation on step 3.
           <details class="reveal"><summary>Answer</summary><span class="ans">About 0.43, which is not a
             useful number and is not meant to be. The crossover lies in the middle of the porosity range
             and not at one end, so the curve is a V and a straight-line correlation averages the two
             halves into nonsense. This is a good reason to look at the shape before trusting a coefficient
 - the correlation is low here not because the physics is noisy but because it is
             two-sided.</span></details></li>
-        <li><b>Change the fluid.</b> Switch between brine, oil and gas under tight sandstone.
+        <li><b>Changing the fluid.</b> We switch between brine, oil and gas under tight sandstone.
           <details class="reveal"><summary>Answer</summary><span class="ans">The curve shifts but keeps its shape and its sign. Hydrocarbon lowers the sand's impedance, which under a tight sandstone seal
             increases the contrast and lifts the whole curve. So fluid and porosity both move the distance
             in the same direction here, and the distance alone cannot separate them. That is exactly what
             module 07's angle is for, and it is the clearest argument on the site for computing both
             attributes and not one.</span></details></li>
-        <li><b>Add noise.</b> Take the noise to 30% under tight sandstone and watch the correlation.
+        <li><b>Adding noise.</b> We take the noise to 30% under tight sandstone and watch the correlation.
           <details class="reveal"><summary>Answer</summary><span class="ans">It does not move. The correlation stays at
             0.99 or better across the whole slider, to 40% noise, for brine, oil and gas. The trend is carried by the sand's contrast with its seal, which
             is large next to the noise, and the enhancement reads every sample of the loop and not just

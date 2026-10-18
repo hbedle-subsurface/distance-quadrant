@@ -123,20 +123,12 @@
       <span class="hint">The same geology, imaged two ways</span>
     </div>
 
-    <p class="lede">
-      The model is a dipping section cut by a normal fault about halfway along, with a sand body that is
-      thin at both ends and thick in the middle. Its porosity rises and falls with its thickness, which is
-      a common enough pairing: the middle of a channel or a bar is usually both thicker and cleaner than
-      its edges.</p>
+    <p class="lede">The model is a dipping section cut by a normal fault about halfway along, with a sand body that's thin at both ends and thick in the middle. Its porosity rises and falls with its thickness, which is a pretty common pairing, since the middle of a channel or bar is usually both thicker and cleaner than its edges.</p>
 
-    <p class="lede">
-      Both displays show the same rocks. On the stack section the sand is a pair of bands and its extent
-      has to be inferred from where those bands brighten. On the DQ section it is a single body whose
-      color follows the rock. The fault and the dip are equally clear on both, because both are built from
-      the same reflections.</p>
+    <p class="lede">Both displays show the same rocks. On the stack section the sand is a pair of bands and we infer its extent from where they brighten, and on the DQ section it's a single body whose color follows the rock. The fault and the dip are equally clear on both, because both come from the same reflections.</p>
 
     <canvas id="c1a" aria-label="The stack section and the DQ section for the same faulted, dipping line"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The dashed outline is the modeled sand, so each display can be checked against the geology that produced it.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The dashed outline is the modeled sand, so we can check each display against the geology that produced it.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Traces on the line</span><b id="s1a">&mdash;</b></div>
@@ -146,9 +138,7 @@
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>Watch the thin ends. Where the sand drops below about a quarter of a wavelength the two
-        reflections merge, the outline no longer matches a distinct body on either display, and the
-        brightness there is tuning and not rock. Module 11 measured that; here the effect on a section is visible.</span>
+      <span>Look at the thin ends. Where the sand drops below about a quarter of a wavelength the two reflections merge, the outline no longer matches a distinct body on either display, and the brightness there is tuning and not rock. Module 11 measured it, and here we can see the effect on a section.</span>
     </div>
   </section>
 
@@ -158,16 +148,9 @@
       <span class="hint">Two attributes that answer different questions</span>
     </div>
 
-    <p class="lede">
-      &theta;<sub>px</sub> maps where each cluster of rock lies on the crossplot, so on a section it
-      separates the sand from the background by kind and not by strength. The half isochron measures
-      how long each half loop lasts, so it responds to bed thickness and to whether a layer is internally
-      uniform.</p>
+    <p class="lede">&theta;<sub>px</sub> maps where each cluster of rock lies on the crossplot, so on a section it separates the sand from the background by kind and not by strength. The half isochron measures how long each half loop lasts, so it responds to bed thickness and to whether a layer is internally uniform.</p>
 
-    <p class="lede">
-      Switch the fluid contact on in the panel. It is placed at a fixed time, so it cuts flat across the
-      dipping, faulted sand - the geometry of a real hydrocarbon contact. Watch where it appears and
-      where it does not.</p>
+    <p class="lede">Switch the fluid contact on in the panel. It's placed at a fixed time, so it cuts flat across the dipping, faulted sand, like a real hydrocarbon contact. We can see where it appears and where it doesn't.</p>
 
     <canvas id="c2a" aria-label="Theta px and half isochron sections for the same line"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Left, the angle; right, the signed half isochron.
@@ -180,13 +163,7 @@
       <div class="stat"><span>Fluid above it</span><b id="s2d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s2e">&mdash;</b></div>
     </div>
-    <div class="legend prose">
-      <span>A boundary that stays flat while the beds around it dip is the classic argument for a fluid
-        contact and not a lithology change, because rock boundaries follow structure and fluid
-        boundaries follow gravity. That reasoning is independent of which attribute we are looking at; the
-        attribute only decides how visible it is.</span>
-    </div>
-  </section>
+    </section>
 
   <section class="tabpane" id="p3" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
@@ -194,23 +171,12 @@
       <span class="hint">DQ Average and DQ Sum</span>
     </div>
 
-    <p class="lede">
-      Everything so far has been a value per sample. These two are values per <b>layer</b>. Take all the DQ
-      samples between one extremum and the next - that is, everything inside a single trough-to-peak
-      or peak-to-trough loop - and either average them or add them up. Both numbers are then written
-      to every sample in that layer, so the result still displays as a section.</p>
+    <p class="lede">So far we've had a value per sample, and these two are values per <b>layer</b>. We take all the DQ samples between one extremum and the next, everything inside a single trough-to-peak or peak-to-trough loop, and either average them or add them up. Both numbers are written to every sample in that layer, so the result still displays as a section.</p>
 
-    <p class="lede">
-      They answer different questions. <b>DQ Average</b> describes the quality of the rock in the layer,
-      because averaging removes how many samples there happen to be. <b>DQ Sum</b> keeps that count, so it
-      grows with both quality and thickness. Neither escapes tuning: both are built from DQ values, and
-      where a bed is thin enough to tune, those values are amplified before either is computed. In the DQ attributes pamphlet these become average and total
-      relative porosity for a layer, and after a well tie, average and total hydrocarbon pore volume. The
-      pamphlet suggests targeting horizontal wells at zones where both the average and the sum are high.</p>
+    <p class="lede">They answer different questions. <b>DQ Average</b> describes the quality of the rock in the layer, because averaging removes how many samples there are. <b>DQ Sum</b> keeps that count, so it grows with both quality and thickness. Neither escapes tuning, since both are built from DQ values that are amplified where a bed is thin enough to tune. In the DQ attributes pamphlet these become average and total relative porosity for a layer, and after a well tie, average and total hydrocarbon pore volume. The pamphlet suggests targeting horizontal wells at zones where both are high.</p>
 
     <canvas id="c3a" aria-label="DQ average and DQ sum sections, with both read along the sand as curves"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">The two sections above, and below them both attributes
-      read along the sand and normalized so their shapes can be compared.</p>
+    <p class="hint-line" style="margin:8px 0 18px">The two sections above, and below them both attributes read along the sand and normalized so we can compare their shapes.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>DQ average, thickest point</span><b id="s3a">&mdash;</b></div>
@@ -220,12 +186,7 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>Both curves peak at a thin end of the sand, where it is <em>thinnest</em> and its
-        porosity is lowest. That is not a fault in the attributes: at 10 ms
-        those beds sit at the tuning maximum module 11 measured, so their reflections are amplified by
-        interference. An interpreter reading either section for rock quality would pick the worst part of
-        the reservoir. The defense is the half isochron on step 2, which shows the loop shortening there
-        and marks the zone as tuned.</span>
+      <span>Both curves peak at a thin end of the sand, where it's <em>thinnest</em> and its porosity is lowest. The attributes are responding correctly: at 10 ms those beds lie at the tuning maximum module 11 measured, so their reflections are amplified by interference. Reading either section for rock quality, we'd pick the worst part of the reservoir. The half isochron on step 2 catches it, since it shows the loop shortening there and marks the zone as tuned.</span>
     </div>
   </section>
 
@@ -234,9 +195,6 @@
       <h3><span class="stepno">?</span>The attributes, and where they came from</h3>
       <span class="hint">A short catalog</span>
     </div>
-
-    <p class="lede">This is the point of the course, so the attributes are set out together
-      with what each measures and where in the workflow it appears.</p>
 
     <div class="legend prose" style="margin-bottom:14px">
       <span><b>StickOgram</b> (module 02) - the centers of peaks and troughs and the zero crossings
@@ -280,27 +238,26 @@
     <div class="tryit" style="max-width:none">
       <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
-        <li><b>Find the fault on each display.</b> Step through the six displays in the panel and look for
+        <li><b>Finding the fault on each display.</b> We step through the six displays in the panel and look for
           the offset.
           <details class="reveal"><summary>Answer</summary><span class="ans">It is visible on all of them,
             because a fault offsets the reflections themselves and every attribute here is computed from
             those reflections. What differs is how sharply it reads: the half isochron often shows it
             most clearly, because the loop structure changes abruptly across the offset. No attribute here
             adds structural information that was not already in the stack.</span></details></li>
-        <li><b>Compare the thin ends with the middle.</b> On step 1, look at where the sand is thinnest.
+        <li><b>Comparing the thin ends with the middle.</b> On step 1, we look at where the sand is thinnest.
           <details class="reveal"><summary>Answer</summary><span class="ans">The outline no longer matches a
             distinct body, and the DQ brightness there is tuning and not rock quality. This is module
             11's finding shown as a picture. A student who reads the thin end as poor rock and the middle
             as good rock happens to be right on this model, because porosity was built to rise with
             thickness - but they would have been right for the wrong reason, and on a model where the
             two were opposed they would have been wrong.</span></details></li>
-        <li><b>Turn on the fluid contact.</b> Then look at step 2.
+        <li><b>Turning on the fluid contact.</b> Then we look at step 2.
           <details class="reveal"><summary>Answer</summary><span class="ans">A boundary appears that stays at
             one time while the beds around it dip and step across the fault. That flatness is the argument
             for a fluid contact and not a lithology change: rock boundaries follow structure, fluid
-            boundaries follow gravity. Note also where it stops - it can only show where the sand is
-            present and thick enough to contain it.</span></details></li>
-        <li><b>Compare DQ average with DQ sum.</b> On step 3, read where each peaks.
+            boundaries follow gravity. It also stops where the sand does, since it can only show where the sand is present and thick enough to contain it.</span></details></li>
+        <li><b>Comparing DQ average with DQ sum.</b> On step 3, we read where each peaks.
           <details class="reveal"><summary>Answer</summary><span class="ans">Both peak at a thin
             end of the sand, the average at the right and the sum at the left, and not in the thick,
             porous middle, because a 10 ms bed at 40 Hz is close
@@ -308,13 +265,12 @@
             numerically, seen here as a picture: a layer attribute inherits every problem the samples it
             is built from already had. Raising the wavelet frequency to 45 Hz, the highest on the slider, does not change that: the sum still peaks at the thin end, on trace 3, because the thin end of the sand is still close to the tuning thickness at that bandwidth. The average moves less, since a short loop reinforces its own top and base reflections wherever the bed is near tuning. The average is about
             rock quality and the sum multiplies that by how much rock there is, but the sum follows the volume only once the tuning effect has been removed, which module 11 takes up.</span></details></li>
-        <li><b>Change the fluid.</b> Switch between brine, oil and gas and watch the DQ and angle sections.
+        <li><b>Changing the fluid.</b> We switch between brine, oil and gas and watch the DQ and angle sections.
           <details class="reveal"><summary>Answer</summary><span class="ans">The body changes value while its
             outline stays put, because the geometry has not changed. How much it changes depends on the
             seal, which module 10 measured: under some seals the fluid effect is mostly a change of
-            distance, under others mostly a change of angle. Try all three overburdens and watch which of
-            the two displays does the work.</span></details></li>
-        <li><b>Add noise.</b> Take it to 30% and look at each display in turn.
+            distance, under others mostly a change of angle. Across all three overburdens, we can see which of the two displays does the work.</span></details></li>
+        <li><b>Adding noise.</b> We take it to 30% and look at each display in turn.
           <details class="reveal"><summary>Answer</summary><span class="ans">The angle and half isochron
             sections degrade first, because both depend on the picks being in the right places and noise
             moves picks. The DQ section holds up longer because it is an amplitude. When displays that
@@ -359,11 +315,7 @@
         sum of the DQ values between one extremum and the next, so a single trough-to-peak or peak-to-trough
         layer. Both are written back to every sample in that layer so they can be displayed as sections.
         The curves below the sections read the layer that contains the middle of the modeled sand.</p>
-      <p><b>What this module does not do.</b> It does not ray trace, and each trace is modeled
-        independently, so there is no lateral wave propagation, no diffraction from the fault tip and no
-        migration artifact. A real fault on real data produces all three. The structure here is a device
-        for showing how the attributes behave when geology varies along a line, not a simulation of a
-        seismic experiment.</p>
+      <p><b>Limits of the model.</b> Each trace is modeled independently and there is no ray tracing, so we get no lateral wave propagation, no diffraction from the fault tip and no migration artifact. A real fault on real data produces all three. The structure here shows how the attributes behave when geology varies along a line, and it is not a simulation of a seismic experiment.</p>
       <ul>
         <li>Neff, D. B., and W. Neff, DQ attributes pamphlet, unpublished.</li>
         <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
