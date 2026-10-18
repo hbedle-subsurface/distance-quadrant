@@ -26,17 +26,17 @@
     <p class="eyebrow">Module 13 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Reading a DQ section</h1>
     <p class="sub">Every attribute so far has been shown as a curve. On a real project they arrive as
-      sections, and a DQ section is not colored like a seismic section &mdash; deliberately. The display conventions are the subject here: what each color bar is doing, why it is built that way, and what you would misread if it were built the ordinary way.</p>
+      sections, and a DQ section is not colored like a seismic section - deliberately. The display conventions are the subject here: what each color bar is doing, why it is built that way, and what we would misread if it were built the ordinary way.</p>
   </div>
 
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap" id="labCap">The section <span>&mdash; a sand thickening across the line</span></p>
+        <p class="cap" id="labCap">The section <span> - a sand thickening across the line</span></p>
         <canvas id="cMain" aria-label="A seismic section with the sand thickening across it"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
+        <p class="cap">The model <span> - everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -67,11 +67,11 @@
             <h2>The section</h2>
             <div class="ctl">
               <label for="thick">Sand thickness, mid line <span class="val" id="thickV">26 ms</span></label>
-              <input type="range" id="thick" min="8" max="50" step="1" value="26">
+              <input type="range" id="thick" min="8" max="40" step="1" value="26">
             </div>
             <div class="ctl">
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
-              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+              <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
             <label class="check" style="grid-column:1/-1"><input type="checkbox" id="wiggle" checked>
               Draw the overlay trace</label>
@@ -120,11 +120,11 @@
       A seismic section is colored red through white to blue, with the two ends the same distance from
       zero. That symmetry is not decoration: amplitude is a signed quantity whose two signs mean equally
       important and opposite things, so a color bar that treated them differently would be lying about the
-      data. The limits are set by scanning the volume and rounding up, and white sits at zero.</p>
+      data. The limits are set by scanning the volume and rounding up, and white lies at zero.</p>
 
     <p class="lede">
-      Over the color goes a wiggle, scaled up so the deflections read &mdash; about twice the trace
-      spacing is a usual starting point &mdash; and horizontal dotted reference lines every ten, twenty,
+      Over the color goes a wiggle, scaled up so the deflections read - about twice the trace
+      spacing is a usual starting point - and horizontal dotted reference lines every ten, twenty,
       twenty-five, fifty or a hundred milliseconds depending on how much time is on the page.</p>
 
     <canvas id="c1a" aria-label="A seismic section with a symmetric red white blue color bar and an overlay wiggle"></canvas>
@@ -134,7 +134,7 @@
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Traces on the line</span><b id="s1a">&mdash;</b></div>
       <div class="stat"><span>Color bar limits</span><b id="s1b">&mdash;</b></div>
-      <div class="stat key"><span>Zero sits at</span><b id="s1c">&mdash;</b></div>
+      <div class="stat key"><span>Zero lies at</span><b id="s1c">&mdash;</b></div>
       <div class="stat"><span>Reference line spacing</span><b id="s1d">&mdash;</b></div>
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
@@ -200,8 +200,8 @@
 
     <p class="lede">
       The sharp boundaries are the unusual choice. Every instinct in modern display design says to
-      interpolate, and here it would be wrong: a feature confined to one ten-degree band &mdash; the papers
-      give a flat spot as the example &mdash; disappears into a smooth ramp and survives a banded one. The
+      interpolate, and here it would be wrong: a feature confined to one ten-degree band - the papers
+      give a flat spot as the example - disappears into a smooth ramp and survives a banded one. The
       two sections are meant to be read as a pair, so they share a sign convention and a geometry, and only
       the coloring differs.</p>
 
@@ -273,7 +273,7 @@
       A seismic red-white-blue bar on a DQ section turns small positive and negative values the same
       pale color, and the sign the DQ carries is lost. A smooth ramp on an angle
       section loses a flat spot. A linear count axis on a DQ histogram buries the tail under the
-      background, which is why the published histograms use a logarithmic one &mdash; in a clastic section
+      background, which is why the published histograms use a logarithmic one - in a clastic section
       roughly four samples in five are shale sitting near zero.</p>
 
     <div class="legend prose">
@@ -290,8 +290,8 @@
         <li><b>Compare the two sections.</b> Look at step 1 and step 2 with the same model.
           <details class="reveal"><summary>Answer</summary><span class="ans">On the seismic section the sand
             is a pair of bands with a gap between them, and locating it means deciding which band is the
-            top and which the base. On the DQ section it is one body. Nothing has been added &mdash; the
-            DQ trace is computed from the same two partial stacks &mdash; but the display is showing one
+            top and which the base. On the DQ section it is one body. Nothing has been added - the
+            DQ trace is computed from the same two partial stacks - but the display is showing one
             value per loop instead of an oscillation, which is what the picking and numbering of modules 02
             and 03 were for.</span></details></li>
         <li><b>Count the increments.</b> On step 2, read how the color bar is divided.
@@ -313,8 +313,8 @@
         <li><b>Turn off the overlay wiggle.</b> Untick the box in the panel.
           <details class="reveal"><summary>Answer</summary><span class="ans">The color alone is easier to
             read for extent and harder to read for detail. The papers keep both because they answer
-            different questions: the color shows you where a body is, the wiggle shows you what the trace
-            is doing sample by sample. The scaling differs too &mdash; about twice for a seismic wiggle,
+            different questions: the color shows us where a body is, the wiggle shows us what the trace
+            is doing sample by sample. The scaling differs too - about twice for a seismic wiggle,
             about one and a half times for a DQ wiggle, because a blocked trace needs less
             exaggeration.</span></details></li>
         <li><b>Add noise and see which display degrades first.</b> Take the noise to 30%.
@@ -328,7 +328,7 @@
           so the section is a wedge.
           <details class="reveal"><summary>Answer</summary><span class="ans">The DQ body brightens toward the
             thin end, which is module 11's tuning seen as a picture and not as a curve. A reader
-            looking only at the DQ section would call the thin part the better rock. The habit to take away: a section shows you where something is, and it will happily show you a
+            looking only at the DQ section would call the thin part the better rock. The habit to take away: a section shows us where something is, and it will happily show us a
             tuning effect as though it were geology.</span></details></li>
       </ol>
     </div>
@@ -372,12 +372,12 @@
         in six directions on a 3D cube, which this page does not attempt; here the color is drawn as flat
         cells one sample tall.</p>
       <p>The remark that roughly four samples in five are shale comes from the same specification and
-        describes a field clastic section, not this model, where the proportion depends on how thick you
+        describes a field clastic section, not this model, where the proportion depends on how thick we
         make the sand. It is quoted because it is the reason for the logarithmic histogram axis, which
         module 12 uses.</p>
       <p><b>What this module does not do.</b> It does not reproduce the published sections, which come from
         ray-traced synthetics over pseudo-well catalogs and from field data. It shows what the
-        conventions are and what each one is protecting, on a model simple enough that you can see the
+        conventions are and what each one is protecting, on a model simple enough that we can see the
         convention and not the geology.</p>
       <ul>
         <li>Neff, D. B., and W. Neff, Seismic plots: the four display types used in the DQ and RDQ
@@ -394,7 +394,7 @@
     <p class="eyebrow">Next up</p>
     <h3><a href="attributes-line.html">14 · A synthetic line with every attribute</a></h3>
     <p>A 2D synthetic with dip, a fault, a sand that thickens and thins and a fluid contact, with every
-      attribute the course has built shown on it &mdash; and two more that have not appeared yet.</p>
+      attribute the course has built shown on it - and two more that have not appeared yet.</p>
     <a class="btn" href="attributes-line.html">Open module 14 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
@@ -414,7 +414,7 @@
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
-        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        count, so that I can show the university these are being used - no cookie, no account,
         no personal information.</p>
     </div>
   </footer>
@@ -465,8 +465,6 @@
   const DTS = [0.001, 0.002, 0.003, 0.004];
   const NEAR_A = [0, 10];
   const T0 = 0, TWIN = 0.150, TTOP = 0.050;
-  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
-  const BEDC = [0.118, 0.130];                   // a tight bed below it
 
   const DEF = {
     over: 'soft', phi: 28, fluid: 'gas',
@@ -542,10 +540,7 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth and not a
-     lone sand, so that the trace looks like something a picker would find: a
-     contrasting bed above, the sand with an optional tight streak inside it,
-     and a tight bed below. Every spike is computed from the two rocks it sits
+  /* The near-stack reflectivity of one trace. The sand, with an optional tight streak inside it. Every spike is computed from the two rocks it sits
      between. */
   function spikes(topT, thickS) {
     const over = LITHS[S.over];
@@ -556,15 +551,11 @@
     const shift = topT - TTOP;                   // structure moves everything together
     const out = [];
 
-    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
-    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
 
     const baseT = topT + thickS / 1000;
     out.push({ t: topT, r: n(shuey(over, sand)) });
     out.push({ t: baseT, r: n(shuey(sand, over)) });
 
-    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
-    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
     return out;
   }
 
@@ -622,16 +613,28 @@
     const floor = 0.01 * peak;
 
     const cross = [];                      // { i, tTrue, err }
-    for (let i = 1; i < nt; i++) {
-      const a = tr[i - 1], b = tr[i];
-      if (a === 0 || b === 0) continue;
-      if ((a > 0) === (b > 0)) continue;
-      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
-      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
-      // where the crossing actually is, by linear interpolation
-      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
-      const tTrue = (i - 1 + frac) * dt();
-      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    /* A sample that is exactly zero is a crossing in its own right when the
+       signs on either side differ, so the loop compares each sample with the
+       last nonzero one and not only with its neighbor. */
+    let prev = -1;
+    for (let i = 0; i < nt; i++) {
+      if (tr[i] === 0) continue;
+      if (prev >= 0 && (tr[prev] > 0) !== (tr[i] > 0)) {
+        const a = tr[prev], b = tr[i];
+        if (!(Math.abs(a) < floor && Math.abs(b) < floor)) {
+          let j, tTrue;
+          if (i - prev > 1) {                   // exact zeros between: take the middle one
+            j = Math.floor((prev + i) / 2);
+            tTrue = ((prev + i) / 2) * dt();
+          } else {
+            j = Math.abs(a) <= Math.abs(b) ? prev : i;
+            // where the crossing actually is, by linear interpolation
+            tTrue = (prev + Math.abs(a) / (Math.abs(a) + Math.abs(b))) * dt();
+          }
+          cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+        }
+      }
+      prev = i;
     }
 
     /* Between each consecutive pair of crossings, keep the single largest
@@ -747,8 +750,8 @@
     return out;
   }
 
-  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
-     or a carbonate play — both partial stacks are reversed at the stacking
+  /* The reservoir top should be a trough. When it is a peak - a class 1 sand,
+     or a carbonate play - both partial stacks are reversed at the stacking
      step, before any picking, so that the numbering rule never changes. */
   function needsFlip() {
     const over = LITHS[S.over];
@@ -863,12 +866,8 @@
     const baseT = TTOP + S.thick / 1000;
     const f = (q) => q.A + q.B * S2F;
     const sp = [
-      { t: BEDA[0], r: f(shuey(over, (S.over === 'soft') ? LITHS.hard : LITHS.soft)) },
-      { t: BEDA[1], r: f(shuey((S.over === 'soft') ? LITHS.hard : LITHS.soft, over)) },
       { t: TTOP, r: f(shuey(over, sand)) },
       { t: baseT, r: f(shuey(sand, over)) },
-      { t: BEDC[0], r: f(shuey(over, LITHS.tight)) },
-      { t: BEDC[1], r: f(shuey(LITHS.tight, over)) },
     ];
     const nt = ntOf();
     const tr = SEIS.traceFromSpikes(sp, T0, dt(), nt, wavelet());
@@ -1066,8 +1065,8 @@
 
      Axes per the AASPI column specification: x is the rotated and split
      near-quadrant amplitude, y the rotated and split gradient, z the signed
-     half isochron. The half isochron is a waveform descriptor — the length
-     and direction of the half loop a sample sits in — not a bed thickness.
+     half isochron. The half isochron is a waveform descriptor - the length
+     and direction of the half loop a sample sits in - not a bed thickness.
      ===================================================================== */
 
   /* =====================================================================
@@ -1285,12 +1284,6 @@
     ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
     ctx.fillStyle = LITHFILL[S.over];
     ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
-    ctx.fillStyle = LITHFILL[other];
-    ctx.fillRect(rect.x, Y(BEDA[0]), rect.w, Y(BEDA[1]) - Y(BEDA[0]));
-    if (S.over !== 'tight') {
-      ctx.fillStyle = LITHFILL.tight;
-      ctx.fillRect(rect.x, Y(BEDC[0]), rect.w, Y(BEDC[1]) - Y(BEDC[0]));
-    }
     const fill = sandFill();
     traces.forEach((t, k) => {
       const top = TTOP, base = TTOP + t.thick / 1000;
@@ -1303,11 +1296,7 @@
     ctx.font = '9px "IBM Plex Mono", monospace';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillStyle = 'rgba(22,25,28,0.78)';
-    ctx.fillText(LITHS[S.over].name, rect.x + rect.w / 2, Y((BEDA[1] + TTOP) / 2));
-    ctx.fillText(LITHS[other].name + ' bed', rect.x + rect.w / 2, Y((BEDA[0] + BEDA[1]) / 2));
-    if (S.over !== 'tight') {
-      ctx.fillText('tight bed', rect.x + rect.w / 2, Y((BEDC[0] + BEDC[1]) / 2));
-    }
+    ctx.fillText(LITHS[S.over].name, rect.x + rect.w / 2, Y(TTOP / 2));
     const last = traces[traces.length - 1];
     ctx.fillStyle = '#5A0E0F';
     ctx.fillText(FLUIDS[S.fluid].name + ' sand, ' + S.phi + '%',
@@ -1716,7 +1705,7 @@
     const sf = $('skipflip'); if (sf) sf.disabled = !three;
 
     if ($('labCap')) {
-      $('labCap').innerHTML = 'The rock model <span>&mdash; the layers, and the near stack they produce</span>';
+      $('labCap').innerHTML = 'The rock model <span> - the layers, and the near stack they produce</span>';
     }
 
     const last = (id === 'pk' || id === 'pm');

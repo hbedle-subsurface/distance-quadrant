@@ -53,12 +53,12 @@ console.log('   thickest trace',kThick,' average peak',pk[1],' sum peak',pk[2]);
 const atThin=(t)=>t<=5||t>=NTR0-4;
 if(!(atThin(+pk[1])&&+pk[1]>kThick)) fail.push('the average no longer peaks at the right-hand thin end: '+pk[1]);
 if(!(atThin(+pk[2])&&+pk[2]<kThick)) fail.push('the sum no longer peaks at the left-hand thin end: '+pk[2]);
-set('freq',70);
+set('freq',45);
 const hi=$('s3d').textContent.match(/average at (\d+), sum at (\d+)/);
-console.log('   at 70 Hz, once the thin end resolves: average at',hi[1],' sum at',hi[2]);
+console.log('   at 45 Hz, once the thin end resolves: average at',hi[1],' sum at',hi[2]);
 if(!(parseInt(hi[1])<parseInt(pk[1]))) fail.push('raising the frequency did not move the average peak inward');
-if(Math.abs(parseInt(hi[2])-kThick)>3) fail.push('at 70 Hz the sum peaks at trace '+hi[2]+', answer says trace 14, next to the thickest');
-if(!/the sum moves to trace 14/.test(h)) fail.push('exercise answer no longer quotes trace 14');
+if(parseInt(hi[2])>6) fail.push('at 45 Hz the sum peaks at trace '+hi[2]+', answer says trace 3');
+if(!/on trace 3/.test(h)) fail.push('exercise answer no longer quotes trace 3');
 set('freq',40);
 
 console.log('\n--- every display renders for every fluid and seal ---');

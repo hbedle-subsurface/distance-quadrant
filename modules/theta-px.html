@@ -25,7 +25,7 @@
   <div class="mod-head">
     <p class="eyebrow">Module 07 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Theta PX</h1>
-    <p class="sub">The DQ says how far a sample sits from the origin. This is the other half of
+    <p class="sub">The DQ says how far a sample lies from the origin. This is the other half of
       the same vector: which direction it points, folded into a single range and given a sign. It is the
       attribute that separates fluids in places where the distance cannot, and it fails in a specific, predictable way, and this module measures it.</p>
   </div>
@@ -33,11 +33,11 @@
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap" id="labCap">The rock model <span>&mdash; the layers, and the near stack they produce</span></p>
+        <p class="cap" id="labCap">The rock model <span> - the layers, and the near stack they produce</span></p>
         <canvas id="cMain" aria-label="The split crossplot with the sand-top sample drawn as a vector and its angle marked"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
+        <p class="cap">The model <span> - everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -68,11 +68,11 @@
             <h2>The layers</h2>
             <div class="ctl">
               <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
-              <input type="range" id="thick" min="6" max="55" step="1" value="30">
+              <input type="range" id="thick" min="6" max="40" step="1" value="30">
             </div>
             <div class="ctl">
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
-              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+              <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
             <label class="check" style="grid-column:1/-1"><input type="checkbox" id="signed" checked>
               Apply the sign of the DQ trace</label>
@@ -135,9 +135,9 @@
       <div class="stat wide"><span>Reading</span><b id="s1e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>The fold is a measurement of how far the sample sits from the background trend in direction
-        and not in distance. Zero means the sample lies along the rotated baseline &mdash; the
-        background itself. Ninety means it sits at right angles to it, which is as far from ordinary as the
+      <span>The fold is a measurement of how far the sample lies from the background trend in direction
+        and not in distance. Zero means the sample lies along the rotated baseline - the
+        background itself. Ninety means it lies at right angles to it, which is as far from ordinary as the
         angle can report.</span>
     </div>
   </section>
@@ -145,7 +145,7 @@
   <section class="tabpane" id="p2" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
       <h3><span class="stepno">2</span>Adding the sign</h3>
-      <span class="hint">Which side of the background the sample sits on</span>
+      <span class="hint">Which side of the background the sample lies on</span>
     </div>
 
     <p class="lede">
@@ -191,11 +191,19 @@
       sand top at a fixed porosity, filled with brine, oil and gas in turn, read both ways.</p>
 
     <p class="lede">
-      At 20% porosity under soft shale the angle separates the three fluids cleanly &mdash; <b>+6&deg; for
-      brine, +15&deg; for oil, +23&deg; for gas</b> &mdash; while the distance moves the wrong way, falling
+      At 20% porosity under soft shale the angle separates the three fluids cleanly - <b>+6&deg; for
+      brine, +15&deg; for oil, +23&deg; for gas</b> - while the distance moves the wrong way, falling
       from 0.147 to 0.103 as the sand is charged. A reader with only the distance would call the gas sand
       the weaker anomaly. Under tight sandstone the position reverses: the angles crowd into a few degrees and
       say almost nothing, while the distance separates the fluids well.</p>
+
+    <p class="lede">
+      <b>These angles belong to this rock model.</b> Different rock models give different results. The
+      published Class 3 example has wet sand at 50 to 70&deg; and gas sand at 20 to 40&deg;, the opposite
+      ordering from the one above, and its Class 4 and Class 2 sands sit near +18&deg; and &minus;18&deg;.
+      The velocities, densities, compaction and overburden all move the angle. What carries over from one
+      model to another is the question the angle answers, which is how far a sample's direction departs
+      from the background trend. The numbers themselves do not carry over.</p>
 
     <canvas id="c3a" aria-label="Theta px and DQ for the three fluids across porosity"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Both attributes at the sand top, across the porosity
@@ -211,7 +219,7 @@
     </div>
     <div class="legend prose">
       <span>The failure mode carries as much information as the success. A short vector has a badly determined
-        direction &mdash; module 06 made the same point about the Q5 samples nearest the origin &mdash; so
+        direction - module 06 made the same point about the Q5 samples nearest the origin - so
         wherever the distance is small the angle is unstable. Near a class 2 crossover, where the intercept
         passes through zero, the distance can fall to a few thousandths and the angle swings wildly. Read
         the two together or not at all.</span>
@@ -227,7 +235,7 @@
     <p class="lede">The DQ attributes pamphlet calls &theta;<sub>px</sub> a <b>crossplot cluster
       mapping attribute</b>, which names its job precisely. Rock types that sit in different places on the
       crossplot take different angles, so a section or map colored by the angle shows where each cluster
-      sits in space. That is a different question from how strong the response is, which is what the
+      lies in space. That is a different question from how strong the response is, which is what the
       distance answers.</p>
 
     <p class="lede">Module 05 made the point in the abstract: rolling a two-component vector into a length
@@ -251,7 +259,7 @@
 
     <div class="legend prose">
       <span>Module 10 adds the third axis. The signed half isochron of module 08 has been carried along
-        unused since then, and the three together &mdash; distance, angle and time thickness &mdash; are
+        unused since then, and the three together - distance, angle and time thickness - are
         what the RDQ crossplot actually plots.</span>
     </div>
   </section>
@@ -263,8 +271,8 @@
         <li><b>Watch the fluids separate in angle.</b> On step 3, with soft shale at 20% porosity, read the
           three angles and the three distances.
           <details class="reveal"><summary>Answer</summary><span class="ans">The angle gives +6&deg;,
-            +15&deg; and +23&deg; for brine, oil and gas: clean, monotonic, and in the direction you would
-            want. The distance gives 0.147, 0.123 and 0.103 &mdash; it falls as the sand is charged, so on
+            +15&deg; and +23&deg; for brine, oil and gas: clean, monotonic, and in the direction we would
+            want. The distance gives 0.147, 0.123 and 0.103 - it falls as the sand is charged, so on
             distance alone the gas sand looks like the weakest anomaly of the three. That is not an error
             in the distance; it is what happens when a charged sand's intercept moves toward the origin
             while its direction swings away from the background. One number cannot carry both
@@ -272,13 +280,13 @@
         <li><b>Now switch the overburden to tight sandstone.</b> Read the same six numbers.
           <details class="reveal"><summary>Answer</summary><span class="ans">The two attributes swap roles.
             The angles crowd into a few degrees and barely separate the fluids at all, while the distance
-            spreads them cleanly. So neither attribute is the useful one in general &mdash; which one
+            spreads them cleanly. So neither attribute is the useful one in general - which one
             works depends on what the reservoir is sitting under, and that is not something an interpreter
             chooses. This is the concrete version of module 05's argument for computing both.</span></details></li>
         <li><b>Find where the angle becomes unreliable.</b> Set soft shale with oil and drag the porosity
           up to about 28%, watching the distance and the angle together.
-          <details class="reveal"><summary>Answer</summary><span class="ans">The distance collapses to a few
-            thousandths and the angle swings to a large value that means nothing. That is a class 2
+          <details class="reveal"><summary>Answer</summary><span class="ans">The distance falls to about 0.04,
+            well below its value at neighboring porosities, and the angle swings to a large value that means nothing. That is a class 2
             crossover: the intercept passes through zero, the vector is almost at the origin, and the
             direction of a point at the origin is undefined. Module 06 made the same observation about the
             Q5 samples, which sit nearest the origin and have the least trustworthy angles. The practical
@@ -288,7 +296,7 @@
           <details class="reveal"><summary>Answer</summary><span class="ans">Everything becomes positive and
             the section loses the ability to distinguish a departure on one side of the background from a
             departure on the other. The magnitude of the fold is a measure of how unusual a sample is; the
-            sign is what tells you in which sense. It is taken from the near stack slope, exactly as the
+            sign is what tells us in which sense. It is taken from the near stack slope, exactly as the
             distance and the half isochron take theirs, so all three can be crossplotted against each other
             without one arriving upside down.</span></details></li>
         <li><b>Check the range.</b> Step through several models and watch the folded angle readout on
@@ -317,13 +325,15 @@
           one per quarter of the crossplot.</li>
         <li><b>The sign comes from the DQ trace</b>, not from the angle, giving a range of &minus;90 to
           +90&deg;.</li>
-        <li><b>Three attributes share one sign convention</b> &mdash; distance, angle and half isochron
-          &mdash; so any two can be crossplotted without one being upside down.</li>
-        <li><b>Zero means the sample lies along the background trend.</b> Ninety means it sits at right
+        <li><b>Three attributes share one sign convention</b> - distance, angle and half isochron
+- so any two can be crossplotted without one being upside down.</li>
+        <li><b>Zero means the sample lies along the background trend.</b> Ninety means it lies at right
           angles to it.</li>
         <li><b>Under soft shale the angle separates fluids and the distance does not.</b> At 20% porosity:
           +6&deg;, +15&deg;, +23&deg; for brine, oil and gas, while the distance falls from 0.147 to
           0.103.</li>
+        <li><b>Angle values depend on the rock model.</b> The same fluid can sit at +23&deg; here and at
+          20 to 40&deg; in a published Class 3 example, so the numbers are read against a local calibration.</li>
         <li><b>Under tight sandstone the two swap roles.</b> The angles crowd together and the distance
           separates cleanly.</li>
         <li><b>An angle is only as good as the distance it belongs to.</b> Near a class 2 crossover the
@@ -353,9 +363,9 @@
       <p>One thing this module does not attempt is a field-scale statement about what particular angle
         values mean. The published Class 3 example quotes a gas response near +25&deg; and a wet response
         near +60&deg;, which is the opposite ordering to the one this rock model produces, and the
-        difference is almost certainly the model and not the method &mdash; a different overburden,
-        compaction state and baseline would move both numbers. Treat the separation shown here as evidence
-        that the angle carries fluid information, not as a calibration.</p>
+        difference is almost certainly the model and not the method - a different overburden,
+        compaction state and baseline would move both numbers. The separation shown here is evidence
+        that the angle carries fluid information, not a calibration.</p>
       <ul>
         <li>Bedle, H., D. B. Neff, W. Neff, and D. Lubo-Robles, 2025a, Distance and quadrant trace method for
           quantitative seismic interpretation: <em>Interpretation</em>, 13, T163&ndash;T176.</li>
@@ -371,7 +381,7 @@
     <p class="eyebrow">Next up</p>
     <h3><a href="isochron.html">08 · Time thickness</a></h3>
     <p>The distance tracks porosity about as tightly as acoustic impedance does, with no well and no
-      inversion &mdash; and with a sign that belongs to the seal and not to the method.</p>
+      inversion - and with a sign that belongs to the seal and not to the method.</p>
     <a class="btn" href="isochron.html">Open module 08 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
   </section>
@@ -391,7 +401,7 @@
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
-        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        count, so that I can show the university these are being used - no cookie, no account,
         no personal information.</p>
     </div>
   </footer>
@@ -442,8 +452,6 @@
   const DTS = [0.001, 0.002, 0.003, 0.004];
   const NEAR_A = [0, 10];
   const T0 = 0, TWIN = 0.150, TTOP = 0.050;
-  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
-  const BEDC = [0.118, 0.130];                   // a tight bed below it
 
   const DEF = {
     over: 'soft', phi: 28, fluid: 'gas',
@@ -519,10 +527,7 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth and not a
-     lone sand, so that the trace looks like something a picker would find: a
-     contrasting bed above, the sand with an optional tight streak inside it,
-     and a tight bed below. Every spike is computed from the two rocks it sits
+  /* The near-stack reflectivity of one trace. The sand, with an optional tight streak inside it. Every spike is computed from the two rocks it sits
      between. */
   function spikes(topT, thickS) {
     const over = LITHS[S.over];
@@ -533,15 +538,11 @@
     const shift = topT - TTOP;                   // structure moves everything together
     const out = [];
 
-    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
-    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
 
     const baseT = topT + thickS / 1000;
     out.push({ t: topT, r: n(shuey(over, sand)) });
     out.push({ t: baseT, r: n(shuey(sand, over)) });
 
-    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
-    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
     return out;
   }
 
@@ -599,16 +600,28 @@
     const floor = 0.01 * peak;
 
     const cross = [];                      // { i, tTrue, err }
-    for (let i = 1; i < nt; i++) {
-      const a = tr[i - 1], b = tr[i];
-      if (a === 0 || b === 0) continue;
-      if ((a > 0) === (b > 0)) continue;
-      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
-      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
-      // where the crossing actually is, by linear interpolation
-      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
-      const tTrue = (i - 1 + frac) * dt();
-      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    /* A sample that is exactly zero is a crossing in its own right when the
+       signs on either side differ, so the loop compares each sample with the
+       last nonzero one and not only with its neighbor. */
+    let prev = -1;
+    for (let i = 0; i < nt; i++) {
+      if (tr[i] === 0) continue;
+      if (prev >= 0 && (tr[prev] > 0) !== (tr[i] > 0)) {
+        const a = tr[prev], b = tr[i];
+        if (!(Math.abs(a) < floor && Math.abs(b) < floor)) {
+          let j, tTrue;
+          if (i - prev > 1) {                   // exact zeros between: take the middle one
+            j = Math.floor((prev + i) / 2);
+            tTrue = ((prev + i) / 2) * dt();
+          } else {
+            j = Math.abs(a) <= Math.abs(b) ? prev : i;
+            // where the crossing actually is, by linear interpolation
+            tTrue = (prev + Math.abs(a) / (Math.abs(a) + Math.abs(b))) * dt();
+          }
+          cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+        }
+      }
+      prev = i;
     }
 
     /* Between each consecutive pair of crossings, keep the single largest
@@ -724,8 +737,8 @@
     return out;
   }
 
-  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
-     or a carbonate play — both partial stacks are reversed at the stacking
+  /* The reservoir top should be a trough. When it is a peak - a class 1 sand,
+     or a carbonate play - both partial stacks are reversed at the stacking
      step, before any picking, so that the numbering rule never changes. */
   function needsFlip() {
     const over = LITHS[S.over];
@@ -840,12 +853,8 @@
     const baseT = TTOP + S.thick / 1000;
     const f = (q) => q.A + q.B * S2F;
     const sp = [
-      { t: BEDA[0], r: f(shuey(over, (S.over === 'soft') ? LITHS.hard : LITHS.soft)) },
-      { t: BEDA[1], r: f(shuey((S.over === 'soft') ? LITHS.hard : LITHS.soft, over)) },
       { t: TTOP, r: f(shuey(over, sand)) },
       { t: baseT, r: f(shuey(sand, over)) },
-      { t: BEDC[0], r: f(shuey(over, LITHS.tight)) },
-      { t: BEDC[1], r: f(shuey(LITHS.tight, over)) },
     ];
     const nt = ntOf();
     const tr = SEIS.traceFromSpikes(sp, T0, dt(), nt, wavelet());
@@ -1070,9 +1079,7 @@
     const baseT = TTOP + S.thick / 1000;
     const b = [
       { t0: T0, t1: TWIN, name: '', fill: LITHFILL[seal] },
-      { t0: BEDA[0], t1: BEDA[1], name: LITHS[other].name, fill: LITHFILL[other] },
       { t0: TTOP, t1: baseT, name: 'sand ' + S.phi + '%', fill: LITHFILL.sand },
-      { t0: BEDC[0], t1: BEDC[1], name: 'tight sandstone', fill: LITHFILL.tight },
     ];
     return b;
   }
@@ -1459,7 +1466,7 @@
     const sf = $('skipflip'); if (sf) sf.disabled = !three;
 
     if ($('labCap')) {
-      $('labCap').innerHTML = 'The rock model <span>&mdash; the layers, and the near stack they produce</span>';
+      $('labCap').innerHTML = 'The rock model <span> - the layers, and the near stack they produce</span>';
     }
 
     const last = (id === 'pk' || id === 'pm');

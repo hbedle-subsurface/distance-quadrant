@@ -34,11 +34,11 @@
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap" id="labCap">The wedge <span>&mdash; the sand thinning, and the trace it produces</span></p>
+        <p class="cap" id="labCap">The wedge <span> - the sand thinning, and the trace it produces</span></p>
         <canvas id="cMain" aria-label="A wedge model with the sand thinning to the right, beside the near stack"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
+        <p class="cap">The model <span> - everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -69,11 +69,11 @@
             <h2>The wedge</h2>
             <div class="ctl">
               <label for="thick">Thickness marked <span class="val" id="thickV">20 ms</span></label>
-              <input type="range" id="thick" min="6" max="55" step="1" value="20">
+              <input type="range" id="thick" min="6" max="40" step="1" value="20">
             </div>
             <div class="ctl">
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
-              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+              <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
             <label class="check" style="grid-column:1/-1"><input type="checkbox" id="showall" checked>
               Show all three fluids on step 3</label>
@@ -125,7 +125,7 @@
       regime, where amplitude reports thickness as much as it reports rock.</p>
 
     <p class="lede">
-      The DQ is an amplitude attribute and inherits the problem. Across a wedge from 6 to 55 ms
+      The DQ is an amplitude attribute and inherits the problem. Across a wedge from 6 to 40 ms
       it varies by about <b>a third of its maximum</b>, peaking near 8 ms at 40 Hz and settling to a
       constant once the bed is thick enough for the two reflections to separate.</p>
 
@@ -156,7 +156,7 @@
 
     <p class="lede">
       Now put &theta;<sub>px</sub> on the same wedge. It is flat. Across the whole thickness range the
-      angle at the sand top does not move &mdash; under a tight seal it holds to within a degree, while
+      angle at the sand top does not move - under a tight seal it holds to within a degree, while
       the distance beside it swings by a third.</p>
 
     <p class="lede">
@@ -192,7 +192,7 @@
 
     <p class="lede">
       Put the two facts together. Module 10 showed the distance tracking porosity. This module shows it
-      tracking thickness as well &mdash; and an interpreter looking at a single bright DQ sample cannot
+      tracking thickness as well - and an interpreter looking at a single bright DQ sample cannot
       tell which of the two caused it. The angle helps, because in module 07 it moved with fluid, and in this wedge it changes
       little with thickness once the bed is thicker than about a quarter wavelength. Thinner beds shift
       the angle as well (Bedle et al., 2025b).</p>
@@ -206,8 +206,8 @@
       How much the angle has to say about fluid depends on the seal, and module 07 measured that. Under
       this tight sandstone the readout below puts brine and gas about two degrees apart, a real separation
       and a small one, while thickness moves the angle by less than one degree across the whole wedge.
-      Under a soft shale the fluids spread much further, but there the reflection is weak and the angle is
-      unstable, which the panel shows if we switch. The thickness immunity holds generally, and how much
+      Under a soft shale the reflection is weak, the distance is several times smaller, and the angle
+      rests on a short vector. The thickness immunity holds generally, and how much
       the angle says about fluid depends on the seal.</p>
 
     <canvas id="c3a" aria-label="Distance and Theta PX against thickness for the three fluids"></canvas>
@@ -224,9 +224,9 @@
     </div>
     <div class="legend prose">
       <span>The panel opens on the tight sandstone seal, where the division of labor works. Switch the
-        overburden to soft shale and it collapses. There the sand and the
-        seal are close in impedance, the distance falls to a few hundredths, and the angle starts swinging
-        wildly because a short vector has no reliable direction. The separation of thickness from rock is
+        overburden to soft shale and it weakens. There the sand and the
+        seal are close in impedance, the distance is about six times smaller, and the angle rests on a
+        short vector, which has no reliable direction. The separation of thickness from rock is
         real, and it holds only where there is a reflection to measure.</span>
     </div>
   </section>
@@ -242,8 +242,8 @@
       the rock". A single amplitude attribute cannot answer that, and no amount of scaling or normalizing
       makes it able to, because the three effects all move it in the same direction.</p>
 
-    <p class="lede">The DQ pair does not solve the problem either &mdash; nothing computed from two partial
-      stacks can fully separate three unknowns &mdash; but it narrows it. Above about a quarter wavelength the angle
+    <p class="lede">The DQ pair does not solve the problem either - nothing computed from two partial
+      stacks can fully separate three unknowns - but it narrows it. Above about a quarter wavelength the angle
       changes little with thickness, so an angle anomaly more likely reflects the rock or the fluid. The
       distance carries thickness, so a distance anomaly with no angle anomaly may be geometry. That
       narrowing is available without a well, and it is weaker in thin beds.</p>
@@ -262,35 +262,35 @@
         <li><b>Find the tuning peak.</b> On step 1 with a tight seal and gas at 24%, read where the curve
           peaks, then change the wavelet frequency.
           <details class="reveal"><summary>Answer</summary><span class="ans">It peaks at 8 ms at 40 Hz, and
-            at 14, 11 and 7 ms for 25, 30 and 55 Hz, because tuning is a property of the wavelet and not
+            at 14, 11 and 7 ms for 25, 30 and 45 Hz, because tuning is a property of the wavelet and not
             of the rock. A quarter-wavelength bed is half the wavelet period in two-way time, 12.5 ms
             at 40 Hz (Widess, 1973). An isolated Ricker wavelet reaches its largest amplitude at a thinner
             bed, 9.8 ms at 40 Hz, and the DQ read at the picked sand-top sample peaks a little thinner again. What matters is not the exact number but the fact that the peak follows the bandwidth.</span></details></li>
         <li><b>Measure how much thickness moves the distance.</b> Read the variation figure on step 1.
           <details class="reveal"><summary>Answer</summary><span class="ans">About a third of the maximum
-            across a wedge from 6 to 55 ms. That is the same order as the change module 10 got from
+            across a wedge from 6 to 40 ms. That is the same order as the change module 10 got from
             varying porosity across its whole range, which is the problem in one sentence: a bright DQ
             sample could be a thick ordinary sand or a thin excellent one, and the distance alone cannot
             say. The habit to form is to treat a bright sample as having at least three candidate
-            causes &mdash; more rock, better rock, or hydrocarbon in the rock &mdash; and to ask which
+            causes - more rock, better rock, or hydrocarbon in the rock - and to ask which
             attribute could separate them.</span></details></li>
         <li><b>Now read the angle.</b> On step 2, compare the two variation figures.
           <details class="reveal"><summary>Answer</summary><span class="ans">The distance moves by about a
-            third and the angle by about a degree. The angle is not merely less sensitive to thickness, it
+            third and the angle by less than a degree. The angle is not merely less sensitive to thickness, it
             is essentially blind to it, and for a clear reason: tuning scales the whole vector, and scaling changes a length but not a direction. Any attribute defined as a ratio or
             an angle of the same pair would behave the same way.</span></details></li>
         <li><b>Check that the angle still sees fluid.</b> On step 3, read the fluid separation.
           <details class="reveal"><summary>Answer</summary><span class="ans">About three degrees from
             brine to gas under this seal, against half a degree of movement across the whole wedge. So the
-            fluid signal is six times the thickness signal &mdash; but both are small here, because module
+            fluid signal is six times the thickness signal - but both are small here, because module
             10 found this seal to be the one where the angle says least about fluid. The claim to take away is the ratio and not the magnitude: whatever fluid response the angle has in a given
             setting, thickness will not counterfeit it.</span></details></li>
         <li><b>Break it with a soft shale.</b> Switch the overburden on step 3 and look again.
-          <details class="reveal"><summary>Answer</summary><span class="ans">The angle stops being flat and
-            starts swinging, and the distance collapses to a few hundredths. Under a soft shale at this
+          <details class="reveal"><summary>Answer</summary><span class="ans">The angle stays flat with thickness, as it did under tight sandstone, but the
+            distance is about six times smaller: 0.06 against 0.38 at 40 ms. Under a soft shale at this
             porosity the sand is close to the seal in impedance, so there is barely a reflection, and a
             short vector has no reliable direction. The separation of thickness from rock is a real
-            property of the pair, but it is only available where there is something to measure. This is the
+            property of the pair, but the angle it leaves is only as good as the distance behind it. This is the
             same limit module 07 met at the class 2 crossover.</span></details></li>
         <li><b>Thin the bed past the point of no return.</b> Drag the thickness marker down to 6 ms on
           step 1 and look at the model panel.
@@ -307,11 +307,11 @@
     <div class="takeaway" style="max-width:none">
       <h3>The main points</h3>
       <ul>
-        <li><b>The DQ is an amplitude attribute and tunes like one.</b> Across a 6 to 55 ms wedge
+        <li><b>The DQ is an amplitude attribute and tunes like one.</b> Across a 6 to 40 ms wedge
           it varies by about a third of its maximum.</li>
         <li><b>The tuning peak follows the wavelet, not the rock</b>, near 10 ms at 40 Hz and moving with
           frequency.</li>
-        <li><b>&theta;<sub>px</sub> does not respond to thickness at all</b> &mdash; about a degree across
+        <li><b>&theta;<sub>px</sub> does not respond to thickness at all</b> - about a degree across
           the same wedge, under a seal that gives a healthy contrast.</li>
         <li><b>The reason is geometric.</b> Tuning scales the vector; scaling changes a length and leaves a
           direction alone.</li>
@@ -320,7 +320,7 @@
         <li><b>It is a narrowing, not a solution.</b> Two numbers from two partial stacks cannot fully
           separate thickness, porosity and fluid.</li>
         <li><b>The division fails where the reflection is weak.</b> Under a soft shale at moderate porosity
-          the distance collapses and the angle swings, exactly as at module 07's class 2 crossover.</li>
+          the distance is about six times smaller and the angle rests on a short vector, as at module 07's class 2 crossover.</li>
         <li><b>Below about 8 ms the sand holds no pick of its own</b>, which module 02 measured, and every
           attribute downstream inherits that.</li>
       </ul>
@@ -332,7 +332,7 @@
       <summary>Method, assumptions, and where to read more</summary>
       <p>Everything upstream is as in modules 02 through 10: the same rocks, picks, quadrant numbers, phase
         filters, enhancement, distance, baseline rotation, sector split and angle fold. The wedge is
-        modeled by rebuilding the whole workflow at each thickness from 6 to 55 ms in steps of one and
+        modeled by rebuilding the whole workflow at each thickness from 6 to 40 ms in steps of one and
         reading both attributes at the sample nearest the top of the sand.</p>
       <p>This is a two-interface wedge in a fixed seal, not a true wedge section with lateral continuity.
         The published wedge displays vary thickness across traces and show the section; this page varies it
@@ -344,7 +344,7 @@
         one. Raising the sample rate control moves the peak around by a millisecond or two for that reason
         and not because the physics changed.</p>
       <p>The claim that the angle is blind to thickness holds where the reflection is strong. It is stated
-        for a tight sandstone seal and shown to fail under a soft shale at moderate porosity, which is the
+        for a tight sandstone seal and compared with a soft shale at moderate porosity, where the distance is far smaller, which is the
         near-crossover case module 07 uses as its example of an unreliable angle. Both statements are
         measured on this page and not assumed.</p>
       <ul>
@@ -360,7 +360,7 @@
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
     <h3><a href="avo-classes.html">12 · The four AVO classes</a></h3>
-    <p>Distance, &theta;<sub>px</sub> and the signed half isochron on three axes &mdash; the plot the whole
+    <p>Distance, &theta;<sub>px</sub> and the signed half isochron on three axes - the plot the whole
       workflow has been building toward.</p>
     <a class="btn" href="avo-classes.html">Open module 12 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
@@ -381,7 +381,7 @@
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
-        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        count, so that I can show the university these are being used - no cookie, no account,
         no personal information.</p>
     </div>
   </footer>
@@ -432,8 +432,6 @@
   const DTS = [0.001, 0.002, 0.003, 0.004];
   const NEAR_A = [0, 10];
   const T0 = 0, TWIN = 0.150, TTOP = 0.050;
-  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
-  const BEDC = [0.118, 0.130];                   // a tight bed below it
 
   /* The tight seal is the default here: it is the case where the division of
      labor the module teaches actually works. The soft shale, where a weak
@@ -513,10 +511,7 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth and not a
-     lone sand, so that the trace looks like something a picker would find: a
-     contrasting bed above, the sand with an optional tight streak inside it,
-     and a tight bed below. Every spike is computed from the two rocks it sits
+  /* The near-stack reflectivity of one trace. The sand, with an optional tight streak inside it. Every spike is computed from the two rocks it sits
      between. */
   function spikes(topT, thickS) {
     const over = LITHS[S.over];
@@ -527,15 +522,11 @@
     const shift = topT - TTOP;                   // structure moves everything together
     const out = [];
 
-    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
-    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
 
     const baseT = topT + thickS / 1000;
     out.push({ t: topT, r: n(shuey(over, sand)) });
     out.push({ t: baseT, r: n(shuey(sand, over)) });
 
-    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
-    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
     return out;
   }
 
@@ -593,16 +584,28 @@
     const floor = 0.01 * peak;
 
     const cross = [];                      // { i, tTrue, err }
-    for (let i = 1; i < nt; i++) {
-      const a = tr[i - 1], b = tr[i];
-      if (a === 0 || b === 0) continue;
-      if ((a > 0) === (b > 0)) continue;
-      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
-      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
-      // where the crossing actually is, by linear interpolation
-      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
-      const tTrue = (i - 1 + frac) * dt();
-      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    /* A sample that is exactly zero is a crossing in its own right when the
+       signs on either side differ, so the loop compares each sample with the
+       last nonzero one and not only with its neighbor. */
+    let prev = -1;
+    for (let i = 0; i < nt; i++) {
+      if (tr[i] === 0) continue;
+      if (prev >= 0 && (tr[prev] > 0) !== (tr[i] > 0)) {
+        const a = tr[prev], b = tr[i];
+        if (!(Math.abs(a) < floor && Math.abs(b) < floor)) {
+          let j, tTrue;
+          if (i - prev > 1) {                   // exact zeros between: take the middle one
+            j = Math.floor((prev + i) / 2);
+            tTrue = ((prev + i) / 2) * dt();
+          } else {
+            j = Math.abs(a) <= Math.abs(b) ? prev : i;
+            // where the crossing actually is, by linear interpolation
+            tTrue = (prev + Math.abs(a) / (Math.abs(a) + Math.abs(b))) * dt();
+          }
+          cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+        }
+      }
+      prev = i;
     }
 
     /* Between each consecutive pair of crossings, keep the single largest
@@ -718,8 +721,8 @@
     return out;
   }
 
-  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
-     or a carbonate play — both partial stacks are reversed at the stacking
+  /* The reservoir top should be a trough. When it is a peak - a class 1 sand,
+     or a carbonate play - both partial stacks are reversed at the stacking
      step, before any picking, so that the numbering rule never changes. */
   function needsFlip() {
     const over = LITHS[S.over];
@@ -834,12 +837,8 @@
     const baseT = TTOP + S.thick / 1000;
     const f = (q) => q.A + q.B * S2F;
     const sp = [
-      { t: BEDA[0], r: f(shuey(over, (S.over === 'soft') ? LITHS.hard : LITHS.soft)) },
-      { t: BEDA[1], r: f(shuey((S.over === 'soft') ? LITHS.hard : LITHS.soft, over)) },
       { t: TTOP, r: f(shuey(over, sand)) },
       { t: baseT, r: f(shuey(sand, over)) },
-      { t: BEDC[0], r: f(shuey(over, LITHS.tight)) },
-      { t: BEDC[1], r: f(shuey(LITHS.tight, over)) },
     ];
     const nt = ntOf();
     const tr = SEIS.traceFromSpikes(sp, T0, dt(), nt, wavelet());
@@ -1040,7 +1039,7 @@
      and leaves the direction alone.
      ===================================================================== */
 
-  const TH_LO = 6, TH_HI = 55;
+  const TH_LO = 6, TH_HI = 40;
   const THS = [];
   for (let t = TH_LO; t <= TH_HI; t += 1) THS.push(t);
 
@@ -1417,7 +1416,7 @@
     const sf = $('skipflip'); if (sf) sf.disabled = !three;
 
     if ($('labCap')) {
-      $('labCap').innerHTML = 'The rock model <span>&mdash; the layers, and the near stack they produce</span>';
+      $('labCap').innerHTML = 'The rock model <span> - the layers, and the near stack they produce</span>';
     }
 
     const last = (id === 'pk' || id === 'pm');

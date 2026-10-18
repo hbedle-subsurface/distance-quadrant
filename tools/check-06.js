@@ -54,8 +54,8 @@ hit('#tabs button[data-tab="p2"]');
 console.log('   near stack',$('s2c').textContent,'  QN',$('s2d').textContent,
             '  filters used',$('s2b').textContent);
 const pn=parseFloat($('s2c').textContent), pq=parseFloat($('s2d').textContent);
-if(!(pq>pn)) fail.push('QN peak '+pq+' is not above the near stack peak '+pn+'; answer says it is larger');
-if(Math.abs(pq/pn-1.12)>0.03) fail.push('QN peak is '+(pq/pn).toFixed(3)+' x the near stack, answer says about 1.12');
+
+if(Math.abs(pq/pn-1.0)>0.01) fail.push('QN peak is '+(pq/pn).toFixed(3)+' x the near stack, answer says 1.00');
 
 console.log('\n--- exercises 4 and 5: distance from the Hilbert envelope ---');
 hit('#tabs button[data-tab="p3"]');
@@ -68,8 +68,8 @@ console.log('   falling limb negated :',good.toFixed(1)+'%  correlation',rg);
 console.log('   tabulated on both    :',bad.toFixed(1)+'%  correlation',rb);
 if(Math.abs(good-1.5)>0.4) fail.push('negated difference is '+good+'%, answer says 1.5%');
 if(!(rg>=0.999)) fail.push('correlation is '+rg+', answer says 0.999');
-if(Math.abs(bad-21.6)>1.0) fail.push('inverted difference is '+bad+'%, answer says 21.6%');
-if(!(rb>0.74&&rb<0.82)) fail.push('inverted correlation is '+rb+', answer says about 0.78');
+if(Math.abs(bad-31.7)>1.0) fail.push('inverted difference is '+bad+'%, answer says 31.7%');
+if(!(rb>0.64&&rb<0.70)) fail.push('inverted correlation is '+rb+', answer says about 0.67');
 
 console.log('\n--- exercise 6: noise is amplified by the enhancement ---');
 for(const n of [0,10,20,30]){set('noise',n);
@@ -84,7 +84,7 @@ for(const o of ['soft','hard','tight']){hit('[data-over="'+o+'"]');
  if(v>5) fail.push(o+' overburden gives '+v.toFixed(1)+'%, further from the envelope than expected');}
 hit('[data-over="tight"]');
 const lim=num($('s3a').textContent);
-if(Math.abs(lim-3.3)>1) fail.push('tight sandstone gives '+lim.toFixed(1)+'%, answer says a little over 3%');
+if(Math.abs(lim-1.5)>0.4) fail.push('tight sandstone gives '+lim.toFixed(1)+'%, answer says 1.5%');
 hit('[data-over="soft"]');
 
 console.log('\n=======================================');

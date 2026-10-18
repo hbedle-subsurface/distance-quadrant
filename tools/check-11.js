@@ -43,8 +43,8 @@ console.log('   soft-shale contrast dies at',$('s3d').textContent);
 const rh=r($('s3c').textContent);
 if(!(Math.abs(rh)<0.7)) fail.push('hard shale correlation is '+rh+', answer says it is not a useful number');
 const dip=$('s3d').textContent;
-if(!/3[2-6]%/.test(dip)) fail.push('the soft-shale minimum is at '+dip+', answer says the mid thirties');
-if(!(parseFloat(dip.split('distance ')[1])<0.02)) fail.push('the minimum distance is '+dip+', answer says under a hundredth');
+if(!/32%/.test(dip)) fail.push('the soft-shale minimum is at '+dip+', answer says 32%');
+if(!(parseFloat(dip.split('distance ')[1])<0.03)) fail.push('the minimum distance is '+dip+', answer says about two hundredths');
 
 console.log('\n--- exercise 5: fluid lifts the curve without flipping it ---');
 hit('#tabs button[data-tab="p2"]'); hit('[data-over="tight"]');
@@ -59,8 +59,8 @@ for(const fl of ['brine','oil','gas']){hit('[data-fluid="'+fl+'"]');const row=[]
  set('noise',0);
  console.log('  ',fl.padEnd(6),row.map(([n,v])=>n+'%:'+v.toFixed(3)).join('  '));
  const to35=row.filter(([n])=>n<=35).map(([,v])=>v), at40=row.find(([n])=>n===40)[1];
- if(!(Math.min(...to35)>=0.98)) fail.push(fl+': below 0.98 before 35% noise, answer says 0.98 or better');
- if(!(at40>=0.905&&at40<=0.955)) fail.push(fl+': '+at40.toFixed(3)+' at 40%, answer says between 0.91 and 0.95');
+ if(!(Math.min(...to35)>=0.99)) fail.push(fl+': below 0.99 before 35% noise, answer says 0.99 or better');
+ if(!(at40>=0.99)) fail.push(fl+': '+at40.toFixed(3)+' at 40%, answer says 0.99 or better');
 }
 hit('[data-fluid="brine"]');
 

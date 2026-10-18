@@ -34,11 +34,11 @@
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap" id="labCap">The front wall <span>&mdash; amplitude against gradient, colored by half isochron</span></p>
+        <p class="cap" id="labCap">The front wall <span> - amplitude against gradient, colored by half isochron</span></p>
         <canvas id="cMain" aria-label="The RDQ crossplot front wall with points colored by signed half isochron"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
+        <p class="cap">The model <span> - everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -69,17 +69,21 @@
             <h2>The layers</h2>
             <div class="ctl">
               <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
-              <input type="range" id="thick" min="6" max="55" step="1" value="30">
+              <input type="range" id="thick" min="6" max="40" step="1" value="30">
             </div>
             <div class="ctl">
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
-              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+              <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
             <div class="ctl">
-              <label for="iso">Half isochron delimiter <span class="val" id="isoV">&plusmn;14 ms</span></label>
-              <input type="range" id="iso" min="1" max="14" step="1" value="14">
+              <label for="isoLo">Half isochron, lower limit <span class="val" id="isoLoV">+6 ms</span></label>
+              <input type="range" id="isoLo" min="-14" max="14" step="1" value="6">
             </div>
-            <p class="hint-line" style="margin:-4px 0 0">Narrow it and samples outside the band drop out of
+            <div class="ctl">
+              <label for="isoHi">Half isochron, upper limit <span class="val" id="isoHiV">+10 ms</span></label>
+              <input type="range" id="isoHi" min="-14" max="14" step="1" value="10">
+            </div>
+            <p class="hint-line" style="margin:-4px 0 0">Samples outside the signed band drop out of
               the plot. Step 3 is about what that is for.</p>
           </div>
 
@@ -131,8 +135,8 @@
     <p class="lede">
       To be precise about what it measures: the half isochron is the time from a sample to
       the pick that bounds its half loop, signed positive from trough to peak. That makes it a
-      <b>description of the waveform's shape at that sample</b> &mdash; how long the loop is and which way
-      it runs &mdash; and not a measurement of how thick a bed is. Once a bed is resolved the loop at its
+      <b>description of the waveform's shape at that sample</b> - how long the loop is and which way
+      it runs - and not a measurement of how thick a bed is. Once a bed is resolved the loop at its
       top belongs to the wavelet, so the half isochron settles to a value set by the bandwidth and stops
       responding to thickness altogether. The panel below shows that directly.</p>
 
@@ -208,11 +212,14 @@
     <p class="lede">
       The crossplot is a tool and not a picture, and it is worked in three ways. First, every column
       can act as a <b>delimiter</b>: set a range and only samples inside it are drawn. The half isochron
-      delimiter is in the panel &mdash; narrow it and watch the plot thin out.</p>
+      delimiter is in the panel, set as a signed band. It starts at +6 to +10 ms, the range used in the
+      published example, where keeping only positive half isochron values thinned the shale points from
+      294 to 76 before a distance cut removed the rest. Here we use a reduced range to show the idea.
+      Move the limits and watch the plot thin out.</p>
 
     <p class="lede">
       Second, regions of the plot are enclosed as <b>polygons</b>, defined either by corners in x and y or,
-      unusually, by a pair of polar coordinates &mdash; a minimum and maximum angle with a minimum and
+      unusually, by a pair of polar coordinates - a minimum and maximum angle with a minimum and
       maximum distance, which is a natural way to draw a region on a plot whose whole geometry is polar.
       Third, <b>statistics</b> are read back for whatever is enclosed: maximum, median, minimum, the 80th,
       50th and 20th percentiles, and a count.</p>
@@ -230,7 +237,7 @@
     </div>
     <div class="legend prose">
       <span>The statistics matter more than they look. They are what turns a cluster on a screen into a
-        number that can be carried forward &mdash; into a polygon definition, into a comparison between
+        number that can be carried forward - into a polygon definition, into a comparison between
         time windows, or into the look-up catalogs module 10 described. A crossplot we can only look at
         is a figure; one we can measure is an instrument.</span>
     </div>
@@ -268,7 +275,7 @@
             the bed is resolved; frequency moves it immediately. The half isochron at a sand top is
             measuring the half loop of the reflection there, and once the top and base reflections separate
             that loop is a property of the wavelet. Useful to know before reading too much into the axis:
-            it tells you about the shape of the waveform at a sample, not about the thickness of the bed
+            it tells us about the shape of the waveform at a sample, not about the thickness of the bed
             underneath it.</span></details></li>
         <li><b>Find the sign change.</b> On step 1, follow the half isochron down through a peak.
           <details class="reveal"><summary>Answer</summary><span class="ans">It flips from positive to
@@ -281,12 +288,15 @@
           <details class="reveal"><summary>Answer</summary><span class="ans">Points that sit together on the
             front wall can be spread across the top view, because two samples with similar AVO behavior
             may come from quite different parts of a loop. Without the third axis, samples are grouped by what they look like and not by where they came from.</span></details></li>
-        <li><b>Use the delimiter.</b> On step 3, narrow the half isochron band and watch the counts and the
-          statistics.
-          <details class="reveal"><summary>Answer</summary><span class="ans">The count falls and the median
-            distance shifts, because you are progressively excluding the samples nearest the zero
-            crossings, which module 06 showed sit closest to the origin. Delimiting chooses which part of the waveform to look at and does not filter out noise, and the statistics readout tells
-            how many samples that choice removed.</span></details></li>
+        <li><b>Use the delimiter.</b> On step 3, start from the +6 to +10 ms band, then move the limits and
+          watch the counts and the statistics.
+          <details class="reveal"><summary>Answer</summary><span class="ans">On the default model the +6 to +10 ms band keeps
+            12 of 31 samples, and their median distance is 0.054 against 0.039 for all of them. A positive
+            band keeps only trough-to-peak half loops, and the 6 to 10 ms range leaves out the samples
+            nearest the zero crossings, which module 06 showed sit closest to the origin. Opening the band
+            to the full range brings the count back to 31. Delimiting chooses which part of the waveform to
+            look at and does not filter out noise, and the statistics readout tells how many samples that
+            choice removed.</span></details></li>
         <li><b>Change the reservoir and watch the cluster move.</b> On step 3, switch the fluid from brine
           to gas.
           <details class="reveal"><summary>Answer</summary><span class="ans">The sand samples move as a group
@@ -310,14 +320,14 @@
         <li><b>The RDQ crossplot has three axes:</b> amplitude, gradient and the signed half isochron,
           after the rotation and the sector split of module 06.</li>
         <li><b>The half isochron describes the waveform, not the bed.</b> It is the length and direction of
-          the half loop a sample sits in, and once a bed is resolved that loop belongs to the
+          the half loop a sample lies in, and once a bed is resolved that loop belongs to the
           wavelet.</li>
         <li><b>It is on the plot so that samples can be grouped by where in a loop they came from</b>,
-          which the front wall alone cannot tell you.</li>
+          which the front wall alone cannot tell us.</li>
         <li><b>Three flat views replace the 3D scatter:</b> front, top and side.</li>
         <li><b>Every column can act as a delimiter</b>, restricting which samples are drawn.</li>
-        <li><b>Polygons can be defined in polar coordinates</b> &mdash; an angle range and a distance range
-          &mdash; which suits a plot whose geometry is polar throughout.</li>
+        <li><b>Polygons can be defined in polar coordinates</b> - an angle range and a distance range
+- which suits a plot whose geometry is polar throughout.</li>
         <li><b>Statistics are read back from whatever is enclosed:</b> maximum, median, minimum, P80, P50,
           P20 and a count.</li>
         <li><b>Sliding the analysis window and watching the cluster move</b> is how the workflow detects
@@ -339,8 +349,8 @@
         and the polar polygon definition by two corner clicks. The page implements the half isochron
         delimiter and the statistics for it; the polygon tool is described and not built, since it
         needs an interaction model this format does not have.</p>
-      <p>The two purposes given on step 1 &mdash; mapping thinning and pinch-out without horizon picking,
-        and separating homogeneous from heterogeneous layers &mdash; are from the AASPI attribute
+      <p>The two purposes given on step 1 - mapping thinning and pinch-out without horizon picking,
+        and separating homogeneous from heterogeneous layers - are from the AASPI attribute
         description, which also notes that the half isochron identifies zones with tuned amplitudes and
         that merging it with a velocity cube gives a depth thickness and a gross rock volume. This page
         does not demonstrate those on field data; it explains what the axis measures and how the plot is
@@ -389,7 +399,7 @@
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
-        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        count, so that I can show the university these are being used - no cookie, no account,
         no personal information.</p>
     </div>
   </footer>
@@ -440,12 +450,10 @@
   const DTS = [0.001, 0.002, 0.003, 0.004];
   const NEAR_A = [0, 10];
   const T0 = 0, TWIN = 0.150, TTOP = 0.050;
-  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
-  const BEDC = [0.118, 0.130];                   // a tight bed below it
 
   const DEF = {
     over: 'soft', phi: 28, fluid: 'gas',
-    thick: 30, freq: 40, dt: 0, noise: 0, iso: 14, tab: 'p1',
+    thick: 30, freq: 40, dt: 0, noise: 0, isoLo: 6, isoHi: 10, tab: 'p1',
   };
   let S = SEIS.readState(DEF);
   if (!LITHS[S.over]) S.over = DEF.over;
@@ -517,10 +525,7 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth and not a
-     lone sand, so that the trace looks like something a picker would find: a
-     contrasting bed above, the sand with an optional tight streak inside it,
-     and a tight bed below. Every spike is computed from the two rocks it sits
+  /* The near-stack reflectivity of one trace. The sand, with an optional tight streak inside it. Every spike is computed from the two rocks it sits
      between. */
   function spikes(topT, thickS) {
     const over = LITHS[S.over];
@@ -531,15 +536,11 @@
     const shift = topT - TTOP;                   // structure moves everything together
     const out = [];
 
-    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
-    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
 
     const baseT = topT + thickS / 1000;
     out.push({ t: topT, r: n(shuey(over, sand)) });
     out.push({ t: baseT, r: n(shuey(sand, over)) });
 
-    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
-    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
     return out;
   }
 
@@ -597,16 +598,28 @@
     const floor = 0.01 * peak;
 
     const cross = [];                      // { i, tTrue, err }
-    for (let i = 1; i < nt; i++) {
-      const a = tr[i - 1], b = tr[i];
-      if (a === 0 || b === 0) continue;
-      if ((a > 0) === (b > 0)) continue;
-      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
-      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
-      // where the crossing actually is, by linear interpolation
-      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
-      const tTrue = (i - 1 + frac) * dt();
-      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    /* A sample that is exactly zero is a crossing in its own right when the
+       signs on either side differ, so the loop compares each sample with the
+       last nonzero one and not only with its neighbor. */
+    let prev = -1;
+    for (let i = 0; i < nt; i++) {
+      if (tr[i] === 0) continue;
+      if (prev >= 0 && (tr[prev] > 0) !== (tr[i] > 0)) {
+        const a = tr[prev], b = tr[i];
+        if (!(Math.abs(a) < floor && Math.abs(b) < floor)) {
+          let j, tTrue;
+          if (i - prev > 1) {                   // exact zeros between: take the middle one
+            j = Math.floor((prev + i) / 2);
+            tTrue = ((prev + i) / 2) * dt();
+          } else {
+            j = Math.abs(a) <= Math.abs(b) ? prev : i;
+            // where the crossing actually is, by linear interpolation
+            tTrue = (prev + Math.abs(a) / (Math.abs(a) + Math.abs(b))) * dt();
+          }
+          cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+        }
+      }
+      prev = i;
     }
 
     /* Between each consecutive pair of crossings, keep the single largest
@@ -722,8 +735,8 @@
     return out;
   }
 
-  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
-     or a carbonate play — both partial stacks are reversed at the stacking
+  /* The reservoir top should be a trough. When it is a peak - a class 1 sand,
+     or a carbonate play - both partial stacks are reversed at the stacking
      step, before any picking, so that the numbering rule never changes. */
   function needsFlip() {
     const over = LITHS[S.over];
@@ -838,12 +851,8 @@
     const baseT = TTOP + S.thick / 1000;
     const f = (q) => q.A + q.B * S2F;
     const sp = [
-      { t: BEDA[0], r: f(shuey(over, (S.over === 'soft') ? LITHS.hard : LITHS.soft)) },
-      { t: BEDA[1], r: f(shuey((S.over === 'soft') ? LITHS.hard : LITHS.soft, over)) },
       { t: TTOP, r: f(shuey(over, sand)) },
       { t: baseT, r: f(shuey(sand, over)) },
-      { t: BEDC[0], r: f(shuey(over, LITHS.tight)) },
-      { t: BEDC[1], r: f(shuey(LITHS.tight, over)) },
     ];
     const nt = ntOf();
     const tr = SEIS.traceFromSpikes(sp, T0, dt(), nt, wavelet());
@@ -1041,8 +1050,8 @@
 
      Axes per the AASPI column specification: x is the rotated and split
      near-quadrant amplitude, y the rotated and split gradient, z the signed
-     half isochron. The half isochron is a waveform descriptor — the length
-     and direction of the half loop a sample sits in — not a bed thickness.
+     half isochron. The half isochron is a waveform descriptor - the length
+     and direction of the half loop a sample sits in - not a bed thickness.
      ===================================================================== */
 
   const SOFT = 'rgba(22,25,28,0.45)';
@@ -1096,7 +1105,8 @@
     });
     return { b, nt, H, pts };
   }
-  const passes = (p) => Math.abs(p.iso) <= S.iso;
+  const sgn = (v) => (v > 0 ? '+' : v < 0 ? '\u2212' : '') + Math.abs(v);
+  const passes = (p) => p.iso >= S.isoLo && p.iso <= S.isoHi;
 
   function pct(arr, p) {
     if (!arr.length) return 0;
@@ -1313,7 +1323,7 @@
     scatter(ctx, rect, S3.pts, (p) => p.x, (p) => p.y, [-ax, ax, -ay, ay],
       { xlab: 'amplitude, rotated and split', ylab: 'gradient', dim: true, title: 'FRONT WALL' });
     SEIS.tag(ctx, rect.x + rect.w + 16, rect.y + 16,
-      'band: \u00B1' + S.iso + ' ms', CRIM);
+      'band: ' + sgn(S.isoLo) + ' to ' + sgn(S.isoHi) + ' ms', CRIM);
     SEIS.tag(ctx, rect.x + rect.w + 16, rect.y + 34, 'gray = excluded', 'rgba(22,25,28,0.5)');
 
     const inb = S3.pts.filter(passes).map((p) => p.d);
@@ -1327,7 +1337,7 @@
     $('s3e').textContent = 'The delimiter keeps ' + inb.length + ' of ' + S3.pts.length
       + ' samples. Median distance among those is ' + (inb.length ? pct(inb, 0.5).toFixed(3) : '\u2014')
       + ', against ' + pct(all, 0.5).toFixed(3)
-      + ' for the whole population \u2014 the statistics move because the delimiter is choosing which '
+      + ' for the whole population - the statistics move because the delimiter is choosing which '
       + 'part of the waveform to look at.';
   }
   /* ------------------------------ the panel ---------------------------- */
@@ -1338,8 +1348,10 @@
     $('freq').value = S.freq;
     $('dt').value = S.dt;
     $('noise').value = S.noise;
-    $('isoV').innerHTML = '&plusmn;' + S.iso + ' ms';
-    $('iso').value = S.iso;
+    $('isoLoV').textContent = sgn(S.isoLo) + ' ms';
+    $('isoHiV').textContent = sgn(S.isoHi) + ' ms';
+    $('isoLo').value = S.isoLo;
+    $('isoHi').value = S.isoHi;
     $('phiV').textContent = S.phi + '%';
     $('thickV').textContent = S.thick + ' ms';
     $('freqV').textContent = S.freq + ' Hz';
@@ -1366,7 +1378,10 @@
   ['phi', 'thick', 'freq', 'dt', 'noise'].forEach((id) => {
     $(id).addEventListener('input', () => { S[id] = parseFloat($(id).value); onChange(); });
   });
-  $('iso').addEventListener('input', () => { S.iso = +$('iso').value; onChange(); });
+  $('isoLo').addEventListener('input', () => {
+    S.isoLo = +$('isoLo').value; if (S.isoLo > S.isoHi) S.isoHi = S.isoLo; onChange(); });
+  $('isoHi').addEventListener('input', () => {
+    S.isoHi = +$('isoHi').value; if (S.isoHi < S.isoLo) S.isoLo = S.isoHi; onChange(); });
   document.querySelectorAll('[data-over]').forEach((b) => {
     b.addEventListener('click', () => { S.over = b.dataset.over; onChange(); });
   });
@@ -1430,7 +1445,7 @@
     const sf = $('skipflip'); if (sf) sf.disabled = !three;
 
     if ($('labCap')) {
-      $('labCap').innerHTML = 'The rock model <span>&mdash; the layers, and the near stack they produce</span>';
+      $('labCap').innerHTML = 'The rock model <span> - the layers, and the near stack they produce</span>';
     }
 
     const last = (id === 'pk' || id === 'pm');

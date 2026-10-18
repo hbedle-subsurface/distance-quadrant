@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The phase filters | How the DQ Trace Actually Works</title>
-<meta name="description" content="Seven phase-rotated copies of the near and far stacks, and the rule that reads one value from each sample. Convolution and not deconvolution, and why the unbalanced result is almost the Hilbert envelope.">
+<meta name="description" content="Seven phase-rotated copies of the near and far stacks, and the rule that reads one value from each sample. Convolution and not deconvolution, and how a coarse filter bank compares with a smooth envelope.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -34,11 +34,11 @@
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap" id="labCap">The rock model <span>&mdash; the layers, and the near stack they produce</span></p>
+        <p class="cap" id="labCap">The rock model <span> - the layers, and the near stack they produce</span></p>
         <canvas id="cMain" aria-label="The near stack at eight phase rotations, beside the quadrant-enhanced trace built from them"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
+        <p class="cap">The model <span> - everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -69,11 +69,11 @@
             <h2>The layers</h2>
             <div class="ctl">
               <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
-              <input type="range" id="thick" min="6" max="55" step="1" value="30">
+              <input type="range" id="thick" min="6" max="40" step="1" value="30">
             </div>
             <div class="ctl">
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
-              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+              <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
             <div class="ctl">
               <label for="phase">Filter to highlight <span class="val" id="phaseV">0&deg;</span></label>
@@ -131,6 +131,12 @@
       amplitude spectrum is untouched and only the phase spectrum moves.</p>
 
     <p class="lede">
+      Here we rotate the whole trace at each angle, because that shows the concept cleanly. The published
+      workflow is not a Hilbert construction. It applies short phase-shift filters, about two cycles
+      long, with a scaling set for each sample, so the boundaries between loops are sharper than anything
+      this whole-trace version produces.</p>
+
+    <p class="lede">
       <b>This is a convolution, not a deconvolution.</b> Nothing is being sharpened, nothing is being
       estimated, and no information is added or removed. Energy is moved around within each loop: a
       rotation of &minus;90&deg; turns every zero crossing into an extremum and every extremum into a zero
@@ -139,7 +145,7 @@
 
     <p class="lede">
       What this step produces: a version of the trace in which every numbered sample has been shifted so that
-      it sits where an extremum would, which is what lets the two-layer reading of module 01 be applied at
+      it lies where an extremum would, which is what lets the two-layer reading of module 01 be applied at
       samples that were not extrema to begin with.</p>
 
     <p class="lede">
@@ -180,7 +186,7 @@
     <div class="legend prose">
       <span>The energy readout does not move, because a phase rotation cannot change it. The peak amplitude
         does move, and by a lot: a &minus;90&deg; rotation of a Ricker wavelet peaks at about 0.83 of the
-        unrotated one. That difference is not a nuisance to be tidied away &mdash; it is the whole subject
+        unrotated one. That difference is not a nuisance to be tidied away - it is the whole subject
         of step 4, and leaving it uncorrected is what makes the filter bank inconsistent.</span>
     </div>
   </section>
@@ -235,20 +241,21 @@
   <section class="tabpane" id="p3" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
       <h3><span class="stepno">3</span>What comes out</h3>
-      <span class="hint">Almost the Hilbert envelope, which is the problem</span>
+      <span class="hint">A smooth envelope as a yardstick</span>
     </div>
 
     <p class="lede">
       Reading each sample from the filter that centers it is very close to asking, at every sample, how big
-      the waveform would be if that sample were at the middle of an event. That question has a classical
-      answer &mdash; the Hilbert envelope &mdash; and the enhanced trace lands almost on top of it, within
-      a couple of percent on the default model.</p>
+      the waveform would be if that sample were at the middle of an event. A smooth envelope answers a
+      similar question, so we use it here as a yardstick, not as the method. With whole-trace rotations
+      the enhanced trace lands within a couple of percent of it on the default model.</p>
 
     <p class="lede">
-      That is not a coincidence. Both are asking the same question, and the enhancement is a coarse,
-      nine-bucket way of answering it. The difference is what happens next: an envelope is a single trace
-      and the enhancement produces a matched pair, near and far, which is what lets module 05 form a
-      vector out of them. Step 4 applies the one scaling the method specifies to that pair.</p>
+      That is expected for this version, since both ask a similar question and the enhancement is a coarse,
+      nine-bucket way of answering it. The published filters are short and applied sample by sample, so
+      they would depart from a smooth envelope, most visibly at the boundaries between loops. An
+      envelope is also a single trace, and the enhancement produces a matched pair, near and far, which
+      is what lets module 05 form a vector out of them. Step 4 applies the scaling to that pair.</p>
 
     <canvas id="c3a" aria-label="The quadrant-enhanced trace drawn against the Hilbert envelope of the near stack"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The magnitude of the enhanced trace against the Hilbert
@@ -314,12 +321,12 @@
 
     <p class="lede">Conventional AVO reads amplitudes at picked events, which module 01 counted at two
       samples per waveform cycle. The reason it cannot read the samples in between is not that they are
-      unimportant &mdash; it is that their amplitude depends on where in the wavelet they sit as much as on
+      unimportant - it is that their amplitude depends on where in the wavelet they sit as much as on
       the rock. A sample halfway down a limb is small because it is halfway down a limb, and comparing it
       with a peak somewhere else is comparing two different questions.</p>
 
     <p class="lede">Quadrant enhancement removes that dependence. Rotating the trace so that a given sample
-      sits at the center of an event, and reading it there, gives a number that means the same thing at
+      lies at the center of an event, and reading it there, gives a number that means the same thing at
       every sample. Two samples with the same quadrant number have been treated identically, so their
       values can be compared. That is what turns two interpretable samples per cycle into all of them, and
       it is the central trick of the method.</p>
@@ -330,7 +337,7 @@
       something that was never recorded and can be wrong. Phase rotation estimates nothing. It is a fixed
       linear filter with a known, exact response, applied seven times. If the input is relative-amplitude
       preserved then so is every output, and the whole step is reversible. What changes is that the wavelet is
-      still there afterwards &mdash; the method does not sharpen anything &mdash; and the benefit is that
+      still there afterwards - the method does not sharpen anything - and the benefit is that
       nothing can be introduced that was not in the data.</p>
 
     <div class="legend prose">
@@ -351,7 +358,7 @@
             0, so the output is the trace untouched. At &minus;90&deg; they are 0 and &minus;1, so the
             output is the quadrature with its sign flipped and every peak has become a zero crossing. In
             between they blend: at &plusmn;45&deg; both weights are 0.707. The squares always sum to
-            exactly 1, which is the whole reason the energy readout does not move &mdash; the two
+            exactly 1, which is the whole reason the energy readout does not move - the two
             components are orthogonal, so Pythagoras applies to them just as it does to the intercept and
             gradient in module 05. And the sum always matches the rotation computed directly, to machine
             precision, because they are the same operation written two ways.</span></details></li>
@@ -369,30 +376,28 @@
             0&deg; to 90&deg; in steps of 22.5&deg;, and back up symmetrically. Those five numbers are the
             balancing scalars of step 4, upside down: dividing each filter's output by its own peak is what
             makes the filters comparable. The spread is about 21%, which does not sound like much
-            until you remember it is applied systematically by quadrant number and therefore correlates
+            until we remember it is applied systematically by quadrant number and therefore correlates
             with waveform position and does not average out.</span></details></li>
         <li><b>Compare QN with the near stack.</b> On step 2, read the two peak amplitudes.
-          <details class="reveal"><summary>Answer</summary><span class="ans">QN's peak is larger &mdash; on
-            the default model about 1.12 times the near stack's. Every extremum comes through untouched,
-            because a Q1 or Q9 sample takes the 0&deg; filter, so the enhancement never lowers anything.
-            What it does is lift the interior of every loop toward what that loop's extremum would be, and
-            somewhere on the trace a lifted interior sample ends up above the largest extremum. That is
-            exactly the behavior of an envelope, which sits on or above the trace everywhere and touches
-            it only at the extrema.</span></details></li>
+          <details class="reveal"><summary>Answer</summary><span class="ans">QN's peak is the same as the near stack's, a ratio of 1.00 on the default model.
+            Every extremum comes through untouched, because a Q1 or Q9 sample takes the 0&deg; filter, so the
+            enhancement never lowers anything. What it does is lift the interior of every loop toward what that
+            loop's extremum would be, so the enhanced trace lies on or above the original everywhere and
+            touches it at the extrema. That is the behavior of an envelope, and of this whole-trace version.</span></details></li>
         <li><b>Measure how close to an envelope it is.</b> On step 3, read the difference and the
           correlation.
           <details class="reveal"><summary>Answer</summary><span class="ans">On the default model, 1.5% of
-            the peak envelope, at a correlation of 0.999. The residual is not error &mdash; it is the
+            the peak envelope, at a correlation of 0.999. The residual is not error - it is the
             coarseness of the scheme. Nine numbers across a half cycle means each covers 22.5&deg;, and a
             sample is assigned one by counting samples and not by measuring its phase, so it is
-            centered only to within about ten degrees. Switch the overburden to tight sandstone or
-            hard shale and the gap widens to a little over 3%, because the sharper contrast makes shorter
-            loops and the counting is coarser relative to them. Either way the unbalanced enhancement is an envelope with a rounding
+            centered only to within about ten degrees. Switch the overburden to hard shale or
+            tight sandstone and the gap stays at 1.5%. Either way this version is an envelope with a rounding
             error on it, and an envelope has thrown away the polarity and the amplitude contrast the whole
-            method exists to measure.</span></details></li>
+            method exists to measure. The published short filters give sharper loop boundaries than this,
+            so the closeness to an envelope belongs to the teaching version.</span></details></li>
         <li><b>Break it on purpose.</b> Tick the invert box in the panel and read step 3 again.
           <details class="reveal"><summary>Answer</summary><span class="ans">The difference goes from 1.5%
-            to 21.6% and the correlation from 0.999 to 0.78. Two sign conventions are in use for what "rotate by
+            to 31.7% and the correlation from 0.999 to 0.67. Two sign conventions are in use for what "rotate by
             theta" means; they differ by conjugating the analytic trace. The published angles are written for
             one of them, and inverting the signs is equivalent to using the other. With the other convention the
             enhanced trace no longer follows the envelope.</span></details></li>
@@ -426,13 +431,13 @@
           nothing has to be adjusted for whether a limb rises or falls.</li>
         <li><b>The published angles are applied as printed.</b> Inverting their signs, which is the same
           as using the other rotation convention, moves the result from 1.5% off the envelope to
-          21.6%.</li>
+          31.7%.</li>
         <li><b>A rotation conserves energy but not peak amplitude.</b> A 90&deg; rotation of a Ricker peaks
           at 0.827 of the unrotated one, and the five distinct values run 1.000, 0.988, 0.954, 0.899,
           0.827.</li>
-        <li><b>The enhanced trace sits within a few percent of the Hilbert envelope</b> &mdash; 1.5% on
-          the default model, at a correlation of 0.999 &mdash; because both answer the same question about
-          each sample.</li>
+        <li><b>In this whole-trace version the enhanced trace lies within a few percent of a smooth
+          envelope</b> - 1.5% on the default model, at a correlation of 0.999. The published workflow uses
+          short two-cycle filters with sample-specific scaling and gives sharper loop boundaries.</li>
       </ul>
     </div>
   </section>
@@ -444,8 +449,10 @@
         identical to modules 02 and 03, so a model built there carries over unchanged.</p>
       <p>A phase rotation is applied in the trace domain as
         x&nbsp;cos&thinsp;&theta;&nbsp;+&nbsp;H(x)&nbsp;sin&thinsp;&theta;, with H the Hilbert transform
-        computed through the analytic signal. Doing it on the trace and not on the wavelet means the
-        same operation applies when noise is present, as it would for recorded data.
+        computed through the analytic signal. This is a teaching stand-in. The published workflow applies
+        short phase-shift filters about two cycles long, with sample-specific scaling, so its loop
+        boundaries are sharper than a Hilbert-based result. Doing it on the trace and not on the wavelet
+        means the same operation applies when noise is present, as it would for recorded data.
         Quadrant enhancement then reads sample <i>i</i> from the rotated trace named by its quadrant
         number.</p>
       <p><b>The filter angles.</b> The published table gives one filter per quadrant number: Q1 and Q9 at
@@ -453,9 +460,9 @@
         &minus;67.5&deg;, &minus;45&deg; and &minus;22.5&deg; (Bedle et al., 2025a). This page applies
         them as printed, with the rotation defined as x&nbsp;cos&nbsp;&theta;&nbsp;+&nbsp;H(x)&nbsp;sin&nbsp;&theta;.
         Under that definition the enhanced trace follows the Hilbert envelope to 1.5% at a correlation of
-        0.999. Inverting the signs, which is equivalent to the other rotation convention, gives 21.6% at a
-        correlation of 0.78. The panel offers the inverted version as a switch for comparison.</p>
-      <p>The Hilbert envelope used for comparison on step 3 is the magnitude of the analytic near stack. The
+        0.999. Inverting the signs, which is equivalent to the other rotation convention, gives 31.7% at a
+        correlation of 0.67. The panel offers the inverted version as a switch for comparison.</p>
+      <p>The envelope used for comparison on step 3 is the magnitude of the analytic near stack, a yardstick and not part of the method. The
         comparison is made only at samples that carry a quadrant number, since the enhancement is undefined
         outside the first and last pick.</p>
       <p>The normalization of step 4 is left out of steps 1 to 3, so that step 3 shows the filter bank
@@ -496,7 +503,7 @@
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
-        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        count, so that I can show the university these are being used - no cookie, no account,
         no personal information.</p>
     </div>
   </footer>
@@ -547,8 +554,6 @@
   const DTS = [0.001, 0.002, 0.003, 0.004];
   const NEAR_A = [0, 10];
   const T0 = 0, TWIN = 0.150, TTOP = 0.050;
-  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
-  const BEDC = [0.118, 0.130];                   // a tight bed below it
 
   const DEF = {
     over: 'soft', phi: 28, fluid: 'gas',
@@ -624,10 +629,7 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth and not a
-     lone sand, so that the trace looks like something a picker would find: a
-     contrasting bed above, the sand with an optional tight streak inside it,
-     and a tight bed below. Every spike is computed from the two rocks it sits
+  /* The near-stack reflectivity of one trace. The sand, with an optional tight streak inside it. Every spike is computed from the two rocks it sits
      between. */
   function spikes(topT, thickS) {
     const over = LITHS[S.over];
@@ -638,15 +640,11 @@
     const shift = topT - TTOP;                   // structure moves everything together
     const out = [];
 
-    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
-    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
 
     const baseT = topT + thickS / 1000;
     out.push({ t: topT, r: n(shuey(over, sand)) });
     out.push({ t: baseT, r: n(shuey(sand, over)) });
 
-    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
-    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
     return out;
   }
 
@@ -704,16 +702,28 @@
     const floor = 0.01 * peak;
 
     const cross = [];                      // { i, tTrue, err }
-    for (let i = 1; i < nt; i++) {
-      const a = tr[i - 1], b = tr[i];
-      if (a === 0 || b === 0) continue;
-      if ((a > 0) === (b > 0)) continue;
-      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
-      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
-      // where the crossing actually is, by linear interpolation
-      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
-      const tTrue = (i - 1 + frac) * dt();
-      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    /* A sample that is exactly zero is a crossing in its own right when the
+       signs on either side differ, so the loop compares each sample with the
+       last nonzero one and not only with its neighbor. */
+    let prev = -1;
+    for (let i = 0; i < nt; i++) {
+      if (tr[i] === 0) continue;
+      if (prev >= 0 && (tr[prev] > 0) !== (tr[i] > 0)) {
+        const a = tr[prev], b = tr[i];
+        if (!(Math.abs(a) < floor && Math.abs(b) < floor)) {
+          let j, tTrue;
+          if (i - prev > 1) {                   // exact zeros between: take the middle one
+            j = Math.floor((prev + i) / 2);
+            tTrue = ((prev + i) / 2) * dt();
+          } else {
+            j = Math.abs(a) <= Math.abs(b) ? prev : i;
+            // where the crossing actually is, by linear interpolation
+            tTrue = (prev + Math.abs(a) / (Math.abs(a) + Math.abs(b))) * dt();
+          }
+          cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+        }
+      }
+      prev = i;
     }
 
     /* Between each consecutive pair of crossings, keep the single largest
@@ -829,8 +839,8 @@
     return out;
   }
 
-  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
-     or a carbonate play — both partial stacks are reversed at the stacking
+  /* The reservoir top should be a trough. When it is a peak - a class 1 sand,
+     or a carbonate play - both partial stacks are reversed at the stacking
      step, before any picking, so that the numbering rule never changes. */
   function needsFlip() {
     const over = LITHS[S.over];
@@ -993,9 +1003,7 @@
     const baseT = TTOP + S.thick / 1000;
     const b = [
       { t0: T0, t1: TWIN, name: '', fill: LITHFILL[seal] },
-      { t0: BEDA[0], t1: BEDA[1], name: LITHS[other].name, fill: LITHFILL[other] },
       { t0: TTOP, t1: baseT, name: 'sand ' + S.phi + '%', fill: LITHFILL.sand },
-      { t0: BEDC[0], t1: BEDC[1], name: 'tight sandstone', fill: LITHFILL.tight },
     ];
     return b;
   }
@@ -1504,7 +1512,7 @@
     const sf = $('skipflip'); if (sf) sf.disabled = !three;
 
     if ($('labCap')) {
-      $('labCap').innerHTML = 'The rock model <span>&mdash; the layers, and the near stack they produce</span>';
+      $('labCap').innerHTML = 'The rock model <span> - the layers, and the near stack they produce</span>';
     }
 
     const last = (id === 'pk' || id === 'pm');

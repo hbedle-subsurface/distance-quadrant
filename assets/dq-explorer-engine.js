@@ -140,11 +140,15 @@
     for (let i = 0; i < nt; i++) peak = Math.max(peak, Math.abs(tr[i]));
     const floor = 0.01 * peak;
     const cross = [];
-    for (let i = 1; i < nt; i++) {
-      const a = tr[i - 1], b = tr[i];
-      if (a === 0 || b === 0 || (a > 0) === (b > 0)) continue;
-      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
-      cross.push({ i: Math.abs(a) <= Math.abs(b) ? i - 1 : i });
+    let prev = -1;                       // last nonzero sample, so an exact zero still counts as a crossing
+    for (let i = 0; i < nt; i++) {
+      if (tr[i] === 0) continue;
+      if (prev >= 0 && (tr[prev] > 0) !== (tr[i] > 0)) {
+        const a = tr[prev], b = tr[i];
+        if (!(Math.abs(a) < floor && Math.abs(b) < floor))
+          cross.push({ i: i - prev > 1 ? Math.floor((prev + i) / 2) : (Math.abs(a) <= Math.abs(b) ? prev : i) });
+      }
+      prev = i;
     }
     const ext = [];
     for (let k = 0; k + 1 < cross.length; k++) {

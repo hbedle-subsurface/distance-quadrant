@@ -25,7 +25,7 @@
   <div class="mod-head">
     <p class="eyebrow">Module 08 &nbsp;·&nbsp; The DQ trace</p>
     <h1>Isochron and half isochron</h1>
-    <p class="sub">A quadrant number says where in a loop a sample sits but nothing about how long the loop
+    <p class="sub">A quadrant number says where in a loop a sample lies but nothing about how long the loop
       was. The isochron measures exactly that: the time from one extremum to the next, carrying a sign
       taken from the slope. Splitting it at the zero crossing gives the half isochron, and the asymmetry
       between the two halves turns out to say something about how the sand is graded.</p>
@@ -34,11 +34,11 @@
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap" id="labCap">The rock model <span>&mdash; the sand shaded by porosity, and the near stack</span></p>
+        <p class="cap" id="labCap">The rock model <span> - the sand shaded by porosity, and the near stack</span></p>
         <canvas id="cMain" aria-label="The near-stack trace beside its signed isochron and half isochron zones"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
+        <p class="cap">The model <span> - everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -82,7 +82,7 @@
               tight sandstone near the base of an otherwise blocky sand.</p>
             <div class="ctl">
               <label for="thick">Sand thickness <span class="val" id="thickV">24 ms</span></label>
-              <input type="range" id="thick" min="10" max="50" step="1" value="24">
+              <input type="range" id="thick" min="10" max="40" step="1" value="24">
             </div>
           </div>
 
@@ -134,7 +134,7 @@
 
     <p class="lede">
       The isochron is the simplest measurement in the whole method. Take two consecutive extrema on the
-      near stack &mdash; a trough and the peak below it, or a peak and the trough below it &mdash; and
+      near stack - a trough and the peak below it, or a peak and the trough below it - and
       record the time between them. Write that number to every sample in the interval. That is the
       isochron.</p>
 
@@ -180,9 +180,9 @@
 
     <p class="lede">
       The two halves are not equal, and their inequality is the measurement. A symmetric loop splits evenly
-      because the crossing sits midway between the two extrema. Anything that pulls the crossing off center
-      &mdash; a stronger reflection at one end of a layer than the other, a thin bed, an interfering event
-      &mdash; makes one half longer than the other while their sum stays the same.</p>
+      because the crossing lies midway between the two extrema. Anything that pulls the crossing off center
+- a stronger reflection at one end of a layer than the other, a thin bed, an interfering event
+- makes one half longer than the other while their sum stays the same.</p>
 
     <canvas id="c2a" aria-label="One isochron drawn large, showing where the zero crossing splits it and how unequal the two halves are"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The strongest isochron on the trace, magnified. The two
@@ -197,7 +197,7 @@
     </div>
     <div class="legend prose">
       <span>The half isochron depends on the position of a zero crossing, and a zero crossing is by
-        definition a low-amplitude sample &mdash; the least stable pick on the trace, and the one a strong
+        definition a low-amplitude sample - the least stable pick on the trace, and the one a strong
         reflection nearby will move first. Module 02 spent a step on choosing which sample a crossing lands
         on; this is what that choice was for. Random noise at the signal's own frequency turns out to be a
         gentle test of that: on this model 40% noise moves the split by about three points. It is
@@ -230,8 +230,8 @@
       <div class="stat wide"><span>Reading</span><b id="s3e">&mdash;</b></div>
     </div>
     <div class="legend prose">
-      <span>The blocky sand splits evenly. The graded sands do not, and the shorter half sits at the
-        cleaner end &mdash; at the top for a coarsening-upward sand and at the base for a fining-upward
+      <span>The blocky sand splits evenly. The graded sands do not, and the shorter half lies at the
+        cleaner end - at the top for a coarsening-upward sand and at the base for a fining-upward
         one. A sharper contrast makes a tighter, better-centered extremum, which pulls the crossing toward
         it and shortens the half on that side. This is the observation Choudhry et al. (2026) build their facies
         argument on: the sign separates sand from shale, and the asymmetry within the sand separates one
@@ -299,9 +299,9 @@
     <h2 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--crimson);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">
       What the sign adds</h2>
     <p class="lede">In the field examples of Choudhry et al. (2026), sand intervals carry a positive slope and
-      the shales and silts around them carry a negative one. That is not a law of nature &mdash; it follows
+      the shales and silts around them carry a negative one. That is not a law of nature - it follows
       from a soft reservoir under a harder overburden, which is the same convention module 03 enforces with
-      its polarity flip &mdash; but where it holds it means a single signed number separates the two
+      its polarity flip - but where it holds it means a single signed number separates the two
       lithologies before any amplitude is looked at. Moderate to high amplitude combined with a positive
       isochron slope is a sand prediction, and machine learning algorithms can use the distinction directly
       during training.</p>
@@ -310,8 +310,8 @@
       Uniform where the geology is uniform</h2>
     <p class="lede">A homogeneous layer produces the same isochron reading on every trace through it,
       because the waveform is the same on every trace. Variability in lithology or thickness produces
-      variable readings, and a real disruption &mdash; a fault, a channel margin, an erosional surface
-      &mdash; produces erratic and locally large ones. So the texture of an isochron volume is itself the
+      variable readings, and a real disruption - a fault, a channel margin, an erosional surface
+- produces erratic and locally large ones. So the texture of an isochron volume is itself the
       display: flat where the geology is layered, noisy where it is not.</p>
 
     <p class="lede">The half isochron adds sensitivity and gives up stability to get it. Peaks and troughs
@@ -324,7 +324,7 @@
     <div class="legend prose">
       <span>The isochron is also the third axis of the crossplot in module 09. The DQ and Theta PX
         describe the amplitude behavior at a sample; the signed half isochron describes the geometry of
-        the waveform it sits in. They are close to independent, and so the three carry different information on one plot.</span>
+        the waveform it lies in. They are close to independent, and so the three carry different information on one plot.</span>
     </div>
   </section>
 
@@ -346,35 +346,35 @@
             to isolated boundaries track the wavelet and have almost nothing to do with the sand. For a
             Ricker wavelet the trough-to-peak time is &radic;1.5&nbsp;/&nbsp;&pi;f, which is 15.6 ms at
             25 Hz and 7.8 ms at 50 Hz, and the measured isochron follows it to within a sample. Note that
-            this is <em>not</em> half a period &mdash; half a period at 25 Hz would be 20 ms &mdash;
+            this is <em>not</em> half a period - half a period at 25 Hz would be 20 ms -
             because a Ricker's side lobes sit closer in than a sinusoid's would. A layer thick enough that
-            its top and base do not interfere gives you back the wavelet and no more. The isochron becomes
+            its top and base do not interfere gives us back the wavelet and no more. The isochron becomes
             a geological measurement only once two boundaries are close enough to interfere, which is the
             tuning regime module 11 works in.</span></details></li>
         <li><b>Split a blocky sand.</b> On step 3, read the blocky panel's two halves.
           <details class="reveal"><summary>Answer</summary><span class="ans">They are equal. Both boundaries
             of the sand are equally sharp and equally strong, so the waveform between them is symmetric and
-            the crossing lands midway. That is the baseline everything else is read against &mdash; not
+            the crossing lands midway. That is the baseline everything else is read against - not
             because blocky sands are common, but because any departure from an even split has to be caused
-            by something, and the something is what you are looking for.</span></details></li>
+            by something, and the something is what we are looking for.</span></details></li>
         <li><b>Grade the sand and watch the split move.</b> Compare the coarsening-upward and
           fining-upward panels on step 3.
-          <details class="reveal"><summary>Answer</summary><span class="ans">The shorter half sits at the
+          <details class="reveal"><summary>Answer</summary><span class="ans">The shorter half lies at the
             cleaner end: at the top for a coarsening-upward sand, at the base for a fining-upward one. The
             cleaner end has the sharper impedance contrast, which produces a tighter extremum sitting
             closer to the boundary, and that pulls the crossing toward it. So the asymmetry is a read on
-            which end of the sand has the better rock &mdash; the same conclusion Choudhry et al. (2026) draw
+            which end of the sand has the better rock - the same conclusion Choudhry et al. (2026) draw
             from their Figure 2, and it comes out of the wavelet and not out of any assumption about
             depositional environment.</span></details></li>
         <li><b>Try to move the crossing with noise.</b> On step 2, with a blocky 24 ms sand at 25 Hz,
           walk the noise from zero to 40% and watch the isochron and the split.
           <details class="reveal"><summary>Answer</summary><span class="ans">Very little happens. The
-            isochron drifts from 22 ms to 19 and the split never leaves the high forties. That matters, because it is the opposite of what the setup invites you to expect, and because it tells you what kind
+            isochron drifts from 22 ms to 19 and the split never leaves the high forties. That matters, because it is the opposite of what the setup invites us to expect, and because it tells us what kind
             of test this is: band-limited noise at the signal's own frequency perturbs a strong, isolated
-            loop hardly at all. The instability Choudhry et al. (2026) report on field data &mdash; half
-            isochron readings becoming varied and sometimes erratic in high-energy settings &mdash; comes
+            loop hardly at all. The instability Choudhry et al. (2026) report on field data - half
+            isochron readings becoming varied and sometimes erratic in high-energy settings - comes
             from strong reflections interfering with each other and dragging the low-amplitude crossing
-            around, not from random noise. Step 3 is where you can see that mechanism working, and this
+            around, not from random noise. Step 3 is where we can see that mechanism working, and this
             synthetic understates it.</span></details></li>
         <li><b>Coarsen the sampling.</b> On step 1, step the sample rate from 1 ms to 4 ms with everything
           else fixed.
@@ -403,7 +403,7 @@
         <li><b>At an isolated boundary the isochron is just the wavelet's trough-to-peak time</b>,
           &radic;1.5&nbsp;/&nbsp;&pi;f for a Ricker. It becomes a geological measurement only where two
           boundaries are close enough to interfere.</li>
-        <li><b>A blocky sand splits evenly; a graded sand does not</b>, and the shorter half sits at the
+        <li><b>A blocky sand splits evenly; a graded sand does not</b>, and the shorter half lies at the
           cleaner end.</li>
         <li><b>The half isochron is the more sensitive of the two</b>, because it depends on the position
           of a zero crossing, which is always a low-amplitude sample. What moves a crossing is interference
@@ -429,7 +429,7 @@
         to every sample in their zone and both signed by the slope, positive from trough down to peak.
         This reproduces Figure 1 of Choudhry et al. (2026), including its property that the two halves sum
         to the isochron.</p>
-      <p>Step 3 compares three profiles and not four. The tight streak is still a model you can select
+      <p>Step 3 compares three profiles and not four. The tight streak is still a model we can select
         in the panel, and its effect on the isochron is real, but it is left out of the facies comparison:
         the direction it moves the split in this model does not match the one shown in Figure 2d of
         Choudhry et al. (2026), and the likeliest reason is that the published model is built from a real sand
@@ -483,7 +483,7 @@
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
-        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        count, so that I can show the university these are being used - no cookie, no account,
         no personal information.</p>
     </div>
   </footer>
@@ -663,16 +663,28 @@
     const floor = 0.01 * peak;
 
     const cross = [];                      // { i, tTrue, err }
-    for (let i = 1; i < nt; i++) {
-      const a = tr[i - 1], b = tr[i];
-      if (a === 0 || b === 0) continue;
-      if ((a > 0) === (b > 0)) continue;
-      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
-      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
-      // where the crossing actually is, by linear interpolation
-      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
-      const tTrue = (i - 1 + frac) * dt();
-      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    /* A sample that is exactly zero is a crossing in its own right when the
+       signs on either side differ, so the loop compares each sample with the
+       last nonzero one and not only with its neighbor. */
+    let prev = -1;
+    for (let i = 0; i < nt; i++) {
+      if (tr[i] === 0) continue;
+      if (prev >= 0 && (tr[prev] > 0) !== (tr[i] > 0)) {
+        const a = tr[prev], b = tr[i];
+        if (!(Math.abs(a) < floor && Math.abs(b) < floor)) {
+          let j, tTrue;
+          if (i - prev > 1) {                   // exact zeros between: take the middle one
+            j = Math.floor((prev + i) / 2);
+            tTrue = ((prev + i) / 2) * dt();
+          } else {
+            j = Math.abs(a) <= Math.abs(b) ? prev : i;
+            // where the crossing actually is, by linear interpolation
+            tTrue = (prev + Math.abs(a) / (Math.abs(a) + Math.abs(b))) * dt();
+          }
+          cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+        }
+      }
+      prev = i;
     }
 
     /* Between each consecutive pair of crossings, keep the single largest
@@ -1156,7 +1168,7 @@
       ? 'The crossing sits close to midway, so this loop is nearly symmetric and the two halves are '
         + 'nearly equal. They sum to the isochron exactly, as they always do.'
       : 'The crossing is off center, so one half is clearly longer than the other. They still sum to the '
-        + 'isochron exactly \u2014 the split moves, the total does not.';
+        + 'isochron exactly - the split moves, the total does not.';
   }
 
   /* ------------------------------- step 3 ------------------------------ */
@@ -1517,7 +1529,7 @@
     if (cp) cp.style.opacity = three ? '0.65' : '1';
 
     if ($('labCap')) {
-      $('labCap').innerHTML = 'The rock model <span>&mdash; the sand shaded by porosity, and the near stack</span>';
+      $('labCap').innerHTML = 'The rock model <span> - the sand shaded by porosity, and the near stack</span>';
     }
 
     const last = (id === 'pk' || id === 'pm');

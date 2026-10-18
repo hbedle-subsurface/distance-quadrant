@@ -45,17 +45,19 @@ console.log('   gradient',$('s2c').textContent,' half isochron',$('s2d').textCon
 if(!(parseInt($('s2a').textContent)>20)) fail.push('too few samples on the crossplot: '+$('s2a').textContent);
 
 console.log('\n--- exercise 4: the delimiter thins the plot ---');
+hit('[data-over="soft"]');hit('[data-fluid="gas"]');
+set('phi',28);set('thick',30);set('freq',40);set('dt',0);set('noise',0);
 hit('#tabs button[data-tab="p3"]');
-let prev=1e9;
-for(const w of [14,8,5,3]){set('iso',w);
-  const n=parseInt($('s3a').textContent);
-  console.log('   band \u00B1'+String(w).padStart(2)+' ms  passing',$('s3a').textContent,
-    '  median',$('s3b').textContent);
-  if(n>prev) fail.push('narrowing the band to '+w+' let more samples through: '+n+' vs '+prev);
-  prev=n;}
-set('iso',14);
+const n0=parseInt($('s3a').textContent), med0=num($('s3b').textContent), medAll=num($('s3d').textContent);
+console.log('   default band',$('s3a').textContent,'  median',$('s3b').textContent,'  all',$('s3d').textContent);
+if($('isoLoV').textContent!=='+6 ms'||$('isoHiV').textContent!=='+10 ms') fail.push('default band is not +6 to +10 ms');
+if(n0!==12) fail.push('default band keeps '+n0+', answer says 12 of 31');
+if(!/of 31/.test($('s3a').textContent)) fail.push('population is not 31: '+$('s3a').textContent);
+if(!(Math.abs(med0-0.054)<0.0006&&Math.abs(medAll-0.039)<0.0006)) fail.push('medians '+med0+' / '+medAll+' differ from the answer 0.054 / 0.039');
+set('isoLo',-14);set('isoHi',14);
 if(parseInt($('s3a').textContent)!==parseInt($('s2a').textContent))
   fail.push('at the widest band not all samples pass: '+$('s3a').textContent+' vs '+$('s2a').textContent);
+set('isoLo',6);set('isoHi',10);
 
 console.log('\n--- exercise 5: the cluster moves with the fluid ---');
 const meds=[];

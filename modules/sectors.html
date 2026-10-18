@@ -27,18 +27,18 @@
     <h1>Sector splitting</h1>
     <p class="sub">One line of arithmetic: after the baseline has been rotated flat, every sample numbered
       Q3 through Q7 has the sign of its gradient flipped. It is the shortest step in the whole method and
-      the least obvious, so this module does two things &mdash; shows exactly what it does to the picture,
+      the least obvious, so this module does two things - shows exactly what it does to the picture,
       and shows what depends on it having been done.</p>
   </div>
 
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap" id="labCap">The rock model <span>&mdash; the layers, and the near stack they produce</span></p>
+        <p class="cap" id="labCap">The rock model <span> - the layers, and the near stack they produce</span></p>
         <canvas id="cMain" aria-label="The rotated crossplot before and after the sector split"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
+        <p class="cap">The model <span> - everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -69,11 +69,11 @@
             <h2>The layers</h2>
             <div class="ctl">
               <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
-              <input type="range" id="thick" min="6" max="55" step="1" value="30">
+              <input type="range" id="thick" min="6" max="40" step="1" value="30">
             </div>
             <div class="ctl">
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
-              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+              <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
             <label class="check" style="grid-column:1/-1"><input type="checkbox" id="split" checked>
               Apply the sector split</label>
@@ -101,7 +101,7 @@
   <p class="tabhint">Work through the three steps in order, <b>then try the exercises</b>.
     Method and references follow.</p>
   <nav class="tabs" id="tabs" role="tablist" aria-label="Module steps">
-    <button role="tab" data-tab="p1" aria-selected="false">1 · Where each number sits</button>
+    <button role="tab" data-tab="p1" aria-selected="false">1 · Where each number lies</button>
     <button role="tab" data-tab="p2" aria-selected="false">2 · The flip</button>
     <button role="tab" data-tab="p3" aria-selected="false">3 · What depends on it</button>
     <button role="tab" data-tab="pw" aria-selected="false">Why it matters</button>
@@ -113,7 +113,7 @@
 
   <section class="tabpane" id="p1" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
-      <h3><span class="stepno">1</span>Where each number sits</h3>
+      <h3><span class="stepno">1</span>Where each number lies</h3>
       <span class="hint">The loop, colored by quadrant number</span>
     </div>
 
@@ -125,7 +125,7 @@
     <p class="lede">
       The numbers are not scattered. A loop on the trace becomes a loop on the crossplot, and it passes
       through the numbers in order: the extrema, <b>Q1 and Q9</b>, sit furthest out along the trend, and
-      the zero crossing, <b>Q5</b>, sits nearest the origin with Q3 and Q7 on either side of it. Position
+      the zero crossing, <b>Q5</b>, lies nearest the origin with Q3 and Q7 on either side of it. Position
       in the waveform and position on the crossplot are the same information seen two ways, which is the
       fact the next step exploits.</p>
 
@@ -216,7 +216,7 @@
     <div class="legend prose">
       <span>The two distance readouts are there as a check and not a result: they should be identical,
         because a reflection cannot change a length. If they ever differ, something has gone wrong with
-        the order of operations &mdash; the split has to come after the rotation, not before.</span>
+        the order of operations - the split has to come after the rotation, not before.</span>
     </div>
   </section>
 
@@ -232,14 +232,14 @@
       and a sector is a quarter of a crossplot.</p>
 
     <p class="lede">The reason for four and not two is a matter of record. The method's authors used a
-      coarser scheme in the original Phillips work &mdash; four quadrant numbers and not nine, which
-      was enough for 35 Hz data sampled at 2 ms &mdash; and it did not include sector splitting. The finer numbering and the splitting arrived together, and the stated reason for the
+      coarser scheme in the original Phillips work - four quadrant numbers and not nine, which
+      was enough for 35 Hz data sampled at 2 ms - and it did not include sector splitting. The finer numbering and the splitting arrived together, and the stated reason for the
       finer numbering was the extra detail it gave the splitting to work with.</p>
 
     <div class="legend prose">
       <span>Which is a good reason to be careful about the sample rate here as everywhere: at 2 ms there
         are not enough samples in a quarter cycle for nine numbers to be distinct, and the splitting
-        inherits whatever coarseness the numbering has. Module 03 measured that directly &mdash; at 40 Hz
+        inherits whatever coarseness the numbering has. Module 03 measured that directly - at 40 Hz
         and 2 ms, sixteen of eighteen gaps lose numbers entirely.</span>
     </div>
   </section>
@@ -253,8 +253,8 @@
           <details class="reveal"><summary>Answer</summary><span class="ans">They are identical every time,
             and they have to be. The split reflects a point in a line through the origin, and a reflection
             is a rigid motion about that origin, so it cannot change how far away the point is. That is
-            checked here and does not have to be assumed, because it tells you the step is doing nothing at all to
-            module 05's attribute and everything to the angle. If you ever see the distance change, the
+            checked here and does not have to be assumed, because it tells us the step is doing nothing at all to
+            module 05's attribute and everything to the angle. If we ever see the distance change, the
             split has been applied before the rotation instead of after it.</span></details></li>
         <li><b>Count what moves.</b> On step 2, read how many samples are moved and how many are left
           alone.
@@ -280,7 +280,7 @@
             it picked the crossings in the first place.</span></details></li>
         <li><b>Turn the step off.</b> Untick the box in the panel and look at steps 2 and 3 together.
           <details class="reveal"><summary>Answer</summary><span class="ans">The crossplot looks tidier
-            without it &mdash; the loop stays a loop &mdash; and the angle statistics get worse. The step makes the picture less tidy and the measurement more usable. Anyone meeting sector splitting for the first time and finding it arbitrary is
+            without it - the loop stays a loop - and the angle statistics get worse. The step makes the picture less tidy and the measurement more usable. Anyone meeting sector splitting for the first time and finding it arbitrary is
             responding to something real, and the answer is that it is not for looking at.</span></details></li>
         <li><b>Coarsen the sampling.</b> Step the sample rate to 4 ms and look at step 1 again.
           <details class="reveal"><summary>Answer</summary><span class="ans">Whole quadrant numbers vanish,
@@ -370,7 +370,7 @@
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
-        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        count, so that I can show the university these are being used - no cookie, no account,
         no personal information.</p>
     </div>
   </footer>
@@ -421,8 +421,6 @@
   const DTS = [0.001, 0.002, 0.003, 0.004];
   const NEAR_A = [0, 10];
   const T0 = 0, TWIN = 0.150, TTOP = 0.050;
-  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
-  const BEDC = [0.118, 0.130];                   // a tight bed below it
 
   const DEF = {
     over: 'soft', phi: 28, fluid: 'gas',
@@ -498,10 +496,7 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth and not a
-     lone sand, so that the trace looks like something a picker would find: a
-     contrasting bed above, the sand with an optional tight streak inside it,
-     and a tight bed below. Every spike is computed from the two rocks it sits
+  /* The near-stack reflectivity of one trace. The sand, with an optional tight streak inside it. Every spike is computed from the two rocks it sits
      between. */
   function spikes(topT, thickS) {
     const over = LITHS[S.over];
@@ -512,15 +507,11 @@
     const shift = topT - TTOP;                   // structure moves everything together
     const out = [];
 
-    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
-    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
 
     const baseT = topT + thickS / 1000;
     out.push({ t: topT, r: n(shuey(over, sand)) });
     out.push({ t: baseT, r: n(shuey(sand, over)) });
 
-    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
-    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
     return out;
   }
 
@@ -578,16 +569,28 @@
     const floor = 0.01 * peak;
 
     const cross = [];                      // { i, tTrue, err }
-    for (let i = 1; i < nt; i++) {
-      const a = tr[i - 1], b = tr[i];
-      if (a === 0 || b === 0) continue;
-      if ((a > 0) === (b > 0)) continue;
-      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
-      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
-      // where the crossing actually is, by linear interpolation
-      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
-      const tTrue = (i - 1 + frac) * dt();
-      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    /* A sample that is exactly zero is a crossing in its own right when the
+       signs on either side differ, so the loop compares each sample with the
+       last nonzero one and not only with its neighbor. */
+    let prev = -1;
+    for (let i = 0; i < nt; i++) {
+      if (tr[i] === 0) continue;
+      if (prev >= 0 && (tr[prev] > 0) !== (tr[i] > 0)) {
+        const a = tr[prev], b = tr[i];
+        if (!(Math.abs(a) < floor && Math.abs(b) < floor)) {
+          let j, tTrue;
+          if (i - prev > 1) {                   // exact zeros between: take the middle one
+            j = Math.floor((prev + i) / 2);
+            tTrue = ((prev + i) / 2) * dt();
+          } else {
+            j = Math.abs(a) <= Math.abs(b) ? prev : i;
+            // where the crossing actually is, by linear interpolation
+            tTrue = (prev + Math.abs(a) / (Math.abs(a) + Math.abs(b))) * dt();
+          }
+          cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+        }
+      }
+      prev = i;
     }
 
     /* Between each consecutive pair of crossings, keep the single largest
@@ -703,8 +706,8 @@
     return out;
   }
 
-  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
-     or a carbonate play — both partial stacks are reversed at the stacking
+  /* The reservoir top should be a trough. When it is a peak - a class 1 sand,
+     or a carbonate play - both partial stacks are reversed at the stacking
      step, before any picking, so that the numbering rule never changes. */
   function needsFlip() {
     const over = LITHS[S.over];
@@ -819,12 +822,8 @@
     const baseT = TTOP + S.thick / 1000;
     const f = (q) => q.A + q.B * S2F;
     const sp = [
-      { t: BEDA[0], r: f(shuey(over, (S.over === 'soft') ? LITHS.hard : LITHS.soft)) },
-      { t: BEDA[1], r: f(shuey((S.over === 'soft') ? LITHS.hard : LITHS.soft, over)) },
       { t: TTOP, r: f(shuey(over, sand)) },
       { t: baseT, r: f(shuey(sand, over)) },
-      { t: BEDC[0], r: f(shuey(over, LITHS.tight)) },
-      { t: BEDC[1], r: f(shuey(LITHS.tight, over)) },
     ];
     const nt = ntOf();
     const tr = SEIS.traceFromSpikes(sp, T0, dt(), nt, wavelet());
@@ -1050,9 +1049,7 @@
     const baseT = TTOP + S.thick / 1000;
     const b = [
       { t0: T0, t1: TWIN, name: '', fill: LITHFILL[seal] },
-      { t0: BEDA[0], t1: BEDA[1], name: LITHS[other].name, fill: LITHFILL[other] },
       { t0: TTOP, t1: baseT, name: 'sand ' + S.phi + '%', fill: LITHFILL.sand },
-      { t0: BEDC[0], t1: BEDC[1], name: 'tight sandstone', fill: LITHFILL.tight },
     ];
     return b;
   }
@@ -1322,7 +1319,7 @@
     const sf = $('skipflip'); if (sf) sf.disabled = !three;
 
     if ($('labCap')) {
-      $('labCap').innerHTML = 'The rock model <span>&mdash; the layers, and the near stack they produce</span>';
+      $('labCap').innerHTML = 'The rock model <span> - the layers, and the near stack they produce</span>';
     }
 
     const last = (id === 'pk' || id === 'pm');

@@ -25,20 +25,20 @@
   <div class="mod-head">
     <p class="eyebrow">Module 12 &nbsp;·&nbsp; The DQ trace</p>
     <h1>The four AVO classes</h1>
-    <p class="sub">Module 01 introduced the classes as a way of naming where a sand sits on an AB
+    <p class="sub">Module 01 introduced the classes as a way of naming where a sand lies on an AB
       crossplot. Every module since has quietly assumed one. Here all four are built from the same rock
-      model, run through the whole workflow, and compared &mdash; as traces, and as the histograms the DQ
+      model, run through the whole workflow, and compared - as traces, and as the histograms the DQ
       papers use to summarise a volume.</p>
   </div>
 
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap" id="labCap">The four exemplars <span>&mdash; where each sits on the AB plane</span></p>
+        <p class="cap" id="labCap">The four exemplars <span> - where each lies on the AB plane</span></p>
         <canvas id="cMain" aria-label="The four AVO class exemplars plotted on an intercept versus gradient crossplot"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
+        <p class="cap">The model <span> - everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -48,16 +48,16 @@
               imaged, not what they are.</p>
             <div class="ctl">
               <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
-              <input type="range" id="thick" min="6" max="55" step="1" value="30">
+              <input type="range" id="thick" min="6" max="40" step="1" value="30">
             </div>
             <div class="ctl">
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
-              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+              <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
           </div>
 
           <div class="ctl-col" id="colLayers">
-            <h2>Where you are</h2>
+            <h2>Where we are</h2>
             <div class="ctl">
               <label>Class shown in detail <span class="val" id="overV">class 3</span></label>
               <div class="seg" role="group" aria-label="Which class to show in detail">
@@ -111,10 +111,10 @@
 
     <p class="lede">
       An AVO class is a position, not a rock. It says which quadrant of the intercept-gradient plane the
-      top of a sand falls in, and that is decided jointly by the sand and by whatever sits above it.
+      top of a sand falls in, and that is decided jointly by the sand and by whatever lies above it.
       <b>Class 3</b> is the familiar bright spot: negative intercept, negative gradient, getting brighter
       with offset. <b>Class 1</b> is a hard sand under a soft seal, positive intercept and negative
-      gradient, dimming and eventually reversing. <b>Class 2</b> sits near the origin with almost no
+      gradient, dimming and eventually reversing. <b>Class 2</b> lies near the origin with almost no
       normal-incidence contrast. <b>Class 4</b> has a negative intercept with a positive gradient, so it is
       bright at zero offset and dims away.</p>
 
@@ -145,7 +145,7 @@
     <p class="lede">
       Each exemplar is now put through everything: partial stacks, picks, quadrant numbers, phase filters,
       the distance of module 05 and the angle of module 07. Nothing is tuned per class. The one thing that
-      changes is the polarity flip &mdash; module 03 established that class 1 sands have both partial
+      changes is the polarity flip - module 03 established that class 1 sands have both partial
       stacks reversed before picking, so that the top of the reservoir arrives at the picker as a trough
       like every other class.</p>
 
@@ -162,7 +162,7 @@
     </div>
     <div class="legend prose">
       <span>The class 2 column is the instructive one. Its intercept is close to zero, so the near stack
-        barely registers the sand at all, and the distance is correspondingly small &mdash; this is the
+        barely registers the sand at all, and the distance is correspondingly small - this is the
         case module 07 used as its example of an unreliable angle, and it is the case every amplitude
         method finds hardest. Nothing here fixes it; what the workflow does is make the weakness visible and does not hide it inside a single bright number.</span>
     </div>
@@ -238,8 +238,8 @@
         <li><b>Read the four positions.</b> On step 1, note the intercept and gradient of each exemplar.
           <details class="reveal"><summary>Answer</summary><span class="ans">Class 1 has a positive
             intercept and a negative gradient, class 3 has both negative, class 4 has a negative intercept
-            with a positive gradient, and class 2 sits near the origin. Those four sign combinations are the entire content of the classification. Note what that does not tell you: two sands in the same class can be quite different rocks, and the same rock changes class when the seal changes. A class is a statement about a boundary, so it is shared by every pair of rocks that happens to produce those signs. Everything else attached to the names &mdash; bright
-            spot, dim spot, phase reversal &mdash; follows from where the line through those two numbers
+            with a positive gradient, and class 2 lies near the origin. Those four sign combinations are the entire content of the classification. Note what that does not tell us: two sands in the same class can be quite different rocks, and the same rock changes class when the seal changes. A class is a statement about a boundary, so it is shared by every pair of rocks that happens to produce those signs. Everything else attached to the names - bright
+            spot, dim spot, phase reversal - follows from where the line through those two numbers
             crosses zero.</span></details></li>
         <li><b>Find the polarity flip.</b> On step 2, see which class has it applied.
           <details class="reveal"><summary>Answer</summary><span class="ans">Class 1, because its intercept
@@ -257,9 +257,9 @@
         <li><b>Switch the histogram to a linear count axis.</b> On step 3, untick the box.
           <details class="reveal"><summary>Answer</summary><span class="ans">The background bar near zero
             swamps everything and the tail vanishes. In a real clastic section the imbalance is far worse
-            than in this model &mdash; the papers put it at roughly four samples in five being shale
-            &mdash; which is why the published histograms use a logarithmic count axis. It is a display
-            choice and not a processing one, and it changes whether you can see the thing you are
+            than in this model - the papers put it at roughly four samples in five being shale
+- which is why the published histograms use a logarithmic count axis. It is a display
+            choice and not a processing one, and it changes whether we can see the thing we are
             looking for.</span></details></li>
         <li><b>Thin the sand.</b> Take the thickness to 10 ms and look at steps 2 and 3 together.
           <details class="reveal"><summary>Answer</summary><span class="ans">Every class loses separation at
@@ -317,7 +317,7 @@
         samples falling inside the modeled sand marked separately. The logarithmic count axis follows the
         published displays; the note that roughly four samples in five are shale in a clastic section is
         from the DQ display specification and describes field data and not this model, where the
-        proportion depends on how thick you set the sand.</p>
+        proportion depends on how thick we set the sand.</p>
       <p><b>What this module does not do.</b> It does not reproduce the published class sections, which are
         built from ray-traced synthetics over pseudo-well catalogs with lateral variation. It is four
         single traces from one rock model, intended to show what the class names mean and how the same
@@ -339,7 +339,7 @@
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
     <h3><a href="reading-sections.html">13 · Reading a DQ section</a></h3>
-    <p>The display conventions the papers use, and what each color bar is protecting &mdash; the last
+    <p>The display conventions the papers use, and what each color bar is protecting - the last
       module in the course.</p>
     <a class="btn" href="reading-sections.html">Open module 13 →</a>
     <a class="btn ghost" href="../index.html">All modules</a>
@@ -360,7 +360,7 @@
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
-        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        count, so that I can show the university these are being used - no cookie, no account,
         no personal information.</p>
     </div>
   </footer>
@@ -411,8 +411,6 @@
   const DTS = [0.001, 0.002, 0.003, 0.004];
   const NEAR_A = [0, 10];
   const T0 = 0, TWIN = 0.150, TTOP = 0.050;
-  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
-  const BEDC = [0.118, 0.130];                   // a tight bed below it
 
   const DEF = {
     over: 'soft', phi: 28, fluid: 'gas',
@@ -488,10 +486,7 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth and not a
-     lone sand, so that the trace looks like something a picker would find: a
-     contrasting bed above, the sand with an optional tight streak inside it,
-     and a tight bed below. Every spike is computed from the two rocks it sits
+  /* The near-stack reflectivity of one trace. The sand, with an optional tight streak inside it. Every spike is computed from the two rocks it sits
      between. */
   function spikes(topT, thickS) {
     const over = LITHS[S.over];
@@ -502,15 +497,11 @@
     const shift = topT - TTOP;                   // structure moves everything together
     const out = [];
 
-    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
-    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
 
     const baseT = topT + thickS / 1000;
     out.push({ t: topT, r: n(shuey(over, sand)) });
     out.push({ t: baseT, r: n(shuey(sand, over)) });
 
-    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
-    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
     return out;
   }
 
@@ -568,16 +559,28 @@
     const floor = 0.01 * peak;
 
     const cross = [];                      // { i, tTrue, err }
-    for (let i = 1; i < nt; i++) {
-      const a = tr[i - 1], b = tr[i];
-      if (a === 0 || b === 0) continue;
-      if ((a > 0) === (b > 0)) continue;
-      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
-      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
-      // where the crossing actually is, by linear interpolation
-      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
-      const tTrue = (i - 1 + frac) * dt();
-      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    /* A sample that is exactly zero is a crossing in its own right when the
+       signs on either side differ, so the loop compares each sample with the
+       last nonzero one and not only with its neighbor. */
+    let prev = -1;
+    for (let i = 0; i < nt; i++) {
+      if (tr[i] === 0) continue;
+      if (prev >= 0 && (tr[prev] > 0) !== (tr[i] > 0)) {
+        const a = tr[prev], b = tr[i];
+        if (!(Math.abs(a) < floor && Math.abs(b) < floor)) {
+          let j, tTrue;
+          if (i - prev > 1) {                   // exact zeros between: take the middle one
+            j = Math.floor((prev + i) / 2);
+            tTrue = ((prev + i) / 2) * dt();
+          } else {
+            j = Math.abs(a) <= Math.abs(b) ? prev : i;
+            // where the crossing actually is, by linear interpolation
+            tTrue = (prev + Math.abs(a) / (Math.abs(a) + Math.abs(b))) * dt();
+          }
+          cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+        }
+      }
+      prev = i;
     }
 
     /* Between each consecutive pair of crossings, keep the single largest
@@ -693,8 +696,8 @@
     return out;
   }
 
-  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
-     or a carbonate play — both partial stacks are reversed at the stacking
+  /* The reservoir top should be a trough. When it is a peak - a class 1 sand,
+     or a carbonate play - both partial stacks are reversed at the stacking
      step, before any picking, so that the numbering rule never changes. */
   function needsFlip() {
     const over = LITHS[S.over];
@@ -809,12 +812,8 @@
     const baseT = TTOP + S.thick / 1000;
     const f = (q) => q.A + q.B * S2F;
     const sp = [
-      { t: BEDA[0], r: f(shuey(over, (S.over === 'soft') ? LITHS.hard : LITHS.soft)) },
-      { t: BEDA[1], r: f(shuey((S.over === 'soft') ? LITHS.hard : LITHS.soft, over)) },
       { t: TTOP, r: f(shuey(over, sand)) },
       { t: baseT, r: f(shuey(sand, over)) },
-      { t: BEDC[0], r: f(shuey(over, LITHS.tight)) },
-      { t: BEDC[1], r: f(shuey(LITHS.tight, over)) },
     ];
     const nt = ntOf();
     const tr = SEIS.traceFromSpikes(sp, T0, dt(), nt, wavelet());
@@ -1012,8 +1011,8 @@
 
      Axes per the AASPI column specification: x is the rotated and split
      near-quadrant amplitude, y the rotated and split gradient, z the signed
-     half isochron. The half isochron is a waveform descriptor — the length
-     and direction of the half loop a sample sits in — not a bed thickness.
+     half isochron. The half isochron is a waveform descriptor - the length
+     and direction of the half loop a sample sits in - not a bed thickness.
      ===================================================================== */
 
   /* =====================================================================
@@ -1288,7 +1287,7 @@
     $('s2d').textContent = cur.topPeak ? 'a peak' : 'a trough';
     $('s2e').textContent = 'Showing ' + cur.label + ' in detail: distance ' + cur.topD.toFixed(3)
       + ' at the sand top, which reads as ' + (cur.topPeak ? 'a peak' : 'a trough')
-      + '. Compare the four distances across the columns \u2014 class 2 is much the smallest.';
+      + '. Compare the four distances across the columns - class 2 is much the smallest.';
   }
 
   function drawStep3() {
@@ -1448,7 +1447,7 @@
     const sf = $('skipflip'); if (sf) sf.disabled = !three;
 
     if ($('labCap')) {
-      $('labCap').innerHTML = 'The rock model <span>&mdash; the layers, and the near stack they produce</span>';
+      $('labCap').innerHTML = 'The rock model <span> - the layers, and the near stack they produce</span>';
     }
 
     const last = (id === 'pk' || id === 'pm');

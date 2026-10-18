@@ -45,7 +45,7 @@ hit('[data-fluid="oil"]'); set('phi',28);
 hit('#tabs button[data-tab="p1"]');
 console.log('   distance',$('s1d').textContent,'  folded angle',$('s1c').textContent);
 const dsmall=parseFloat($('s1d').textContent);
-if(!(dsmall<0.03)) fail.push('the class 2 crossover distance is '+dsmall+', expected under 0.03');
+if(!(dsmall<0.05)) fail.push('the class 2 crossover distance is '+dsmall+', expected about 0.04');
 hit('[data-fluid="gas"]'); set('phi',20);
 
 console.log('\n--- exercise 5: the fold never leaves its range ---');

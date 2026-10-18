@@ -36,11 +36,11 @@
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap" id="labCap">The gather <span>&mdash; and the two traces made from it</span></p>
+        <p class="cap" id="labCap">The gather <span> - and the two traces made from it</span></p>
         <canvas id="cMain" aria-label="An NMO-corrected angle gather with the near and far windows shaded, and the two stacked traces beside it"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
+        <p class="cap">The model <span> - everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -80,11 +80,11 @@
               <input type="range" id="far" min="12" max="30" step="1" value="20">
             </div>
             <p class="hint-line" style="margin:-8px 0 14px">The near window is fixed at 0&ndash;10&deg;.
-              The far one is ten degrees wide and you choose where it starts. Both are data dependent in
+              The far one is ten degrees wide and we choose where it starts. Both are data dependent in
               practice, set by what the acquisition actually illuminated.</p>
             <div class="ctl">
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
-              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+              <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
             <p class="hint-line" style="margin:-8px 0 0">A zero-phase Ricker, as throughout the DQ
               papers.</p>
@@ -140,12 +140,12 @@
 
     <p class="lede">
       Two windows are cut from that gather and the traces inside each are averaged. The near window is
-      0&ndash;10&deg;, the far window is ten degrees wide starting wherever you put it, 20&ndash;30&deg; by
+      0&ndash;10&deg;, the far window is ten degrees wide starting wherever we put it, 20&ndash;30&deg; by
       default. Averaging turns eleven traces into one, and the gather becomes two traces called N and F.</p>
 
     <canvas id="c1a" aria-label="The angle gather drawn as wiggle traces with the near and far windows shaded"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Time runs down the page. Each wiggle is one incidence
-      angle. Blue traces fall inside the near window, pink inside the far window, gray outside both. Turn
+      angle. All wiggles share one fixed amplitude scale, so a stronger reflection draws a larger wiggle. Blue traces fall inside the near window, pink inside the far window, gray outside both. Turn
       the noise up in the panel and the individual traces get worse while the two averages hold up.</p>
 
     <p class="sublabel"><b>2</b> The two traces, and their difference
@@ -189,7 +189,7 @@
 
     <canvas id="c2a" aria-label="Two scatter plots: the near stack against the intercept, and the far-minus-near difference against the gradient"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Every porosity from 8 to 36% and all three fluids, under
-      the overburden you picked, computed with no wavelet and no noise. The dashed lines are N = A on the
+      the overburden we picked, computed with no wavelet and no noise. The dashed lines are N = A on the
       left and F &minus; N = 0.1701&nbsp;B on the right. Both scatters sit on them.</p>
 
     <div class="stats" style="margin-top:16px">
@@ -267,7 +267,7 @@
       <span class="hint">The reason that has nothing to do with statistics</span>
     </div>
 
-    <p class="lede">The strongest reason the DQ process takes partial stacks only becomes visible once you
+    <p class="lede">The strongest reason the DQ process takes partial stacks only becomes visible once we
       know what happens next. Everything from module 02 onward reads structure off the near stack: where it
       crosses zero, where its peaks are, where its troughs are. Those picks define the acoustic layers, and
       every quadrant number and phase filter in the method hangs off them. So the question that matters is
@@ -276,7 +276,7 @@
 
     <p class="lede">On that question step 3 is one-sided. The near stack averages ten degrees of angle, over
       which the leftover moveout is a fraction of a millisecond, and its intercept stays exact however far
-      you push the moveout slider. The fitted intercept has to extrapolate back to zero angle from a lever
+      we push the moveout slider. The fitted intercept has to extrapolate back to zero angle from a lever
       arm forty degrees long, and by eight milliseconds it is out by half. A trace that is wrong by half is
       not something to pick zero crossings on.</p>
 
@@ -316,8 +316,8 @@
             minus A, which is a hundredth of the gradient. Across the whole model it never exceeds about
             0.007, and for most sands it is nearer 0.002. Set against intercepts of a tenth to half, that
             is a rounding error, and it is why the DQ papers use the near stack as the intercept without
-            further comment. It is not an approximation to the physics &mdash; the physics is exact
-            &mdash; it is a decision that one hundredth of B can be dropped.</span></details></li>
+            further comment. It is not an approximation to the physics - the physics is exact
+- it is a decision that one hundredth of B can be dropped.</span></details></li>
         <li><b>Move the far window and watch the gradient scale.</b> On step 2, drag the far window from
           12&deg; out to 45&deg;, reading the multiplier on F &minus; N.
           <details class="reveal"><summary>Answer</summary><span class="ans">It climbs steeply: 0.0775 at a
@@ -331,7 +331,7 @@
         <li><b>Be fair to the fit first.</b> On step 3, leave the residual moveout at zero and raise the
           noise to 40%, then read the two gradient noise figures.
           <details class="reveal"><summary>Answer</summary><span class="ans">57% of the true gradient for the
-            two stacks against 28% for the fit &mdash; almost exactly half, which is the square root of the
+            two stacks against 28% for the fit - almost exactly half, which is the square root of the
             factor of four in variance. The fit uses all forty-one traces; the difference of two window
             averages uses eleven and eleven, and then divides by 0.1701, which magnifies whatever noise
             survived. On a flat gather the fit is simply the better estimator, and if that were the whole
@@ -345,7 +345,7 @@
             apart on the waveform, and reports the difference between two parts of a wavelet as a property
             of the rock. Four milliseconds is not a badly processed gather. It is an ordinary
             one.</span></details></li>
-        <li><b>Watch the intercept while you do it.</b> Push the moveout on to 8 ms and read the two
+        <li><b>Watch the intercept while we do it.</b> Push the moveout on to 8 ms and read the two
           intercept bias figures.
           <details class="reveal"><summary>Answer</summary><span class="ans">The near stack is still exact.
             The fitted intercept is out by about half. The near stack averages ten degrees of angle, over
@@ -357,7 +357,7 @@
             the gradient is no consolation if they are not.</span></details></li>
         <li><b>Find a model where the far stack is the only thing that sees the sand.</b> Try the soft
           shale with gas, around 25% porosity, and read the two key numbers on step 1.
-          <details class="reveal"><summary>Answer</summary><span class="ans">The near stack sits close to
+          <details class="reveal"><summary>Answer</summary><span class="ans">The near stack lies close to
             zero while F &minus; N is clearly negative, and the far stack has the opposite sign to the
             near. This is the class 2p case from module 01, seen through the two traces the method actually
             works on. A full stack would average the two and lose most of it. The DQ process never forms a
@@ -470,7 +470,7 @@
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
-        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        count, so that I can show the university these are being used - no cookie, no account,
         no personal information.</p>
     </div>
   </footer>
@@ -528,6 +528,21 @@
   const DT = 0.001;                              // 1 ms, as the papers specify
   const T0 = 0, TWIN = 0.140, TTOP = 0.045, THICK = 0.030;
   const NT = Math.floor(TWIN / DT) + 1;
+  /* Every trace panel on this page is drawn at one fixed gain, so a wiggle that
+     doubles in size has doubled in amplitude and the readouts agree with the
+     picture. 0.45 holds every conventional model on the sliders; a stronger
+     input (tight sandstone over a porous sand, heavy noise) is clipped at the
+     edge of its panel and tagged. */
+  const TRACE_FS = 0.45;
+  function offScale(ctx, rect, actual) {
+    if (actual <= TRACE_FS) return;
+    ctx.save();
+    ctx.font = '10px "IBM Plex Mono", monospace'; ctx.fillStyle = '#841617';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'top';
+    ctx.fillText('clipped: peak ' + actual.toFixed(2), rect.x + rect.w - 4, rect.y + 3);
+    ctx.restore();
+  }
+
 
   const DEF = {
     over: 'soft', phi: 28, fluid: 'gas',
@@ -810,10 +825,12 @@
   function drawGather(ctx, rect, g, opts) {
     const fb = g.fb;
     const xOf = (d) => rect.x + (d / DEG_MAX) * rect.w;
-    let peak = 1e-6;
+    let actual = 1e-6;
     for (let d = 0; d < NANG; d++) {
-      for (let i = 0; i < NT; i++) peak = Math.max(peak, Math.abs(g.traces[d][i]));
+      for (let i = 0; i < NT; i++) actual = Math.max(actual, Math.abs(g.traces[d][i]));
     }
+    const peak = TRACE_FS;
+    offScale(ctx, rect, actual);
 
     // the two windows, behind everything
     [[NEAR_A, 'rgba(29,111,163,0.11)'], [fb, 'rgba(194,48,107,0.11)']].forEach((q) => {
@@ -854,10 +871,12 @@
     drawGather(ctx, rG, g, { ticks: 5 });
 
     const rest = { x: rG.x + rG.w + 22, y: top, w: W - (rG.x + rG.w + 22) - 6, h: bot - top };
-    let peak = 1e-6;
+    let actual = 1e-6;
     for (let i = 0; i < NT; i++) {
-      peak = Math.max(peak, Math.abs(g.near.tr[i]), Math.abs(g.far.tr[i]));
+      actual = Math.max(actual, Math.abs(g.near.tr[i]), Math.abs(g.far.tr[i]));
     }
+    const peak = TRACE_FS;
+    offScale(ctx, rest, actual);
     SEIS.frame(ctx, rest);
     const third = rest.w / 3;
     wiggle(ctx, g.near.tr, { x: rest.x, y: rest.y, w: third, h: rest.h },
@@ -903,11 +922,13 @@
       const ctx = SEIS.fitCanvas(cb, W, H);
       ctx.clearRect(0, 0, W, H);
       const rect = { x: 62, y: 22, w: W - 84, h: H - 66 };
-      let peak = 1e-6;
+      let actual = 1e-6;
       for (let i = 0; i < NT; i++) {
-        peak = Math.max(peak, Math.abs(g.near.tr[i]), Math.abs(g.far.tr[i]),
+        actual = Math.max(actual, Math.abs(g.near.tr[i]), Math.abs(g.far.tr[i]),
           Math.abs(g.diff[i]));
       }
+      const peak = TRACE_FS;
+      offScale(ctx, rect, actual);
       SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
         (v) => String(Math.round(v)), { ticks: 6 });
       SEIS.frame(ctx, rect);
@@ -1026,11 +1047,13 @@
     ctx.clearRect(0, 0, W, H);
     const rect = { x: 62, y: 26, w: W - 84, h: H - 74 };
 
-    let peak = 1e-6;
+    let actual = 1e-6;
     for (let i = 0; i < NT; i++) {
-      peak = Math.max(peak, Math.abs(g.near.tr[i]), Math.abs(g.far.tr[i]),
+      actual = Math.max(actual, Math.abs(g.near.tr[i]), Math.abs(g.far.tr[i]),
         Math.abs(g.diff[i]), Math.abs(g.fitA[i]), Math.abs(g.fitB[i]) * g.m.gain);
     }
+    const peak = TRACE_FS;
+    offScale(ctx, rect, actual);
 
     SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)',
       (v) => String(Math.round(v)), { ticks: 8 });
@@ -1101,7 +1124,7 @@
     } else {
       verdict = 'Both effects at once, which is the realistic case. The fit is the more precise '
         + 'estimator and the more biased one: less noise, more error from the moveout. Which matters '
-        + 'more depends on the gather in front of you, and neither is free.';
+        + 'more depends on the gather in front of us, and neither is free.';
     }
     $('s3f').textContent = verdict
       + (ns > 0 && nf > 0 && S.noise > 0 && S.rmo === 0 ? '' : '');
@@ -1217,8 +1240,8 @@
 
     if ($('labCap')) {
       $('labCap').innerHTML = two
-        ? 'The gather <span>&mdash; step 2 works from the algebra, not the traces</span>'
-        : 'The gather <span>&mdash; and the two traces made from it</span>';
+        ? 'The gather <span> - step 2 works from the algebra, not the traces</span>'
+        : 'The gather <span> - and the two traces made from it</span>';
     }
 
     const last = (id === 'pk' || id === 'pm');

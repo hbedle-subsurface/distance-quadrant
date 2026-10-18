@@ -38,7 +38,7 @@
         <canvas id="cMain" aria-label="The rock model with depth and two-way time scales, the stack section and the DQ section computed from it"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; all three panels redraw as a control moves</span></p>
+        <p class="cap">The model <span> - all three panels redraw as a control moves</span></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>Build the rocks</h2>
@@ -66,11 +66,11 @@
             <h2>The section</h2>
             <div class="ctl">
               <label for="thick">Sand thickness, mid line <span class="val" id="thickV">26 ms</span></label>
-              <input type="range" id="thick" min="8" max="50" step="1" value="26">
+              <input type="range" id="thick" min="8" max="40" step="1" value="15">
             </div>
             <div class="ctl">
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
-              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+              <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
             <label class="check" style="grid-column:1/-1"><input type="checkbox" id="wiggle" checked>
               Draw the overlay trace</label>
@@ -95,10 +95,8 @@
 
   <section class="tabpane" id="p1" role="tabpanel">
     <p class="lede">The left panel is the model, the answer both seismic sections are trying to show. A sand
-      of constant thickness lies between layers of the rock chosen in the panel, with a thin contrasting bed
-      above it and a tight sandstone bed below. When the surrounding rock is itself tight sandstone, that
-      lower bed has no contrast and gives no reflection. The sand top is at 50 ms on every setting, and its depth
-      changes with the rock: about 71 m under soft shale, 80 m under hard shale and 107 m under tight
+      of constant thickness lies between layers of the rock chosen in the panel. The sand top is at 50 ms on every setting, and its depth
+      changes with the rock: about 68 m under soft shale, 84 m under hard shale and 120 m under tight
       sandstone, since faster rock puts more meters into each millisecond. The sand&rsquo;s <span class="g" data-g="porosity">porosity</span> rises
       from 12% at the left of the line to 33% at the right, and the color of the sand shows its pore
       fluid.</p>
@@ -159,7 +157,7 @@
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
-        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        count, so that I can show the university these are being used - no cookie, no account,
         no personal information.</p>
     </div>
   </footer>
@@ -210,12 +208,10 @@
   const DTS = [0.001, 0.002, 0.003, 0.004];
   const NEAR_A = [0, 10];
   const T0 = 0, TWIN = 0.150, TTOP = 0.050;
-  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
-  const BEDC = [0.118, 0.130];                   // a tight bed below it
 
   const DEF = {
-    over: 'tight', phi: 24, fluid: 'gas',
-    thick: 26, freq: 40, dt: 0, noise: 0, wiggle: true, tab: 'p1',
+    over: 'hard', phi: 20, fluid: 'gas',
+    thick: 15, freq: 40, dt: 0, noise: 0, wiggle: true, tab: 'p1',
   };
   let S = SEIS.readState(DEF);
   if (!LITHS[S.over]) S.over = DEF.over;
@@ -287,10 +283,7 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth and not a
-     lone sand, so that the trace looks like something a picker would find: a
-     contrasting bed above, the sand with an optional tight streak inside it,
-     and a tight bed below. Every spike is computed from the two rocks it sits
+  /* The near-stack reflectivity of one trace. The sand, with an optional tight streak inside it. Every spike is computed from the two rocks it sits
      between. */
   function spikes(topT, thickS) {
     const over = LITHS[S.over];
@@ -301,15 +294,11 @@
     const shift = topT - TTOP;                   // structure moves everything together
     const out = [];
 
-    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
-    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
 
     const baseT = topT + thickS / 1000;
     out.push({ t: topT, r: n(shuey(over, sand)) });
     out.push({ t: baseT, r: n(shuey(sand, over)) });
 
-    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
-    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
     return out;
   }
 
@@ -367,16 +356,28 @@
     const floor = 0.01 * peak;
 
     const cross = [];                      // { i, tTrue, err }
-    for (let i = 1; i < nt; i++) {
-      const a = tr[i - 1], b = tr[i];
-      if (a === 0 || b === 0) continue;
-      if ((a > 0) === (b > 0)) continue;
-      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
-      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
-      // where the crossing actually is, by linear interpolation
-      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
-      const tTrue = (i - 1 + frac) * dt();
-      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    /* A sample that is exactly zero is a crossing in its own right when the
+       signs on either side differ, so the loop compares each sample with the
+       last nonzero one and not only with its neighbor. */
+    let prev = -1;
+    for (let i = 0; i < nt; i++) {
+      if (tr[i] === 0) continue;
+      if (prev >= 0 && (tr[prev] > 0) !== (tr[i] > 0)) {
+        const a = tr[prev], b = tr[i];
+        if (!(Math.abs(a) < floor && Math.abs(b) < floor)) {
+          let j, tTrue;
+          if (i - prev > 1) {                   // exact zeros between: take the middle one
+            j = Math.floor((prev + i) / 2);
+            tTrue = ((prev + i) / 2) * dt();
+          } else {
+            j = Math.abs(a) <= Math.abs(b) ? prev : i;
+            // where the crossing actually is, by linear interpolation
+            tTrue = (prev + Math.abs(a) / (Math.abs(a) + Math.abs(b))) * dt();
+          }
+          cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+        }
+      }
+      prev = i;
     }
 
     /* Between each consecutive pair of crossings, keep the single largest
@@ -492,8 +493,8 @@
     return out;
   }
 
-  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
-     or a carbonate play — both partial stacks are reversed at the stacking
+  /* The reservoir top should be a trough. When it is a peak - a class 1 sand,
+     or a carbonate play - both partial stacks are reversed at the stacking
      step, before any picking, so that the numbering rule never changes. */
   function needsFlip() {
     const over = LITHS[S.over];
@@ -615,12 +616,8 @@
     const baseT = TTOP + S.thick / 1000;
     const f = (q) => q.A + q.B * S2F;
     const sp = [
-      { t: BEDA[0], r: f(shuey(over, (S.over === 'soft') ? LITHS.hard : LITHS.soft)) },
-      { t: BEDA[1], r: f(shuey((S.over === 'soft') ? LITHS.hard : LITHS.soft, over)) },
       { t: TTOP, r: f(shuey(over, sand)) },
       { t: baseT, r: f(shuey(sand, over)) },
-      { t: BEDC[0], r: f(shuey(over, LITHS.tight)) },
-      { t: BEDC[1], r: f(shuey(LITHS.tight, over)) },
     ];
     const nt = ntOf();
     const tr = SEIS.traceFromSpikes(sp, T0, dt(), nt, wavelet());
@@ -818,8 +815,8 @@
 
      Axes per the AASPI column specification: x is the rotated and split
      near-quadrant amplitude, y the rotated and split gradient, z the signed
-     half isochron. The half isochron is a waveform descriptor — the length
-     and direction of the half loop a sample sits in — not a bed thickness.
+     half isochron. The half isochron is a waveform descriptor - the length
+     and direction of the half loop a sample sits in - not a bed thickness.
      ===================================================================== */
 
   /* =====================================================================
@@ -1065,8 +1062,7 @@
     const other = (S.over === 'soft') ? 'hard' : 'soft';
     const Y = (t) => rect.y + (t / TWIN) * rect.h;
     const layers = [
-      [0, BEDA[0], S.over], [BEDA[0], BEDA[1], other], [BEDA[1], TTOP, S.over],
-      [TTOP, tb, 'sand'], [tb, BEDC[0], S.over], [BEDC[0], BEDC[1], 'tight'], [BEDC[1], TWIN, S.over],
+      [0, TTOP, S.over], [TTOP, tb, 'sand'], [tb, TWIN, S.over],
     ];
     const tw = rect.w / NTR;
     layers.forEach((L, n) => {
@@ -1088,10 +1084,8 @@
     ctx.font = '9px "IBM Plex Mono", monospace';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillStyle = 'rgba(22,25,28,0.78)';
-    ctx.fillText(LITHS[S.over].name, rect.x + rect.w / 2, Y((BEDA[1] + TTOP) / 2));
-    ctx.fillText(LITHS[other].name + ' bed', rect.x + rect.w / 2, Y((BEDA[0] + BEDA[1]) / 2));
-    if (S.over !== 'tight') ctx.fillText('tight sandstone bed', rect.x + rect.w / 2, Y((BEDC[0] + BEDC[1]) / 2));
-    ctx.fillText(LITHS[S.over].name, rect.x + rect.w / 2, Y((tb + BEDC[0]) / 2));
+    ctx.fillText(LITHS[S.over].name, rect.x + rect.w / 2, Y(TTOP / 2));
+    ctx.fillText(LITHS[S.over].name, rect.x + rect.w / 2, Y((tb + TWIN) / 2));
     const sandName = FLUIDS[S.fluid].name + ' sand';
     if (Y(tb) - Y(TTOP) > 13) {
       ctx.fillStyle = '#5A0E0F';
@@ -1116,8 +1110,6 @@
     const mid = sandRock(phiOf(Math.floor(NTR / 2)) / 100, S.fluid);
     const vAt = (t) => {
       if (t >= TTOP && t < tb) return mid.vp;
-      if (t >= BEDA[0] && t < BEDA[1]) return LITHS[other].vp;
-      if (t >= BEDC[0] && t < BEDC[1]) return LITHS.tight.vp;
       return LITHS[S.over].vp;
     };
     const DTZ = 0.0005, zs = [0];

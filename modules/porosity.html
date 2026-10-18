@@ -33,11 +33,11 @@
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap" id="labCap">The rock model <span>&mdash; three sands of known porosity, and the DQ trace</span></p>
+        <p class="cap" id="labCap">The rock model <span> - three sands of known porosity, and the DQ trace</span></p>
         <canvas id="cMain" aria-label="The DQ and acoustic impedance plotted against porosity"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
+        <p class="cap">The model <span> - everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -70,11 +70,11 @@
             <h2>The layers</h2>
             <div class="ctl">
               <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
-              <input type="range" id="thick" min="6" max="55" step="1" value="30">
+              <input type="range" id="thick" min="6" max="40" step="1" value="30">
             </div>
             <div class="ctl">
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
-              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+              <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
             <label class="check" style="grid-column:1/-1"><input type="checkbox" id="showall" checked>
               Show all three overburdens on step 3</label>
@@ -136,7 +136,7 @@
       adding porosity weakens the frame, so the shear modulus falls steeply. The pore fluid resists
       compression and holds the bulk modulus up, so it falls less. The rock is weakened against an S-wave
       more than against a P-wave, and so the ratio of the two velocities rises. Both relationships are close to monotonic here, and both belong to
-      the sand alone &mdash; nothing above it enters into either.</p>
+      the sand alone - nothing above it enters into either.</p>
 
     <canvas id="c1a" aria-label="Acoustic impedance and Vp over Vs plotted against porosity"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">The two classical porosity indicators for this rock
@@ -171,7 +171,7 @@
     <p class="lede">
       Under a tight sandstone seal the result is a near-straight line. The distance rises with porosity at a
       correlation of about <b>0.99</b>, against 0.99 for acoustic impedance and 1.00 for
-      V<sub>P</sub>/V<sub>S</sub> &mdash; the same information, from amplitudes.</p>
+      V<sub>P</sub>/V<sub>S</sub> - the same information, from amplitudes.</p>
 
     <p class="lede">
       The sequence of causes is set out once here, because the rest of the module depends on it. Porosity raises pore
@@ -316,7 +316,7 @@
       Why one catalog is never enough</h2>
     <p class="lede">Step 3 shows the sign flipping between seals. In a real basin the same thing happens
       with depth: compaction moves both the sand trend and the shale trend, and where they cross, the
-      relationship inverts. The reported field practice matches &mdash; two catalogs over a two-second
+      relationship inverts. The reported field practice matches - two catalogs over a two-second
       window in one offshore dataset, a forced catalog switch at an unconformity in another where the
       petrophysics changed abruptly, and a single catalog sufficing in a third field where it did not.
       None of that is a weakness of the attribute. It is what any amplitude-based rock property estimate
@@ -351,17 +351,17 @@
         <li><b>Find where the contrast dies.</b> Still on soft shale, look at where the curve bottoms
           out on step 3.
           <details class="reveal"><summary>Answer</summary><span class="ans">In the mid thirties, where the
-            distance falls to under a hundredth &mdash; on the 2% sampling this page uses, the minimum
-            lands at 34%. That is the class 2 crossover: the sand and the shale have matched impedances,
+            distance falls to about two hundredths - on the 2% sampling this page uses, the minimum
+            lands at 32%. That is the class 2 crossover: the sand and the shale have matched impedances,
             there is almost no reflection, and the attribute has nothing to measure. Module 07 used the
             same region as its example of an unreliable angle, for the same underlying reason. Near a
             crossover, every attribute in this course is weak at once.</span></details></li>
         <li><b>Try the hard shale.</b> Read its correlation on step 3.
           <details class="reveal"><summary>Answer</summary><span class="ans">About 0.43, which is not a
-            useful number and is not meant to be. The crossover sits in the middle of the porosity range
+            useful number and is not meant to be. The crossover lies in the middle of the porosity range
             and not at one end, so the curve is a V and a straight-line correlation averages the two
             halves into nonsense. This is a good reason to look at the shape before trusting a coefficient
-            &mdash; the correlation is low here not because the physics is noisy but because it is
+- the correlation is low here not because the physics is noisy but because it is
             two-sided.</span></details></li>
         <li><b>Change the fluid.</b> Switch between brine, oil and gas under tight sandstone.
           <details class="reveal"><summary>Answer</summary><span class="ans">The curve shifts but keeps its shape and its sign. Hydrocarbon lowers the sand's impedance, which under a tight sandstone seal
@@ -370,12 +370,11 @@
             module 07's angle is for, and it is the clearest argument on the site for computing both
             attributes and not one.</span></details></li>
         <li><b>Add noise.</b> Take the noise to 30% under tight sandstone and watch the correlation.
-          <details class="reveal"><summary>Answer</summary><span class="ans">It barely moves. The correlation stays at
-            0.98 or better up to 35% noise for brine, oil and gas, and eases to between 0.91 and 0.95 at
-            40%, the end of the slider. The trend is carried by the sand's contrast with its seal, which
+          <details class="reveal"><summary>Answer</summary><span class="ans">It does not move. The correlation stays at
+            0.99 or better across the whole slider, to 40% noise, for brine, oil and gas. The trend is carried by the sand's contrast with its seal, which
             is large next to the noise, and the enhancement reads every sample of the loop and not just
-            its peak. The figure is an upper bound in any case: it is computed on one modeled sand at a
-            time, not on a population of real samples.</span></details></li>
+            its peak. The figure is an upper bound in any case: the noise is one realization scaled to the sand's
+            own reflection, and the correlation is computed on one modeled sand at a time, not on a population of real samples.</span></details></li>
       </ol>
     </div>
   </section>
@@ -395,7 +394,7 @@
           is a V that no single correlation describes.</li>
         <li><b>The sand is identical in all three.</b> The attribute reads the contrast, and the contrast
           belongs to the pair.</li>
-        <li><b>Near a crossover every attribute is weak at once</b> &mdash; the distance collapses and the
+        <li><b>Near a crossover every attribute is weak at once</b> - the distance collapses and the
           angle of module 07 becomes meaningless together.</li>
         <li><b>Fluid and porosity move the distance the same way</b>, so the distance alone cannot separate
           them. The angle can.</li>
@@ -418,8 +417,8 @@
         (2025). Correlations are ordinary Pearson coefficients across the porosity samples.</p>
       <p><b>What the correlation figure does and does not represent.</b> It is computed on one modeled sand
         at a time under a fixed seal, with no lithological variation, no shale content and no noise unless
-        you add it. A real correlation on a real basin would be lower, and the number here should be read as a demonstration that the information is present in the attribute and not as an estimate of how well it would perform. The step 3 result &mdash; that the sign depends on the seal
-        &mdash; is the finding that holds generally, because it follows from the sign of an impedance contrast and not from any detail of the rock model.</p>
+        we add it. A real correlation on a real basin would be lower, and the number here should be read as a demonstration that the information is present in the attribute and not as an estimate of how well it would perform. The step 3 result - that the sign depends on the seal
+- is the finding that holds generally, because it follows from the sign of an impedance contrast and not from any detail of the rock model.</p>
       <p>The module stops short of predicting a porosity value, deliberately. The vertical axis is in
         amplitude units, and the conversion is a scaling that has to be calibrated. The method's authors
         treat that as a separate paper requiring forward modeling from well logs, and this course covers
@@ -464,7 +463,7 @@
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
-        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        count, so that I can show the university these are being used - no cookie, no account,
         no personal information.</p>
     </div>
   </footer>
@@ -515,8 +514,6 @@
   const DTS = [0.001, 0.002, 0.003, 0.004];
   const NEAR_A = [0, 10];
   const T0 = 0, TWIN = 0.400, TTOP = 0.050;
-  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
-  const BEDC = [0.118, 0.130];                   // a tight bed below it
 
   const DEF = {
     over: 'tight', phi: 24, fluid: 'brine',
@@ -592,10 +589,7 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth and not a
-     lone sand, so that the trace looks like something a picker would find: a
-     contrasting bed above, the sand with an optional tight streak inside it,
-     and a tight bed below. Every spike is computed from the two rocks it sits
+  /* The near-stack reflectivity of one trace. The sand, with an optional tight streak inside it. Every spike is computed from the two rocks it sits
      between. */
   function spikes(topT, thickS) {
     const over = LITHS[S.over];
@@ -606,15 +600,11 @@
     const shift = topT - TTOP;                   // structure moves everything together
     const out = [];
 
-    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
-    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
 
     const baseT = topT + thickS / 1000;
     out.push({ t: topT, r: n(shuey(over, sand)) });
     out.push({ t: baseT, r: n(shuey(sand, over)) });
 
-    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
-    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
     return out;
   }
 
@@ -672,16 +662,28 @@
     const floor = 0.01 * peak;
 
     const cross = [];                      // { i, tTrue, err }
-    for (let i = 1; i < nt; i++) {
-      const a = tr[i - 1], b = tr[i];
-      if (a === 0 || b === 0) continue;
-      if ((a > 0) === (b > 0)) continue;
-      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
-      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
-      // where the crossing actually is, by linear interpolation
-      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
-      const tTrue = (i - 1 + frac) * dt();
-      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    /* A sample that is exactly zero is a crossing in its own right when the
+       signs on either side differ, so the loop compares each sample with the
+       last nonzero one and not only with its neighbor. */
+    let prev = -1;
+    for (let i = 0; i < nt; i++) {
+      if (tr[i] === 0) continue;
+      if (prev >= 0 && (tr[prev] > 0) !== (tr[i] > 0)) {
+        const a = tr[prev], b = tr[i];
+        if (!(Math.abs(a) < floor && Math.abs(b) < floor)) {
+          let j, tTrue;
+          if (i - prev > 1) {                   // exact zeros between: take the middle one
+            j = Math.floor((prev + i) / 2);
+            tTrue = ((prev + i) / 2) * dt();
+          } else {
+            j = Math.abs(a) <= Math.abs(b) ? prev : i;
+            // where the crossing actually is, by linear interpolation
+            tTrue = (prev + Math.abs(a) / (Math.abs(a) + Math.abs(b))) * dt();
+          }
+          cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+        }
+      }
+      prev = i;
     }
 
     /* Between each consecutive pair of crossings, keep the single largest
@@ -797,8 +799,8 @@
     return out;
   }
 
-  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
-     or a carbonate play — both partial stacks are reversed at the stacking
+  /* The reservoir top should be a trough. When it is a peak - a class 1 sand,
+     or a carbonate play - both partial stacks are reversed at the stacking
      step, before any picking, so that the numbering rule never changes. */
   function needsFlip() {
     const over = LITHS[S.over];
@@ -913,12 +915,8 @@
     const baseT = TTOP + S.thick / 1000;
     const f = (q) => q.A + q.B * S2F;
     const sp = [
-      { t: BEDA[0], r: f(shuey(over, (S.over === 'soft') ? LITHS.hard : LITHS.soft)) },
-      { t: BEDA[1], r: f(shuey((S.over === 'soft') ? LITHS.hard : LITHS.soft, over)) },
       { t: TTOP, r: f(shuey(over, sand)) },
       { t: baseT, r: f(shuey(sand, over)) },
-      { t: BEDC[0], r: f(shuey(over, LITHS.tight)) },
-      { t: BEDC[1], r: f(shuey(LITHS.tight, over)) },
     ];
     const nt = ntOf();
     const tr = SEIS.traceFromSpikes(sp, T0, dt(), nt, wavelet());
@@ -1139,7 +1137,7 @@
     });
   }
 
-  // the full workflow, once per porosity — the expensive call in this module
+  // the full workflow, once per porosity - the expensive call in this module
   const distCache = {};
   function distCurve(over, fluid) {
     const key = [over, fluid, S.thick, S.freq, S.dt, S.noise].join('|');
@@ -1204,7 +1202,7 @@
   };
 
 
-  /* The pinned panel shows the rock model of step 4 — three sands of known
+  /* The pinned panel shows the rock model of step 4 - three sands of known
      porosity in a seal, and does not repeat a plot the steps already draw. */
   function drawMain() {
     const c = $('cMain'); if (!c) return;
@@ -1375,7 +1373,7 @@
     $('s3c').textContent = 'r = ' + rh.toFixed(3);
     $('s3d').textContent = dip.phi + '%, distance ' + dip.d.toFixed(4);
     $('s3e').textContent = 'The same sand gives ' + rl.toFixed(2) + ' under tight sandstone and '
-      + rs.toFixed(2) + ' under soft shale \u2014 nearly as strong, opposite in sign. Under hard shale the '
+      + rs.toFixed(2) + ' under soft shale - nearly as strong, opposite in sign. Under hard shale the '
       + 'crossover falls mid-range and a single correlation, ' + rh.toFixed(2) + ', describes nothing.';
   }
 
@@ -1530,7 +1528,7 @@
     $('s4d').textContent = 'r = ' + rr.toFixed(3);
     $('s4e').textContent = 'Three sands went in at ' + LOG_PHI.join(', ')
       + '% porosity and the DQ trace read them back at a correlation of ' + rr.toFixed(2)
-      + ', from the seismic alone. The sign is set by the seal and the scale by nothing here \u2014 that '
+      + ', from the seismic alone. The sign is set by the seal and the scale by nothing here - that '
       + 'is what a well tie would supply.';
   }
 
@@ -1636,7 +1634,7 @@
     const sf = $('skipflip'); if (sf) sf.disabled = !three;
 
     if ($('labCap')) {
-      $('labCap').innerHTML = 'The rock model <span>&mdash; three sands of known porosity, and the DQ trace</span>';
+      $('labCap').innerHTML = 'The rock model <span> - three sands of known porosity, and the DQ trace</span>';
     }
 
     const last = (id === 'pk' || id === 'pm');

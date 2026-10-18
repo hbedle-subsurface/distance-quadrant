@@ -27,18 +27,18 @@
     <h1>Quadrant numbers</h1>
     <p class="sub">Module 02 left a skeleton of picks with nothing in between them. This module fills the
       gaps. Every sample on the trace gets a number from one to nine describing where in the waveform cycle
-      it sits, the numbers are spread uniformly between the picks, and the loops that are too short or too
+      it lies, the numbers are spread uniformly between the picks, and the loops that are too short or too
       long for an exact fit are handled by dropping numbers or by using them twice.</p>
   </div>
 
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap" id="labCap">The rock model <span>&mdash; the layers, and the near stack they produce</span></p>
+        <p class="cap" id="labCap">The rock model <span> - the layers, and the near stack they produce</span></p>
         <canvas id="cMain" aria-label="The near-stack trace with each sample labeled by its quadrant number"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
+        <p class="cap">The model <span> - everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -73,11 +73,11 @@
             <h2>The layers</h2>
             <div class="ctl">
               <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
-              <input type="range" id="thick" min="6" max="55" step="1" value="30">
+              <input type="range" id="thick" min="6" max="40" step="1" value="30">
             </div>
             <div class="ctl">
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
-              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+              <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
             <p class="hint-line" style="margin:-8px 0 0">Frequency is the control that matters most here.
               It sets how many samples there are between one pick and the next, and therefore whether the
@@ -132,8 +132,9 @@
     <p class="lede">
       One warning about the word. A <b>quadrant number</b> is a position along a waveform, one of nine.
       Later modules also refer to the four <b>sectors</b> of a crossplot, which are quarters of a plot and
-      have nothing to do with quadrant numbers. The two words are unrelated here, and keeping them apart
-      will save confusion in modules 06 and 09.</p>
+      have nothing to do with quadrant numbers. The word comes from the original patents, where a "quadrant" was a
+      quarter of a waveform cycle and each one was given its own phase filter. Here a quadrant number says which phase filter a sample receives, and the sectors of a crossplot are a separate idea, which modules 06 and 09 take up.
+      The published papers use a symmetric assignment of the numbers around the zero crossing. The authors' working code gives the rising half of the waveform one more sample than the falling half, which matters only for exact sample counts and not for the concept taught here.</p>
 
     <p class="lede">
       Between Q1 and Q5 there are three numbers to place, Q2, Q3 and Q4, and the rule is to spread them
@@ -188,7 +189,7 @@
       Which case holds is set by frequency and sample rate together, and the arithmetic is not
       subtle. An exact fit needs a quarter cycle four samples long, which at 1 ms is a 16 ms period, which
       is <b>62.5 Hz</b>. Almost all seismic is well below that, so <b>repetition is the normal case and
-      omission is the exception</b> &mdash; the opposite of what the phrase "too short a loop" suggests.</p>
+      omission is the exception</b> - the opposite of what the phrase "too short a loop" suggests.</p>
 
     <canvas id="c2a" aria-label="How the three interior numbers are distributed across quarter cycles of different lengths"></canvas>
     <p class="hint-line" style="margin:8px 0 18px">Every quarter-cycle length from one sample to fifteen,
@@ -256,7 +257,7 @@
 
   <section class="tabpane" id="pw" role="tabpanel" hidden>
     <div class="plot-head" style="margin-bottom:14px">
-      <h3><span class="stepno">?</span>What a quadrant number tells you</h3>
+      <h3><span class="stepno">?</span>What a quadrant number tells us</h3>
       <span class="hint">Why the method bothers with an integer per sample</span>
     </div>
 
@@ -272,7 +273,7 @@
         traces and reads one value from each sample. The quadrant number is the index into that set. Nine
         numbers, seven filters, because Q1 and Q9 both take the unrotated trace.</li>
       <li><b>Making the isochron measurable.</b> Module 08 measures the time between anchors. The numbers
-        are what tells you which anchors bound which zone, and the sign of the half isochron comes
+        are what tells us which anchors bound which zone, and the sign of the half isochron comes
         straight from whether the numbers are counting up or down.</li>
       <li><b>Comparing samples across a survey.</b> A Q3 sample in a 20 Hz zone and a Q3 sample in a 45 Hz
         zone are at the same phase of their own cycles. That is the sense in which the DQ trace is
@@ -298,20 +299,17 @@
       <h3>Exercises <button class="popbtn" type="button" data-popout="exercises">Pop out exercises</button></h3>
       <ol>
         <li><b>Find the frequency that fits exactly.</b> On step 2, with 1 ms sampling, drag the frequency
-          until the quarter cycle holds exactly three interior samples.
-          <details class="reveal"><summary>Answer</summary><span class="ans">It happens around 62 Hz, where
-            the period is 16 ms and the quarter cycle is 4 ms. That is the only setting at which Q2, Q3 and
-            Q4 each land on exactly one sample. Everything slower repeats numbers and everything faster
-            starts dropping them, so an exact fit is a coincidence and not a design target. Nothing in
-            the method tries to achieve it.</span></details></li>
-        <li><b>Check that repetition is the normal case.</b> Set the frequency to 25 Hz and read the two
-          counters on step 2, then to 70 Hz and read them again.
-          <details class="reveal"><summary>Answer</summary><span class="ans">At 25 Hz every gap repeats
-            numbers and none omits any. At 70 Hz gaps start omitting. Since almost all seismic sits between
-            about 15 and 50 Hz, repetition is what happens on real data essentially all of the time. The
-            phrase "short isochron" in the method description &mdash; isochron here just means the time
-            between two picks, which module 08 takes up properly &mdash; is describing the rare case, not
-            the usual one. This comes up in the papers.</span></details></li>
+          from 15 to 45 Hz and watch the interior count.
+          <details class="reveal"><summary>Answer</summary><span class="ans">Three interior samples per quarter cycle
+            would need a 4 ms quarter cycle, a period of 16 ms or about 62 Hz, which is above the slider range. At 45 Hz the
+            quarter cycle is about 5.6 ms, and at 15 Hz it is about 16.7 ms. Every gap is longer than three samples, so numbers repeat. An exact fit
+            is a coincidence and not a design target.</span></details></li>
+        <li><b>Check that repetition is the normal case.</b> Compare the two counters on step 2 at 15 Hz and at 45 Hz.
+          <details class="reveal"><summary>Answer</summary><span class="ans">Across the whole range, gaps repeat numbers and none omits any.
+            Omission needs a quarter cycle shorter than three samples, which is above about 60 Hz at 1 ms sampling. Almost all seismic lies between
+            about 15 and 50 Hz, so repetition is what happens on real data essentially all of the time. The
+            phrase "short isochron" in the method description (isochron here is the time
+            between two picks, which module 08 takes up) describes the rare case. This comes up in the papers.</span></details></li>
         <li><b>Coarsen the sampling instead.</b> Put the frequency back to 40 Hz and step the sample rate
           from 1 ms to 4 ms.
           <details class="reveal"><summary>Answer</summary><span class="ans">Omission arrives quickly,
@@ -378,7 +376,7 @@
         quadrant numbers are written to the same sample grid.</p>
       <p>The anchors come straight from the picks: each zero-crossing sample is Q5, each trough is Q1 and
         each peak is Q9. Between two consecutive anchors the three interior numbers are distributed by
-        proportion &mdash; interior sample <i>k</i> of <i>n</i> takes the number indexed by the integer part
+        proportion - interior sample <i>k</i> of <i>n</i> takes the number indexed by the integer part
         of (<i>k</i>&nbsp;+&nbsp;&frac12;)&nbsp;&times;&nbsp;3&nbsp;/&nbsp;<i>n</i>. That reproduces the
         uniform spacing the method calls for, gives an exact Q2 Q3 Q4 when <i>n</i> is three, repeats
         numbers when <i>n</i> is larger, and drops numbers from the outside in when <i>n</i> is smaller: a
@@ -398,8 +396,8 @@
         closely.</p>
       <p>The polarity decision is made on the sign of the near-stack reflection coefficient at the top of
         the sand: positive means the reservoir top is a peak, so the traces are reversed. That reproduces
-        the published grouping exactly &mdash; classes 4, 3 and 2 are left alone and class 1 is flipped
-        &mdash; while being stated in terms of the contrast itself and not of the class label. In the
+        the published grouping exactly - classes 4, 3 and 2 are left alone and class 1 is flipped
+- while being stated in terms of the contrast itself and not of the class label. In the
         real workflow the reversal is applied to both partial stacks at the stacking step, before any
         picking, and this page does the same.</p>
       <p>What this module leaves out is what the numbers are then used for. Module 04 attaches a phase
@@ -419,7 +417,7 @@
   <section class="nextup" id="nextup" hidden>
     <p class="eyebrow">Next up</p>
     <h3><a href="phase-filters.html">04 · Turning every sample into a peak</a></h3>
-    <p>The numbers say where in a loop a sample sits but not how long the loop was. The isochron measures
+    <p>The numbers say where in a loop a sample lies but not how long the loop was. The isochron measures
       exactly that, the half isochron splits it at the zero crossing, and the asymmetry between the two
       halves turns out to track the vertical grading of the sand.</p>
     <a class="btn" href="phase-filters.html">Open module 04 →</a>
@@ -441,7 +439,7 @@
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
-        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        count, so that I can show the university these are being used - no cookie, no account,
         no personal information.</p>
     </div>
   </footer>
@@ -492,8 +490,6 @@
   const DTS = [0.001, 0.002, 0.003, 0.004];
   const NEAR_A = [0, 10];
   const T0 = 0, TWIN = 0.150, TTOP = 0.050;
-  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
-  const BEDC = [0.118, 0.130];                   // a tight bed below it
 
   const DEF = {
     over: 'soft', phi: 28, fluid: 'gas',
@@ -569,10 +565,7 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth and not a
-     lone sand, so that the trace looks like something a picker would find: a
-     contrasting bed above, the sand with an optional tight streak inside it,
-     and a tight bed below. Every spike is computed from the two rocks it sits
+  /* The near-stack reflectivity of one trace. The sand, with an optional tight streak inside it. Every spike is computed from the two rocks it sits
      between. */
   function spikes(topT, thickS) {
     const over = LITHS[S.over];
@@ -583,15 +576,11 @@
     const shift = topT - TTOP;                   // structure moves everything together
     const out = [];
 
-    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
-    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
 
     const baseT = topT + thickS / 1000;
     out.push({ t: topT, r: n(shuey(over, sand)) });
     out.push({ t: baseT, r: n(shuey(sand, over)) });
 
-    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
-    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
     return out;
   }
 
@@ -649,16 +638,28 @@
     const floor = 0.01 * peak;
 
     const cross = [];                      // { i, tTrue, err }
-    for (let i = 1; i < nt; i++) {
-      const a = tr[i - 1], b = tr[i];
-      if (a === 0 || b === 0) continue;
-      if ((a > 0) === (b > 0)) continue;
-      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
-      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
-      // where the crossing actually is, by linear interpolation
-      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
-      const tTrue = (i - 1 + frac) * dt();
-      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    /* A sample that is exactly zero is a crossing in its own right when the
+       signs on either side differ, so the loop compares each sample with the
+       last nonzero one and not only with its neighbor. */
+    let prev = -1;
+    for (let i = 0; i < nt; i++) {
+      if (tr[i] === 0) continue;
+      if (prev >= 0 && (tr[prev] > 0) !== (tr[i] > 0)) {
+        const a = tr[prev], b = tr[i];
+        if (!(Math.abs(a) < floor && Math.abs(b) < floor)) {
+          let j, tTrue;
+          if (i - prev > 1) {                   // exact zeros between: take the middle one
+            j = Math.floor((prev + i) / 2);
+            tTrue = ((prev + i) / 2) * dt();
+          } else {
+            j = Math.abs(a) <= Math.abs(b) ? prev : i;
+            // where the crossing actually is, by linear interpolation
+            tTrue = (prev + Math.abs(a) / (Math.abs(a) + Math.abs(b))) * dt();
+          }
+          cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+        }
+      }
+      prev = i;
     }
 
     /* Between each consecutive pair of crossings, keep the single largest
@@ -777,8 +778,8 @@
     return out;
   }
 
-  /* The reservoir top should be a trough. When it is a peak — a class 1 sand,
-     or a carbonate play — both partial stacks are reversed at the stacking
+  /* The reservoir top should be a trough. When it is a peak - a class 1 sand,
+     or a carbonate play - both partial stacks are reversed at the stacking
      step, before any picking, so that the numbering rule never changes. */
   function needsFlip() {
     const over = LITHS[S.over];
@@ -898,9 +899,7 @@
     const baseT = TTOP + S.thick / 1000;
     const b = [
       { t0: T0, t1: TWIN, name: '', fill: LITHFILL[seal] },
-      { t0: BEDA[0], t1: BEDA[1], name: LITHS[other].name, fill: LITHFILL[other] },
       { t0: TTOP, t1: baseT, name: 'sand ' + S.phi + '%', fill: LITHFILL.sand },
-      { t0: BEDC[0], t1: BEDC[1], name: 'tight sandstone', fill: LITHFILL.tight },
     ];
     return b;
   }
@@ -1168,7 +1167,7 @@
     const near = b.pk.ext.slice().sort((x, y) => Math.abs(x.i - win[0]) - Math.abs(y.i - win[0]))[0];
     if (near && Math.abs(near.i - win[0]) <= 3) topKind = near.sign > 0 ? 'peak' : 'trough';
     // the loop that opens at the top of the sand, whether or not it also
-    // reaches the base — a thick sand spans several loops
+    // reaches the base - a thick sand spans several loops
     let L = null, best = 1e9;
     b.qd.loops.forEach((z) => {
       const d = Math.abs(z.a - win[0]);
@@ -1303,7 +1302,7 @@
     const sf = $('skipflip'); if (sf) sf.disabled = !three;
 
     if ($('labCap')) {
-      $('labCap').innerHTML = 'The rock model <span>&mdash; the layers, and the near stack they produce</span>';
+      $('labCap').innerHTML = 'The rock model <span> - the layers, and the near stack they produce</span>';
     }
 
     const last = (id === 'pk' || id === 'pm');

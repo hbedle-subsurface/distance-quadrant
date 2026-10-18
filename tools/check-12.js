@@ -23,7 +23,7 @@ function rickerWedgePeak(f){const ric=t=>{const a=Math.PI*Math.PI*f*f*t*t;return
 console.log('--- exercise 1: the tuning peak follows the wavelet ---');
 hit('#tabs button[data-tab="p1"]'); hit('[data-over="tight"]'); hit('[data-fluid="gas"]'); set('phi',24);
 const peaks=[];
-for(const f of [25,30,40,55]){set('freq',f);
+for(const f of [25,30,40,45]){set('freq',f);
  const m=$('s1b').textContent.match(/at (\d+) ms/); peaks.push([f,parseInt(m[1])]);
  const pk=parseInt(String($('s1b').textContent).split(' at ')[1]);
  const rk=rickerWedgePeak(f), half=500/f;
@@ -66,7 +66,11 @@ console.log('\n--- exercise 5: a weak reflection breaks the division ---');
 hit('[data-over="soft"]');
 console.log('   soft shale: angle moves',$('s3c').textContent,' distance moves',$('s3d').textContent);
 const softAng=num($('s3c').textContent);
-if(!(softAng>tAng)) fail.push('under soft shale the angle moves '+softAng+', expected more than '+tAng);
+if(Math.abs(softAng)>0.5) fail.push('under soft shale the angle moves '+softAng+', answer says it stays flat');
+{const W=window.__DQW, dAt=(o)=>{hit('[data-over="'+o+'"]');hit('[data-fluid="gas"]');set('phi',28);set('thick',40);const b=W.build();const i0=Math.round(W.TTOP/0.001);let bi=-1,bd=1e9;
+ for(let i=0;i<b.D.length;i++){if(!b.qd.q[i])continue;if(Math.abs(i-i0)<bd){bd=Math.abs(i-i0);bi=i;}}return b.D[bi];};
+ const dt_=dAt('tight'), ds=dAt('soft'); console.log('   distance at 40 ms: tight',dt_.toFixed(3),' soft',ds.toFixed(3));
+ if(Math.abs(dt_-0.38)>0.02||Math.abs(ds-0.06)>0.01) fail.push('distance at 40 ms is '+dt_.toFixed(3)+' tight, '+ds.toFixed(3)+' soft; answer says 0.38 and 0.06'); set('thick',20);}
 hit('[data-over="tight"]');
 
 console.log('\n--- the module opens on the case that works ---');

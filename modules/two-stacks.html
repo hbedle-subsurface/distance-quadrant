@@ -42,7 +42,7 @@
         <canvas id="cMain" aria-label="Depth and two-way time beside a lithology column, the angle gather, and the near stack, far stack and far-minus-near traces"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything redraws as a control moves</span></p>
+        <p class="cap">The model <span> - everything redraws as a control moves</span></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
             <h2>The rocks</h2>
@@ -68,14 +68,14 @@
             </div>
             <div class="ctl">
               <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
-              <input type="range" id="thick" min="4" max="50" step="1" value="30">
+              <input type="range" id="thick" min="4" max="40" step="1" value="30">
             </div>
           </div>
           <div class="ctl-col">
             <h2>The seismic</h2>
             <div class="ctl">
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
-              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+              <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
             <div class="stats" style="margin:4px 0 0;grid-column:1/-1">
               <div class="stat"><span>Sand V<sub>P</sub></span><b id="mVp">&mdash;</b></div>
@@ -314,7 +314,7 @@
         <li><b>Does the trough still give the two-layer answer when the sand is thin?</b> With the step 3 cursor
           on the trough at the sand top, what happens to the distance readout as the sand thins from
           30&nbsp;ms to 10&nbsp;ms?
-          <details class="reveal"><summary>Answer</summary><span class="ans">At 30&nbsp;ms the trough sits
+          <details class="reveal"><summary>Answer</summary><span class="ans">At 30&nbsp;ms the trough lies
             <span id="x4a">0%</span> from the two-layer answer. At 10&nbsp;ms the top and base reflections overlap,
             the trough moves, and it lands <span id="x4b">45%</span> away. This is
             <span class="g" data-g="tuning">tuning</span>: even the extrema stop being single-boundary
@@ -329,7 +329,7 @@
             from the regional geology.</span></details></li>
         <li><b>What does a zero crossing contribute?</b> Where does the crossplot point sit when the step 3
           cursor is halfway between the trough and the peak?
-          <details class="reveal"><summary>Answer</summary><span class="ans">The point sits close to the origin
+          <details class="reveal"><summary>Answer</summary><span class="ans">The point lies close to the origin
             of the crossplot. The sample is real data from inside the sand, yet both N and F&nbsp;&minus;&nbsp;N
             are near zero there, so a conventional AVO reading has nothing to work with. These are the samples
             the DQ workflow is built to recover.</span></details></li>
@@ -383,7 +383,7 @@
         index at 0&deg; and 40&deg;, which are no longer the same part of the waveform. The near stack spans
         only a fraction of a millisecond of that moveout, and the DQ workflow picks its layer boundaries from
         the near stack.</p>
-      <p>The crossplots use fixed axes of &plusmn;0.20, so the same sand always plots at the same size. The
+      <p>The crossplots use fixed axes of &plusmn;0.30, so the same sand always plots at the same size. The
         stronger contrasts, mostly tight sandstone over a porous sand, fall outside; in step 2 they are drawn
         as open triangles at the edge, and in step 3 the samples are pinned to the edge.</p>
       <ul>
@@ -429,7 +429,7 @@
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace is
         transmitted anywhere. The one request the page makes is a page-view count, so that I can show the
-        university these are being used &mdash; no cookie, no account, no personal information.</p>
+        university these are being used - no cookie, no account, no personal information.</p>
     </div>
   </footer>
 </div>
@@ -457,7 +457,7 @@
   const visible = (id) => { const el = $(id); return el && !el.hidden; };
 
   /* =====================================================================
-     THE ROCKS — identical on every page of the site
+     THE ROCKS - identical on every page of the site
      ===================================================================== */
 
   const MATRIX = { vp: 5486, rho: 2.65, K: 37.0 };
@@ -483,7 +483,22 @@
   const TWIN = 0.140, TTOP = 0.045;
   const NT = Math.round(TWIN / DT) + 1;
 
-  const LIM = 0.20;                               // fixed crossplot and R axes
+  const LIM = 0.30;                               // fixed crossplot and R axes
+  /* Every trace panel on this page is drawn at one fixed gain, so a wiggle that
+     doubles in size has doubled in amplitude and the readouts agree with the
+     picture. 0.45 holds every conventional model on the sliders; a stronger
+     input (tight sandstone over a porous sand, heavy noise) is clipped at the
+     edge of its panel and tagged. */
+  const TRACE_FS = 0.45;
+  function offScale(ctx, rect, actual) {
+    if (actual <= TRACE_FS) return;
+    ctx.save();
+    ctx.font = '10px "IBM Plex Mono", monospace'; ctx.fillStyle = '#841617';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'top';
+    ctx.fillText('clipped: peak ' + actual.toFixed(2), rect.x + rect.w - 4, rect.y + 3);
+    ctx.restore();
+  }
+
 
   const DEF = { iphase: 0, rmo: 0, fgain: 0, over: 'soft', phi: 28, fluid: 'gas', thick: 30, freq: 40, far: 20, ang: 35, tpick: 45, tab: 'p1' };
   let S = SEIS.readState(DEF);
@@ -763,8 +778,10 @@
     SEIS.axisBottom(ctx, rG, 0, DEG_MAX, 'incidence angle (degrees)', (v) => String(Math.round(v)), { ticks: 4 });
     SEIS.frame(ctx, rG);
 
-    let peak = 1e-6;
-    for (let d = 0; d < NANG; d++) for (let i = 0; i < NT; i++) peak = Math.max(peak, Math.abs(g.traces[d][i]));
+    let actual = 1e-6;
+    for (let d = 0; d < NANG; d++) for (let i = 0; i < NT; i++) actual = Math.max(actual, Math.abs(g.traces[d][i]));
+    const peak = TRACE_FS;
+    offScale(ctx, rG, actual);
     const half = rG.w / DEG_MAX * 1.9;
     for (let d = 0; d < NANG; d += 2) {
       const col = inBand(d, NEAR_A) ? NEARC : inBand(d, g.m.fb) ? FARC : 'rgba(22,25,28,0.32)';
@@ -798,8 +815,10 @@
       const rect = { x: 58, y: 24, w: W - 70, h: H - 46 };
       SEIS.axisLeft(ctx, rect, 0, TWIN * 1000, 'two-way time (ms)', (v) => String(Math.round(v)), { ticks: 7 });
 
-      let peak = 1e-6;
-      for (let d = 0; d < NANG; d++) for (let i = 0; i < NT; i++) peak = Math.max(peak, Math.abs(g.traces[d][i]));
+      let actual = 1e-6;
+      for (let d = 0; d < NANG; d++) for (let i = 0; i < NT; i++) actual = Math.max(actual, Math.abs(g.traces[d][i]));
+      const peak = TRACE_FS;
+      offScale(ctx, rect, actual);
 
       const cw = rect.w / 3;
       const cells = [
@@ -978,8 +997,10 @@
     const rT = { x: 56, y: 22, w: Math.max(120, rX.x - 56 - 50), h: side };
 
     /* left: the two traces */
-    let peak = 1e-6;
-    for (let i = 0; i < NT; i++) peak = Math.max(peak, Math.abs(g.near.tr[i]), Math.abs(g.diff[i]));
+    let actual = 1e-6;
+    for (let i = 0; i < NT; i++) actual = Math.max(actual, Math.abs(g.near.tr[i]), Math.abs(g.diff[i]));
+    const peak = TRACE_FS;
+    offScale(ctx, rT, actual);
     SEIS.axisLeft(ctx, rT, 0, TWIN * 1000, 'two-way time (ms)', (v) => String(Math.round(v)), { ticks: 7 });
     const yOf = (i) => rT.y + (i / (NT - 1)) * rT.h;
     ctx.fillStyle = 'rgba(132,22,23,0.06)';
@@ -1081,11 +1102,13 @@
     const rX = { x: W - side - 14, y: 26, w: side, h: side };
     const rT = { x: 58, y: 26, w: Math.max(150, rX.x - 58 - 50), h: side };
 
-    let peak = 1e-6;
+    let actual = 1e-6;
     for (let i = 0; i < NT; i++) {
-      peak = Math.max(peak, Math.abs(g.near.tr[i]), Math.abs(g.far.tr[i]), Math.abs(g.diff[i]),
+      actual = Math.max(actual, Math.abs(g.near.tr[i]), Math.abs(g.far.tr[i]), Math.abs(g.diff[i]),
                       Math.abs(gi.near.tr[i]), Math.abs(gi.far.tr[i]), Math.abs(gi.diff[i]));
     }
+    const peak = TRACE_FS;
+    offScale(ctx, rT, actual);
     SEIS.axisLeft(ctx, rT, 0, TWIN * 1000, 'two-way time (ms)', (v) => String(Math.round(v)), { ticks: 7 });
     const yT = rT.y + (TTOP / TWIN) * rT.h, yB = rT.y + (m.tb / TWIN) * rT.h;
     ctx.fillStyle = 'rgba(132,22,23,0.05)';

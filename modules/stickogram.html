@@ -36,11 +36,11 @@
   <div class="labhead">
     <div class="labgrid">
       <div>
-        <p class="cap" id="labCap">The rock model <span>&mdash; the layers, and the near stack they produce</span></p>
+        <p class="cap" id="labCap">The rock model <span> - the layers, and the near stack they produce</span></p>
         <canvas id="cMain" aria-label="The near-stack trace with its zero crossings, peak centers and trough centers marked"></canvas>
       </div>
       <div>
-        <p class="cap">The model <span>&mdash; everything updates as a control moves</span>
+        <p class="cap">The model <span> - everything updates as a control moves</span>
           <button class="popbtn" type="button" data-popout="panel">Pop out panel</button></p>
         <div class="controls" id="labControls">
           <div class="ctl-col">
@@ -71,11 +71,11 @@
             <h2>The layers</h2>
             <div class="ctl">
               <label for="thick">Sand thickness <span class="val" id="thickV">30 ms</span></label>
-              <input type="range" id="thick" min="6" max="55" step="1" value="30">
+              <input type="range" id="thick" min="6" max="40" step="1" value="30">
             </div>
             <div class="ctl">
               <label for="freq">Wavelet frequency <span class="val" id="freqV">40 Hz</span></label>
-              <input type="range" id="freq" min="15" max="70" step="1" value="40">
+              <input type="range" id="freq" min="15" max="45" step="1" value="40">
             </div>
             <label class="check" style="grid-column:1/-1"><input type="checkbox" id="streak">
               Tight streak near the base of the sand</label>
@@ -201,7 +201,7 @@
     <p class="lede">
       The second rule follows from the first. <b>Between each pair of consecutive crossings, take the
       single largest peak or trough</b>. Usually there is only one and the rule does nothing. When
-      interference puts two extrema inside a single loop &mdash; a doublet &mdash; only the larger is kept
+      interference puts two extrema inside a single loop - a doublet - only the larger is kept
       and the smaller is discarded along with the rest of the waveform. A thin bed will do it, and so will
       a thick sand under a long wavelet, where the top and base loops overlap enough to leave a shoulder.
       The counter below reports only the extrema discarded between the top and base of the sand, so that it
@@ -238,8 +238,8 @@
       first as ordinary amplitudes and then as the StickOgram.</p>
 
     <canvas id="c3a" aria-label="A seismic section drawn as amplitudes, and the same section drawn as a StickOgram"></canvas>
-    <p class="hint-line" style="margin:8px 0 18px">Left, the near-stack amplitudes. Right, the picks alone,
-      colored by whether they are a peak or a trough. Drag the fault throw and the noise in the panel.</p>
+    <p class="hint-line" style="margin:8px 0 18px">Left, the near-stack amplitudes. Right, the picks alone.
+      Peaks and zero crossings that go from trough to peak are pink, troughs and crossings that go from peak to trough are blue, so a fault offset shows in both. Drag the fault throw and the noise in the panel.</p>
 
     <div class="stats" style="margin-top:16px">
       <div class="stat"><span>Traces in the section</span><b id="s3a">&mdash;</b></div>
@@ -309,9 +309,9 @@
       <ol>
         <li><b>Count what survives.</b> On step 1, with the default model, compare the number of samples on
           the trace with the number of picks.
-          <details class="reveal"><summary>Answer</summary><span class="ans">Between 86% and 93% of the trace
-            is discarded, depending on the model. Where there is an event the picks come at four per
-            waveform cycle &mdash; a peak, a trough and a crossing on either side &mdash; and where there
+          <details class="reveal"><summary>Answer</summary><span class="ans">About 94% of the trace
+            is discarded: nine picks out of 151 samples, whichever rock and fluid are chosen. Where there is an event the picks come at four per
+            waveform cycle - a peak, a trough and a crossing on either side - and where there
             is no event there is nothing to pick, which is most of why the fraction is as high as it is.
             Module 01 counted two interpretable samples per cycle for conventional AVO, so the StickOgram
             is not yet an improvement in how much of the trace is usable. It is the same information,
@@ -323,42 +323,37 @@
             sample interval, because the rule always takes the nearer of the two samples to zero. At 1 ms
             that is at most half a millisecond and usually less. At 4 ms it can be two, which at 40 Hz is
             most of a tenth of a cycle. Everything after this counts samples away from that crossing, so the
-            error does not stay where it started &mdash; it shifts the quadrant numbering of the whole
+            error does not stay where it started - it shifts the quadrant numbering of the whole
             loop.</span></details></li>
-        <li><b>Make a doublet.</b> With the default model &mdash; 30 ms of sand at 40 Hz &mdash; switch the
+        <li><b>Make a doublet.</b> With the default model - 30 ms of sand at 40 Hz - switch the
           tight streak on and off on step 2, watching the counter and the dashed circles.
           <details class="reveal"><summary>Answer</summary><span class="ans">Zero discarded extrema without
-            the streak, two with it. The thin tight sandstone bed puts a second extremum inside a loop that
+            the streak, two with it. The thin tight sandstone streak puts a second extremum inside a loop that
             previously held one, and the rule keeps only the larger. The smaller is a real reflection from
             a real bed, and the StickOgram does not record it. That is a deliberate trade: the numbering
             scheme in module 03 needs exactly one extremum between each pair of crossings, and a rule that
-            sometimes returned two would have nothing to number. Now try 45 ms of sand at 30 Hz with the
-            streak switched off, and you will find three discarded extrema with no thin bed anywhere. A
-            long wavelet over a thick sand overlaps the top and base loops enough to leave shoulders on
-            them. Doublets are an interference effect, and a thin bed is only one way to
+            sometimes returned two would have nothing to number. Doublets are an interference effect, and a thin bed inside the sand is one way to
             get one.</span></details></li>
         <li><b>Thin the sand until it holds no picks at all.</b> On step 1, drag the thickness down from
           30 ms, watching the count of peaks and troughs inside the sand.
           <details class="reveal"><summary>Answer</summary><span class="ans">At 8 ms and below it reaches
             zero. The top and base have merged into one event, and the center of that event does not sit
-            between the top and the base &mdash; it sits above the sand entirely. So the picks record that
+            between the top and the base - it lies above the sand entirely. So the picks record that
             something is there while saying nothing whatever about its interior, and no attribute computed
             from them can do better. Module 11 comes back to this: the DQ responds to bed
             thickness where Theta PX does not, and this is where the sensitivity starts.</span></details></li>
-        <li><b>Add noise and watch picks disappear.</b> On step 1, raise the noise from zero to 40% a few
+        <li><b>Add noise and watch the picks multiply.</b> On step 1, raise the noise from zero to 40% a few
           percent at a time, watching the pick count.
-          <details class="reveal"><summary>Answer</summary><span class="ans">It does not climb. With the
-            default model it goes 21, 19, 15, then 13 at 30% noise, before climbing back to 19 at 40%.
-            Noise destroys picks as readily as it invents them: a weak event that was a clean loop stops
-            producing an extremum above the amplitude floor, and a crossing shifts by several samples or
-            merges with its neighbor. Losing a pick is the worse outcome of the two, because a spurious
-            layer can be recognized as noise later while a missing one cannot be recovered at all. This is
+          <details class="reveal"><summary>Answer</summary><span class="ans">It climbs. With the
+            default model it goes 9 with no noise, 19 at 5%, and 25 from 10% on. Noise invents extrema and
+            crossings in the quiet parts of the trace, and each one is picked as if it were an event. Noise can also move
+            a crossing by several samples or merge it with its neighbor, which changes the numbering of the whole loop. This is
             why module 01 cared so much about the near stack being clean, and why the papers say to bandpass
             filter for signal to noise and not for bandwidth.</span></details></li>
         <li><b>Find the fault on the wrong display.</b> On step 3, set the noise to 25% and try to locate
           the fault on the amplitude section, then on the sticks.
           <details class="reveal"><summary>Answer</summary><span class="ans">On the amplitudes the fault is a
-            subtle lateral shift inside a continuous field, and the noise sits on top of it. On the sticks
+            subtle lateral shift inside a continuous field, and the noise lies on top of it. On the sticks
             it is a clean break in a set of lines, because the display has already thrown away everything
             that was not an event. This is the argument for using the StickOgram as a structural display
             and not only as an intermediate product, and it is the same argument for feeding it to a
@@ -416,9 +411,8 @@
       <p>The crossing error quoted on step 2 is the time between the chosen sample and the true crossing,
         found by linear interpolation between the two bracketing samples. It is bounded above by half the
         sample interval, which is a property of the rule and not of the data.</p>
-      <p>The layer stack is a contrasting bed from 14 to 26 ms, the sand from 50 ms down, an optional four
-        millisecond tight sandstone streak three quarters of the way through it, and a tight bed from 118 to
-        130 ms. Structure moves the whole stack together. The extra beds are there so that the trace looks like something a picker would find and not like a lone reflection in an empty window.</p>
+      <p>The layer stack is the sand from 50 ms down, in one rock, with an optional four
+        millisecond tight sandstone streak three quarters of the way through it. Structure moves the whole stack together.</p>
       <p>The section on step 3 is seventy traces. The top of the sand follows a gentle anticline, the sand
         thins linearly to the right, and a normal fault at the fortieth trace displaces everything below it
         by the throw set in the panel. Each trace is modeled and picked independently; nothing is smoothed or tracked laterally, so the continuity in the display is the
@@ -467,7 +461,7 @@
       <p class="lic">To cite: H. Bedle, <i>How the DQ Trace Actually Works</i>, University of
         Oklahoma, <span class="k">hbedle-subsurface.github.io/distance-quadrant</span>.</p>
       <p class="lic">Nothing done inside this module leaves the browser: no slider, no click and no trace generated here is transmitted anywhere. The one request the page itself makes is a page-view
-        count, so that I can show the university these are being used &mdash; no cookie, no account,
+        count, so that I can show the university these are being used - no cookie, no account,
         no personal information.</p>
     </div>
   </footer>
@@ -518,8 +512,6 @@
   const DTS = [0.001, 0.002, 0.003, 0.004];
   const NEAR_A = [0, 10];
   const T0 = 0, TWIN = 0.150, TTOP = 0.050;
-  const BEDA = [0.014, 0.026];                   // a contrasting bed above the sand
-  const BEDC = [0.118, 0.130];                   // a tight bed below it
   const STREAK_MS = 3;                           // tight streak thickness
   const STREAK_POS = 0.75;                       // how far down the sand it sits
   const NX = 70;                                 // traces in the step 3 section
@@ -599,10 +591,7 @@
 
   /* --------------------------- the layer stack ------------------------- */
 
-  /* The near-stack reflectivity of one trace. A layered earth and not a
-     lone sand, so that the trace looks like something a picker would find: a
-     contrasting bed above, the sand with an optional tight streak inside it,
-     and a tight bed below. Every spike is computed from the two rocks it sits
+  /* The near-stack reflectivity of one trace. The sand, with an optional tight streak inside it. Every spike is computed from the two rocks it sits
      between. */
   function spikes(topT, thickS) {
     const over = LITHS[S.over];
@@ -613,8 +602,6 @@
     const shift = topT - TTOP;                   // structure moves everything together
     const out = [];
 
-    out.push({ t: BEDA[0] + shift, r: n(shuey(over, other)) });
-    out.push({ t: BEDA[1] + shift, r: n(shuey(other, over)) });
 
     const baseT = topT + thickS / 1000;
     out.push({ t: topT, r: n(shuey(over, sand)) });
@@ -625,8 +612,6 @@
     }
     out.push({ t: baseT, r: n(shuey(sand, over)) });
 
-    out.push({ t: BEDC[0] + shift, r: n(shuey(over, tight)) });
-    out.push({ t: BEDC[1] + shift, r: n(shuey(tight, over)) });
     return out;
   }
 
@@ -684,16 +669,28 @@
     const floor = 0.01 * peak;
 
     const cross = [];                      // { i, tTrue, err }
-    for (let i = 1; i < nt; i++) {
-      const a = tr[i - 1], b = tr[i];
-      if (a === 0 || b === 0) continue;
-      if ((a > 0) === (b > 0)) continue;
-      if (Math.abs(a) < floor && Math.abs(b) < floor) continue;
-      const j = Math.abs(a) <= Math.abs(b) ? i - 1 : i;
-      // where the crossing actually is, by linear interpolation
-      const frac = Math.abs(a) / (Math.abs(a) + Math.abs(b));
-      const tTrue = (i - 1 + frac) * dt();
-      cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+    /* A sample that is exactly zero is a crossing in its own right when the
+       signs on either side differ, so the loop compares each sample with the
+       last nonzero one and not only with its neighbor. */
+    let prev = -1;
+    for (let i = 0; i < nt; i++) {
+      if (tr[i] === 0) continue;
+      if (prev >= 0 && (tr[prev] > 0) !== (tr[i] > 0)) {
+        const a = tr[prev], b = tr[i];
+        if (!(Math.abs(a) < floor && Math.abs(b) < floor)) {
+          let j, tTrue;
+          if (i - prev > 1) {                   // exact zeros between: take the middle one
+            j = Math.floor((prev + i) / 2);
+            tTrue = ((prev + i) / 2) * dt();
+          } else {
+            j = Math.abs(a) <= Math.abs(b) ? prev : i;
+            // where the crossing actually is, by linear interpolation
+            tTrue = (prev + Math.abs(a) / (Math.abs(a) + Math.abs(b))) * dt();
+          }
+          cross.push({ i: j, tTrue, err: Math.abs(j * dt() - tTrue) });
+        }
+      }
+      prev = i;
     }
 
     /* Between each consecutive pair of crossings, keep the single largest
@@ -812,9 +809,7 @@
     const baseT = TTOP + S.thick / 1000;
     const b = [
       { t0: T0, t1: TWIN, name: '', fill: LITHFILL[seal] },
-      { t0: BEDA[0], t1: BEDA[1], name: LITHS[other].name, fill: LITHFILL[other] },
       { t0: TTOP, t1: baseT, name: 'sand ' + S.phi + '%', fill: LITHFILL.sand },
-      { t0: BEDC[0], t1: BEDC[1], name: 'tight sandstone', fill: LITHFILL.tight },
     ];
     return b;
   }
@@ -881,7 +876,10 @@
       pk.cross.forEach((c) => {
         ctx.beginPath();
         ctx.moveTo(xc - half * 0.55, yOf(c.i)); ctx.lineTo(xc + half * 0.55, yOf(c.i));
-        ctx.strokeStyle = 'rgba(22,25,28,0.30)'; ctx.lineWidth = 1.1; ctx.stroke();
+        const nx1 = Math.min(nt - 1, c.i + 1);
+        const up = (tr[nx1] - tr[c.i]) > 0;      // trough to peak with time increasing
+        ctx.strokeStyle = up ? 'rgba(194,48,107,0.55)' : 'rgba(29,111,163,0.55)';
+        ctx.lineWidth = 1.6; ctx.stroke();
       });
       pk.ext.forEach((e) => {
         const s = Math.min(1, Math.abs(tr[e.i]) / pk.peak);
@@ -934,7 +932,7 @@
     $('s1f').textContent = pk.inSand + '';
     $('s1e').textContent = (100 * (1 - kept / nt)).toFixed(0)
       + '% of the trace is discarded. Where there is an event, the picks come out at four per waveform '
-      + 'cycle \u2014 a peak, a trough and a crossing on either side \u2014 and one cycle here is '
+      + 'cycle - a peak, a trough and a crossing on either side - and one cycle here is '
       + period.toFixed(0) + ' ms. Where there is no event there is nothing to pick.';
   }
 
@@ -1229,7 +1227,7 @@
     const th = $('throw'); if (th) th.disabled = !three;
 
     if ($('labCap')) {
-      $('labCap').innerHTML = 'The rock model <span>&mdash; the layers, and the near stack they produce</span>';
+      $('labCap').innerHTML = 'The rock model <span> - the layers, and the near stack they produce</span>';
     }
 
     const last = (id === 'pk' || id === 'pm');

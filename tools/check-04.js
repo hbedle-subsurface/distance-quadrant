@@ -18,14 +18,14 @@ const fail=[];
 console.log('--- exercise 1: the frequency that fits exactly (1 ms) ---');
 hit('#tabs button[data-tab="p2"]'); set('dt',0);
 let exact=null;
-for(let f=15;f<=70;f++){set('freq',f);
+for(let f=15;f<=45;f++){set('freq',f);
  const per=parseFloat($('s2b').textContent);
  if(Math.abs(per-3)<0.06&&exact===null) exact=f;}
 for(const f of [40,60,62,63,65]){set('freq',f);
  console.log('  ',String(f).padStart(2)+' Hz  quarter',$('s2a').textContent.padEnd(8),
   'interior samples',$('s2b').textContent);}
 console.log('   closest to exactly 3 interior samples:',exact,'Hz');
-if(!(exact>=61&&exact<=63)) fail.push('exact fit lands at '+exact+' Hz, answer says around 62');
+if(exact!==null) fail.push('exact fit lands at '+exact+' Hz, answer says it is above the slider range');
 
 console.log('\n--- exercise 2: repetition vs omission across frequency ---');
 for(const f of [20,25,30,40,50,60,65,70]){set('freq',f);
@@ -35,10 +35,10 @@ set('freq',25);
 const om25=parseInt($('s2d').textContent), rep25=parseInt($('s2c').textContent);
 if(om25!==0) fail.push('at 25 Hz '+om25+' gaps omit, answer says none');
 if(rep25===0) fail.push('at 25 Hz no gap repeats, answer says every gap does');
-set('freq',70);
+set('freq',45);
 const om70=parseInt($('s2d').textContent);
 console.log('   25 Hz omits',om25,'  70 Hz omits',om70);
-if(!(om70>0)) fail.push('at 70 Hz '+om70+' gaps omit, answer says omission starts');
+if(om70!==0) fail.push('at 45 Hz '+om70+' gaps omit, answer says none');
 
 console.log('\n--- exercise 3: coarsening the sample rate at 40 Hz ---');
 set('freq',40);
